@@ -6,7 +6,7 @@
  * \author wbaoqing (wbaoqing@gmail.com)
  */
 #include <action/ActionSineMoveTo.h>
-#include <math/IMath.h>
+#include <math.h>
 ActionSineMoveTo::ActionSineMoveTo( MOVE_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time )
 {
 	m_eType = eType;

@@ -6,7 +6,7 @@
  * \author wbaoqing (wbaoqing@gmail.com)
  */
 #include <action/ActionExpoMoveTo.h>
-
+#include <math.h>
 ActionExpoMoveTo::ActionExpoMoveTo( MOVE_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time )
 {
 	m_eType = eType;
