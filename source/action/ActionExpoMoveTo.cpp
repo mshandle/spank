@@ -67,13 +67,13 @@ Vector3 ActionExpoMoveTo::Tween()
 	case  MOVE__EASEIN:
 		if(m_fCurrTime < IMath::FLOAT_MIN)return m_vPosStart;
 		alpha = ((m_fCurrTime / m_fTime) - 1.0f) * 10.0f;
-		alpha = pow(2.0f, alpha);
+		alpha = powf(2.0f, alpha);
 		vPos = (m_vPosEnd - m_vPosStart) * alpha + m_vPosStart;
 		return vPos;
 	case  MOVE__EASEOUT:
 		if((m_fTime - m_fCurrTime) < IMath::FLOAT_MIN) return m_vPosEnd;
 		alpha = (m_fCurrTime / m_fTime) * -10.0f;
-		alpha = -pow(2.0f, alpha) + 1.0f;
+		alpha = -powf(2.0f, alpha) + 1.0f;
 		vPos = (m_vPosEnd - m_vPosStart) * alpha + m_vPosStart;
 		return vPos;
 	case  MOVE__EASEINOUT:
@@ -83,14 +83,14 @@ Vector3 ActionExpoMoveTo::Tween()
 		if(alpha < 1.0f)
 		{
 			alpha = (alpha - 1.0f) * 10.0f;
-			alpha = pow(2.0f, alpha);
+			alpha = powf(2.0f, alpha);
 			vPos = (m_vPosEnd - m_vPosStart) / 2.0f * alpha + m_vPosStart;
 			return vPos;
 		}
 		else
 		{
 			alpha = (alpha - 1.0f) * -10.0f;
-			alpha = -pow(2.0f, alpha) + 2.0f;
+			alpha = -powf(2.0f, alpha) + 2.0f;
 			vPos = (m_vPosEnd - m_vPosStart) / 2.0f * alpha + m_vPosStart;
 		}
 		return vPos;

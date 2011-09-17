@@ -64,17 +64,17 @@ Vector3 ActionSineMoveTo::Tween()
 	{
 	case  MOVE__EASEIN:
 		alpha = m_fCurrTime / m_fTime;
-		alpha = cos( alpha * IMath::F_PI / 2.0f);
+		alpha = cosf( alpha * IMath::F_PI / 2.0f);
 		vPos = - (m_vPosEnd - m_vPosStart) * alpha + m_vPosEnd;
 		return vPos;
 	case  MOVE__EASEOUT:
 		alpha = m_fCurrTime / m_fTime;
-		alpha = sin( alpha * IMath::F_PI / 2.0f);
+		alpha = sinf( alpha * IMath::F_PI / 2.0f);
 		vPos = (m_vPosEnd - m_vPosStart) * alpha + m_vPosStart;
 		return vPos;
 	case  MOVE__EASEINOUT:
 		alpha = m_fCurrTime / m_fTime;
-		alpha = cos( alpha * IMath::F_PI) - 1.0f;
+		alpha = cosf( alpha * IMath::F_PI) - 1.0f;
 		vPos = -(m_vPosEnd - m_vPosStart) / 2.0f * alpha + m_vPosStart;
 		return vPos;
 	default:

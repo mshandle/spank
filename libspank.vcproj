@@ -329,6 +329,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\action\ActionCircMoveTo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\include\action\ActionCircMoveTo.h"
+				>
+			</File>
+			<File
 				RelativePath=".\source\action\ActionCompose.cpp"
 				>
 			</File>
