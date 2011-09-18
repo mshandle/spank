@@ -14,7 +14,7 @@ class ActionSineMoveTo :public IActionBase
 public:
 	DECLARE_RTTI(ActionSineMoveTo, IActionBase);
 public:
-	ActionSineMoveTo(MOVE_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time);
+	ActionSineMoveTo(ACTION_TWEEN_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time);
 	virtual ~ActionSineMoveTo();
 	virtual void Reset() ;
 	virtual void Update(float dt) ;
@@ -31,6 +31,6 @@ private:
 	float m_fTime;
 
 	float m_fCurrTime;
-	MOVE_TYPE m_eType;
+	ACTION_TWEEN_TYPE m_eType;
 };
 #endif//__ACTIONSINEMOVE_H_

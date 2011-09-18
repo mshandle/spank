@@ -25,7 +25,8 @@
 #include "MapTestCase.h"
 #include "Box2DTestCase.h"
 #include "ClipRectTestCase.h"
-#include "TweentActionMove.h"
+#include "TweenTestCase.h"
+
 IGameApp& IGameApp::GetInstance()
 {
 	static GameApp s_GameApp;
@@ -48,6 +49,8 @@ bool GameApp::Initialize()
 {
 	MsgMgr::GetInstance().SubscribeMessage(MI_TOUCH, this, CAST_MSG_CALLBACK(&GameApp::OnMsgTouch));
 
+	IResourceMgr::GetInstance().AddImagePieceList("test_case.xml");
+
 	m_pMainScreen = IUISystem::GetInstance().GetCurrentScreen();
 
 	// add test case
@@ -58,7 +61,7 @@ bool GameApp::Initialize()
 	AddTestCase(new MapTestCase(), m_pMainScreen);
 	AddTestCase(new Box2DTestCase(), m_pMainScreen);
 	AddTestCase(new ClipRectTestCase(), m_pMainScreen);
-	AddTestCase(new TweenActionMove(), m_pMainScreen);
+	AddTestCase(new TweenTestCase(), m_pMainScreen);
 	return true;
 }
 

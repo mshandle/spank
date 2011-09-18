@@ -20,7 +20,7 @@ ParticleTestCase::~ParticleTestCase()
 
 bool ParticleTestCase::Initialize(UIScreen* pUIScreen)
 {
-	m_pSnow = new SnowParticleSystem();
+	m_pSnow = new SnowParticleSystem("test_snow");
 	if (!m_pSnow || !m_pSnow->IsOK()) return false;
 
 	return true;

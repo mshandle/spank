@@ -238,11 +238,11 @@
 			>
 		</File>
 		<File
-			RelativePath="..\source\TweenActionMove.cpp"
+			RelativePath="..\source\TweenTestCase.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\source\TweentActionMove.h"
+			RelativePath="..\source\TweenTestCase.h"
 			>
 		</File>
 		<File

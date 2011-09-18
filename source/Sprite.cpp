@@ -10,25 +10,20 @@
 #include <IShaderMgr.h>
 #include <ITextureMgr.h>
 #include <IRenderer2D.h>
+#include <IResourceMgr.h>
 #include <INode.h>
 #include <tinyxml-2.6.2/tinyxml.h>
 
 Sprite::Sprite(const char* pszSpriteFile)
 {
 	m_pShader = NULL;
-	m_pTexture = NULL;
 	m_nNumFrames = 0;
-	m_nColumn = 0;
-	m_fFrameTime = 0.0f;
-	m_nPieceWidth = 0;
-	m_nPieceHeight = 0;
-	m_nOffsetX = 0;
-	m_nOffsetY = 0;
-	m_pQuadVerts = NULL;
 
 	m_fCurrTime = 0.0f;
 	m_nCurrIndex = 0;
 	m_bLoop = true;
+
+	m_pSpriteFrames = NULL;
 
 	m_bOK = LoadSpriteFromFile(pszSpriteFile);
 }
@@ -36,16 +31,15 @@ Sprite::Sprite(const char* pszSpriteFile)
 Sprite::~Sprite()
 {
 	SAFE_RELEASE(m_pShader);
-	SAFE_RELEASE(m_pTexture);
-	SAFE_DELETE_ARRAY(m_pQuadVerts);
+	SAFE_DELETE_ARRAY(m_pSpriteFrames);
 }
 
 void Sprite::Update(float dt)
 {
 	m_fCurrTime += dt;
-	if (m_fCurrTime > m_fFrameTime)
+	if (m_fCurrTime > m_pSpriteFrames[m_nCurrIndex].fFrameTime)
 	{
-		m_fCurrTime -= m_fFrameTime;
+		m_fCurrTime -= m_pSpriteFrames[m_nCurrIndex].fFrameTime;
 		m_nCurrIndex = (m_nCurrIndex + 1) % m_nNumFrames;
 	}
 }
@@ -55,12 +49,12 @@ void Sprite::Render()
 	INode* pNode = GetParentNode();
 	if (!pNode) return;
 
-	m_pShader->SetTexture("u_texture", m_pTexture);
+	m_pShader->SetTexture("u_texture", m_pSpriteFrames[m_nCurrIndex].pImagePiece->pTexture);
 
 	IRenderer2D::GetInstance().SetModelViewMatrix(pNode->GetFinalMatrix());
 	m_pShader->SetMatrix4x4("u_matModelViewProj", IRenderer2D::GetInstance().GetFinalMatrixTranspose());
 
-	IRenderer2D::GetInstance().DrawRect(m_pQuadVerts[m_nCurrIndex], m_pShader);
+	IRenderer2D::GetInstance().DrawRect(0.0f, 0.0f, m_pSpriteFrames[m_nCurrIndex].pImagePiece, m_pShader);
 }
 
 void Sprite::SetLoop(bool bLoop)
@@ -87,94 +81,34 @@ bool Sprite::LoadSpriteFromFile(const char* pszSpriteFile)
 	pszShader = pElmSprite->Attribute("shader");
 	if (!pszShader) return false;
 
-	const char* pszTexture = NULL;
-	pszTexture = pElmSprite->Attribute("texture");
-	if (!pszTexture) return false;
-
-	pElmSprite->Attribute("num_pieces", &m_nNumFrames);
+	pElmSprite->Attribute("num_frames", &m_nNumFrames);
 	if (m_nNumFrames <= 0) return false;
 
-	pElmSprite->Attribute("column", &m_nColumn);
-	if (m_nColumn <= 0) return false;
+	m_pSpriteFrames = new SPRITE_FRAME[m_nNumFrames];
+	if (!m_pSpriteFrames) return false;
 
-	int nFrameTime = 0;
-	pElmSprite->Attribute("frame_time", &nFrameTime);
-	if (nFrameTime <= 0) return false;
-	m_fFrameTime = nFrameTime / 1000.0f;
+	TiXmlElement* pElmFrame = pElmSprite->FirstChildElement("frame");
+	for (int i = 0; i < m_nNumFrames; ++i)
+	{
+		if (!pElmFrame) return false;
 
-	pElmSprite->Attribute("piece_width", &m_nPieceWidth);
-	if (m_nPieceWidth <= 0) return false;
+		const char* pszID = pElmFrame->Attribute("id");
+		if (!pszID) return false;
 
-	pElmSprite->Attribute("piece_height", &m_nPieceHeight);
-	if (m_nPieceHeight <= 0) return false;
+		int nTime = 0;
+		if (!pElmFrame->Attribute("time", &nTime)) return false;
 
-	pElmSprite->Attribute("offset_x", &m_nOffsetX);
-	pElmSprite->Attribute("offset_y", &m_nOffsetY);
+		m_pSpriteFrames[i].pImagePiece = IResourceMgr::GetInstance().FindImagePiece(pszID);
+		if (!m_pSpriteFrames[i].pImagePiece) return false;
+		m_pSpriteFrames[i].fFrameTime = nTime / 1000.0f;
+
+		pElmFrame = pElmFrame->NextSiblingElement("frame");
+	}
 
 	m_pShader = IShaderMgr::GetInstance().CreateShader(pszShader);
 	if (!m_pShader) return false;
 
-	m_pTexture = ITextureMgr::GetInstance().CreateTexture(pszTexture);
-	if (!m_pTexture) return false;
-
-	CreateVertexs();
 	return true;
-}
-
-void Sprite::CreateVertexs()
-{
-	SAFE_DELETE_ARRAY(m_pQuadVerts);
-
-	m_pQuadVerts = new QUAD_VERT_POS_UV[m_nNumFrames];
-
-	float fHalfWidth = m_nPieceWidth/2.0f;
-	float fHalfHeight = m_nPieceHeight/2.0f;
-
-	int nCurrOffsetX = m_nOffsetX;
-	int nCurrOffsetY = m_nOffsetY - m_nPieceHeight;
-
-	int nTextureWidth = m_pTexture->GetWidth();
-	int nTextureHeight = m_pTexture->GetHeight();
-
-	float fTextureWidth = (float)nTextureWidth;
-	float fTextureHeight = (float)nTextureHeight;
-
-	for (int i = 0; i < m_nNumFrames; ++i)
-	{
-		if (i % m_nColumn == 0)
-		{
-			nCurrOffsetX = m_nOffsetX;
-			nCurrOffsetY += m_nPieceHeight;
-		}
-		else
-		{
-			nCurrOffsetX += m_nPieceWidth;
-		}
-
-		m_pQuadVerts[i].verts[0].x = -fHalfWidth;
-		m_pQuadVerts[i].verts[0].y = -fHalfHeight;
-		m_pQuadVerts[i].verts[0].z = 0.0f;
-		m_pQuadVerts[i].verts[0].u = nCurrOffsetX / fTextureWidth;
-		m_pQuadVerts[i].verts[0].v = (nTextureHeight - nCurrOffsetY - m_nPieceHeight) / fTextureHeight;
-
-		m_pQuadVerts[i].verts[1].x = -fHalfWidth;
-		m_pQuadVerts[i].verts[1].y = fHalfHeight;
-		m_pQuadVerts[i].verts[1].z = 0.0f;
-		m_pQuadVerts[i].verts[1].u = nCurrOffsetX / fTextureWidth;
-		m_pQuadVerts[i].verts[1].v = (nTextureHeight - nCurrOffsetY) / fTextureHeight;
-
-		m_pQuadVerts[i].verts[2].x = fHalfWidth;
-		m_pQuadVerts[i].verts[2].y = -fHalfHeight;
-		m_pQuadVerts[i].verts[2].z = 0.0f;
-		m_pQuadVerts[i].verts[2].u = (nCurrOffsetX+m_nPieceWidth) / fTextureWidth;
-		m_pQuadVerts[i].verts[2].v = (nTextureHeight - nCurrOffsetY - m_nPieceHeight) / fTextureHeight;
-
-		m_pQuadVerts[i].verts[3].x = fHalfWidth;
-		m_pQuadVerts[i].verts[3].y = fHalfHeight;
-		m_pQuadVerts[i].verts[3].z = 0.0f;
-		m_pQuadVerts[i].verts[3].u = (nCurrOffsetX+m_nPieceWidth) / fTextureWidth;
-		m_pQuadVerts[i].verts[3].v = (nTextureHeight - nCurrOffsetY) / fTextureHeight;
-	}
 }
 
 INode* Sprite::GetParentNode()

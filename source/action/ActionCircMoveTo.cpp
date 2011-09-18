@@ -8,7 +8,7 @@
 
 #include <action/ActionCircMoveTo.h>
 #include <math.h>
-ActionCircMoveTo::ActionCircMoveTo( MOVE_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time )
+ActionCircMoveTo::ActionCircMoveTo( ACTION_TWEEN_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time )
 {
 	m_eType = eType;
 	m_vPosStart = posStart;
@@ -65,19 +65,19 @@ Vector3 ActionCircMoveTo::Tween()
 	Vector3 vPos (0.0f ,0.0f, 0.0f);
 	switch(m_eType)
 	{
-	case  MOVE__EASEIN:
+	case ATT_EASE_IN:
 		alpha = m_fCurrTime / m_fTime;
 		alpha *= alpha;
 		alpha = sqrtf(1.0f - alpha);
 		vPos = -(m_vPosEnd - m_vPosStart) * (alpha - 1.0f) + m_vPosStart;
 		return vPos;
-	case  MOVE__EASEOUT:
+	case ATT_EASE_OUT:
 		alpha = m_fCurrTime / m_fTime - 1.0f;
 		alpha *= alpha;
 		alpha = sqrtf(1.0f - alpha);
 		vPos = (m_vPosEnd - m_vPosStart) * alpha + m_vPosStart;
 		return vPos;
-	case  MOVE__EASEINOUT:
+	case ATT_EASE_IN_OUT:
 		alpha = m_fCurrTime / (m_fTime / 2.0f);
 		if(alpha < 1.0f)
 		{

@@ -7,7 +7,7 @@
  */
 #include <action/ActionQuintMoveTo.h>
 
-ActionQuintMoveTo::ActionQuintMoveTo( MOVE_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time )
+ActionQuintMoveTo::ActionQuintMoveTo( ACTION_TWEEN_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time )
 {
 	m_eType = eType;
 	m_vPosStart = posStart;
@@ -63,17 +63,17 @@ Vector3 ActionQuintMoveTo::Tween()
 	//TODO:
 	switch(m_eType)
 	{
-	case  MOVE__EASEIN:
+	case  ATT_EASE_IN:
 		 alpha = m_fCurrTime / m_fTime;
 		 alpha = alpha * alpha * alpha * alpha * alpha;
 		 vPos = (m_vPosEnd - m_vPosStart) * alpha + m_vPosStart;
 		 return vPos;
-	case  MOVE__EASEOUT:
+	case  ATT_EASE_OUT:
 		alpha = m_fCurrTime / m_fTime - 1.0f;
 		alpha = alpha * alpha * alpha * alpha * alpha + 1.0f;
 		vPos = (m_vPosEnd - m_vPosStart) * alpha + m_vPosStart;
 		return vPos;
-	case  MOVE__EASEINOUT:
+	case  ATT_EASE_IN_OUT:
 		alpha = m_fCurrTime / (m_fTime / 2.0f);
 		if(alpha < 1.0f)
 		{

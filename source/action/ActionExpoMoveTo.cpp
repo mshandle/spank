@@ -7,7 +7,7 @@
  */
 #include <action/ActionExpoMoveTo.h>
 #include <math.h>
-ActionExpoMoveTo::ActionExpoMoveTo( MOVE_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time )
+ActionExpoMoveTo::ActionExpoMoveTo( ACTION_TWEEN_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time )
 {
 	m_eType = eType;
 	m_vPosStart = posStart;
@@ -64,19 +64,19 @@ Vector3 ActionExpoMoveTo::Tween()
 	Vector3 vPos (0.0f ,0.0f, 0.0f);
 	switch(m_eType)
 	{
-	case  MOVE__EASEIN:
+	case  ATT_EASE_IN:
 		if(m_fCurrTime < IMath::FLOAT_MIN)return m_vPosStart;
 		alpha = ((m_fCurrTime / m_fTime) - 1.0f) * 10.0f;
 		alpha = powf(2.0f, alpha);
 		vPos = (m_vPosEnd - m_vPosStart) * alpha + m_vPosStart;
 		return vPos;
-	case  MOVE__EASEOUT:
+	case  ATT_EASE_OUT:
 		if((m_fTime - m_fCurrTime) < IMath::FLOAT_MIN) return m_vPosEnd;
 		alpha = (m_fCurrTime / m_fTime) * -10.0f;
 		alpha = -powf(2.0f, alpha) + 1.0f;
 		vPos = (m_vPosEnd - m_vPosStart) * alpha + m_vPosStart;
 		return vPos;
-	case  MOVE__EASEINOUT:
+	case  ATT_EASE_IN_OUT:
 		if(m_fCurrTime < IMath::FLOAT_MIN)return m_vPosStart;
 		if((m_fTime - m_fCurrTime) < IMath::FLOAT_MIN) return m_vPosEnd;
 		alpha = m_fCurrTime / (m_fTime / 2.0f);

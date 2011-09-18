@@ -44,6 +44,11 @@ public:
 	virtual void DrawRect(float x, float y, const IMAGE_PIECE* pImagePiece, IShader* pShader);
 	virtual void DrawRect(float x, float y, float width, float height, const IMAGE_PIECE* pImagePiece, IShader* pShader);
 
+	virtual bool SetupQuad(QUAD_VERT_POS_UV& quadOut, const IMAGE_PIECE* pImagePiece, const Vector2& pos);
+	virtual bool SetupQuad(QUAD_VERT_POS_UV& quadOut, const IMAGE_PIECE* pImagePiece, float x, float y);
+	virtual bool SetupQuad(QUAD_VERT_POS_UV& quadOut, const IMAGE_PIECE* pImagePiece, const Vector2& pos, const Vector2& size);
+	virtual bool SetupQuad(QUAD_VERT_POS_UV& quadOut, const IMAGE_PIECE* pImagePiece, float x, float y, float width, float height);
+
 private:
 	void UpdateFinalMatrix();
 

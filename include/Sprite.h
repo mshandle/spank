@@ -16,6 +16,13 @@
 class Sprite : public IRenderableObject
 {
 public:
+	typedef struct SPRITE_FRAME_tag
+	{
+		const IMAGE_PIECE* pImagePiece;
+		float fFrameTime;
+	} SPRITE_FRAME;
+
+public:
 	DECLARE_RTTI(Sprite, IRenderableObject);
 
 	Sprite(const char* pszSpriteFile);
@@ -28,20 +35,13 @@ public:
 
 private:
 	bool LoadSpriteFromFile(const char* pszSpriteFile);
-	void CreateVertexs();
 	INode* GetParentNode();
 
 private:
 	IShader* m_pShader;
-	ITexture* m_pTexture;
+
 	int m_nNumFrames;
-	int m_nColumn;
-	float m_fFrameTime;
-	int m_nPieceWidth;
-	int m_nPieceHeight;
-	int m_nOffsetX;
-	int m_nOffsetY;
-	QUAD_VERT_POS_UV* m_pQuadVerts;
+	SPRITE_FRAME* m_pSpriteFrames;
 
 	float m_fCurrTime;
 	int m_nCurrIndex;

@@ -15,7 +15,7 @@ class ActionQuintMoveTo :public IActionBase
 public:
 	DECLARE_RTTI(ActionQuintMoveTo, IActionBase);
 public:
-	ActionQuintMoveTo(MOVE_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time);
+	ActionQuintMoveTo(ACTION_TWEEN_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time);
 	virtual ~ActionQuintMoveTo();
 	virtual void Reset() ;
 	virtual void Update(float dt) ;
@@ -32,6 +32,6 @@ private:
 	float m_fTime;
 
 	float m_fCurrTime;
-	MOVE_TYPE m_eType;
+	ACTION_TWEEN_TYPE m_eType;
 };
 #endif//__ACTIONQUINTMOVETO_H

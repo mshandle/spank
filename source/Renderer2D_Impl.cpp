@@ -211,6 +211,53 @@ void Renderer2D_Impl::DrawRect(float x, float y, float width, float height, cons
 	DrawTriangleList(s_Verts, 4, s_Indis, 6, pShader);
 }
 
+bool Renderer2D_Impl::SetupQuad(QUAD_VERT_POS_UV& quadOut, const IMAGE_PIECE* pImagePiece, const Vector2& pos)
+{
+	return SetupQuad(quadOut, pImagePiece, pos.x, pos.y, pImagePiece->width, pImagePiece->height);
+}
+
+bool Renderer2D_Impl::SetupQuad(QUAD_VERT_POS_UV& quadOut, const IMAGE_PIECE* pImagePiece, float x, float y)
+{
+	return SetupQuad(quadOut, pImagePiece, x, y, pImagePiece->width, pImagePiece->height);
+}
+
+bool Renderer2D_Impl::SetupQuad(QUAD_VERT_POS_UV& quadOut, const IMAGE_PIECE* pImagePiece, const Vector2& pos, const Vector2& size)
+{
+	return SetupQuad(quadOut, pImagePiece, pos.x, pos.y, size.x, size.y);
+}
+
+bool Renderer2D_Impl::SetupQuad(QUAD_VERT_POS_UV& quadOut, const IMAGE_PIECE* pImagePiece, float x, float y, float width, float height)
+{
+	float fHalfWidth = width*0.5f;
+	float fHalfHeight = height*0.5f;
+
+	quadOut.verts[0].x = -fHalfWidth;
+	quadOut.verts[0].y = -fHalfHeight;
+	quadOut.verts[0].z = 0.0f;
+	quadOut.verts[0].u = pImagePiece->u;
+	quadOut.verts[0].v = pImagePiece->v;
+
+	quadOut.verts[1].x = -fHalfWidth;
+	quadOut.verts[1].y = fHalfHeight;
+	quadOut.verts[1].z = 0.0f;
+	quadOut.verts[1].u = pImagePiece->u;
+	quadOut.verts[1].v = pImagePiece->v + pImagePiece->dv;
+
+	quadOut.verts[2].x = fHalfWidth;
+	quadOut.verts[2].y = -fHalfHeight;
+	quadOut.verts[2].z = 0.0f;
+	quadOut.verts[2].u = pImagePiece->u + pImagePiece->du;
+	quadOut.verts[2].v = pImagePiece->v;
+
+	quadOut.verts[3].x = fHalfWidth;
+	quadOut.verts[3].y = fHalfHeight;
+	quadOut.verts[3].z = 0.0f;
+	quadOut.verts[3].u = pImagePiece->u + pImagePiece->du;
+	quadOut.verts[3].v = pImagePiece->v + pImagePiece->dv;
+
+	return true;
+}
+
 void Renderer2D_Impl::UpdateFinalMatrix()
 {
 	m_matModelViewProj = m_matProj * m_matModelView;

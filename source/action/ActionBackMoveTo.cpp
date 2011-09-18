@@ -7,7 +7,7 @@
  */
 #include <action/ActionBackMoveTo.h>
 
-ActionBackMoveTo::ActionBackMoveTo( MOVE_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time )
+ActionBackMoveTo::ActionBackMoveTo( ACTION_TWEEN_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time )
 {
 	m_eType = eType;
 	m_vPosStart = posStart;
@@ -65,17 +65,17 @@ Vector3 ActionBackMoveTo::Tween()
 	float  s = 1.70158f;
 	switch(m_eType)
 	{
-	case MOVE__EASEIN:
+	case ATT_EASE_IN:
 		alpha = m_fCurrTime / m_fTime;
 		alpha = alpha * alpha * ((s + 1.0f) * alpha - s);
 		pos = (m_vPosEnd - m_vPosStart) * alpha + m_vPosStart;
 		return pos;
-	case  MOVE__EASEOUT:
+	case  ATT_EASE_OUT:
 		alpha = m_fCurrTime / m_fTime - 1.0f;
 		alpha = (alpha * alpha * ((s + 1.0f) * alpha +s) + 1.0f);
 		pos = alpha * (m_vPosEnd - m_vPosStart) + m_vPosStart;
 		return pos;
-	case  MOVE__EASEINOUT:
+	case  ATT_EASE_IN_OUT:
 		s *= 1.525f;
 		alpha = m_fCurrTime / (m_fTime / 2.0f);
 		if(alpha < 1.0f)

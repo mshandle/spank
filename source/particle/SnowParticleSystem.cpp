@@ -8,18 +8,19 @@
 #include <particle/SnowParticleSystem.h>
 #include <particle/SnowParticle.h>
 #include <IRenderer2D.h>
+#include <IResourceMgr.h>
 #include <IShaderMgr.h>
 #include <ITextureMgr.h>
 
-SnowParticleSystem::SnowParticleSystem()
+SnowParticleSystem::SnowParticleSystem(const char* pszImagePiece)
 {
 	m_pSnowEmmiter = NULL;
 	m_pVerts = NULL;
 	m_pIndis = NULL;
 	m_pShader = NULL;
-	m_pTexture = NULL;
+	m_pImagePiece = NULL;
 
-	m_bOK = Init();
+	m_bOK = Init(pszImagePiece);
 }
 
 SnowParticleSystem::~SnowParticleSystem()
@@ -28,7 +29,6 @@ SnowParticleSystem::~SnowParticleSystem()
 	SAFE_DELETE_ARRAY(m_pVerts);
 	SAFE_DELETE_ARRAY(m_pIndis);
 	SAFE_RELEASE(m_pShader);
-	SAFE_RELEASE(m_pTexture);
 }
 
 void SnowParticleSystem::Update(float dt)
@@ -89,7 +89,7 @@ void SnowParticleSystem::Render()
 
 		if (nNumVerts >= VERTEX_CACHE_SIZE)
 		{
-			m_pShader->SetTexture("u_texture", m_pTexture);
+			m_pShader->SetTexture("u_texture", m_pImagePiece->pTexture);
 
 			IRenderer2D::GetInstance().SetModelViewMatrix(IMath::MAT4X4_IDENTITY);
 			m_pShader->SetMatrix4x4("u_matModelViewProj", IRenderer2D::GetInstance().GetFinalMatrixTranspose());
@@ -102,7 +102,7 @@ void SnowParticleSystem::Render()
 
 	if (nNumVerts > 0)
 	{
-		m_pShader->SetTexture("u_texture", m_pTexture);
+		m_pShader->SetTexture("u_texture", m_pImagePiece->pTexture);
 
 		IRenderer2D::GetInstance().SetModelViewMatrix(IMath::MAT4X4_IDENTITY);
 		m_pShader->SetMatrix4x4("u_matModelViewProj", IRenderer2D::GetInstance().GetFinalMatrixTranspose());
@@ -113,7 +113,7 @@ void SnowParticleSystem::Render()
 	}
 }
 
-bool SnowParticleSystem::Init()
+bool SnowParticleSystem::Init(const char* pszImagePiece)
 {
 	m_pSnowEmmiter = new SnowEmmiter();
 
@@ -123,8 +123,8 @@ bool SnowParticleSystem::Init()
 	m_pShader = IShaderMgr::GetInstance().CreateShader();
 	if (!m_pShader) return false;
 
-	m_pTexture = ITextureMgr::GetInstance().CreateTexture("snow.png", TST_LINEAR);
-	if (!m_pTexture) return false;
+	m_pImagePiece = IResourceMgr::GetInstance().FindImagePiece(pszImagePiece);
+	if (!m_pImagePiece) return false;
 
 	for (int i = 0; i < NUM_PARTICLE; ++i)
 	{
@@ -132,26 +132,26 @@ bool SnowParticleSystem::Init()
 		m_pVerts[nVertsIndexBase+0].x = 0.0f;
 		m_pVerts[nVertsIndexBase+0].y = 0.0f;
 		m_pVerts[nVertsIndexBase+0].z = 0.0f;
-		m_pVerts[nVertsIndexBase+0].u = 0.0f;
-		m_pVerts[nVertsIndexBase+0].v = 0.0f;
+		m_pVerts[nVertsIndexBase+0].u = m_pImagePiece->u;
+		m_pVerts[nVertsIndexBase+0].v = m_pImagePiece->v;
 
 		m_pVerts[nVertsIndexBase+1].x = 0.0f;
 		m_pVerts[nVertsIndexBase+1].y = 0.0f;
 		m_pVerts[nVertsIndexBase+1].z = 0.0f;
-		m_pVerts[nVertsIndexBase+1].u = 0.0f;
-		m_pVerts[nVertsIndexBase+1].v = 1.0f;
+		m_pVerts[nVertsIndexBase+1].u = m_pImagePiece->u;
+		m_pVerts[nVertsIndexBase+1].v = m_pImagePiece->v+m_pImagePiece->dv;
 
 		m_pVerts[nVertsIndexBase+2].x = 0.0f;
 		m_pVerts[nVertsIndexBase+2].y = 0.0f;
 		m_pVerts[nVertsIndexBase+2].z = 0.0f;
-		m_pVerts[nVertsIndexBase+2].u = 1.0f;
-		m_pVerts[nVertsIndexBase+2].v = 0.0f;
+		m_pVerts[nVertsIndexBase+2].u = m_pImagePiece->u+m_pImagePiece->du;
+		m_pVerts[nVertsIndexBase+2].v = m_pImagePiece->v;
 
 		m_pVerts[nVertsIndexBase+3].x = 0.0f;
 		m_pVerts[nVertsIndexBase+3].y = 0.0f;
 		m_pVerts[nVertsIndexBase+3].z = 0.0f;
-		m_pVerts[nVertsIndexBase+3].u = 1.0f;
-		m_pVerts[nVertsIndexBase+3].v = 1.0f;
+		m_pVerts[nVertsIndexBase+3].u = m_pImagePiece->u+m_pImagePiece->du;
+		m_pVerts[nVertsIndexBase+3].v = m_pImagePiece->v+m_pImagePiece->dv;
 
 		int nIndisIndexBase = i*6;
 		m_pIndis[nIndisIndexBase+0] = nVertsIndexBase+0;

@@ -7,7 +7,7 @@
  */
 #include <action/ActionSineMoveTo.h>
 #include <math.h>
-ActionSineMoveTo::ActionSineMoveTo( MOVE_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time )
+ActionSineMoveTo::ActionSineMoveTo( ACTION_TWEEN_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time )
 {
 	m_eType = eType;
 	m_vPosStart = posStart;
@@ -62,17 +62,17 @@ Vector3 ActionSineMoveTo::Tween()
 	Vector3 vPos (0.0f ,0.0f, 0.0f);
 	switch(m_eType)
 	{
-	case  MOVE__EASEIN:
+	case  ATT_EASE_IN:
 		alpha = m_fCurrTime / m_fTime;
 		alpha = cosf( alpha * IMath::F_PI / 2.0f);
 		vPos = - (m_vPosEnd - m_vPosStart) * alpha + m_vPosEnd;
 		return vPos;
-	case  MOVE__EASEOUT:
+	case  ATT_EASE_OUT:
 		alpha = m_fCurrTime / m_fTime;
 		alpha = sinf( alpha * IMath::F_PI / 2.0f);
 		vPos = (m_vPosEnd - m_vPosStart) * alpha + m_vPosStart;
 		return vPos;
-	case  MOVE__EASEINOUT:
+	case  ATT_EASE_IN_OUT:
 		alpha = m_fCurrTime / m_fTime;
 		alpha = cosf( alpha * IMath::F_PI) - 1.0f;
 		vPos = -(m_vPosEnd - m_vPosStart) / 2.0f * alpha + m_vPosStart;

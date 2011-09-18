@@ -30,14 +30,14 @@ public:
 public:
 	DECLARE_RTTI(SnowParticleSystem, IParticleSystem);
 
-	SnowParticleSystem();
+	SnowParticleSystem(const char* pszImagePiece);
 	virtual ~SnowParticleSystem();
 
 	virtual void Update(float dt);
 	virtual void Render();
 
 private:
-	bool Init();
+	bool Init(const char* pszImagePiece);
 
 private:
 	TV_PARTICLE m_vParticles;
@@ -46,7 +46,7 @@ private:
 	ushort* m_pIndis;
 
 	IShader* m_pShader;
-	ITexture* m_pTexture;
+	const IMAGE_PIECE* m_pImagePiece;
 
 };
 #endif // __SNOWPARTICLESYSTEM_H__
