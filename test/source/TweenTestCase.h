@@ -10,9 +10,14 @@
 
 #include "TestCase.h"
 #include <Sprite.h>
-
+#include <action/ActionSequeue.h>
+#include <action/ActionLoop.h>
+#include <vector>
+#include <string>
 class TweenTestCase : public TestCase
 {
+public:
+	typedef std::vector<IActionBase*> TV_ACTIONLOOP;
 public:
 	DECLARE_RTTI(TweenTestCase, TestCase);
 
@@ -25,13 +30,22 @@ public:
 private:
 	void OnPrvButton(IMsgBase* pMsg);
 	void OnNextButton(IMsgBase* pMsg);
+	void OnEASEInButton(IMsgBase* pMsg);
+	void OnEASEOutButton(IMsgBase* pMsg);
+	void OnEASEInOutButton(IMsgBase* pMsg);
 
-	void ConnectAction(uint nIndex);
-
+	void UpdateTween();
 private:
 	Sprite* m_pSpriteAction;
+	ActionSequeue* m_pActionSequeue;
+	ActionLoop* m_pActionLoop;
 	INode* m_pActionNode;
 	uint m_nIndexTween;
 	uint m_nEffectIndex;
+	TV_ACTIONLOOP m_vActionLoop;
+	const static int TWEEN_TYPE_SIZE = 3;
+
+	
+	
 };
 #endif // __TWEENTESTCASE_H__
