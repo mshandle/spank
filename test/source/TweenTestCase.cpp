@@ -18,6 +18,7 @@
 #include <action/ActionExpoMoveTo.h>
 #include <action/ActionCircMoveTo.h>
 #include <action/ActionElasticMoveTo.h>
+#include <action/ActionBounceMoveTo.h>
 TweenTestCase::TweenTestCase()
 :TestCase("TweenTestCase")
 {	
@@ -39,7 +40,7 @@ bool TweenTestCase::Initialize(UIScreen* pUIScreen)
 
 	ActionSequeue* pActionFregment = new ActionSequeue();
 
-	pActionFregment->AddAction(new ActionElasticMoveTo(ATT_EASE_IN_OUT, Vector3(-350.0f, 0.0f ,0.0f), Vector3(350.0f , 0.0f, 0.0f), 6.0f));
+	pActionFregment->AddAction(new ActionElasticMoveTo(ATT_EASE_IN_OUT, Vector3(-350.0f, 0.0f ,0.0f), Vector3(350.0f , 0.0f, 0.0f), 3.0f));
 	ActionSequeue* pActionSequeue = new ActionSequeue();
 	pActionSequeue->AddAction(pActionFregment);
 

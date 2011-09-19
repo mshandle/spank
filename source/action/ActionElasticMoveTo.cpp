@@ -59,24 +59,14 @@ float ActionElasticMoveTo::GetTimeLength() const
 
 Vector3 ActionElasticMoveTo::Tween()
 {
-	//(m_vPosEnd - m_vPosStart) * (m_fCurrTime / m_fTime) + m_vPosStart
-	// c * (t / d) + b;
-
-	//if (t==0) return b;  if ((t/=d)==1) return b+c;  if (!p) p=d*.3;
-	//if (!a || a < Math.abs(c)) { a=c; var s=p/4; }
-	//else var s = p/(2*Math.PI) * Math.asin (c/a);
-	//return (a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p ) + c + b);
-
 	float alpha = 0.0f;
 	Vector3 vPos (0.0f ,0.0f, 0.0f);
 	switch(m_eType)
 	{
 	case ATT_EASE_IN:
 		{
-			if(m_fCurrTime < IMath::FLOAT_MIN) return m_vPosStart;
-			if((m_fTime - m_fCurrTime) < IMath::FLOAT_MIN) return m_vPosEnd;
-			float fAtt = m_fTime * 0.4f;
-			float fCof = fAtt / 6.0f;
+			float fAtt = m_fTime * 0.3f;
+			float fCof = fAtt / 4.0f;
 			alpha = m_fCurrTime / m_fTime - 1.0f;
 			float alpha1 = powf(2.0f, 10.0f * alpha);
 			float alpha2 = (m_fCurrTime * m_fTime - fCof) * (2.0f * IMath::F_PI) / fAtt;
@@ -86,10 +76,8 @@ Vector3 ActionElasticMoveTo::Tween()
 		}
 	case ATT_EASE_OUT:
 		{
-			if( m_fCurrTime < IMath::FLOAT_MIN) return m_vPosStart;
-			if((m_fTime - m_fCurrTime) < IMath::FLOAT_MIN) return m_vPosEnd;
-			float fAtt = m_fTime * 0.4f;
-			float fCof = fAtt / 6.0f;
+			float fAtt = m_fTime * 0.3f;
+			float fCof = fAtt / 4.0f;
 			alpha = m_fCurrTime / m_fTime;
 			float alpha1 = powf(2.0f, -10.0f * alpha);
 			float alpha2 = (m_fCurrTime * m_fTime - fCof) * (2.0f * IMath::F_PI) / fAtt;
@@ -99,26 +87,24 @@ Vector3 ActionElasticMoveTo::Tween()
 		return vPos;
 	case ATT_EASE_IN_OUT:
 		{
-			if(m_fCurrTime < IMath::FLOAT_MIN) return m_vPosStart;
-			if((m_fTime - m_fCurrTime) < IMath::FLOAT_MIN) return m_vPosEnd;
-			float fAtt = m_fTime * 0.8f;
-			float fCof = fAtt / 0.2f;
-			alpha = m_fCurrTime /( m_fTime / 2.0f);
+			float fAtt = m_fTime * 0.45f;
+			float fCof = fAtt / 4.0f;
+			alpha = m_fCurrTime /(m_fTime / 2.0f);
 			if( alpha < 1.0f)
 			{
 				alpha -= 1.0f;
 				float alpha1 = powf(2.0f, 10.0f * alpha);
-				float alpha2 = (m_fCurrTime * m_fTime - fCof) * (2.0f * IMath::F_PI) / fAtt;
+				float alpha2 = ((m_fCurrTime - 1.0f) * m_fTime - fCof) * (2.0f * IMath::F_PI) / fAtt;
 				alpha2 = sinf(alpha2);
-				vPos = -(m_vPosEnd - m_vPosStart) / 2.0f * alpha1 * alpha2 + m_vPosStart;
+				vPos = -0.5f * (m_vPosEnd - m_vPosStart)  * alpha1 * alpha2 + m_vPosStart;
 			}
 			else
 			{
 				alpha -= 1.0f;
 				float alpha1 = powf(2.0f, -10.0f * alpha);
-				float alpha2 = (m_fCurrTime * m_fTime - fCof) * (2.0f * IMath::F_PI) / fAtt;
+				float alpha2 = ((m_fCurrTime - 1.0f) * m_fTime - fCof) * (2.0f * IMath::F_PI) / fAtt;
 				alpha2 = sinf(alpha2);
-				vPos = (m_vPosEnd - m_vPosStart) * alpha1 * alpha2 + m_vPosEnd;
+				vPos = (m_vPosEnd - m_vPosStart) * 0.5f * alpha1 * alpha2 + m_vPosEnd;
 			}
 		return vPos;
 		}
