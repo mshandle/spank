@@ -115,6 +115,7 @@ bool TweenTestCase::Initialize(UIScreen* pUIScreen)
 	UIRadioButton* pBtInButton = new UIRadioButton(pUIScreen);
 	pBtInButton->SetPosition(Vector2(200.0f, 10.0f));
 	pBtInButton->SetText("EASEIN");
+	pBtInButton->SetCheck(true);
 	pBtInButton->ConnectEvent(UMI_CHECKED, this, CAST_MSG_CALLBACK(&TweenTestCase::OnEASEInButton));
 
 	UIRadioButton* pBtOutButton = new UIRadioButton(pUIScreen);
