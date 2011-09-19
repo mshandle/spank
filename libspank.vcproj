@@ -369,6 +369,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\action\ActionElasticMoveTo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\include\action\ActionElasticMoveTo.h"
+				>
+			</File>
+			<File
 				RelativePath=".\source\action\ActionExpoMoveTo.cpp"
 				>
 			</File>
