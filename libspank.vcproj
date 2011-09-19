@@ -321,6 +321,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\action\ActionBounceMoveTo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\include\action\ActionBounceMoveTo.h"
+				>
+			</File>
+			<File
 				RelativePath=".\source\action\ActionBySpline.cpp"
 				>
 			</File>
