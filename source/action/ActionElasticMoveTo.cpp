@@ -90,11 +90,12 @@ Vector3 ActionElasticMoveTo::Tween()
 			float fAtt = m_fTime * 0.45f;
 			float fCof = fAtt / 4.0f;
 			alpha = m_fCurrTime /(m_fTime / 2.0f);
+
 			if( alpha < 1.0f)
 			{
 				alpha -= 1.0f;
 				float alpha1 = powf(2.0f, 10.0f * alpha);
-				float alpha2 = ((m_fCurrTime - 1.0f) * m_fTime - fCof) * (2.0f * IMath::F_PI) / fAtt;
+				float alpha2 = (alpha * m_fTime - fCof) * (2.0f * IMath::F_PI) / fAtt;
 				alpha2 = sinf(alpha2);
 				vPos = -0.5f * (m_vPosEnd - m_vPosStart)  * alpha1 * alpha2 + m_vPosStart;
 			}
@@ -102,7 +103,7 @@ Vector3 ActionElasticMoveTo::Tween()
 			{
 				alpha -= 1.0f;
 				float alpha1 = powf(2.0f, -10.0f * alpha);
-				float alpha2 = ((m_fCurrTime - 1.0f) * m_fTime - fCof) * (2.0f * IMath::F_PI) / fAtt;
+				float alpha2 = (alpha * m_fTime - fCof) * (2.0f * IMath::F_PI) / fAtt;
 				alpha2 = sinf(alpha2);
 				vPos = (m_vPosEnd - m_vPosStart) * 0.5f * alpha1 * alpha2 + m_vPosEnd;
 			}

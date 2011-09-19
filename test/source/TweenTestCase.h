@@ -21,9 +21,17 @@ public:
 
 	virtual bool Initialize(UIScreen* pUIScreen);
 	virtual void Terminate();
+	virtual void Render();
+private:
+	void OnPrvButton(IMsgBase* pMsg);
+	void OnNextButton(IMsgBase* pMsg);
+
+	void ConnectAction(uint nIndex);
 
 private:
 	Sprite* m_pSpriteAction;
 	INode* m_pActionNode;
+	uint m_nIndexTween;
+	uint m_nEffectIndex;
 };
 #endif // __TWEENTESTCASE_H__
