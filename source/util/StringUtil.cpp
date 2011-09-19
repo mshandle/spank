@@ -38,6 +38,8 @@ int StringUtil::StringLength(const char* pszString)
 
 bool StringUtil::IsEqual(const char* psz1, const char* psz2)
 {
+	if (psz1 == psz2) return true;
+	if (psz1 == NULL || psz2 == NULL) return false;
 	if (strcmp(psz1, psz2) != 0) return false;
 	return true;
 }

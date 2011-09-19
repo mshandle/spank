@@ -8,6 +8,7 @@
 #include "ResourceMgr_Impl.h"
 #include <ITextureMgr.h>
 #include <util/IFileUtil.h>
+#include <util/StringUtil.h>
 #include <tinyxml-2.6.2/tinyxml.h>
 
 IResourceMgr& IResourceMgr::GetInstance()
@@ -70,7 +71,11 @@ bool ResourceMgr_Impl::AddImagePieceList(const char* pszFile)
 		const char* pszTexture = pElmImage->Attribute("file");
 		if (!pszTexture) return false;
 
-		ITexture* pTexture = ITextureMgr::GetInstance().CreateTexture(pszTexture);
+		TEXTURE_SAMPLE_TYPE eSampleType = TST_POINT;
+		const char* pszSample = pElmImage->Attribute("sample");
+		if (StringUtil::IsEqual(pszSample, "linear")) eSampleType = TST_LINEAR;
+
+		ITexture* pTexture = ITextureMgr::GetInstance().CreateTexture(pszTexture, eSampleType);
 		if (!pTexture) return false;
 
 		textureInfoMap.insert(std::make_pair(nID, pTexture));

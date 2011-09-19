@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <ImagePiece>
     <ImageList>
-        <Image id="1" file="ui.png" />
+        <Image id="1" file="ui.png" sample="nearest" />
     </ImageList>
     <PieceList>
         <Piece id="ui_button_default" image="1" x="1" y="1" width="93" height="34" />
