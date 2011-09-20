@@ -65,6 +65,9 @@ void Level2D::Render()
 	m_pShader->SetTexture("u_texture",m_pTexture);
 
 	Vector2 vecTranslate(m_vCenterPosition.x - m_nPrvCenterPositionX, m_vCenterPosition.y - m_nPrvCenterPositionY);
+
+	vecTranslate.x = float((int)vecTranslate.x);
+	vecTranslate.y = float((int)vecTranslate.y);
 	Matrix4x4 matModelView;
 	IMath::BuildTranslateMatrix(matModelView, -vecTranslate.x, -vecTranslate.y, 0.0f);
 	IRenderer2D::GetInstance().SetModelViewMatrix(matModelView);

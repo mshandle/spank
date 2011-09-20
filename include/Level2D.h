@@ -20,7 +20,7 @@ class Level2D : public IRenderableObject
 public:
 	enum CONST_DEFINE
 	{
-		TILE_BORDER_SIZE = 3,
+		TILE_BORDER_SIZE = 4,
 		VERTEX_CACHE_SIZE = 4,
 		INDEX_CACHE_SIZE = 6,
 	};
