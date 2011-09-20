@@ -20,6 +20,7 @@ ActionSequeue::~ActionSequeue()
 	for (TV_ACTION_BASE::iterator it = m_vAction.begin(); it != m_vAction.end(); ++it)
 	{
 		IActionBase* pAction = (*it);
+		pAction->DisconnectEvent(MI_ACTION_UPDATE);
 		SAFE_RELEASE(pAction);
 	}
 	m_vAction.clear();
