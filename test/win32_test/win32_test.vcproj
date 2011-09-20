@@ -222,6 +222,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\source\PorkerTestCase.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\source\PorkerTestCase.h"
+			>
+		</File>
+		<File
 			RelativePath="..\source\SpriteTestCase.cpp"
 			>
 		</File>
