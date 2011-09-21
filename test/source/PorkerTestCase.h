@@ -22,7 +22,7 @@ public:
 	virtual void Terminate();
 	virtual void Render();
 private:
-	ITexture* m_pBackGroundTexture;
-	IShader* m_pShader;	
+	const IMAGE_PIECE* m_pBackGroundImagePiece;
+	 IShader* m_pShader;	
 };
 #endif//__PORKERTESTCASE_H_

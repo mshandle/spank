@@ -50,7 +50,7 @@ bool GameApp::Initialize()
 	MsgMgr::GetInstance().SubscribeMessage(MI_TOUCH, this, CAST_MSG_CALLBACK(&GameApp::OnMsgTouch));
 
 	IResourceMgr::GetInstance().AddImagePieceList("test_case.xml");
-
+	IResourceMgr::GetInstance().AddImagePieceList("Porker.xml");
 	m_pMainScreen = IUISystem::GetInstance().GetCurrentScreen();
 
 	// add test case

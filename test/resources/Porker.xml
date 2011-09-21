@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<ImagePiece>
+    <ImageList>
+        <Image id="1" file="background_1024_v2.png" />
+    </ImageList>
+    <PieceList>
+        <Piece id="backgorund" image="1" x="0" y="0" width="1024" height="768" />
+    </PieceList>
+</ImagePiece>
