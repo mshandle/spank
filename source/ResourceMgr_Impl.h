@@ -29,6 +29,8 @@ public:
 	virtual void Terminate();
 
 	virtual bool AddImagePieceList(const char* pszFile);
+	virtual bool RemoveImagePieceList(const char* pszFile);
+
 	virtual const IMAGE_PIECE* FindImagePiece(const char* pszName);
 
 private:

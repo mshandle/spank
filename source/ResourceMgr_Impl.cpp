@@ -41,6 +41,7 @@ void ResourceMgr_Impl::Terminate()
 		SAFE_RELEASE(pTexture);
 	}
 	m_vTextures.clear();
+	m_TexturePieceMap.clear();
 }
 
 bool ResourceMgr_Impl::AddImagePieceList(const char* pszFile)
@@ -123,6 +124,12 @@ bool ResourceMgr_Impl::AddImagePieceList(const char* pszFile)
 	}
 
 	return true;
+}
+
+bool ResourceMgr_Impl::RemoveImagePieceList(const char* pszFile)
+{
+	// TODO: remove the image piece list
+	return false;
 }
 
 const IMAGE_PIECE* ResourceMgr_Impl::FindImagePiece(const char* pszName)

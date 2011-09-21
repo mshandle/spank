@@ -16,7 +16,7 @@ class UICheckButton : public UIWindow
 public:
 	DECLARE_RTTI(UICheckButton, UIWindow);
 
-	UICheckButton(UIWindow* pParent);
+	UICheckButton(UIWindow* pParent, const Vector2& pos = IMath::VEC2_ZERO, const char* pszText = NULL);
 	virtual ~UICheckButton();
 
 	virtual void Update(float dt);
@@ -28,6 +28,7 @@ public:
 	bool SetCheck(bool bCheck);
 	bool IsChecked() const;
 
+	bool SetCheckButtonTexture(const char* pszImageId, int nIndex);
 	bool SetCheckButtonTexture(const IMAGE_PIECE* pImagePiece, int nIndex);
 
 	virtual bool OnClicked(const Vector2& pos);

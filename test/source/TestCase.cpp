@@ -74,7 +74,7 @@ void TestCase::Render()
 
 void TestCase::AddReturnButton(UIScreen* pUIScreen)
 {
-	UITextView* pTextView = new UITextView(pUIScreen, "RETURN");
+	UITextView* pTextView = new UITextView(pUIScreen, IMath::VEC2_ZERO, "RETURN");
 
 	Vector2 pos(0.0f, ScreenUtil::GetInstance().GetScreenHeight() - pTextView->GetSize().y);
 	pTextView->SetPosition(pos);

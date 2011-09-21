@@ -13,13 +13,14 @@
 #include <util/IDebugUtil.h>
 #include <util/StringUtil.h>
 
-UIButton::UIButton(UIWindow *pParent)
-:UIWindow(pParent)
+UIButton::UIButton(UIWindow* pParent, const Vector2& pos /* = IMath::VEC2_ZERO */, const char* pszText /* = NULL */)
+:UIWindow(pParent, pos)
 {
-	m_pString = new UIString(NULL);
+	m_pString = new UIString(pszText);
 
 	// load default state styles
 	IUIResMgr::GetInstance().SetupDefaultButtonTextures(m_pStyle);
+
 	AdjustSize();
 }
 

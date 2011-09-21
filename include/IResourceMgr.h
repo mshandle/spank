@@ -19,6 +19,7 @@ public:
 	static IResourceMgr& GetInstance();
 
 	virtual bool AddImagePieceList(const char* pszFile) = 0;
+	virtual bool RemoveImagePieceList(const char* pszFile) = 0;
 	virtual const IMAGE_PIECE* FindImagePiece(const char* pszName) = 0;
 
 };

@@ -21,9 +21,11 @@ Sprite::Sprite(const char* pszSpriteFile)
 
 	m_fCurrTime = 0.0f;
 	m_nCurrIndex = 0;
-	m_bLoop = true;
+	m_nLoop = 0;
+	m_nCurrLoop = 0;
 
 	m_pSpriteFrames = NULL;
+	m_bRunning = false;
 
 	m_bOK = LoadSpriteFromFile(pszSpriteFile);
 }
@@ -36,11 +38,20 @@ Sprite::~Sprite()
 
 void Sprite::Update(float dt)
 {
+	if (!IsRunning()) return;
+
 	m_fCurrTime += dt;
+
 	if (m_fCurrTime > m_pSpriteFrames[m_nCurrIndex].fFrameTime)
 	{
 		m_fCurrTime -= m_pSpriteFrames[m_nCurrIndex].fFrameTime;
 		m_nCurrIndex = (m_nCurrIndex + 1) % m_nNumFrames;
+
+		if (m_nCurrIndex == 0)	// one loop ended
+		{
+			if (m_nCurrLoop > 0) --m_nCurrLoop;
+			if (m_nLoop > 0 && m_nCurrLoop == 0) Stop();
+		}
 	}
 }
 
@@ -57,9 +68,62 @@ void Sprite::Render()
 	IRenderer2D::GetInstance().DrawRect(0.0f, 0.0f, m_pSpriteFrames[m_nCurrIndex].pImagePiece, m_pShader);
 }
 
-void Sprite::SetLoop(bool bLoop)
+void Sprite::SetLoop(int nLoop)
 {
-	m_bLoop = bLoop;
+	m_nLoop = nLoop;
+	Reset();
+}
+
+int Sprite::GetLoop() const
+{
+	return m_nLoop;
+}
+
+int Sprite::GetCurrentLoop() const
+{
+	return m_nCurrLoop;
+}
+
+void Sprite::Start()
+{
+	SetRunning(true);
+}
+
+void Sprite::Stop()
+{
+	SetRunning(false);
+	Reset();
+}
+
+void Sprite::Pause()
+{
+	SetRunning(false);
+}
+
+void Sprite::Restart()
+{
+	Reset();
+	SetRunning(true);
+}
+
+void Sprite::Reset()
+{
+	m_fCurrTime = 0.0f;
+	m_nCurrIndex = 0;
+	m_nCurrLoop = m_nLoop;
+	m_bRunning = false;
+}
+
+bool Sprite::SetRunning(bool bRunning)
+{
+	bool difference = (m_bRunning != bRunning);
+	m_bRunning = bRunning;
+	return difference;
+}
+
+bool Sprite::IsRunning() const
+{
+	return m_bRunning;
 }
 
 bool Sprite::LoadSpriteFromFile(const char* pszSpriteFile)

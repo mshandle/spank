@@ -17,7 +17,13 @@
 class TweenTestCase : public TestCase
 {
 public:
+	enum CONST_DEFINE
+	{
+		TWEEN_TYPE_SIZE = 3,
+	};
+
 	typedef std::vector<IActionBase*> TV_ACTIONLOOP;
+
 public:
 	DECLARE_RTTI(TweenTestCase, TestCase);
 
@@ -33,15 +39,19 @@ public:
 	void OnEASEInButton(IMsgBase* pMsg);
 	void OnEASEOutButton(IMsgBase* pMsg);
 	void OnEASEInOutButton(IMsgBase* pMsg);
+
 private:
 	void UpdateTween();
+
 private:
+	IShader* m_pShader;
 	Sprite* m_pSpriteAction;
 	INode* m_pActionNode;
 	uint m_nIndexTween;
 	uint m_nEffectIndex;
 	UITextView* m_pUiText;
 	TV_ACTIONLOOP m_vActionLoop;
-	const static int TWEEN_TYPE_SIZE = 3;
+	const IMAGE_PIECE* m_pImagePiece;
+
 };
 #endif // __TWEENTESTCASE_H__

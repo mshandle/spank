@@ -19,11 +19,11 @@ static bool PointInRect(const Vector2& point, const Vector2& rectPos, const Vect
 	return true;
 }
 
-UIWindow::UIWindow(UIWindow* pParent)
+UIWindow::UIWindow(UIWindow* pParent, const Vector2& pos /* = IMath::VEC2_ZERO */)
 :IObject(pParent)
 {
 	m_nID = 0;
-	m_vPosition = IMath::VEC2_ZERO;
+	m_vPosition = pos;
 	m_vSize = IMath::VEC2_ZERO;
 
 	m_MarginLeftTop = IMath::VEC2_ZERO;
@@ -82,7 +82,13 @@ Vector2 UIWindow::GetPositionAbsolute()
 
 void UIWindow::SetPosition(const Vector2& pos)
 {
-	m_vPosition = pos;
+	SetPosition(pos.x, pos.y);
+}
+
+void UIWindow::SetPosition(float x, float y)
+{
+	m_vPosition.x = x;
+	m_vPosition.y = y;
 }
 
 const Vector2& UIWindow::GetSize() const
@@ -92,8 +98,14 @@ const Vector2& UIWindow::GetSize() const
 
 void UIWindow::SetSize(const Vector2& size)
 {
+	SetSize(size.x, size.y);
+}
+
+void UIWindow::SetSize(float width, float height)
+{
 	SetAutoAdjustSize(false);
-	m_vSize = size;
+	m_vSize.x = width;
+	m_vSize.y = height;
 }
 
 void UIWindow::SetMargin(float left, float top, float right, float bottom)

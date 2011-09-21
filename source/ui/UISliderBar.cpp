@@ -12,8 +12,8 @@
 #include <ui/uimsg/MsgSlider.h>
 #include <util/IDebugUtil.h>
 
-UISliderBar::UISliderBar(UIWindow* pParent)
-:UIWindow(pParent)
+UISliderBar::UISliderBar(UIWindow* pParent, const Vector2& pos /* = IMath::VEC2_ZERO */)
+:UIWindow(pParent, pos)
 {
 	m_nMinRange = SLIDERBAR_MIN_RANGE;
 	m_nMaxRange = SLIDERBAR_MAX_RANGE;

@@ -11,11 +11,11 @@
 #include <util/IDebugUtil.h>
 #include <ui/uimsg/MsgClick.h>
 
-UITextView::UITextView(UIWindow* pParent, const char* pszText)
-:UIWindow(pParent)
+UITextView::UITextView(UIWindow* pParent, const Vector2& pos /* = IMath::VEC2_ZERO */, const char* pszText /* = NULL */)
+:UIWindow(pParent, pos)
 {
-	m_pString = new UIString(NULL);
-	SetText(pszText);
+	m_pString = new UIString(pszText);
+	AdjustSize();
 }
 
 UITextView::~UITextView()

@@ -19,7 +19,7 @@ class UIButton : public UIWindow
 public:
 	DECLARE_RTTI(UIButton, UIWindow);
 
-	UIButton(UIWindow* pParent);
+	UIButton(UIWindow* pParent, const Vector2& pos = IMath::VEC2_ZERO, const char* pszText = NULL);
 	virtual ~UIButton();
 
 	virtual void Update(float dt);

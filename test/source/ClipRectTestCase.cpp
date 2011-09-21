@@ -21,7 +21,7 @@ ClipRectTestCase::~ClipRectTestCase()
 	//TODO:
 }
 
-bool ClipRectTestCase::Initialize( UIScreen* pUIScreen )
+bool ClipRectTestCase::Initialize(UIScreen* pUIScreen)
 {
 	////TODO:
 	return true;
@@ -79,7 +79,6 @@ void ClipRectTestCase::Render()
 	IRendererUI::GetInstance().SetupQuad(quad, m_pStyle[DUS_BUTTON_DEFAULT],Vector2(100.0f, 300.0f));
 	IRendererUI::GetInstance().ClipRect(quad,100.0f, 300.0f, 100.0f, 60.0f);
 	IRendererUI::GetInstance().DrawRect(quad);
-
 
 	IRendererUI::GetInstance().EndRender();
 }

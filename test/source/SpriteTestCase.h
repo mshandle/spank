@@ -23,6 +23,12 @@ public:
 	virtual void Terminate();
 
 private:
+	bool OnBtnStartClicked(IMsgBase* pMsg);
+	bool OnBtnPauseClicked(IMsgBase* pMsg);
+	bool OnBtnStopClicked(IMsgBase* pMsg);
+	bool OnBtnRestartClicked(IMsgBase* pMsg);
+
+private:
 	Sprite* m_pSprite;
 	INode* m_pSpriteNode;
 

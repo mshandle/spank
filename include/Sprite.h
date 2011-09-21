@@ -31,7 +31,18 @@ public:
 	virtual void Update(float dt);
 	virtual void Render();
 
-	virtual void SetLoop(bool bLoop);
+	void SetLoop(int nLoop);
+	int GetLoop() const;
+	int GetCurrentLoop() const;
+
+	void Start();
+	void Stop();
+	void Pause();
+	void Restart();
+	void Reset();
+
+	bool SetRunning(bool bRunning);
+	bool IsRunning() const;
 
 private:
 	bool LoadSpriteFromFile(const char* pszSpriteFile);
@@ -45,7 +56,11 @@ private:
 
 	float m_fCurrTime;
 	int m_nCurrIndex;
-	bool m_bLoop;
+
+	int m_nLoop;
+	int m_nCurrLoop;
+
+	bool m_bRunning;
 
 };
 #endif // __SPRITE_H__

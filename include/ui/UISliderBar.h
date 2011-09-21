@@ -23,7 +23,7 @@ public:
 public:
 	DECLARE_RTTI(UISliderBar, UIWindow);
 
-	UISliderBar(UIWindow* pParent);
+	UISliderBar(UIWindow* pParent, const Vector2& pos = IMath::VEC2_ZERO);
 	virtual ~UISliderBar();
 
 	virtual void Update(float dt);

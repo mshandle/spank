@@ -8,15 +8,18 @@
 #include <ui/UICheckButton.h>
 #include <ui/IRendererUI.h>
 #include <ui/IUIResMgr.h>
+#include <IResourceMgr.h>
 #include <ui/uimsg/MsgCheck.h>
 
-UICheckButton::UICheckButton(UIWindow* pParent)
-:UIWindow(pParent)
+UICheckButton::UICheckButton(UIWindow* pParent, const Vector2& pos /* = IMath::VEC2_ZERO */, const char* pszText /* = NULL */)
+:UIWindow(pParent, pos)
 {
-	m_pString = new UIString(NULL);
+	m_pString = new UIString(pszText);
 	m_bCheck = false;
+
 	// load default state styles
 	IUIResMgr::GetInstance().SetupDefaultCheckButtonTextures(m_pStyle);
+
 	AdjustSize();
 }
 
@@ -132,6 +135,11 @@ bool UICheckButton::SetCheck(bool bCheck)
 bool UICheckButton::IsChecked() const
 {
 	return m_bCheck;
+}
+
+bool UICheckButton::SetCheckButtonTexture(const char* pszImageId, int nIndex)
+{
+	return SetCheckButtonTexture(IResourceMgr::GetInstance().FindImagePiece(pszImageId), nIndex);
 }
 
 bool UICheckButton::SetCheckButtonTexture(const IMAGE_PIECE* pImagePiece, int nIndex)

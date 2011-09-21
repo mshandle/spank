@@ -9,15 +9,17 @@
 #include <ui/IRendererUI.h>
 #include <ui/IUIResMgr.h>
 #include <ui/uimsg/MsgCheck.h>
+#include <IResourceMgr.h>
 
-UIRadioButton::UIRadioButton(UIWindow* pParent)
-:UIWindow(pParent)
+UIRadioButton::UIRadioButton(UIWindow* pParent, const Vector2& pos /* = IMath::VEC2_ONE */, const char* pszText /* = NULL */)
+:UIWindow(pParent, pos)
 {
 	m_nGroupID = 1;
-	m_pString = new UIString(NULL);
+	m_pString = new UIString(pszText);
 	m_bCheck = false;
 
 	IUIResMgr::GetInstance().SetupDefaultRadioButtonTextures(m_pStyle, DUS_RADIOBUTTON_NUM);
+
 	AdjustSize();
 }
 
@@ -175,6 +177,11 @@ bool UIRadioButton::SetCheck(bool bCheck)
 bool UIRadioButton::IsChecked() const
 {
 	return m_bCheck;
+}
+
+bool UIRadioButton::SetRadioButtonTexture(const char* pszImageId, int nIndex)
+{
+	return SetRadioButtonTexture(IResourceMgr::GetInstance().FindImagePiece(pszImageId), nIndex);
 }
 
 bool UIRadioButton::SetRadioButtonTexture(const IMAGE_PIECE* pImagePiece, int nIndex)

@@ -138,7 +138,7 @@ bool GameApp::AddTestCase(TestCase* pTestCase, UIScreen* pScreen)
 
 	int nIndex = (int)m_vTestCase.size();
 
-	UITextView* pTextView = new UITextView(pScreen, pTestCase->GetName());
+	UITextView* pTextView = new UITextView(pScreen, IMath::VEC2_ZERO, pTestCase->GetName());
 
 	Vector2 pos((ScreenUtil::GetInstance().GetScreenWidth() - pTextView->GetSize().x) / 2.0f, m_vTextViewPos.y);
 	pTextView->SetID(nIndex);

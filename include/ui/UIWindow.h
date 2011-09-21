@@ -34,7 +34,7 @@ public:
 public:
 	DECLARE_RTTI(UIWindow, IObject);
 
-	UIWindow(UIWindow* pParent);
+	UIWindow(UIWindow* pParent, const Vector2& pos = IMath::VEC2_ZERO);
 	virtual ~UIWindow();
 
 	virtual void Update(float dt) = 0;
@@ -49,9 +49,11 @@ public:
 	const Vector2& GetPosition() const;
 	Vector2 GetPositionAbsolute();
 	void SetPosition(const Vector2& pos);
+	void SetPosition(float x, float y);
 
 	const Vector2& GetSize() const;
 	void SetSize(const Vector2& size);
+	void SetSize(float width, float height);
 
 	void SetMargin(float left, float top, float right, float bottom);
 	const Vector2& GetMarginLeftTop() const;
