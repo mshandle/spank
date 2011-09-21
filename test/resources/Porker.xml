@@ -2,7 +2,7 @@
 <ImagePiece>
     <ImageList>
         <Image id="1" file="background_1024_v2.png" />
-        <Image id="2" file="newcomponent.png" />
+        <Image id="2" file="newcomponent.png" sample="linear"  />
     </ImageList>
     <PieceList>
         <Piece id="backgorund" image="1" x="0" y="0" width="1024" height="768" />
@@ -39,11 +39,17 @@
 				<Piece id="CirYellowRight" image="2" x="370" y="253" width="74" height="148" />
 				<Piece id="CirGreenRight" image="2" x="222" y="253" width="74" height="148" />
 				<Piece id="CirGreenLeft" image="2" x="148" y="253" width="74" height="148" />
-				<Piece id="Sit" image="2" x="0" y="401" width="95" height="95" />
+				<Piece id="Sit" image="2" x="0" y="402" width="95" height="95" />
 				<Piece id="PhotoFrame" image="2" x="100" y="401" width="95" height="133" />
 				<Piece id="PokerBack" image="2" x="195" y="401" width="58" height="60" />
 				<Piece id="PhotoBox" image="2" x="253" y="401" width="98" height="47" />
 				<Piece id="Normal" image="2" x="256" y="454" width="47" height="12" />
+				<Piece id="Cup" image="2" x="0" y="500" width="39" height="39" />
+				<Piece id="NewBuddy" image="2" x="0" y="540" width="241" height="48" />
+				<Piece id="Envelope" image="2" x="0" y="588" width="57" height="48" />
+				<Piece id="CirBlackRight" image="2" x="0" y="675" width="90" height="180" />
+				<Piece id="CirBlackLeft" image="2" x="90" y="675" width="90" height="180" />
+				
 				
     </PieceList>
 </ImagePiece>
