@@ -107,6 +107,7 @@ bool TweenTestCase::Initialize(UIScreen* pUIScreen)
 	char* psz_Text = "ActionElasticMoveTo";
 	m_pUiText = new UITextView(pUIScreen,psz_Text);
 	m_pUiText->SetPosition (Vector2(10.0f,340.0f));
+
 	ActionSequeue* pActionSequeue = new ActionSequeue();
 	pActionSequeue->AddAction(m_vActionLoop[m_nIndexTween * TWEEN_TYPE_SIZE + m_nEffectIndex]);
 	m_vActionLoop[m_nIndexTween * TWEEN_TYPE_SIZE + m_nEffectIndex]->IncRef();

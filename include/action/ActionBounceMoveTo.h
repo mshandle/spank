@@ -26,7 +26,7 @@ public:
 	virtual float GetTimeLength() const;
 private:
 	Vector3 Tween();
-	Vector3 BounceTween(float t, Vector3& b, Vector3& c, float d);
+	Vector3 BounceTween(float t, const Vector3& b, const Vector3& c, float d);
 private:
 	Vector3 m_vPosStart;
 	Vector3 m_vPosEnd;

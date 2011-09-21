@@ -59,7 +59,6 @@ float ActionBounceMoveTo::GetTimeLength() const
 
 Vector3 ActionBounceMoveTo::Tween()
 {
-	float alpha = 0.0f;
 	Vector3 vPos (0.0f ,0.0f, 0.0f);
 	switch(m_eType)
 	{
@@ -84,7 +83,7 @@ Vector3 ActionBounceMoveTo::Tween()
 	}
 }
 
-Vector3 ActionBounceMoveTo::BounceTween( float t, Vector3& b, Vector3& c, float d )
+Vector3 ActionBounceMoveTo::BounceTween( float t, const Vector3& b, const Vector3& c, float d )
 {
 	
 	if ((t/=d) < (1/2.75f)) 
