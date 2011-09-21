@@ -7,9 +7,10 @@
  */
 #ifndef __PORKERTESTCASE_H_
 #define __PORKERTESTCASE_H_
+
 #include "TestCase.h"
-#include <ITexture.h>
 #include <IShader.h>
+
 class PorkerTestCase : public TestCase
 {
 public:
@@ -20,9 +21,12 @@ public:
 
 	virtual bool Initialize(UIScreen* pUIScreen);
 	virtual void Terminate();
+
 	virtual void Render();
+
 private:
-	const IMAGE_PIECE* m_pBackGroundImagePiece;
 	 IShader* m_pShader;	
+	 const IMAGE_PIECE* m_pBackGroundImagePiece;
 };
+
 #endif//__PORKERTESTCASE_H_

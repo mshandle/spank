@@ -78,7 +78,7 @@ void TestCase::AddReturnButton(UIScreen* pUIScreen)
 
 	Vector2 pos(0.0f, ScreenUtil::GetInstance().GetScreenHeight() - pTextView->GetSize().y);
 	pTextView->SetPosition(pos);
-	pTextView->ConnectEvent(UMI_CLICKED, this, CAST_MSG_CALLBACK(&TestCase::OnBtnReturnClicked));
+	pTextView->ConnectEvent(UMI_CLICKED, this, (MSG_CALLBACK)&TestCase::OnBtnReturnClicked);
 }
 
 bool TestCase::OnBtnReturnClicked(IMsgBase* pMsg)

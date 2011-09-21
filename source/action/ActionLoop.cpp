@@ -12,7 +12,7 @@
 ActionLoop::ActionLoop(IActionBase* pAction, int nLoop /* = 0 */)
 {
 	m_pAction = pAction;
-	m_pAction->ConnectEvent(MI_ACTION_UPDATE, this, CAST_MSG_CALLBACK(&ActionLoop::OnActionUpdate));
+	m_pAction->ConnectEvent(MI_ACTION_UPDATE, this, (MSG_CALLBACK)&ActionLoop::OnActionUpdate);
 	m_nLoop = nLoop;
 
 	Reset();

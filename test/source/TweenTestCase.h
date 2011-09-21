@@ -14,6 +14,7 @@
 #include <action/ActionLoop.h>
 #include <ui/UITextView.h>
 #include <vector>
+
 class TweenTestCase : public TestCase
 {
 public:
@@ -34,11 +35,11 @@ public:
 	virtual void Terminate();
 	virtual void Render();
 
-	void OnPrvButton(IMsgBase* pMsg);
-	void OnNextButton(IMsgBase* pMsg);
-	void OnEASEInButton(IMsgBase* pMsg);
-	void OnEASEOutButton(IMsgBase* pMsg);
-	void OnEASEInOutButton(IMsgBase* pMsg);
+	bool OnPrvButton(IMsgBase* pMsg);
+	bool OnNextButton(IMsgBase* pMsg);
+	bool OnEASEInButton(IMsgBase* pMsg);
+	bool OnEASEOutButton(IMsgBase* pMsg);
+	bool OnEASEInOutButton(IMsgBase* pMsg);
 
 private:
 	void UpdateTween();

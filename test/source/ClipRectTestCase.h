@@ -6,11 +6,10 @@
  * \author:	wbaoqing(wbaoqing@gmail.com)
  */
 
-#ifndef __CLIPRECTESTCASE_H_
-#define __CLIPRECTESTCASE_H_
+#ifndef __CLIPRECTESTCASE_H__
+#define __CLIPRECTESTCASE_H__
 
 #include "TestCase.h"
-
 
 class ClipRectTestCase :public TestCase
 {
@@ -23,7 +22,9 @@ public:
 	virtual bool Initialize(UIScreen* pUIScreen);
 	virtual void Terminate();
 	virtual void Render();
+
 private:
 	const IMAGE_PIECE* m_pStyle[DUS_BUTTON_NUM];
+
 };
-#endif//__CLIPRECTESTCASE_H_
+#endif // __CLIPRECTESTCASE_H__

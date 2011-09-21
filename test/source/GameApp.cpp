@@ -27,6 +27,7 @@
 #include "ClipRectTestCase.h"
 #include "TweenTestCase.h"
 #include "PorkerTestCase.h"
+
 IGameApp& IGameApp::GetInstance()
 {
 	static GameApp s_GameApp;
@@ -47,7 +48,7 @@ GameApp::~GameApp()
 
 bool GameApp::Initialize()
 {
-	MsgMgr::GetInstance().SubscribeMessage(MI_TOUCH, this, CAST_MSG_CALLBACK(&GameApp::OnMsgTouch));
+	MsgMgr::GetInstance().SubscribeMessage(MI_TOUCH, this, (MSG_CALLBACK)&GameApp::OnMsgTouch);
 
 	IResourceMgr::GetInstance().AddImagePieceList("test_case.xml");
 	IResourceMgr::GetInstance().AddImagePieceList("Porker.xml");
@@ -143,10 +144,10 @@ bool GameApp::AddTestCase(TestCase* pTestCase, UIScreen* pScreen)
 	Vector2 pos((ScreenUtil::GetInstance().GetScreenWidth() - pTextView->GetSize().x) / 2.0f, m_vTextViewPos.y);
 	pTextView->SetID(nIndex);
 	pTextView->SetPosition(pos);
-	pTextView->ConnectEvent(UMI_CLICKED, this, CAST_MSG_CALLBACK(&GameApp::OnBtnTestCaseClicked));
+	pTextView->ConnectEvent(UMI_CLICKED, this, (MSG_CALLBACK)&GameApp::OnBtnTestCaseClicked);
 
 	m_vTestCase.push_back(pTestCase);
-	pTestCase->ConnectEvent(MI_USER_RETURN, this, CAST_MSG_CALLBACK(&GameApp::OnBtnReturnClicked));
+	pTestCase->ConnectEvent(MI_USER_RETURN, this, (MSG_CALLBACK)&GameApp::OnBtnReturnClicked);
 
 	m_vTextViewPos.y += pTextView->GetSize().y;
 	return true;

@@ -108,7 +108,7 @@ bool TweenTestCase::Initialize(UIScreen* pUIScreen)
 	m_vActionLoop.push_back(new ActionQuadMoveTo(ATT_EASE_OUT, Vector3(-350.0f, 0.0f ,0.0f), Vector3(350.0f , 0.0f, 0.0f), 3.0f));
 	m_vActionLoop.push_back(new ActionQuadMoveTo(ATT_EASE_IN_OUT, Vector3(-350.0f, 0.0f ,0.0f), Vector3(350.0f , 0.0f, 0.0f), 3.0f));
 
-	m_pUiText = new UITextView(pUIScreen, Vector2(10.0f,340.0f), "ActionElasticMoveTo");
+	m_pUiText = new UITextView(pUIScreen, Vector2(10.0f, 340.0f), "ActionElasticMoveTo");
 
 	ActionSequeue* pActionSequeue = new ActionSequeue();
 	pActionSequeue->AddAction(m_vActionLoop[m_nIndexTween * TWEEN_TYPE_SIZE + m_nEffectIndex]);
@@ -117,20 +117,20 @@ bool TweenTestCase::Initialize(UIScreen* pUIScreen)
 	m_pActionNode->RunAction(pActionLoop);
 	
 	UIButton* pBtRrvButton = new UIButton(pUIScreen, Vector2(10.0f, 10.0f), "Prv");
-	pBtRrvButton->ConnectEvent(UMI_CLICKED, this, CAST_MSG_CALLBACK(&TweenTestCase::OnPrvButton));
+	pBtRrvButton->ConnectEvent(UMI_CLICKED, this, (MSG_CALLBACK)&TweenTestCase::OnPrvButton);
 
-	UIButton* pBtNextButton = new UIButton(pUIScreen, Vector2(10.f, 60.0f), "Next");
-	pBtNextButton->ConnectEvent(UMI_CLICKED, this, CAST_MSG_CALLBACK(&TweenTestCase::OnNextButton));
+	UIButton* pBtNextButton = new UIButton(pUIScreen, Vector2(10.0f, 60.0f), "Next");
+	pBtNextButton->ConnectEvent(UMI_CLICKED, this, (MSG_CALLBACK)&TweenTestCase::OnNextButton);
 
 	UIRadioButton* pBtInButton = new UIRadioButton(pUIScreen, Vector2(200.0f, 10.0f), "Ease In");
 	pBtInButton->SetCheck(true);
-	pBtInButton->ConnectEvent(UMI_CHECKED, this, CAST_MSG_CALLBACK(&TweenTestCase::OnEASEInButton));
+	pBtInButton->ConnectEvent(UMI_CHECKED, this, (MSG_CALLBACK)&TweenTestCase::OnEASEInButton);
 
 	UIRadioButton* pBtOutButton = new UIRadioButton(pUIScreen, Vector2(200.0f, 60.0f), "Ease Out");
-	pBtOutButton->ConnectEvent(UMI_CHECKED, this, CAST_MSG_CALLBACK(&TweenTestCase::OnEASEOutButton));
+	pBtOutButton->ConnectEvent(UMI_CHECKED, this, (MSG_CALLBACK)&TweenTestCase::OnEASEOutButton);
 
 	UIRadioButton* pBtInOutButton = new UIRadioButton(pUIScreen, Vector2(200.0f, 110.0f), "Ease In & Out");
-	pBtInOutButton->ConnectEvent(UMI_CHECKED, this, CAST_MSG_CALLBACK(&TweenTestCase::OnEASEInOutButton));
+	pBtInOutButton->ConnectEvent(UMI_CHECKED, this, (MSG_CALLBACK)&TweenTestCase::OnEASEInOutButton);
 
 	return true;
 }
@@ -150,43 +150,52 @@ void TweenTestCase::Render()
 	IRenderer2D::GetInstance().DrawRect(0.0f, 0.0f, 700.0f, 3.0f, m_pImagePiece, m_pShader);
 }
 
-void TweenTestCase::OnPrvButton(IMsgBase* pMsg)
+bool TweenTestCase::OnPrvButton(IMsgBase* pMsg)
 {
 	if(((int)m_nIndexTween - 1) >= 0)
 	{
-		m_nIndexTween --;
+		m_nIndexTween--;
 		UpdateTween();
 	}
+
+	return true;
 }
 
-void TweenTestCase::OnNextButton(IMsgBase* pMsg)
+bool TweenTestCase::OnNextButton(IMsgBase* pMsg)
 {
 	if((m_nIndexTween + 1) < (m_vActionLoop.size() / TWEEN_TYPE_SIZE))
 	{
 		m_nIndexTween++;
 		UpdateTween();
 	}
+
+	return true;
 }
 
-void TweenTestCase::OnEASEInButton(IMsgBase* pMsg)
+bool TweenTestCase::OnEASEInButton(IMsgBase* pMsg)
 { 
-	if(m_nEffectIndex == 0) return;
+	if(m_nEffectIndex == 0) return true;
 	m_nEffectIndex = 0;
 	UpdateTween();
+
+	return true;
 }
 
-void TweenTestCase::OnEASEOutButton(IMsgBase* pMsg)
+bool TweenTestCase::OnEASEOutButton(IMsgBase* pMsg)
 {
-	if(m_nEffectIndex == 1) return;
+	if(m_nEffectIndex == 1) return true;
 	m_nEffectIndex = 1;
 	UpdateTween();
+	return true;
 }
 
-void TweenTestCase::OnEASEInOutButton(IMsgBase* pMsg)
+bool TweenTestCase::OnEASEInOutButton(IMsgBase* pMsg)
 {
-	if(m_nEffectIndex == 2) return;
+	if(m_nEffectIndex == 2) return true;
 	m_nEffectIndex = 2;
 	UpdateTween();
+
+	return true;
 }
 
 void TweenTestCase::UpdateTween()

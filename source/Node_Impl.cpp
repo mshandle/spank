@@ -169,7 +169,7 @@ void Node_Impl::RunAction(IActionBase* pAction)
 
 	if (m_pAction)
 	{
-		m_pAction->ConnectEvent(MI_ACTION_UPDATE, this, CAST_MSG_CALLBACK(&Node_Impl::OnActionUpdate));
+		m_pAction->ConnectEvent(MI_ACTION_UPDATE, this, (MSG_CALLBACK)&Node_Impl::OnActionUpdate);
 		m_pAction->Start();
 	}
 }

@@ -51,7 +51,7 @@ bool UITestCase::Initialize(UIScreen* pUIScreen)
 		pButton->SetID(nID++);
 		pButton->SetPosition(Vector2(10.0f, 10.0f));
 		pButton->SetText("Button1");
-		pButton->ConnectEvent(UMI_CLICKED, this, CAST_MSG_CALLBACK(&UITestCase::OnButtonClicked));
+		pButton->ConnectEvent(UMI_CLICKED, this, (MSG_CALLBACK)&UITestCase::OnButtonClicked);
 	}
 
 	{
@@ -62,7 +62,7 @@ bool UITestCase::Initialize(UIScreen* pUIScreen)
 			pUICheck->SetID(nID++);
 			pUICheck->SetPosition(Vector2(10.0f, 100.0f+i*50.0f));
 			pUICheck->SetText("Check");
-			pUICheck->ConnectEvent(UMI_CHECKED, this, CAST_MSG_CALLBACK(&UITestCase::OnCheckButtonChecked));
+			pUICheck->ConnectEvent(UMI_CHECKED, this, (MSG_CALLBACK)&UITestCase::OnCheckButtonChecked);
 		}
 	}
 
@@ -74,7 +74,7 @@ bool UITestCase::Initialize(UIScreen* pUIScreen)
 			pUIRadio->SetID(nID++);
 			pUIRadio->SetPosition(Vector2(210.0f, 100.0f+i*50.0f));
 			pUIRadio->SetText("Radio");
-			pUIRadio->ConnectEvent(UMI_CHECKED, this, CAST_MSG_CALLBACK(&UITestCase::OnRadioButtonChecked));
+			pUIRadio->ConnectEvent(UMI_CHECKED, this, (MSG_CALLBACK)&UITestCase::OnRadioButtonChecked);
 		}
 	}
 
@@ -84,7 +84,7 @@ bool UITestCase::Initialize(UIScreen* pUIScreen)
 		pSlider->SetID(nID++);
 		pSlider->SetPosition(Vector2(10.0f, 250.0f));
 		pSlider->SetSliderRange(0, 10);
-		pSlider->ConnectEvent(UMI_SLIDER, this, CAST_MSG_CALLBACK(&UITestCase::OnSlider));
+		pSlider->ConnectEvent(UMI_SLIDER, this, (MSG_CALLBACK)&UITestCase::OnSlider);
 	}
 
 	return true;
@@ -95,26 +95,30 @@ void UITestCase::Terminate()
 	// TODO: 
 }
 
-void UITestCase::OnButtonClicked(IMsgBase* pMsg)
+bool UITestCase::OnButtonClicked(IMsgBase* pMsg)
 {
 	MsgClick* pMsgClick = (MsgClick*)pMsg;
 	LOGD("button (%d) clicked", pMsgClick->GetSenderID());
+	return true;
 }
 
-void UITestCase::OnCheckButtonChecked(IMsgBase* pMsg)
+bool UITestCase::OnCheckButtonChecked(IMsgBase* pMsg)
 {
 	MsgCheck* pMsgCheck = (MsgCheck*)pMsg;
 	LOGD("check button (%d) checked: (%d)", pMsgCheck->GetSenderID(), (int)pMsgCheck->IsChecked());
+	return true;
 }
 
-void UITestCase::OnRadioButtonChecked(IMsgBase* pMsg)
+bool UITestCase::OnRadioButtonChecked(IMsgBase* pMsg)
 {
 	MsgCheck* pMsgCheck = (MsgCheck*)pMsg;
 	LOGD("radio button (%d) checked: (%d)", pMsgCheck->GetSenderID(), (int)pMsgCheck->IsChecked());
+	return true;
 }
 
-void UITestCase::OnSlider(IMsgBase* pMsg)
+bool UITestCase::OnSlider(IMsgBase* pMsg)
 {
 	MsgSlider* pMsgSlider = (MsgSlider*)pMsg;
 	LOGD("slider bar (%d) pos:%d", pMsgSlider->GetSenderID(), pMsgSlider->GetPosition());
+	return true;
 }

@@ -14,9 +14,20 @@
 #include <map>
 
 class IMsgHandler;
-typedef bool (IMsgHandler::*MSG_CALLBACK)(IMsgBase* pMsg);
 
-#define CAST_MSG_CALLBACK(x) reinterpret_cast<MSG_CALLBACK>(x)
+/*! define the message handle function like this:
+ *
+ *      bool On[Object][Action](IMsgBase* pMsg);
+ *
+ *  ex: 
+ *
+ *      bool OnButtonClicked(ImsgBase* pMsg);
+ *
+ * if the return value is true means you have process this message,
+ * otherwise you don't want to process this message, and the message
+ * will pass to another appropriate object
+ */
+typedef bool (IMsgHandler::*MSG_CALLBACK)(IMsgBase* pMsg);
 
 class IMsgHandler
 {

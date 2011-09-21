@@ -53,7 +53,7 @@ ITexture* TextureMgr_Impl::CreateTexture(const char* pszFileName, TEXTURE_SAMPLE
 	}
 
 	// connect the destroy event
-	pTexture_Impl->ConnectEvent(MI_TEXTURE_DESTROIED, this, CAST_MSG_CALLBACK(&TextureMgr_Impl::OnTextureDestroied));
+	pTexture_Impl->ConnectEvent(MI_TEXTURE_DESTROIED, this, (MSG_CALLBACK)&TextureMgr_Impl::OnTextureDestroied);
 	// cache the texture
 	m_TextureMap.insert(std::make_pair(pszFileName, pTexture_Impl));
 

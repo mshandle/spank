@@ -22,10 +22,10 @@ public:
 	virtual void Terminate();
 
 private:
-	void OnButtonClicked(IMsgBase* pMsg);
-	void OnCheckButtonChecked(IMsgBase* pMsg);
-	void OnRadioButtonChecked(IMsgBase* pMsg);
-	void OnSlider(IMsgBase* pMsg);
+	bool OnButtonClicked(IMsgBase* pMsg);
+	bool OnCheckButtonChecked(IMsgBase* pMsg);
+	bool OnRadioButtonChecked(IMsgBase* pMsg);
+	bool OnSlider(IMsgBase* pMsg);
 
 };
 #endif // __UITESTCASE_H__

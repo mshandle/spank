@@ -59,7 +59,7 @@ bool RendererUI_Impl::Initialize()
 		int nVertexAttributeSize = m_pShader_POS_UV->GetVertexAttribute()->GetStride();
 		m_pCaches_POS_UV[i] = new VertexCache(4*NUM_POS_UV_PRIMETIVE_PER_CACHE*nVertexAttributeSize, 6*NUM_POS_UV_PRIMETIVE_PER_CACHE);
 		if (!m_pCaches_POS_UV[i] || !m_pCaches_POS_UV[i]->IsOK()) return false;
-		m_pCaches_POS_UV[i]->ConnectEvent(MI_RENDERER_UI_FLUSH, this, CAST_MSG_CALLBACK(&RendererUI_Impl::OnTriangleCacheFlushed));
+		m_pCaches_POS_UV[i]->ConnectEvent(MI_RENDERER_UI_FLUSH, this, (MSG_CALLBACK)&RendererUI_Impl::OnTriangleCacheFlushed);
 	}
 
 	return true;

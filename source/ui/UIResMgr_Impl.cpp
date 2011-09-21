@@ -75,7 +75,7 @@ IFont* UIResMgr_Impl::CreateFont(const char* pszFontFile)
 	}
 
 	// connect the destroy event
-	pFont_Impl->ConnectEvent(MI_FONT_DESTROIED, this, CAST_MSG_CALLBACK(&UIResMgr_Impl::OnFontDestroied));
+	pFont_Impl->ConnectEvent(MI_FONT_DESTROIED, this, (MSG_CALLBACK)&UIResMgr_Impl::OnFontDestroied);
 	// cache the texture
 	m_mapFont.insert(std::make_pair(pszFontFile, pFont_Impl));
 

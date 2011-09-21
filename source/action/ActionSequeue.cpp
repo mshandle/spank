@@ -30,7 +30,7 @@ IActionBase* ActionSequeue::AddAction(IActionBase* pAction)
 {
 	if (!pAction) return NULL;
 
-	pAction->ConnectEvent(MI_ACTION_UPDATE, this, CAST_MSG_CALLBACK(&ActionSequeue::OnActionUpdate));
+	pAction->ConnectEvent(MI_ACTION_UPDATE, this, (MSG_CALLBACK)&ActionSequeue::OnActionUpdate);
 	m_fTimeLength += pAction->GetTimeLength();
 	m_vAction.push_back(pAction);
 	return pAction;

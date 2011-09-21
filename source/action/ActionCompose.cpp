@@ -29,7 +29,7 @@ IActionBase* ActionCompose::AddAction(IActionBase* pAction)
 {
 	if (!pAction) return NULL;
 
-	pAction->ConnectEvent(MI_ACTION_UPDATE, this, CAST_MSG_CALLBACK(&ActionCompose::OnActionUpdate));
+	pAction->ConnectEvent(MI_ACTION_UPDATE, this, (MSG_CALLBACK)&ActionCompose::OnActionUpdate);
 	if (m_fMaxTime < pAction->GetTimeLength()) m_fMaxTime = pAction->GetTimeLength();
 	m_vAction.push_back(pAction);
 	return pAction;

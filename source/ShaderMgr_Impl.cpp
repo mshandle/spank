@@ -161,7 +161,7 @@ IShader* ShaderMgr_Impl::InternalCreateShader(int nShaderID, const char* pszVert
 	}
 
 	// connect the destroy event
-	pShader->ConnectEvent(MI_SHADER_DESTROIED, this, CAST_MSG_CALLBACK(&ShaderMgr_Impl::OnShaderDestroied));
+	pShader->ConnectEvent(MI_SHADER_DESTROIED, this, (MSG_CALLBACK)&ShaderMgr_Impl::OnShaderDestroied);
 	// cache the shader
 	m_mapShader.insert(std::make_pair(nShaderID, pShader));
 
