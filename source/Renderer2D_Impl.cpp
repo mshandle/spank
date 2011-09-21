@@ -101,22 +101,22 @@ void Renderer2D_Impl::EndRender()
 	// TODO: 
 }
 
-void Renderer2D_Impl::DrawPoints( const void* pVerts, uint nNumVerts, IShader* pShader )
-{
-	if(!pShader) return;
-
-	pShader->Commit(pVerts);
-	glDrawArrays(GL_POINTS, 0, nNumVerts);
-}
-
-void Renderer2D_Impl::DrawLineList(const void* pVerts, uint nNumVerts, const ushort* pIndis, uint nNumIndis, IShader* pShader)
-{
-	if(!pShader) return;
-
-	pShader->Commit(pVerts);
-// 	glLineWidth(2.0f);
-	glDrawElements(GL_LINES, nNumIndis, GL_UNSIGNED_SHORT, pIndis);
-}
+// void Renderer2D_Impl::DrawPoints(const void* pVerts, uint nNumVerts, IShader* pShader)
+// {
+// 	if(!pShader) return;
+// 
+// 	pShader->Commit(pVerts);
+// 	glDrawArrays(GL_POINTS, 0, nNumVerts);
+// }
+// 
+// void Renderer2D_Impl::DrawLineList(const void* pVerts, uint nNumVerts, const ushort* pIndis, uint nNumIndis, IShader* pShader)
+// {
+// 	if(!pShader) return;
+// 
+// 	pShader->Commit(pVerts);
+// // 	glLineWidth(2.0f);
+// 	glDrawElements(GL_LINES, nNumIndis, GL_UNSIGNED_SHORT, pIndis);
+// }
 
 void Renderer2D_Impl::DrawTriangleList(const void* pVerts, uint nNumVerts, const ushort* pIndis, uint nNumIndis, IShader* pShader)
 {

@@ -76,6 +76,8 @@ public:
 	void AdjustSize();
 
 	virtual bool ProcessTouchEvent(const Vector2& pos, UI_TOUCH_EVENT_TYPE eType);
+
+	UIWindow* FindChildWindow(int nID);
 	bool EnumlateChildrenWindows(TV_WINDOW& vWindowsOut, IMsgHandler* pHandler, ENUM_WINDOW_FILTER pCallback, void* pCustomData);
 
 	virtual bool OnClicked(const Vector2& pos);

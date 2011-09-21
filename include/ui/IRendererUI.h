@@ -20,11 +20,11 @@ public:
 
 	virtual void SetTexture(ITexture* pTexture) = 0;
 
-	virtual void DrawLineList(const VATTR_POS_RGB* pVerts, uint nVerts, const ushort* pIndis, uint nIndis) = 0;
-	virtual void DrawLineRect(const QUAD_VERT_POS_RGB& quad) = 0;
-	virtual void DrawLineRect(const Vector2& pos, const Vector2& size) = 0;
-	virtual void DrawLineRect(float x, float y, float width, float height) = 0;
-	virtual void SetColor(float r, float g, float b, float a) = 0;
+// 	virtual void DrawLineList(const VATTR_POS_RGB* pVerts, uint nVerts, const ushort* pIndis, uint nIndis) = 0;
+// 	virtual void DrawLineRect(const QUAD_VERT_POS_RGB& quad) = 0;
+// 	virtual void DrawLineRect(const Vector2& pos, const Vector2& size) = 0;
+// 	virtual void DrawLineRect(float x, float y, float width, float height) = 0;
+// 	virtual void SetColor(float r, float g, float b, float a) = 0;
 
 	virtual void DrawTriangleList(const VATTR_POS_UV* pVerts, uint nVerts, const ushort* pIndis, uint nIndis) = 0;
 	virtual void DrawRect(const QUAD_VERT_POS_UV& quad) = 0;

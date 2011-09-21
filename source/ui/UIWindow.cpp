@@ -233,6 +233,16 @@ bool UIWindow::ProcessTouchEvent(const Vector2& pos, UI_TOUCH_EVENT_TYPE eType)
 	return bProcessed;
 }
 
+UIWindow* UIWindow::FindChildWindow(int nID)
+{
+	for (TV_WINDOW::iterator it = m_vChildren.begin(); it != m_vChildren.end(); ++it)
+	{
+		UIWindow* pWindow = (*it);
+		if (pWindow->GetID() == nID) return pWindow;
+	}
+	return NULL;
+}
+
 bool UIWindow::EnumlateChildrenWindows(TV_WINDOW& vWindowsOut, IMsgHandler* pHandler, ENUM_WINDOW_FILTER pCallback, void* pCustomData)
 {
 	if (!pHandler || !pCallback) return false;

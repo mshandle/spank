@@ -17,8 +17,8 @@ class RendererUI_Impl : public IRendererUI
 public:
 	enum CONST_DEFINE
 	{
-		NUM_POS_RGB_CACHE = 1,
-		NUM_POS_RGB_PRIMETIVE_PER_CACHE = 128,
+// 		NUM_POS_RGB_CACHE = 1,
+// 		NUM_POS_RGB_PRIMETIVE_PER_CACHE = 128,
 
 		NUM_POS_UV_CACHE = 10,
 		NUM_POS_UV_PRIMETIVE_PER_CACHE = 128,
@@ -35,11 +35,11 @@ public:
 
 	virtual void SetTexture(ITexture* pTexture);
 
-	virtual void DrawLineList(const VATTR_POS_RGB* pVerts, uint nVerts, const ushort* pIndis, uint nIndis);
-	virtual void DrawLineRect(const QUAD_VERT_POS_RGB& quad);
-	virtual void DrawLineRect(const Vector2& pos, const Vector2& size);
-	virtual void DrawLineRect(float x, float y, float width, float height);
-	virtual void SetColor(float r, float g, float b, float a);
+// 	virtual void DrawLineList(const VATTR_POS_RGB* pVerts, uint nVerts, const ushort* pIndis, uint nIndis);
+// 	virtual void DrawLineRect(const QUAD_VERT_POS_RGB& quad);
+// 	virtual void DrawLineRect(const Vector2& pos, const Vector2& size);
+// 	virtual void DrawLineRect(float x, float y, float width, float height);
+// 	virtual void SetColor(float r, float g, float b, float a);
 
 	virtual void DrawTriangleList(const VATTR_POS_UV* pVerts, uint nVerts, const ushort* pIndis, uint nIndis);
 
@@ -69,18 +69,18 @@ public:
 
 private:
 	bool AddPrimetive(VertexCache** pCache, int nNumCache, IShader* pShader, ITexture* pTexture, const void* pVerts, uint nVerts, const ushort* pIndis, uint nIndis);
-	bool OnLineCacheFlushed(IMsgBase* pMsg);
+// 	bool OnLineCacheFlushed(IMsgBase* pMsg);
 	bool OnTriangleCacheFlushed(IMsgBase* pMsg);
 
 private:
-	VertexCache* m_pCaches_POS_RGB[NUM_POS_RGB_CACHE];
-	IShader* m_pShader_POS_RGB;
+// 	VertexCache* m_pCaches_POS_RGB[NUM_POS_RGB_CACHE];
+// 	IShader* m_pShader_POS_RGB;
 
 	VertexCache* m_pCaches_POS_UV[NUM_POS_UV_CACHE];
 	IShader* m_pShader_POS_UV;
 
 	ITexture* m_pTexture;
-	Vector4 m_vColor;
+// 	Vector4 m_vColor;
 	bool m_bRenderBegan;
 
 };
