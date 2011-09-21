@@ -104,8 +104,7 @@ bool TweenTestCase::Initialize(UIScreen* pUIScreen)
 	m_vActionLoop.push_back(new ActionQuadMoveTo(ATT_EASE_OUT, Vector3(-350.0f, 0.0f ,0.0f), Vector3(350.0f , 0.0f, 0.0f), 3.0f));
 	m_vActionLoop.push_back(new ActionQuadMoveTo(ATT_EASE_IN_OUT, Vector3(-350.0f, 0.0f ,0.0f), Vector3(350.0f , 0.0f, 0.0f), 3.0f));
 
-	char* psz_Text = "ActionElasticMoveTo";
-	m_pUiText = new UITextView(pUIScreen,psz_Text);
+	m_pUiText = new UITextView(pUIScreen, "ActionElasticMoveTo");
 	m_pUiText->SetPosition (Vector2(10.0f,340.0f));
 
 	ActionSequeue* pActionSequeue = new ActionSequeue();

@@ -176,7 +176,6 @@ void ActionBySpline::Update(float dt)
 	if(! IsRunning()) return;
 
 	m_fCurrenTime +=dt;
-	int nNumPoints = m_vPoints.size();
 	//action end
 	if( m_fCurrenTime > m_fTime)
 	{
