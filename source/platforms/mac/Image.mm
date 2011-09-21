@@ -56,9 +56,7 @@ bool Image::CreateImage(const char* pszImageFile)
 	m_nImageHeight = CGImageGetHeight(tmpImg.CGImage);
 	m_nBPP = CGImageGetBitsPerPixel(tmpImg.CGImage);
 
-	m_pPixelData=(uchar *)malloc(m_nImageWidth * m_nImageHeight * 4);
-	memset(m_pPixelData, 0, m_nImageWidth * m_nImageHeight * 4);
-
+	m_pPixelData = new uchar[m_nImageWidth * m_nImageHeight * 4];
 	CGContextRef textureContext = CGBitmapContextCreate(m_pPixelData,
 		m_nImageWidth,
 		m_nImageHeight,
