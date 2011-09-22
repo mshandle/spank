@@ -28,7 +28,6 @@ void Tile::Render()
 
 	static IShader* pShader = IShaderMgr::GetInstance().CreateShader(SSI_DEFAULT);
 	pShader->SetTexture("u_texture",m_pImagePiece->pTexture);
-
 	IRenderer2D::GetInstance().SetModelViewMatrix(pNode->GetFinalMatrix());
 	pShader->SetMatrix4x4("u_matModelViewProj", IRenderer2D::GetInstance().GetFinalMatrixTranspose());
 	IRenderer2D::GetInstance().DrawRect(0.0f, 0.0f, m_pImagePiece, pShader);
