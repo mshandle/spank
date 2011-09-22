@@ -44,6 +44,10 @@ public:
 	bool SetRunning(bool bRunning);
 	bool IsRunning() const;
 
+	void SetColor(const Vector4& material);
+	void SetColor(float r, float g, float b, float a);
+	const Vector4& GetColor() const;
+
 private:
 	bool LoadSpriteFromFile(const char* pszSpriteFile);
 	INode* GetParentNode();
@@ -62,5 +66,6 @@ private:
 
 	bool m_bRunning;
 
+	Vector4 m_vColor;
 };
 #endif // __SPRITE_H__

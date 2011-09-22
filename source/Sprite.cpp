@@ -27,6 +27,8 @@ Sprite::Sprite(const char* pszSpriteFile)
 	m_pSpriteFrames = NULL;
 	m_bRunning = false;
 
+	m_vColor = IMath::VEC4_ONE;
+
 	m_bOK = LoadSpriteFromFile(pszSpriteFile);
 }
 
@@ -61,6 +63,7 @@ void Sprite::Render()
 	if (!pNode) return;
 
 	m_pShader->SetTexture("u_texture", m_pSpriteFrames[m_nCurrIndex].pImagePiece->pTexture);
+ 	m_pShader->SetVector4("u_color", m_vColor);
 
 	IRenderer2D::GetInstance().SetModelViewMatrix(pNode->GetFinalMatrix());
 	m_pShader->SetMatrix4x4("u_matModelViewProj", IRenderer2D::GetInstance().GetFinalMatrixTranspose());
@@ -124,6 +127,24 @@ bool Sprite::SetRunning(bool bRunning)
 bool Sprite::IsRunning() const
 {
 	return m_bRunning;
+}
+
+void Sprite::SetColor(const Vector4& material)
+{
+	m_vColor = material;
+}
+
+void Sprite::SetColor(float r, float g, float b, float a)
+{
+	m_vColor.x = r;
+	m_vColor.y = g;
+	m_vColor.z = b;
+	m_vColor.w = a;
+}
+
+const Vector4& Sprite::GetColor() const
+{
+	return m_vColor;
 }
 
 bool Sprite::LoadSpriteFromFile(const char* pszSpriteFile)

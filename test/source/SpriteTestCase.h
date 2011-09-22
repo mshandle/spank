@@ -27,6 +27,7 @@ private:
 	bool OnBtnPauseClicked(IMsgBase* pMsg);
 	bool OnBtnStopClicked(IMsgBase* pMsg);
 	bool OnBtnRestartClicked(IMsgBase* pMsg);
+	bool OnSlider(IMsgBase* pMsg);
 
 private:
 	Sprite* m_pSprite;

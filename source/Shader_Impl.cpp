@@ -15,11 +15,9 @@
 Shader_Impl::Shader_Impl(StreamReader* pVertexShader, StreamReader* pFregmentShader, VertexAttribute* pVertexAttribute)
 {
 	m_pVertexAttribute = NULL;
-	m_glVertexShader = 0;
-	m_glFragmentShader = 0;
 	m_glProgramObject = 0;
 
-	m_bOK = CreateShader(pVertexShader, pFregmentShader, pVertexAttribute);
+	m_bOK = CreateProgram(pVertexShader, pFregmentShader, pVertexAttribute);
 }
 
 Shader_Impl::~Shader_Impl()
@@ -27,17 +25,14 @@ Shader_Impl::~Shader_Impl()
 	MsgCommon msgCommon(MI_SHADER_DESTROIED);
 	msgCommon.SetObject(this);
 	CallEvent(msgCommon);
-	FreeShader();
+	FreeProgram();
 }
 
 bool Shader_Impl::SetMatrix4x4(const char* pszParamName, const Matrix4x4& m)
 {
 	if (!pszParamName) return false;
 
-	int location = glGetUniformLocation(m_glProgramObject, pszParamName);
-	if (location == -1) return false;
-
-	glUniformMatrix4fv(location, 1, GL_FALSE, m.e);
+	m_mapCommitMatrix.insert(std::make_pair(pszParamName, m));
 	return true;
 }
 
@@ -45,10 +40,7 @@ bool Shader_Impl::SetVector4(const char* pszParamName, const Vector4& v)
 {
 	if (!pszParamName) return false;
 
-	int location = glGetUniformLocation(m_glProgramObject, pszParamName);
-	if (location == -1) return false;
-
-	glUniform4f(location, v.x, v.y, v.z, v.w);
+	m_mapCommitVector.insert(std::make_pair(pszParamName, v));
 	return true;
 }
 
@@ -56,20 +48,18 @@ bool Shader_Impl::SetTexture(const char* pszParamName, ITexture* pTexture, uint 
 {
 	if (!pszParamName || !pTexture) return false;
 
-	int location = glGetUniformLocation(m_glProgramObject, pszParamName);
-	if (location == -1) return false;
-
-	Texture_Impl* pTexture_Impl = (Texture_Impl*)pTexture;
-	glActiveTexture(GL_TEXTURE0+nIndex);
-	glBindTexture(GL_TEXTURE_2D, pTexture_Impl->GetGLTextureID());
-	glUniform1i(location, nIndex);
-
+	TEXTURE_COMMIT_INFO info;
+	info.pTexture = pTexture;
+	info.nIndex = nIndex;
+	m_mapCommitTexture.insert(std::make_pair(pszParamName, info));
 	return true;
 }
 
 void Shader_Impl::Reset()
 {
-	// TODO: 
+	m_mapCommitMatrix.clear();
+	m_mapCommitVector.clear();
+	m_mapCommitTexture.clear();
 }
 
 const VertexAttribute* Shader_Impl::GetVertexAttribute() const
@@ -80,35 +70,51 @@ const VertexAttribute* Shader_Impl::GetVertexAttribute() const
 bool Shader_Impl::Commit(const void* pVerts)
 {
 	glUseProgram(m_glProgramObject);
+	GLenum eError = glGetError();
+	if (eError != GL_NO_ERROR) LOGE("glUseProgram error code: 0x%04x", eError);
+
+	FlushCommitInfo();
+
+	if (pVerts == NULL) return false;
 
 	// setup vertex attributes
 	int nNumAttrs = m_pVertexAttribute->GetNumAttributeItems();
 	for (int i = 0; i < nNumAttrs; ++i)
 	{
 		const ATTRIBUTE_ITEM* pAttrItem = m_pVertexAttribute->GetAttributeItem(i);
+
+		glEnableVertexAttribArray(i);
+		eError = glGetError();
+		if (eError != GL_NO_ERROR) LOGE("glEnableVertexAttribArray error code: 0x%04x", eError);
+
 		GLenum eType = GetGLType(pAttrItem->eItemType);
 		glVertexAttribPointer(i, pAttrItem->nSize, eType, GL_FALSE, m_pVertexAttribute->GetStride(), ((const uchar*)pVerts)+pAttrItem->nOffset);
-		glEnableVertexAttribArray(i);
+		eError = glGetError();
+		if (eError != GL_NO_ERROR) LOGE("glVertexAttribPointer error code: 0x%04x", eError);
+
 		glBindAttribLocation(m_glProgramObject, i, pAttrItem->szParamName);
+		eError = glGetError();
+		if (eError != GL_NO_ERROR) LOGE("glBindAttribLocation error code: 0x%04x", eError);
 	}
 
 	return true;
 }
 
-bool Shader_Impl::CreateShader(StreamReader* pVertexShader, StreamReader* pFregmentShader, VertexAttribute* pVertexAttribute)
+bool Shader_Impl::CreateProgram(StreamReader* pVertexShader, StreamReader* pFregmentShader, VertexAttribute* pVertexAttribute)
 {
 	if (!pVertexAttribute) return false;
 
-	m_glVertexShader = LoadShader((const char*)pVertexShader->GetBuffer(), GL_VERTEX_SHADER);
-	if (m_glVertexShader == 0)
+	GLuint glVertexShader = CreateShader((const char*)pVertexShader->GetBuffer(), GL_VERTEX_SHADER);
+	if (glVertexShader == 0)
 	{
 		LOGE("create vertex shader failed");
 		return false;
 	}
 
-	m_glFragmentShader = LoadShader((const char*)pFregmentShader->GetBuffer(), GL_FRAGMENT_SHADER);
-	if (m_glFragmentShader == 0)
+	GLuint glFragmentShader = CreateShader((const char*)pFregmentShader->GetBuffer(), GL_FRAGMENT_SHADER);
+	if (glFragmentShader == 0)
 	{
+		FreeShader(glVertexShader);
 		LOGE("create fregment shader failed");
 		return false;
 	}
@@ -116,13 +122,18 @@ bool Shader_Impl::CreateShader(StreamReader* pVertexShader, StreamReader* pFregm
 	m_glProgramObject = glCreateProgram();
 	if (m_glProgramObject == 0)
 	{
+		FreeShader(glVertexShader);
+		FreeShader(glFragmentShader);
 		LOGE("create shader program failed");
 		return false;
 	}
 
-	glAttachShader(m_glProgramObject, m_glVertexShader);
-	glAttachShader(m_glProgramObject, m_glFragmentShader);
+	glAttachShader(m_glProgramObject, glVertexShader);
+	glAttachShader(m_glProgramObject, glFragmentShader);
 	glLinkProgram(m_glProgramObject);
+
+	FreeShader(glVertexShader);
+	FreeShader(glFragmentShader);
 
 	GLint glLinked = 0;
 	glGetProgramiv(m_glProgramObject, GL_LINK_STATUS, &glLinked);
@@ -146,7 +157,7 @@ bool Shader_Impl::CreateShader(StreamReader* pVertexShader, StreamReader* pFregm
 	return true;
 }
 
-void Shader_Impl::FreeShader()
+void Shader_Impl::FreeProgram()
 {
 	if (m_glProgramObject)
 	{
@@ -154,22 +165,10 @@ void Shader_Impl::FreeShader()
 		m_glProgramObject = 0;
 	}
 
-	if (m_glVertexShader)
-	{
-		glDeleteShader(m_glVertexShader);
-		m_glVertexShader = 0;
-	}
-
-	if (m_glFragmentShader)
-	{
-		glDeleteShader(m_glFragmentShader);
-		m_glFragmentShader = 0;
-	}
-
 	SAFE_RELEASE(m_pVertexAttribute);
 }
 
-GLuint Shader_Impl::LoadShader(const char* pszShaderSource, GLenum eType)
+GLuint Shader_Impl::CreateShader(const char* pszShaderSource, GLenum eType)
 {
 	GLuint glShader = glCreateShader(eType);
 	if (glShader == 0) return 0;
@@ -197,6 +196,70 @@ GLuint Shader_Impl::LoadShader(const char* pszShaderSource, GLenum eType)
 	}
 
 	return glShader;
+}
+
+void Shader_Impl::FreeShader(GLuint nShader)
+{
+	glDeleteShader(nShader);
+}
+
+void Shader_Impl::FlushCommitInfo()
+{
+	for (TM_MATRIX_COMMIT_INFO::iterator it = m_mapCommitMatrix.begin(); it != m_mapCommitMatrix.end(); ++it)
+	{
+		int location = glGetUniformLocation(m_glProgramObject, it->first.c_str());
+		if (location == -1)
+		{
+			LOGE("glGetUniformLocation %s failed", it->first.c_str());
+			continue;
+		}
+
+		const Matrix4x4& m = it->second;
+		glUniformMatrix4fv(location, 1, GL_FALSE, m.e);
+		GLenum eError = glGetError();
+		if (eError != GL_NO_ERROR) LOGE("glUniformMatrix4fv error code: 0x%04x", eError);
+	}
+	m_mapCommitMatrix.clear();
+
+	for (TM_VECTOR_COMMIT_INFO::iterator it = m_mapCommitVector.begin(); it != m_mapCommitVector.end(); ++it)
+	{
+		int location = glGetUniformLocation(m_glProgramObject, it->first.c_str());
+		if (location == -1)
+		{
+			LOGE("glGetUniformLocation %s failed", it->first.c_str());
+			continue;
+		}
+
+		const Vector4& v = it->second;
+		glUniform4f(location, v.x, v.y, v.z, v.w);
+		GLenum eError = glGetError();
+		if (eError != GL_NO_ERROR) LOGE("glUniform4f error code: 0x%04x", eError);
+	}
+	m_mapCommitVector.clear();
+
+	for (TM_TEXTURE_COMMIT_INFO::iterator it = m_mapCommitTexture.begin(); it != m_mapCommitTexture.end(); ++it)
+	{
+		int location = glGetUniformLocation(m_glProgramObject, it->first.c_str());
+		if (location == -1)
+		{
+			LOGE("glGetUniformLocation %s failed", it->first.c_str());
+			continue;
+		}
+
+		Texture_Impl* pTexture_Impl = (Texture_Impl*)it->second.pTexture;
+		glActiveTexture(GL_TEXTURE0+it->second.nIndex);
+		GLenum eError = glGetError();
+		if (eError != GL_NO_ERROR) LOGE("glActiveTexture error code: 0x%04x", eError);
+
+		glBindTexture(GL_TEXTURE_2D, pTexture_Impl->GetGLTextureID());
+		eError = glGetError();
+		if (eError != GL_NO_ERROR) LOGE("glBindTexture error code: 0x%04x", eError);
+
+		glUniform1i(location, it->second.nIndex);
+		eError = glGetError();
+		if (eError != GL_NO_ERROR) LOGE("glUniform1i error code: 0x%04x", eError);
+	}
+	m_mapCommitTexture.clear();
 }
 
 GLenum Shader_Impl::GetGLType(ATTRIBUTE_ITEM_TYPE eType)

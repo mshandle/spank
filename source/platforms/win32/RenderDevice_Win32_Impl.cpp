@@ -63,11 +63,20 @@ void RenderDevice_Win32_Impl::Terminate()
 void RenderDevice_Win32_Impl::BeginRender()
 {
 	glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
+	GLenum eError = glGetError();
+	if (eError != GL_NO_ERROR) LOGE("glClearColor error code: 0x%04x", eError);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	eError = glGetError();
+	if (eError != GL_NO_ERROR) LOGE("glClear error code: 0x%04x", eError);
 }
 
 void RenderDevice_Win32_Impl::EndRender()
 {
+	glFlush();
+	GLenum eError = glGetError();
+	if (eError != GL_NO_ERROR) LOGE("glFlush error code: 0x%04x", eError);
+
 	eglSwapBuffers(m_EGLDisplay, m_EGLSurface);
 }
 

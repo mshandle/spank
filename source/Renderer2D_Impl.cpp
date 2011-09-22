@@ -124,6 +124,9 @@ void Renderer2D_Impl::DrawTriangleList(const void* pVerts, uint nNumVerts, const
 
 	pShader->Commit(pVerts);
 	glDrawElements(GL_TRIANGLES, nNumIndis, GL_UNSIGNED_SHORT, pIndis);
+
+	GLenum eError = glGetError();
+	if (eError != GL_NO_ERROR) LOGE("glDrawElements error code: 0x%04x", eError);
 }
 
 void Renderer2D_Impl::DrawTriangleStrip(const void* pVerts, uint nNumVerts, const ushort* pIndis, uint nNumIndis, IShader* pShader)
@@ -132,6 +135,9 @@ void Renderer2D_Impl::DrawTriangleStrip(const void* pVerts, uint nNumVerts, cons
 
 	pShader->Commit(pVerts);
 	glDrawElements(GL_TRIANGLE_STRIP, nNumIndis, GL_UNSIGNED_SHORT, pIndis);
+
+	GLenum eError = glGetError();
+	if (eError != GL_NO_ERROR) LOGE("glDrawElements error code: 0x%04x", eError);
 }
 
 void Renderer2D_Impl::DrawRect(float x, float y, float width, float height, IShader* pShader)

@@ -8,7 +8,9 @@
 #include "SpriteTestCase.h"
 #include <ICore.h>
 #include <ui/UIButton.h>
+#include <ui/UISliderBar.h>
 #include <ui/uimsg/UIMsgID.h>
+#include <ui/uimsg/MsgSlider.h>
 
 SpriteTestCase::SpriteTestCase()
 :TestCase("SpriteTestCase")
@@ -38,6 +40,11 @@ bool SpriteTestCase::Initialize(UIScreen* pUIScreen)
 	pButtonStop->ConnectEvent(UMI_CLICKED, this, (MSG_CALLBACK)&SpriteTestCase::OnBtnStopClicked);
 	UIButton* pButtonRestart = new UIButton(pUIScreen, Vector2(310.0f, 100.0f), "Restart");
 	pButtonRestart->ConnectEvent(UMI_CLICKED, this, (MSG_CALLBACK)&SpriteTestCase::OnBtnRestartClicked);
+
+	UISliderBar* pSlider = new UISliderBar(pUIScreen, Vector2(30.0f, 150.0f));
+	pSlider->SetSliderRange(0, 100);
+	pSlider->SetCurrentPos(100);
+	pSlider->ConnectEvent(UMI_SLIDER, this, (MSG_CALLBACK)&SpriteTestCase::OnSlider);
 
 	return true;
 }
@@ -70,5 +77,14 @@ bool SpriteTestCase::OnBtnStopClicked(IMsgBase* pMsg)
 bool SpriteTestCase::OnBtnRestartClicked(IMsgBase* pMsg)
 {
 	m_pSprite->Restart();
+	return true;
+}
+
+bool SpriteTestCase::OnSlider(IMsgBase* pMsg)
+{
+	MsgSlider* pMsgSlider = (MsgSlider*)pMsg;
+	int nPos = pMsgSlider->GetPosition();
+	float fAlpha = nPos / 100.0f;
+	m_pSprite->SetColor(1.0f, 1.0f, 1.0f, fAlpha);
 	return true;
 }

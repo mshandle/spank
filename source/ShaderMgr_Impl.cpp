@@ -22,7 +22,7 @@ IShaderMgr& IShaderMgr::GetInstance()
 
 ShaderMgr_Impl::ShaderMgr_Impl()
 {
-	// TODO: 
+	m_pDefaultShader = NULL;
 }
 
 ShaderMgr_Impl::~ShaderMgr_Impl()
@@ -32,13 +32,15 @@ ShaderMgr_Impl::~ShaderMgr_Impl()
 
 bool ShaderMgr_Impl::Initialize()
 {
-	CreateShader("default_shader.xml");
+	m_pDefaultShader = CreateShader("default_shader.xml");
+	if (!m_pDefaultShader) return false;
+
 	return true;
 }
 
 void ShaderMgr_Impl::Terminate()
 {
-	// TODO: 
+	SAFE_RELEASE(m_pDefaultShader);
 }
 
 IShader* ShaderMgr_Impl::CreateShader(const char* pszShaderFile)

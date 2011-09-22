@@ -37,6 +37,7 @@ private:
 
 private:
 	TM_SHADER m_mapShader;
+	IShader* m_pDefaultShader;
 
 };
 #endif // __SHADERMGR_IMPL_H__
