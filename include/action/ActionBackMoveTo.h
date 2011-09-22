@@ -7,30 +7,23 @@
  */
 #ifndef __ACTIONBACKMOVE_H_
 #define __ACTIONBACKMOVE_H_
-#include "IActionBase.h"
 
-class ActionBackMoveTo :public IActionBase
+#include "action/ActionMoveTo.h"
+
+class ActionBackMoveTo :public ActionMoveTo
 {
 public:
-	DECLARE_RTTI(ActionBackMoveTo, IActionBase);
+	DECLARE_RTTI(ActionBackMoveTo, ActionMoveTo);
 public:
 	ActionBackMoveTo(ACTION_TWEEN_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time);
 	virtual ~ActionBackMoveTo();
-	virtual void Reset() ;
-	virtual void Update(float dt) ;
 
 	virtual IActionBase* Clone() ;
 	virtual IActionBase* CloneInverse();
 
-	virtual float GetTimeLength() const;
+protected:
+	virtual float Interpolate();
 private:
-	Vector3 Tween();
-private:
-	Vector3 m_vPosStart;
-	Vector3 m_vPosEnd;
-	float m_fTime;
-
-	float m_fCurrTime;
 	ACTION_TWEEN_TYPE m_eType;
 };
 #endif//__ACTIONBACKMOVE_H_
