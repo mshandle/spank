@@ -8,30 +8,22 @@
 #ifndef __ACTIONCUBICMOVE_H_
 #define __ACTIONCUBICMOVE_H_
 
-#include "IActionBase.h"
+#include "action/ActionMoveTo.h"
 
-class ActionCubicMoveTo : public IActionBase
+class ActionCubicMoveTo : public ActionMoveTo
 {
 public:
-	DECLARE_RTTI(ActionCubicMoveTo, IActionBase);
+	DECLARE_RTTI(ActionCubicMoveTo, ActionMoveTo);
 public:
 	ActionCubicMoveTo(ACTION_TWEEN_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time);
 	virtual ~ActionCubicMoveTo();
-	virtual void Reset() ;
-	virtual void Update(float dt) ;
 
 	virtual IActionBase* Clone() ;
 	virtual IActionBase* CloneInverse();
 
-	virtual float GetTimeLength() const;
+protected:
+	virtual float Interpolate();
 private:
-	Vector3 Tween();
-private:
-	Vector3 m_vPosStart;
-	Vector3 m_vPosEnd;
-	float m_fTime;
-
-	float m_fCurrTime;
 	ACTION_TWEEN_TYPE m_eType;
 };
 #endif//__ACTIONCUBICMOVE_H_
