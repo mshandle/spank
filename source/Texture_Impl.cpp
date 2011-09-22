@@ -7,6 +7,7 @@
  */
 #include "Texture_Impl.h"
 #include <util/IFileUtil.h>
+#include <util/IDebugUtil.h>
 #include <msg/MsgCommon.h>
 #include <msg/MsgID.h>
 #include <GLES2/gl2.h>
@@ -71,6 +72,11 @@ bool Texture_Impl::CreateGLTexture(Image* pImage, TEXTURE_SAMPLE_TYPE eSample)
 	m_nTextureWidth = pImage->GetWidth();
 	m_nTextureHeight = pImage->GetHeight();
 
+	if (!IsValidTextureSize(m_nTextureWidth) || !IsValidTextureSize(m_nTextureHeight))
+	{
+		LOGE("invalid texture size: %dx%d", m_nTextureWidth, m_nTextureHeight);
+	}
+
 	glBindTexture(GL_TEXTURE_2D, m_nGLTextureID);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_nTextureWidth, m_nTextureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pImage->GetPixelData());
 
@@ -95,4 +101,24 @@ void Texture_Impl::FreeGLTexture()
 		glDeleteTextures(1, &m_nGLTextureID);
 		m_nGLTextureID = 0;
 	}
+}
+
+bool Texture_Impl::IsValidTextureSize(uint nSize)
+{
+	static const uint s_nValidSize[] = {16, 32, 64, 128, 256, 512, 1024, 2048, 0};
+
+	bool bValid = false;
+
+	int nIndex = 0;
+	while (s_nValidSize[nIndex] != 0)
+	{
+		if (nSize == s_nValidSize[nIndex])
+		{
+			bValid = true;
+			break;
+		}
+		++nIndex;
+	}
+
+	return bValid;
 }

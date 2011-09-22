@@ -31,6 +31,8 @@ private:
 	bool CreateGLTexture(Image* pImage, TEXTURE_SAMPLE_TYPE eSample);
 	void FreeGLTexture();
 
+	bool IsValidTextureSize(uint nSize);
+
 private:
 	uint m_nTextureWidth;
 	uint m_nTextureHeight;
