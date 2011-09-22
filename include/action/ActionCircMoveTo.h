@@ -10,29 +10,21 @@
 #define __ACTIONCIRCMOVETO_H_
 
 #include "IActionBase.h"
+#include "action/ActionMoveTo.h"
 
-class ActionCircMoveTo : public IActionBase
+class ActionCircMoveTo : public ActionMoveTo
 {
 public:
-	DECLARE_RTTI(ActionCircMoveTo, IActionBase);
+	DECLARE_RTTI(ActionCircMoveTo, ActionMoveTo);
 public:
 	ActionCircMoveTo(ACTION_TWEEN_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time);
 	virtual ~ActionCircMoveTo();
-	virtual void Reset() ;
-	virtual void Update(float dt) ;
 
 	virtual IActionBase* Clone() ;
 	virtual IActionBase* CloneInverse();
-
-	virtual float GetTimeLength() const;
+protected:
+	virtual float Interpolate();
 private:
-	Vector3 Tween();
-private:
-	Vector3 m_vPosStart;
-	Vector3 m_vPosEnd;
-	float m_fTime;
-
-	float m_fCurrTime;
 	ACTION_TWEEN_TYPE m_eType;
 
 };

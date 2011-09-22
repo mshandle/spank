@@ -846,6 +846,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\source\Tile.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\Tile.h"
+			>
+		</File>
+		<File
 			RelativePath=".\source\VertexAttribute.cpp"
 			>
 		</File>

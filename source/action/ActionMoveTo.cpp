@@ -41,7 +41,7 @@ void ActionMoveTo::Update(float dt)
 	}
 
 	// changing the position
-	float alpha = Interpolate(m_fCurrTime / m_fTime);
+	float alpha = Interpolate();
 	SetPosition(m_vPosStart*(1.0f-alpha) + m_vPosEnd*alpha);
 }
 
@@ -60,7 +60,7 @@ float ActionMoveTo::GetTimeLength() const
 	return m_fTime;
 }
 
-float ActionMoveTo::Interpolate(float alpha)
+float ActionMoveTo::Interpolate()
 {
-	return alpha;
+	return m_fCurrTime / m_fTime;
 }

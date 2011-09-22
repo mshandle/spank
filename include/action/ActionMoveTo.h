@@ -27,9 +27,8 @@ public:
 	virtual float GetTimeLength() const;
 
 protected:
-	virtual float Interpolate(float alpha);
+	virtual float Interpolate();
 
-private:
 	Vector3 m_vPosStart;
 	Vector3 m_vPosEnd;
 	float m_fTime;
