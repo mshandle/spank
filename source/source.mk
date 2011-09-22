@@ -1,14 +1,26 @@
 LIBSPANK_SOURCE_FILES := \
+		$(LIBSPANK_SOURCE)/action/ActionBackMoveTo.cpp \
+		$(LIBSPANK_SOURCE)/action/ActionBounceMoveTo.cpp \
+		$(LIBSPANK_SOURCE)/action/ActionBySpline.cpp \
+		$(LIBSPANK_SOURCE)/action/ActionCircMoveTo.cpp \
 		$(LIBSPANK_SOURCE)/action/ActionCompose.cpp \
+		$(LIBSPANK_SOURCE)/action/ActionCubicBSpline.cpp \
+		$(LIBSPANK_SOURCE)/action/ActionCubicMoveTo.cpp \
 		$(LIBSPANK_SOURCE)/action/ActionDelay.cpp \
+		$(LIBSPANK_SOURCE)/action/ActionElasticMoveTo.cpp \
+		$(LIBSPANK_SOURCE)/action/ActionExpoMoveTo.cpp \
 		$(LIBSPANK_SOURCE)/action/ActionLoop.cpp \
 		$(LIBSPANK_SOURCE)/action/ActionMoveBy.cpp \
 		$(LIBSPANK_SOURCE)/action/ActionMoveTo.cpp \
+		$(LIBSPANK_SOURCE)/action/ActionQuadMoveTo.cpp \
+		$(LIBSPANK_SOURCE)/action/ActionQuartMoveTo.cpp \
+		$(LIBSPANK_SOURCE)/action/ActionQuintMoveTo.cpp \
 		$(LIBSPANK_SOURCE)/action/ActionRotateBy.cpp \
 		$(LIBSPANK_SOURCE)/action/ActionRotateTo.cpp \
 		$(LIBSPANK_SOURCE)/action/ActionScaleBy.cpp \
 		$(LIBSPANK_SOURCE)/action/ActionScaleTo.cpp \
 		$(LIBSPANK_SOURCE)/action/ActionSequeue.cpp \
+		$(LIBSPANK_SOURCE)/action/ActionSineMoveTo.cpp \
 		$(LIBSPANK_SOURCE)/action/IActionBase.cpp \
 		$(LIBSPANK_SOURCE)/math/IMath.cpp \
 		$(LIBSPANK_SOURCE)/math/Matrix2x2.cpp \
@@ -21,10 +33,8 @@ LIBSPANK_SOURCE_FILES := \
 		$(LIBSPANK_SOURCE)/msg/IMsgBase.cpp \
 		$(LIBSPANK_SOURCE)/msg/IMsgHandler.cpp \
 		$(LIBSPANK_SOURCE)/msg/MsgActionUpdate.cpp \
-		$(LIBSPANK_SOURCE)/msg/MsgClick.cpp \
 		$(LIBSPANK_SOURCE)/msg/MsgCommon.cpp \
 		$(LIBSPANK_SOURCE)/msg/MsgMgr.cpp \
-		$(LIBSPANK_SOURCE)/msg/MsgSlider.cpp \
 		$(LIBSPANK_SOURCE)/msg/MsgTouch.cpp \
 		$(LIBSPANK_SOURCE)/particle/IEmmiter.cpp \
 		$(LIBSPANK_SOURCE)/particle/IParticle.cpp \
@@ -38,6 +48,10 @@ LIBSPANK_SOURCE_FILES := \
 		$(LIBSPANK_SOURCE)/platforms/android/util/FileUtil_Android_Impl.cpp \
 		$(LIBSPANK_SOURCE)/platforms/android/unzip/unzip.cpp \
 		$(LIBSPANK_SOURCE)/platforms/android/unzip/ioapi.cpp \
+		$(LIBSPANK_SOURCE)/ui/uimsg/IMsgBaseUI.cpp \
+		$(LIBSPANK_SOURCE)/ui/uimsg/MsgCheck.cpp \
+		$(LIBSPANK_SOURCE)/ui/uimsg/MsgClick.cpp \
+		$(LIBSPANK_SOURCE)/ui/uimsg/MsgSlider.cpp \
 		$(LIBSPANK_SOURCE)/ui/BitmapFont_Impl.cpp \
 		$(LIBSPANK_SOURCE)/ui/RendererUI_Impl.cpp \
 		$(LIBSPANK_SOURCE)/ui/RenderParam.cpp \
