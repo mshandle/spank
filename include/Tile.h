@@ -12,26 +12,30 @@
 #include "BaseTypeEx.h"
 #include "INode.h"
 #include "IShader.h"
+
 class Tile :public IRenderableObject
 {
 public:
 	DECLARE_RTTI(Tile, IRenderableObject);
 
-	Tile(const IMAGE_PIECE* pImagePiece, const Vector3& Pos = IMath::VEC3_ZERO);
-	~Tile();
+	Tile(const IMAGE_PIECE* pImagePiece);
+	virtual ~Tile();
 
 	virtual void Render();
 	virtual void Update(float dt);
-	void SetPosition(const Vector3& pos);
-	void SetVisual(bool bVisual);
+
+	void SetVisible(bool bVisible);
+	bool IsVisible() const;
+
 private:
 	bool InitShader();
 	INode* GetParentNode();
+
 private:
 	const IMAGE_PIECE* m_pImagePiece;
-	Vector3 m_vPos;
 	IShader* m_pShader;
-	bool m_bVisual;
+	bool m_bVisible;
+
 };
 
 #endif // __TILE_H__

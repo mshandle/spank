@@ -36,7 +36,7 @@ bool Renderer2D_Impl::Initialize()
 
 	float fSurfaceWidth = (float)IRenderDevice::GetInstance().GetSurfaceWidth();
 	float fSurfaceHeight = (float)IRenderDevice::GetInstance().GetSurfaceHeight();
-	IMath::BuildOrthoMatrix(m_matProj, -fSurfaceWidth/2.0f, fSurfaceWidth/2.0f, -fSurfaceHeight/2.0f, fSurfaceHeight/2.0f, 0.1f, 1000.0f);
+	IMath::BuildOrthoMatrix(m_matProj, -fSurfaceWidth/2.0f, fSurfaceWidth/2.0f, -fSurfaceHeight/2.0f, fSurfaceHeight/2.0f, -1000.0f, 1000.0f);
 
 	float fDegree = ScreenUtil::GetInstance().GetRotationDegree();
 	if (fabsf(fDegree - 0.0f) > IMath::FLOAT_MIN)
