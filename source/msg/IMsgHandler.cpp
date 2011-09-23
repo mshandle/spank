@@ -44,13 +44,21 @@ bool IMsgHandler::DisconnectEvent(uint nMsgID)
 
 bool IMsgHandler::CallEvent(IMsgBase& msgBase)
 {
-	int nFailedCount = 0;
-	bool bResult = false;
-
+	// collect all connection info in stack, in case of caller delete itself
+	TV_CONNECTION_INFO vConnectInfo;
 	std::pair<TM_CONNECTION_INFO::iterator, TM_CONNECTION_INFO::iterator> range = m_ConnectionMap.equal_range(msgBase.GetMsgID());
 	for (TM_CONNECTION_INFO::iterator it = range.first; it != range.second; ++it)
 	{
 		CONNECTION_INFO& connectInfo = it->second;
+		vConnectInfo.push_back(connectInfo);
+	}
+
+	// call event from stack
+	int nFailedCount = 0;
+	bool bResult = false;
+	for (TV_CONNECTION_INFO::iterator it = vConnectInfo.begin(); it != vConnectInfo.end(); ++it)
+	{
+		CONNECTION_INFO& connectInfo = (*it);
 
 		IMsgHandler* pHandler = connectInfo.pHandler;
 		MSG_CALLBACK pCallback = connectInfo.pCallback;

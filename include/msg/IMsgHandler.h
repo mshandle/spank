@@ -12,6 +12,7 @@
 #include "../IRtti.h"
 #include "IMsgBase.h"
 #include <map>
+#include <vector>
 
 class IMsgHandler;
 
@@ -40,6 +41,7 @@ public:
 	} CONNECTION_INFO;
 
 	typedef std::multimap<uint, CONNECTION_INFO> TM_CONNECTION_INFO;
+	typedef std::vector<CONNECTION_INFO> TV_CONNECTION_INFO;
 
 public:
 	DECLARE_RTTI(IMsgHandler, INoRtti);
