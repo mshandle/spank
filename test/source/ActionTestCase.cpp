@@ -16,7 +16,7 @@
 ActionTestCase::ActionTestCase()
 :TestCase("ActionTestCase")
 {
-	m_pSpriteAction = NULL;
+	m_pSprite = NULL;
 	m_pActionNode = NULL;
 }
 
@@ -27,11 +27,11 @@ ActionTestCase::~ActionTestCase()
 
 bool ActionTestCase::Initialize(UIScreen* pUIScreen)
 {
-	m_pSpriteAction = new Sprite("test_sprite.xml");
-	if (!m_pSpriteAction) return true;
+	m_pSprite = new Sprite("test_sprite.xml");
+	if (!m_pSprite) return true;
 
 	m_pActionNode = ICore::GetInstance().GetRootNode()->CreateChildNode();
-	m_pActionNode->AttachObject(m_pSpriteAction);
+	m_pActionNode->AttachObject(m_pSprite);
 
 	ActionSequeue* pActionFregment = new ActionSequeue();
 	pActionFregment->AddAction(new ActionMoveTo(Vector3(-200.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), 3.0f));
@@ -52,5 +52,5 @@ void ActionTestCase::Terminate()
 {
 	ICore::GetInstance().GetRootNode()->RemoveChildNode(m_pActionNode);
 	m_pActionNode = NULL;
-	SAFE_DELETE(m_pSpriteAction);
+	SAFE_DELETE(m_pSprite);
 }

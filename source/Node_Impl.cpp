@@ -209,13 +209,14 @@ void Node_Impl::UpdateMatrix(float dt, bool bForceUpdate /* = false */)
 		{
 			m_matFinal = m_matLocal;
 		}
+	}
 
-		// tell children setup their matrix
-		for (TV_NODE::iterator it = m_vChildNodes.begin(); it != m_vChildNodes.end(); ++it)
-		{
-			INode* pNode = (*it);
-			pNode->UpdateMatrix(dt, true);
-		}
+	bool bChildNeedUpdate = (m_bNeedUpdateMatrix || bForceUpdate);
+	// tell children setup their matrix
+	for (TV_NODE::iterator it = m_vChildNodes.begin(); it != m_vChildNodes.end(); ++it)
+	{
+		INode* pNode = (*it);
+		pNode->UpdateMatrix(dt, bChildNeedUpdate);
 	}
 }
 

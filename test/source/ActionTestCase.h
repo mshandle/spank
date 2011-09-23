@@ -23,7 +23,7 @@ public:
 	virtual void Terminate();
 
 private:
-	Sprite* m_pSpriteAction;
+	Sprite* m_pSprite;
 	INode* m_pActionNode;
 
 };
