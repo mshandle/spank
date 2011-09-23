@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <ImagePiece>
     <ImageList>
-        <Image id="1" file="background_1024_v2.png" />
+        <Image id="1" file="background_1024_v2.png" sample="linear" />
         <Image id="2" file="newcomponent.png" sample="linear"  />
     </ImageList>
     <PieceList>
         <Piece id="backgorund" image="1" x="0" y="0" width="1024" height="768" />
+        <Piece id="BackCard" image="1" x="0" y="769" width="61" height="79" />
+        <Piece id="Card" image="1" x="62" y="769" width="61" height="79" />
         <Piece id="NumZero" image="2" x="0" y="0" width="20" height="25" />
         <Piece id="NumOne" image="2" x="20" y="0" width="20" height="25" />
         <Piece id="NumTwo" image="2" x="40" y="0" width="20" height="25" />
@@ -20,7 +22,7 @@
         <Piece id="ChipRed" image="2" x="226" y="0" width="26" height="20" />
         <Piece id="ChipBule" image="2" x="252" y="0" width="26" height="20" />
         <Piece id="ChipGreen" image="2" x="278" y="0" width="26" height="20" />
-        <Piece id="Chipblack" image="2" x="304" y="0" width="26" height="20" />
+        <Piece id="ChipBlack" image="2" x="304" y="0" width="26" height="20" />
         <Piece id="ChipBrown" image="2" x="330" y="0" width="26" height="20" />
         <Piece id="ChipYellow" image="2" x="356" y="0" width="26" height="20" />
         <Piece id="Winner_Big" image="2" x="382" y="0" width="91" height="19" />
