@@ -39,7 +39,7 @@ public:
 		MSG_CALLBACK pCallback;
 	} CONNECTION_INFO;
 
-	typedef std::map<uint, CONNECTION_INFO> TM_CONNECTION_INFO;
+	typedef std::multimap<uint, CONNECTION_INFO> TM_CONNECTION_INFO;
 
 public:
 	DECLARE_RTTI(IMsgHandler, INoRtti);
@@ -52,9 +52,7 @@ public:
 
 protected:
 	bool CallEvent(IMsgBase& msgBase);
-
-private:
-	CONNECTION_INFO* FindConnectionInfo(uint nMsgID);
+	TM_CONNECTION_INFO::iterator FindConnectInfo(uint nMsgID, IMsgHandler* pHandler);
 
 private:
 	TM_CONNECTION_INFO m_ConnectionMap;

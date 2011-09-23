@@ -18,19 +18,19 @@ public:
 	Image(const char* pszImageFile);
 	virtual ~Image();
 
-	virtual uint GetWidth() const;
-	virtual uint GetHeight() const;
+	int GetWidth() const;
+	int GetHeight() const;
 
-	virtual void* GetPixelData();
-	virtual uint GetBPP() const;
+	void* GetPixelData();
+	int GetBPP() const;
 
 private:
 	bool CreateImage(const char* pszImageFile);
 
 private:
-	uint m_nImageWidth;
-	uint m_nImageHeight;
-	uint m_nBPP;
+	int m_nImageWidth;
+	int m_nImageHeight;
+	int m_nBPP;
 	uchar* m_pPixelData;
 
 };

@@ -16,8 +16,8 @@ class ITexture : public IObject
 public:
 	DECLARE_RTTI(ITexture, IObject);
 
-	virtual uint GetWidth() const = 0;
-	virtual uint GetHeight() const = 0;
+	virtual int GetWidth() const = 0;
+	virtual int GetHeight() const = 0;
 
 protected:
 	ITexture() {};

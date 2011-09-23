@@ -18,25 +18,13 @@ IMsgHandler::~IMsgHandler()
 	// TODO: 
 }
 
-bool IMsgHandler::CallEvent(IMsgBase& msgBase)
-{
-	CONNECTION_INFO* pInfo = FindConnectionInfo(msgBase.GetMsgID());
-	if (!pInfo) return false;
-
-	IMsgHandler* pHandler = pInfo->pHandler;
-	MSG_CALLBACK pCallback = pInfo->pCallback;
-
-	bool bOK = (pHandler->*pCallback)(&msgBase);
-	return bOK;
-}
-
 bool IMsgHandler::ConnectEvent(uint nMsgID, IMsgHandler* pHandler, MSG_CALLBACK pCallback)
 {
 	if (nMsgID == 0 || !pHandler || !pCallback) return false;
 
-	if (FindConnectionInfo(nMsgID))
+	if (FindConnectInfo(nMsgID, pHandler) != m_ConnectionMap.end())
 	{
-		LOGE("connect event failed, duplicate event connection");
+		LOGD("duplicate connect event %d", nMsgID);
 		return false;
 	}
 
@@ -47,17 +35,41 @@ bool IMsgHandler::ConnectEvent(uint nMsgID, IMsgHandler* pHandler, MSG_CALLBACK 
 
 bool IMsgHandler::DisconnectEvent(uint nMsgID)
 {
-	TM_CONNECTION_INFO::iterator itfound = m_ConnectionMap.find(nMsgID);
-	if (itfound == m_ConnectionMap.end()) return false;
+	std::pair<TM_CONNECTION_INFO::iterator, TM_CONNECTION_INFO::iterator> range = m_ConnectionMap.equal_range(nMsgID);
+	if (range.first == m_ConnectionMap.end()) return false;
 
-	m_ConnectionMap.erase(itfound);
+	m_ConnectionMap.erase(range.first, range.second);
 	return true;
 }
 
-IMsgHandler::CONNECTION_INFO* IMsgHandler::FindConnectionInfo(uint nMsgID)
+bool IMsgHandler::CallEvent(IMsgBase& msgBase)
 {
-	TM_CONNECTION_INFO::iterator itfound = m_ConnectionMap.find(nMsgID);
-	if (itfound == m_ConnectionMap.end()) return NULL;
+	int nFailedCount = 0;
+	bool bResult = false;
 
-	return &(itfound->second);
+	std::pair<TM_CONNECTION_INFO::iterator, TM_CONNECTION_INFO::iterator> range = m_ConnectionMap.equal_range(msgBase.GetMsgID());
+	for (TM_CONNECTION_INFO::iterator it = range.first; it != range.second; ++it)
+	{
+		CONNECTION_INFO& connectInfo = it->second;
+
+		IMsgHandler* pHandler = connectInfo.pHandler;
+		MSG_CALLBACK pCallback = connectInfo.pCallback;
+
+		bResult = (pHandler->*pCallback)(&msgBase);
+		if (!bResult) ++nFailedCount;
+	}
+
+	return (bResult && nFailedCount == 0);
+}
+
+IMsgHandler::TM_CONNECTION_INFO::iterator IMsgHandler::FindConnectInfo(uint nMsgID, IMsgHandler* pHandler)
+{
+	std::pair<TM_CONNECTION_INFO::iterator, TM_CONNECTION_INFO::iterator> range = m_ConnectionMap.equal_range(nMsgID);
+	for (TM_CONNECTION_INFO::iterator it = range.first; it != range.second; ++it)
+	{
+		CONNECTION_INFO& connectInfo = it->second;
+		if (connectInfo.pHandler == pHandler) return it;
+	}
+
+	return m_ConnectionMap.end();
 }

@@ -32,7 +32,6 @@ public:
 
 private:
 	bool OnActionUpdate(IMsgBase* pMsg);
-	void NotifySubActionUpdate(ACTION_UPDATE_TYPE eType, IActionBase* pAction);
 
 private:
 	IActionBase* m_pAction;

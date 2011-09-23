@@ -34,12 +34,12 @@ Image::~Image()
 	SAFE_DELETE_ARRAY(m_pPixelData);
 }
 
-uint Image::GetWidth() const
+int Image::GetWidth() const
 {
 	return m_nImageWidth;
 }
 
-uint Image::GetHeight() const
+int Image::GetHeight() const
 {
 	return m_nImageHeight;
 }
@@ -49,7 +49,7 @@ void* Image::GetPixelData()
 	return m_pPixelData;
 }
 
-uint Image::GetBPP() const
+int Image::GetBPP() const
 {
 	return m_nBPP;
 }
@@ -113,7 +113,7 @@ bool Image::CreateImage(const char* pszImageFile)
 
 	// read image data into pRowPointers
 	uchar** pRowPointers = new uchar*[m_nImageHeight];
-	for (uint y = 0; y < m_nImageHeight; y++)
+	for (int y = 0; y < m_nImageHeight; y++)
 	{
 		pRowPointers[y] = new uchar[m_nImageWidth * 4]; //each pixel(RGBA) has 4 bytes
 	}
@@ -127,9 +127,9 @@ bool Image::CreateImage(const char* pszImageFile)
 	m_pPixelData = new uchar[m_nImageWidth * m_nImageHeight * 4];
 	//unlike store the pixel data from top-left corner, store them from bottom-left corner for OGLES Texture drawing...
 	int nCurrPos = (m_nImageWidth * m_nImageHeight * 4) - (4 * m_nImageWidth);
-	for(uint row = 0; row < m_nImageHeight; row++)
+	for(int row = 0; row < m_nImageHeight; row++)
 	{
-		for(uint col = 0; col < (4 * m_nImageWidth); col += 4)
+		for(int col = 0; col < (4 * m_nImageWidth); col += 4)
 		{
 			m_pPixelData[nCurrPos++] = pRowPointers[row][col + 0];    // red
 			m_pPixelData[nCurrPos++] = pRowPointers[row][col + 1];    // green
@@ -140,7 +140,7 @@ bool Image::CreateImage(const char* pszImageFile)
 	}
 
 	// free pRowPointers
-	for (uint y = 0; y < m_nImageHeight; y++)
+	for (int y = 0; y < m_nImageHeight; y++)
 	{
 		SAFE_DELETE_ARRAY(pRowPointers[y]);
 	}

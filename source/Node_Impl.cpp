@@ -184,9 +184,9 @@ const Matrix4x4& Node_Impl::GetFinalMatrix()
 	return m_matFinal;
 }
 
-void Node_Impl::UpdateMatrix(float dt)
+void Node_Impl::UpdateMatrix(float dt, bool bForceUpdate /* = false */)
 {
-	if (m_bNeedUpdateMatrix)
+	if (m_bNeedUpdateMatrix || bForceUpdate)
 	{
 		m_bNeedUpdateMatrix = false;
 
@@ -209,13 +209,13 @@ void Node_Impl::UpdateMatrix(float dt)
 		{
 			m_matFinal = m_matLocal;
 		}
-	}
 
-	// tell children setup their matrix
-	for (TV_NODE::iterator it = m_vChildNodes.begin(); it != m_vChildNodes.end(); ++it)
-	{
-		INode* pNode = (*it);
-		pNode->UpdateMatrix(dt);
+		// tell children setup their matrix
+		for (TV_NODE::iterator it = m_vChildNodes.begin(); it != m_vChildNodes.end(); ++it)
+		{
+			INode* pNode = (*it);
+			pNode->UpdateMatrix(dt, true);
+		}
 	}
 }
 
@@ -318,16 +318,11 @@ bool Node_Impl::OnActionUpdate(IMsgBase* pMsg)
 			SetRotation(pMsgActionUpdate->GetRotation());
 		}
 		break;
-	//case AUT_START:
-	//case AUT_PAUSE:
 	case AUT_STOPED:
 		{
 			SAFE_RELEASE(m_pAction);
 		}
 		break;
-	// case AUT_SUBACTION_START:
-	// case AUT_SUBACTION_PAUSE:
-	// case AUT_SUBACTION_STOPED:
 	}
 
 	return true;

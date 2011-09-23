@@ -9,6 +9,7 @@
 #include "Texture_Impl.h"
 #include <msg/MsgID.h>
 #include <msg/MsgCommon.h>
+#include <util/IDebugUtil.h>
 
 ITextureMgr& ITextureMgr::GetInstance()
 {
@@ -33,7 +34,7 @@ bool TextureMgr_Impl::Initialize()
 
 void TextureMgr_Impl::Terminate()
 {
-	// TODO: 
+	// TODO: check m_TextureMap and m_MemoryTextureSet exist textures
 }
 
 ITexture* TextureMgr_Impl::CreateTexture(const char* pszFileName, TEXTURE_SAMPLE_TYPE eSample /* = TST_POINT */)
@@ -60,6 +61,23 @@ ITexture* TextureMgr_Impl::CreateTexture(const char* pszFileName, TEXTURE_SAMPLE
 	return pTexture_Impl;
 }
 
+ITexture* TextureMgr_Impl::CreateTextureFromMemory(const void* pPixelData, int nWidth, int nHeight, TEXTURE_SAMPLE_TYPE eSample /*= TST_POINT*/)
+{
+	Texture_Impl* pTexture_Impl = new Texture_Impl(pPixelData, nWidth, nHeight, eSample);
+	if (!pTexture_Impl || !pTexture_Impl->IsOK())
+	{
+		SAFE_DELETE(pTexture_Impl);
+		return NULL;
+	}
+
+	// connect the destroy event
+	pTexture_Impl->ConnectEvent(MI_TEXTURE_DESTROIED, this, (MSG_CALLBACK)&TextureMgr_Impl::OnMemoryTextureDestroied);
+	// cache the texture
+	m_MemoryTextureSet.insert(pTexture_Impl);
+
+	return pTexture_Impl;
+}
+
 ITexture* TextureMgr_Impl::FindTexture(const char* pszFileName)
 {
 	TM_TEXTURE::iterator itfound = m_TextureMap.find(pszFileName);
@@ -72,7 +90,7 @@ bool TextureMgr_Impl::OnTextureDestroied(IMsgBase* pMsg)
 {
 	MsgCommon* pMsgCommon = (MsgCommon*)pMsg;
 	ITexture* pTexture = (ITexture*)pMsgCommon->GetObject();
-	if (!pTexture) return false;
+	if (!pTexture) return true;
 
 	for (TM_TEXTURE::iterator it = m_TextureMap.begin(); it != m_TextureMap.end(); ++it)
 	{
@@ -83,5 +101,23 @@ bool TextureMgr_Impl::OnTextureDestroied(IMsgBase* pMsg)
 		}
 	}
 
-	return false;
+	LOGE("free texture error, un-cached texture");
+	return true;
+}
+
+bool TextureMgr_Impl::OnMemoryTextureDestroied(IMsgBase* pMsg)
+{
+	MsgCommon* pMsgCommon = (MsgCommon*)pMsg;
+	ITexture* pTexture = (ITexture*)pMsgCommon->GetObject();
+	if (!pTexture) return true;
+
+	TS_TEXTURE::iterator itfound = m_MemoryTextureSet.find(pTexture);
+	if (itfound == m_MemoryTextureSet.end())
+	{
+		LOGE("free memory texture error, un-cached memory texture");
+		return true;
+	}
+
+	m_MemoryTextureSet.erase(itfound);
+	return true;
 }

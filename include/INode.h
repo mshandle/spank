@@ -45,7 +45,7 @@ public:
 	virtual const Matrix4x4& GetLocalMatrix() = 0;
 	virtual const Matrix4x4& GetFinalMatrix() = 0;
 
-	virtual void UpdateMatrix(float dt) = 0;
+	virtual void UpdateMatrix(float dt, bool bForceUpdate = false) = 0;
 	virtual void UpdateAction(float dt) = 0;
 	virtual void UpdateObjects(float dt) = 0;
 	virtual void RenderObjects() = 0;

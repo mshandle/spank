@@ -112,23 +112,8 @@ bool ActionSequeue::OnActionUpdate(IMsgBase* pMsg)
 			SetRotation(pMsgActionUpdate->GetRotation());
 		}
 		break;
-	case AUT_START:
-		{
-			// notify sub action started
-			NotifySubActionUpdate(AUT_SUBACTION_START, pMsgActionUpdate->GetAction());
-		}
-		break;
-	case AUT_PAUSE:
-		{
-			// notify sub action paused
-			NotifySubActionUpdate(AUT_SUBACTION_PAUSE, pMsgActionUpdate->GetAction());
-		}
-		break;
 	case AUT_STOPED:
 		{
-			// notify sub action stoped
-			NotifySubActionUpdate(AUT_SUBACTION_STOPED, pMsgActionUpdate->GetAction());
-
 			if (!GetAction(++m_nCurrIndex))
 			{
 				Stop();
@@ -138,10 +123,4 @@ bool ActionSequeue::OnActionUpdate(IMsgBase* pMsg)
 	}
 
 	return true;
-}
-
-void ActionSequeue::NotifySubActionUpdate(ACTION_UPDATE_TYPE eType, IActionBase* pAction)
-{
-	MsgActionUpdate msg(eType, pAction);
-	CallEvent(msg);
 }

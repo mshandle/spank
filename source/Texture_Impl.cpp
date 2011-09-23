@@ -21,6 +21,15 @@ Texture_Impl::Texture_Impl(const char* pszFileName, TEXTURE_SAMPLE_TYPE eSample)
 	m_bOK = LoadTextureFromFile(pszFileName, eSample);
 }
 
+Texture_Impl::Texture_Impl(const void* pPixelData, int nWidth, int nHeight, TEXTURE_SAMPLE_TYPE eSample)
+{
+	m_nTextureWidth = 0;
+	m_nTextureHeight = 0;
+	m_nGLTextureID = 0;
+
+	m_bOK = LoadTextureFromMemory(pPixelData, nWidth, nHeight, eSample);
+}
+
 Texture_Impl::~Texture_Impl()
 {
 	MsgCommon msgCommon(MI_TEXTURE_DESTROIED);
@@ -29,12 +38,12 @@ Texture_Impl::~Texture_Impl()
 	FreeGLTexture();
 }
 
-uint Texture_Impl::GetWidth() const
+int Texture_Impl::GetWidth() const
 {
 	return m_nTextureWidth;
 }
 
-uint Texture_Impl::GetHeight() const
+int Texture_Impl::GetHeight() const
 {
 	return m_nTextureHeight;
 }
@@ -60,6 +69,38 @@ bool Texture_Impl::LoadTextureFromFile(const char* pszFileName, TEXTURE_SAMPLE_T
 	SAFE_DELETE(pImage);
 
 	return bOK;
+}
+
+bool Texture_Impl::LoadTextureFromMemory(const void* pPixelData, int nWidth, int nHeight, TEXTURE_SAMPLE_TYPE eSample)
+{
+	FreeGLTexture();
+
+	glGenTextures(1, &m_nGLTextureID);
+	if (m_nGLTextureID == 0) return false;
+
+	m_nTextureWidth = nWidth;
+	m_nTextureHeight = nHeight;
+
+	if (!IsValidTextureSize(m_nTextureWidth) || !IsValidTextureSize(m_nTextureHeight))
+	{
+		LOGE("invalid texture size: %dx%d", m_nTextureWidth, m_nTextureHeight);
+	}
+
+	glBindTexture(GL_TEXTURE_2D, m_nGLTextureID);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_nTextureWidth, m_nTextureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pPixelData);
+
+	if (eSample == TST_POINT)
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	}
+	else
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+
+	return true;
 }
 
 bool Texture_Impl::CreateGLTexture(Image* pImage, TEXTURE_SAMPLE_TYPE eSample)

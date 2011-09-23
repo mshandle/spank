@@ -18,15 +18,17 @@ public:
 	DECLARE_RTTI(Texture_Impl, ITexture);
 
 	Texture_Impl(const char* pszFileName, TEXTURE_SAMPLE_TYPE eSample);
+	Texture_Impl(const void* pPixelData, int nWidth, int nHeight, TEXTURE_SAMPLE_TYPE eSample);
 	virtual ~Texture_Impl();
 
-	virtual uint GetWidth() const;
-	virtual uint GetHeight() const;
+	virtual int GetWidth() const;
+	virtual int GetHeight() const;
 
 	GLuint GetGLTextureID() const;
 
 private:
 	bool LoadTextureFromFile(const char* pszFileName, TEXTURE_SAMPLE_TYPE eSample);
+	bool LoadTextureFromMemory(const void* pPixelData, int nWidth, int nHeight, TEXTURE_SAMPLE_TYPE eSample);
 
 	bool CreateGLTexture(Image* pImage, TEXTURE_SAMPLE_TYPE eSample);
 	void FreeGLTexture();
@@ -34,8 +36,8 @@ private:
 	bool IsValidTextureSize(uint nSize);
 
 private:
-	uint m_nTextureWidth;
-	uint m_nTextureHeight;
+	int m_nTextureWidth;
+	int m_nTextureHeight;
 	GLuint m_nGLTextureID;
 
 };
