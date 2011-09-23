@@ -186,7 +186,9 @@ const Matrix4x4& Node_Impl::GetFinalMatrix()
 
 void Node_Impl::UpdateMatrix(float dt, bool bForceUpdate /* = false */)
 {
-	if (m_bNeedUpdateMatrix || bForceUpdate)
+	bool bNeedUpdate = (m_bNeedUpdateMatrix || bForceUpdate);
+
+	if (bNeedUpdate)
 	{
 		m_bNeedUpdateMatrix = false;
 
@@ -211,12 +213,11 @@ void Node_Impl::UpdateMatrix(float dt, bool bForceUpdate /* = false */)
 		}
 	}
 
-	bool bChildNeedUpdate = (m_bNeedUpdateMatrix || bForceUpdate);
 	// tell children setup their matrix
 	for (TV_NODE::iterator it = m_vChildNodes.begin(); it != m_vChildNodes.end(); ++it)
 	{
 		INode* pNode = (*it);
-		pNode->UpdateMatrix(dt, bChildNeedUpdate);
+		pNode->UpdateMatrix(dt, bNeedUpdate);
 	}
 }
 
