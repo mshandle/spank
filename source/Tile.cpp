@@ -14,7 +14,8 @@ Tile::Tile(const IMAGE_PIECE* pImagePiece)
 {
 	m_pImagePiece = pImagePiece;
 	m_bVisible= true;
-
+	m_nWidth = pImagePiece->width;
+	m_nHeight = pImagePiece->height;
 	m_pShader = IShaderMgr::GetInstance().CreateShader(SSI_DEFAULT);
 }
 
@@ -40,7 +41,13 @@ void Tile::Render()
 	IRenderer2D::GetInstance().SetModelViewMatrix(pNode->GetFinalMatrix());
 	m_pShader->SetMatrix4x4("u_matModelViewProj", IRenderer2D::GetInstance().GetFinalMatrixTranspose());
 
-	IRenderer2D::GetInstance().DrawRect(0.0f, 0.0f, m_pImagePiece, m_pShader);
+	IRenderer2D::GetInstance().DrawRect(0.0f, 0.0f, m_nWidth, m_nHeight, m_pImagePiece, m_pShader);
+}
+
+void Tile::SetSize( float width, float height )
+{
+	m_nWidth = width;
+	m_nHeight = height;
 }
 
 void Tile::SetVisible(bool bVisible)

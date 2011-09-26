@@ -23,7 +23,7 @@ public:
 
 	virtual void Render();
 	virtual void Update(float dt);
-
+	void SetSize(float width, float height);
 	void SetVisible(bool bVisible);
 	bool IsVisible() const;
 
@@ -35,7 +35,8 @@ private:
 	const IMAGE_PIECE* m_pImagePiece;
 	IShader* m_pShader;
 	bool m_bVisible;
-
+	float m_nWidth;
+	float m_nHeight;
 };
 
 #endif // __TILE_H__
