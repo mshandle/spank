@@ -10,6 +10,12 @@
 #include <IRenderer2D.h>
 #include <INode.h>
 
+const char* Tile::pszShaderFileName[] = 
+{
+	"default_shader.xml",
+	"Gray_shader.xml"
+};
+
 Tile::Tile(const IMAGE_PIECE* pImagePiece)
 {
 	m_pImagePiece = pImagePiece;
@@ -17,6 +23,7 @@ Tile::Tile(const IMAGE_PIECE* pImagePiece)
 	m_nWidth = pImagePiece->width;
 	m_nHeight = pImagePiece->height;
 	m_pShader = IShaderMgr::GetInstance().CreateShader(SSI_DEFAULT);
+	m_eType = NORMAL;
 }
 
 Tile::~Tile()
@@ -44,6 +51,14 @@ void Tile::Render()
 	IRenderer2D::GetInstance().DrawRect(0.0f, 0.0f, m_nWidth, m_nHeight, m_pImagePiece, m_pShader);
 }
 
+void Tile::SetRenderType(RENDER_TYPE eType)
+{
+	if(eType == m_eType) return;
+	SAFE_RELEASE(m_pShader);
+	m_pShader = IShaderMgr::GetInstance().CreateShader(pszShaderFileName[eType]);
+	if(!m_pShader)return;
+	m_eType = eType;
+}
 void Tile::SetSize( float width, float height )
 {
 	m_nWidth = width;

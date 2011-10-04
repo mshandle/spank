@@ -16,6 +16,12 @@
 class Tile :public IRenderableObject
 {
 public:
+	enum RENDER_TYPE
+	{
+		NORMAL = 0,
+		GRAY,
+	};
+	const static char* pszShaderFileName[];
 	DECLARE_RTTI(Tile, IRenderableObject);
 
 	Tile(const IMAGE_PIECE* pImagePiece);
@@ -23,6 +29,8 @@ public:
 
 	virtual void Render();
 	virtual void Update(float dt);
+
+	void SetRenderType(RENDER_TYPE eType);
 	void SetSize(float width, float height);
 	void SetVisible(bool bVisible);
 	bool IsVisible() const;
@@ -37,6 +45,7 @@ private:
 	bool m_bVisible;
 	float m_nWidth;
 	float m_nHeight;
+	RENDER_TYPE m_eType;
 };
 
 #endif // __TILE_H__

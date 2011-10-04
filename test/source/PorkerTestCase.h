@@ -10,6 +10,9 @@
 
 #include "TestCase.h"
 #include <IShader.h>
+#include <Tile.h>
+#include <INode.h>
+#include <ui/uimsg/IMsgBaseUI.h>
 
 class PorkerTestCase : public TestCase
 {
@@ -23,10 +26,14 @@ public:
 	virtual void Terminate();
 
 	virtual void Render();
+	bool OnNormalButtonClick(IMsgBase* pMsg);
+	bool OnGrayButtonClick(IMsgBase* pMsg);
 
 private:
 	 IShader* m_pShader;	
 	 const IMAGE_PIECE* m_pBackGroundImagePiece;
+	 Tile* m_pTile;
+	 INode* m_pNode;
 };
 
 #endif//__PORKERTESTCASE_H_
