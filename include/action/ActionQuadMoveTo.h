@@ -9,28 +9,23 @@
 #define __ACTIONTWEENMOVE_H_
 
 #include "IActionBase.h"
-class ActionQuadMoveTo : public IActionBase
+#include "ActionMoveTo.h"
+
+class ActionQuadMoveTo : public ActionMoveTo
 {
 public:
-	DECLARE_RTTI(ActionQuadMoveTo, IActionBase);
+	DECLARE_RTTI(ActionQuadMoveTo, ActionMoveTo);
 public:
 	ActionQuadMoveTo(ACTION_TWEEN_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time);
 	virtual ~ActionQuadMoveTo();
-	virtual void Reset() ;
-	virtual void Update(float dt) ;
 
 	virtual IActionBase* Clone() ;
 	virtual IActionBase* CloneInverse();
 	
-	virtual float GetTimeLength() const;
+protected:
+	virtual float Interpolate();
 private:
-	Vector3 Tween();
-private:
-	Vector3 m_vPosStart;
-	Vector3 m_vPosEnd;
-	float m_fTime;
-
-	float m_fCurrTime;
+	
 	ACTION_TWEEN_TYPE m_eType;
 };
 #endif//__ACTIONTWEENMOVE_H_

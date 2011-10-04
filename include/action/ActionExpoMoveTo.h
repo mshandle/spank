@@ -9,29 +9,22 @@
 #define __ACTIONEXPOMOVE_H_
 
 #include "IActionBase.h"
+#include "ActionMoveTo.h"
 
-class ActionExpoMoveTo :public IActionBase
+class ActionExpoMoveTo :public ActionMoveTo
 {
 public:
-	DECLARE_RTTI(ActionExpoMoveTo, IActionBase);
+	DECLARE_RTTI(ActionExpoMoveTo, ActionMoveTo);
 public:
 	ActionExpoMoveTo(ACTION_TWEEN_TYPE eType,const Vector3& posStart, const Vector3& posEnd, float time);
 	virtual ~ActionExpoMoveTo();
-	virtual void Reset() ;
-	virtual void Update(float dt) ;
 
 	virtual IActionBase* Clone() ;
 	virtual IActionBase* CloneInverse();
+protected:
+	virtual float Interpolate();
 
-	virtual float GetTimeLength() const;
 private:
-	Vector3 Tween();
-private:
-	Vector3 m_vPosStart;
-	Vector3 m_vPosEnd;
-	float m_fTime;
-
-	float m_fCurrTime;
 	ACTION_TWEEN_TYPE m_eType;
 };
 #endif//__ACTIONEXPOMOVE_H_
