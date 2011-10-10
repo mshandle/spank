@@ -70,6 +70,25 @@ void Tile::SetVisible(bool bVisible)
 	m_bVisible = bVisible;
 }
 
+float Tile::GetWidth() const
+{
+	return m_nWidth;
+}
+
+float Tile::GetHeight() const
+{
+	return m_nHeight;
+}
+
+float Tile::GetPieceWidth() const
+{
+	return m_pImagePiece->width;
+}
+
+float Tile::getPieceheight() const
+{
+	return m_pImagePiece->height;
+}
 bool Tile::IsVisible() const
 {
 	return m_bVisible;
@@ -84,3 +103,4 @@ INode* Tile::GetParentNode()
 
 	return NULL;
 }
+

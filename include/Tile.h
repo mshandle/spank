@@ -23,7 +23,7 @@ public:
 	};
 	const static char* pszShaderFileName[];
 	DECLARE_RTTI(Tile, IRenderableObject);
-
+public:
 	Tile(const IMAGE_PIECE* pImagePiece);
 	virtual ~Tile();
 
@@ -33,10 +33,12 @@ public:
 	void SetRenderType(RENDER_TYPE eType);
 	void SetSize(float width, float height);
 	void SetVisible(bool bVisible);
+	float GetWidth()const;
+	float GetHeight() const;
+	float GetPieceWidth()const;
+	float getPieceheight()const;
 	bool IsVisible() const;
-
 private:
-	bool InitShader();
 	INode* GetParentNode();
 
 private:
