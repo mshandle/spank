@@ -32,11 +32,14 @@ public:
 
 	void SetRenderType(RENDER_TYPE eType);
 	void SetSize(float width, float height);
+	void SetColor(const Vector4& vColor);
 	void SetVisible(bool bVisible);
+	
 	float GetWidth()const;
 	float GetHeight() const;
 	float GetPieceWidth()const;
 	float getPieceheight()const;
+
 	bool IsVisible() const;
 private:
 	INode* GetParentNode();
@@ -48,6 +51,7 @@ private:
 	float m_nWidth;
 	float m_nHeight;
 	RENDER_TYPE m_eType;
+	Vector4 m_vColor;
 };
 
 #endif // __TILE_H__
