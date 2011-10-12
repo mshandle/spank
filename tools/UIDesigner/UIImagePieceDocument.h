@@ -38,16 +38,18 @@ public:
 
 	virtual bool OpenFile(const wxString& strFile);
 	virtual bool SaveFile(const wxString& strFile);
+	virtual bool NewFile (const wxString& strFile);
 	virtual const wxString& GetFileName() const;
 
-	const TM_IMAGE_INFO& GetImageMap() const;
+	TM_IMAGE_INFO& GetImageMap();
 	const wxString& FindImage(int nID) const;
-
-	const TM_PIECE_INFO& GetPieceInfoMap() const;
+	void AddPieceInfo(const PIECE_INFO& PieceInfo);
+	void AddImageInfo(const IMAGE_INFO& ImageInfo);
+	TM_PIECE_INFO& GetPieceInfoMap();
 	const PIECE_INFO* FindPieceInfo(const wxString& strID) const;
-
+	
 	void UpdateImagePiece(const PIECE_INFO& pieceInfo);
-
+	void Clear();
 private:
 	TM_IMAGE_INFO m_ImageMap;
 	TM_PIECE_INFO m_PieceInfoMap;

@@ -48,7 +48,17 @@ public:
 		IDC_PROJECT = 10003,
 		IDC_PROPERTY = 10002,
 		IDC_INPUT_VIEW = 10004,
-		IDC_OUTPUT_VIEW = 10001
+		IDC_OUTPUT_VIEW = 10001,
+		ID_ADDIMAGE = 10060,
+		ID_ADDPIECE = 10061,
+		ID_NEWIMAGEPIECE = 10062,
+		ID_NEWDILOG = 10063,
+		ID_ADDPIECEMENU = 10064,
+		ID_ADDIMAGEMENU = 10065,
+		ID_DELETE_IMAGE = 10066,
+		ID_DELETE_PIECE = 10067,
+		ID_TIPS_DIALOG = 10068,
+		IDC_PROJECTIMAGE = 10069 
 	};
 
 public:
@@ -76,7 +86,7 @@ private:
 	void OnFileNew(wxCommandEvent& event);
 	void OnFileOpen(wxCommandEvent& event);
 	void OnFileSave(wxCommandEvent& event);
-
+	void OnFileClose(wxCommandEvent& event);
 	void OnLayoutMoveLeft(wxCommandEvent& event);
 	void OnLayoutMoveRight(wxCommandEvent& event);
 	void OnLayoutMoveUp(wxCommandEvent& event);
@@ -87,13 +97,18 @@ private:
 	void OnViewZoomOut(wxCommandEvent& event);
 
 	void OnProjectItemSelChanged(wxTreeEvent& event);
+	void OnProjectRightClick(wxTreeEvent& event);
 	void OnImagePieceChanged(wxImagePieceEvent& event);
-
+	
+	void OnAddImageInfo(wxCommandEvent& event);
+	void OnAddPieceInfo(wxCommandEvent& event);
+	void OnDeletePieceInfo(wxCommandEvent& event);
 private:
 	wxAuiManager m_auiManager;
 	wxTreeCtrl* m_pProjectView;
 	UIImagePieceView* m_pImagePieceView;
 	UIImagePieceDocument* m_pImagePieceDocument;
-
+	wxTextCtrl* m_pOutputView;
+	wxTreeItemId m_CurTreeItemId;
 };
 #endif // __UIDESIGNERFRAME_H__

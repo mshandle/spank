@@ -10,6 +10,10 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
 #include <wx/filedlg.h>
+#include "UIAddPieceInfoView.h"
+#include "UIAddImageInfoView.h"
+#include "UINewImagePieceView.h"
+#include "UITipsDialogView.h"
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
@@ -17,7 +21,7 @@ BEGIN_EVENT_TABLE(UIDesignerFrame, wxFrame)
 	EVT_MENU(wxID_NEW, UIDesignerFrame::OnFileNew)
 	EVT_MENU(wxID_OPEN, UIDesignerFrame::OnFileOpen)
 	EVT_MENU(wxID_SAVE, UIDesignerFrame::OnFileSave)
-
+	EVT_MENU(wxID_CLOSE, UIDesignerFrame::OnFileClose)
 	EVT_MENU(ID_LAYOUT_MOVE_LEFT, UIDesignerFrame::OnLayoutMoveLeft)
 	EVT_MENU(ID_LAYOUT_MOVE_RIGHT, UIDesignerFrame::OnLayoutMoveRight)
 	EVT_MENU(ID_LAYOUT_MOVE_UP, UIDesignerFrame::OnLayoutMoveUp)
@@ -27,6 +31,10 @@ BEGIN_EVENT_TABLE(UIDesignerFrame, wxFrame)
 	EVT_MENU(wxID_ZOOM_IN, UIDesignerFrame::OnViewZoomIn)
 	EVT_MENU(wxID_ZOOM_OUT, UIDesignerFrame::OnViewZoomOut)
 
+	EVT_MENU(ID_ADDPIECEMENU, UIDesignerFrame::OnAddPieceInfo)
+	EVT_MENU(ID_DELETE_PIECE, UIDesignerFrame::OnDeletePieceInfo)
+	EVT_TREE_ITEM_MENU(IDC_PROJECT, UIDesignerFrame::OnProjectRightClick)
+	//evt_tr(IDC_PROJECT, UIDesignerFrame::OnProjectRightClick)
 	EVT_TREE_SEL_CHANGED(IDC_PROJECT, UIDesignerFrame::OnProjectItemSelChanged)
 	EVT_IMAGE_PIECE_CHANGED(IDC_INPUT_VIEW, UIDesignerFrame::OnImagePieceChanged)
 END_EVENT_TABLE()
@@ -298,7 +306,6 @@ void UIDesignerFrame::CreateToolbar()
 void UIDesignerFrame::CreateProjectView()
 {
 	m_pProjectView = new wxTreeCtrl(this, IDC_PROJECT, wxDefaultPosition, wxDefaultSize, wxTR_SINGLE|wxNO_BORDER);
-
 	m_auiManager.AddPane(m_pProjectView, wxAuiPaneInfo()
 		.Name(wxT("Project"))
 		.Caption(wxT("Project"))
@@ -308,8 +315,23 @@ void UIDesignerFrame::CreateProjectView()
 		.DestroyOnClose(false)
 		.Resizable(true)
 		.Floatable(false)
-		.FloatingSize(wxSize(300, 500))
+		.FloatingSize(wxSize(300, 250))
 		.Movable(false));
+
+	wxTreeCtrl* ProjectView = new wxTreeCtrl(this, IDC_PROJECTIMAGE, wxPoint(0, 360), wxDefaultSize, wxTR_SINGLE|wxNO_BORDER);
+	m_auiManager.AddPane(m_pProjectView, wxAuiPaneInfo()
+		.Name(wxT("ProjectImage"))
+		.Caption(wxT("Project"))
+		.BestSize(wxSize(300, 300))
+		.Layer(1)
+		.CloseButton(false)
+		.DestroyOnClose(false)
+		.Resizable(true)
+		.Floatable(false)
+		.FloatingSize(wxSize(300, 250))
+		.Movable(false));
+
+
 }
 
 void UIDesignerFrame::CreatePropertyView()
@@ -336,7 +358,6 @@ void UIDesignerFrame::CreatePropertyView()
 void UIDesignerFrame::CreateInputView()
 {
 	m_pImagePieceView = new UIImagePieceView(this, IDC_INPUT_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
-
 	m_auiManager.AddPane(m_pImagePieceView, wxAuiPaneInfo()
 		.Name(wxT("Input"))
 		.Caption(wxT("Input"))
@@ -351,12 +372,12 @@ void UIDesignerFrame::CreateInputView()
 
 void UIDesignerFrame::CreateOutputView()
 {
-	wxTextCtrl* pOutputView = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_MULTILINE|wxNO_BORDER);
-	pOutputView->AppendText(wxT("This is output view\n"));
-	pOutputView->AppendText(wxT("line 1\n"));
-	pOutputView->AppendText(wxT("line 2\n"));
+	m_pOutputView = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_MULTILINE|wxNO_BORDER);
+	m_pOutputView->AppendText(wxT("This is output view\n"));
+	m_pOutputView->AppendText(wxT("line 1\n"));
+	m_pOutputView->AppendText(wxT("line 2\n"));
 
-	m_auiManager.AddPane(pOutputView, wxAuiPaneInfo()
+	m_auiManager.AddPane(m_pOutputView, wxAuiPaneInfo()
 		.Name(wxT("Output"))
 		.Caption(wxT("Output"))
 		.Bottom()
@@ -383,6 +404,7 @@ void UIDesignerFrame::UpdateProjectView()
 	m_pProjectView->ExpandAll();
 
 	wxTreeItemIdValue value;
+	if(pieceInfoMap.empty()) return;
 	m_pProjectView->SelectItem(m_pProjectView->GetFirstChild(rootItem, value));
 }
 
@@ -399,6 +421,13 @@ void UIDesignerFrame::UpdateImagePieceView(const UIImagePieceDocument::PIECE_INF
 void UIDesignerFrame::OnFileNew(wxCommandEvent& event)
 {
 	// TODO: 
+	UINewImagePieceView NewImagePiece(this,ID_NEWIMAGEPIECE);
+	if(NewImagePiece.ShowModal() == wxID_OK)
+	{
+		m_pImagePieceDocument->NewFile(NewImagePiece.GetValue());
+		m_pOutputView->AppendText("Add The New Xml File :" + NewImagePiece.GetValue() + "\n");
+		UpdateProjectView();
+	}
 }
 
 void UIDesignerFrame::OnFileOpen(wxCommandEvent& event)
@@ -418,6 +447,19 @@ void UIDesignerFrame::OnFileSave(wxCommandEvent& event)
 	{
 		m_pImagePieceDocument->SaveFile(m_pImagePieceDocument->GetFileName());
 	}
+}
+
+void UIDesignerFrame::OnFileClose(wxCommandEvent& event)
+{
+	if(m_pImagePieceDocument->GetImageMap().size() != 0)
+	{
+		UITipsDialog uiTipsDialog(this,ID_TIPS_DIALOG);
+		if(uiTipsDialog.ShowModal() == wxID_YES)
+			m_pImagePieceDocument->SaveFile(m_pImagePieceDocument->GetFileName());
+		m_pImagePieceDocument->Clear();
+		UpdateProjectView();
+	}
+
 }
 
 void UIDesignerFrame::OnLayoutMoveLeft(wxCommandEvent& event)
@@ -453,21 +495,73 @@ void UIDesignerFrame::OnViewZoomIn(wxCommandEvent& event)
 void UIDesignerFrame::OnViewZoomOut(wxCommandEvent& event)
 {
 	m_pImagePieceView->ZoomOut();
+
 }
 
 void UIDesignerFrame::OnProjectItemSelChanged(wxTreeEvent& event)
 {
-	wxTreeItemId itemID = event.GetItem();
-	wxString strItemID = m_pProjectView->GetItemText(itemID);
+	m_CurTreeItemId = event.GetItem();
+	wxString strItemID = m_pProjectView->GetItemText(m_CurTreeItemId);
 
 	const UIImagePieceDocument::PIECE_INFO* pPieceInfo = m_pImagePieceDocument->FindPieceInfo(strItemID);
 	if (!pPieceInfo) return;
-
-	UpdateImagePieceView(pPieceInfo);
+	UpdateImagePieceView(pPieceInfo);	
 }
 
 void UIDesignerFrame::OnImagePieceChanged(wxImagePieceEvent& event)
 {
 	const UIImagePieceDocument::PIECE_INFO& pieceInfo = event.GetPieceInfo();
 	m_pImagePieceDocument->UpdateImagePiece(pieceInfo);
+}
+
+void UIDesignerFrame::OnProjectRightClick(wxTreeEvent& event)
+{
+	m_CurTreeItemId = event.GetItem();
+	 wxPoint clientpt = event.GetPoint();
+	 wxMenu menu;
+	 menu.Append(ID_ADDPIECEMENU,wxT("&Add Piece"));
+	 menu.Append(ID_DELETE_PIECE, wxT("&Delete Piece"));
+	 m_pProjectView->PopupMenu(&menu, clientpt);
+}
+
+void UIDesignerFrame::OnAddImageInfo(wxCommandEvent& event)
+{
+	UIAddImageInfoView uiAddImage(this, ID_ADDPIECE);
+	if(uiAddImage.ShowModal()== wxOK)
+	{
+		UIImagePieceDocument::IMAGE_INFO ImageInfo = uiAddImage.GetValue();
+		if(m_pImagePieceDocument->FindImage(ImageInfo.nID) != wxEmptyString)
+			m_pOutputView->AppendText("Error:Have the same ID\n");
+		m_pImagePieceDocument->AddImageInfo(ImageInfo);
+	}
+}
+
+void UIDesignerFrame::OnAddPieceInfo(wxCommandEvent& event)
+{
+	if(m_pImagePieceDocument->GetImageMap().size() ==0) 
+	{
+		m_pOutputView->AppendText("Error: Don't hava any Image\n");
+		return;
+	}
+	AddImageDialog pAddImage(this, ID_ADDIMAGE, wxT("Add Image"));
+
+	if(pAddImage.ShowModal() == wxAPPLY)
+	{
+		UIImagePieceDocument::PIECE_INFO vlaue = pAddImage.GetValue();
+		if(m_pImagePieceDocument->FindImage(vlaue.nImageID) == wxEmptyString)
+			return;
+		m_pImagePieceDocument->AddPieceInfo(vlaue);
+		UpdateProjectView();
+	}
+	event.Skip();
+}
+
+void UIDesignerFrame::OnDeletePieceInfo(wxCommandEvent& event)
+{
+	wxString strItemID = m_pProjectView->GetItemText(m_CurTreeItemId);
+
+	if(!m_pImagePieceDocument->GetPieceInfoMap().erase(strItemID))
+		m_pOutputView->AppendText("Error: Failed delete" + strItemID + "\n");
+	UpdateProjectView();
+	event.Skip();
 }

@@ -18,7 +18,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(ProjectDir)..\..\build\$(ProjectName)\$(ConfigurationName)"
+			OutputDirectory="..\..\bin"
 			IntermediateDirectory="$(ProjectDir)..\..\build\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -91,7 +91,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="echo copy &quot;$(TargetPath)&quot; &quot;$(ProjectDir)..\..\bin\&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(ProjectDir)..\..\bin\&quot;&#x0D;&#x0A;"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -178,6 +178,22 @@
 	</References>
 	<Files>
 		<File
+			RelativePath=".\UIAddImageInfoView.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\UIAddImageInfoView.h"
+			>
+		</File>
+		<File
+			RelativePath=".\UIAddPieceInfoView.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\UIAddPieceInfoView.h"
+			>
+		</File>
+		<File
 			RelativePath=".\UIDesignerApp.cpp"
 			>
 		</File>
@@ -215,6 +231,22 @@
 		</File>
 		<File
 			RelativePath=".\UIImagePieceView.h"
+			>
+		</File>
+		<File
+			RelativePath=".\UINewImagePieceView.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\UINewImagePieceView.h"
+			>
+		</File>
+		<File
+			RelativePath=".\UITipsDialogView.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\UITipsDialogView.h"
 			>
 		</File>
 		<File

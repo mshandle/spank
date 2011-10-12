@@ -115,7 +115,7 @@ const wxString& UIImagePieceDocument::GetFileName() const
 	return m_strFile;
 }
 
-const UIImagePieceDocument::TM_IMAGE_INFO& UIImagePieceDocument::GetImageMap() const
+ UIImagePieceDocument::TM_IMAGE_INFO& UIImagePieceDocument::GetImageMap()
 {
 	return m_ImageMap;
 }
@@ -129,7 +129,7 @@ const wxString& UIImagePieceDocument::FindImage(int nID) const
 	return (itfound->second).strFile;
 }
 
-const UIImagePieceDocument::TM_PIECE_INFO& UIImagePieceDocument::GetPieceInfoMap() const
+ UIImagePieceDocument::TM_PIECE_INFO& UIImagePieceDocument::GetPieceInfoMap() 
 {
 	return m_PieceInfoMap;
 }
@@ -149,4 +149,31 @@ void UIImagePieceDocument::UpdateImagePiece(const PIECE_INFO& pieceInfo)
 	PIECE_INFO* pPieceInfo = &itfound->second;
 	pPieceInfo->nImageID = pieceInfo.nImageID;
 	pPieceInfo->rect = pieceInfo.rect;
+}
+
+void UIImagePieceDocument::AddPieceInfo(const PIECE_INFO& PieceInfo)
+{
+	if(FindPieceInfo(PieceInfo.strID) != NULL) return;
+	m_PieceInfoMap.insert(std::make_pair(PieceInfo.strID, PieceInfo));
+}
+
+void UIImagePieceDocument::AddImageInfo(const IMAGE_INFO& ImageInfo)
+{
+	if(FindImage(ImageInfo.nID) != wxEmptyString) return;
+	m_ImageMap.insert(std::make_pair(ImageInfo.nID, ImageInfo));
+}
+
+bool UIImagePieceDocument::NewFile(const wxString& strFile)
+{
+	m_ImageMap.clear();
+	m_PieceInfoMap.clear();
+	m_strFile = strFile;
+	return true;
+}
+
+void UIImagePieceDocument::Clear()
+{
+	m_strFile = wxEmptyString;
+	m_ImageMap.clear();
+	m_PieceInfoMap.clear();
 }
