@@ -177,3 +177,13 @@ void UIImagePieceDocument::Clear()
 	m_ImageMap.clear();
 	m_PieceInfoMap.clear();
 }
+
+int UIImagePieceDocument::GetImageMapKeyValue(const wxString& strValue)
+{
+	for (TM_IMAGE_INFO::iterator it = m_ImageMap.begin(); it != m_ImageMap.end(); ++it)
+	{
+		if(it->second.strFile == strValue)
+			return it->second.nID;
+	}
+	return 0;
+}

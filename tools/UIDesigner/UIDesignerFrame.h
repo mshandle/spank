@@ -81,12 +81,14 @@ private:
 	void CreateOutputView();
 
 	void UpdateProjectView();
+	void UpDateProjectImageView();
 	void UpdateImagePieceView(const UIImagePieceDocument::PIECE_INFO* pPieceInfo);
-
+	
 	void OnFileNew(wxCommandEvent& event);
 	void OnFileOpen(wxCommandEvent& event);
 	void OnFileSave(wxCommandEvent& event);
 	void OnFileClose(wxCommandEvent& event);
+	void OnExit(wxCommandEvent& event);
 	void OnLayoutMoveLeft(wxCommandEvent& event);
 	void OnLayoutMoveRight(wxCommandEvent& event);
 	void OnLayoutMoveUp(wxCommandEvent& event);
@@ -100,12 +102,17 @@ private:
 	void OnProjectRightClick(wxTreeEvent& event);
 	void OnImagePieceChanged(wxImagePieceEvent& event);
 	
+	void OnProjectImageViewRightClick(wxTreeEvent& event);
+
 	void OnAddImageInfo(wxCommandEvent& event);
+	void OnDeleteImageInfo(wxCommandEvent& event);
+
 	void OnAddPieceInfo(wxCommandEvent& event);
 	void OnDeletePieceInfo(wxCommandEvent& event);
 private:
 	wxAuiManager m_auiManager;
 	wxTreeCtrl* m_pProjectView;
+	wxTreeCtrl* m_pProjectViewImage;
 	UIImagePieceView* m_pImagePieceView;
 	UIImagePieceDocument* m_pImagePieceDocument;
 	wxTextCtrl* m_pOutputView;
