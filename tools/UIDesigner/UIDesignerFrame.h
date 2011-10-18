@@ -11,6 +11,7 @@
 #include <wx/frame.h>
 #include <wx/aui/aui.h>
 #include <wx/treectrl.h>
+#include <wx/propgrid/property.h>
 
 #include "UIImagePieceView.h"
 #include "UIImagePieceDocument.h"
@@ -46,7 +47,8 @@ public:
 		ID_HELP_ABOUT = 10044,
 		ID_TOOLBAR = 10018,
 		IDC_PROJECT = 10003,
-		IDC_PROPERTY = 10002,
+		IDC_PROPERTYPIECE = 10002,
+		
 		IDC_INPUT_VIEW = 10004,
 		IDC_OUTPUT_VIEW = 10001,
 		ID_ADDIMAGE = 10060,
@@ -57,8 +59,16 @@ public:
 		ID_ADDIMAGEMENU = 10065,
 		ID_DELETE_IMAGE = 10066,
 		ID_DELETE_PIECE = 10067,
+		ID_CUT_PIECE = 10075,
 		ID_TIPS_DIALOG = 10068,
-		IDC_PROJECTIMAGE = 10069 
+		IDC_PROJECTIMAGE = 10069,
+		IDC_PROPERTYIMAGE = 10070,
+		IDC_UIIMAGE_VIEW = 10071,
+		IDC_IMPORT_PIECE = 10072,
+		IDC_IMAPORT_PIECE_VIEW = 10073,
+		IDC_IMPORT_PROPERTY = 10074,
+		IDC_DELETE_IMPORTPIECE = 10100,
+		IDC_LOAD_IMPORTPIECE = 10101,
 	};
 
 public:
@@ -82,6 +92,8 @@ private:
 
 	void UpdateProjectView();
 	void UpDateProjectImageView();
+	void UpDataProjectImportView();
+
 	void UpdateImagePieceView(const UIImagePieceDocument::PIECE_INFO* pPieceInfo);
 	
 	void OnFileNew(wxCommandEvent& event);
@@ -89,6 +101,8 @@ private:
 	void OnFileSave(wxCommandEvent& event);
 	void OnFileClose(wxCommandEvent& event);
 	void OnExit(wxCommandEvent& event);
+	void OnImport(wxCommandEvent& event);
+
 	void OnLayoutMoveLeft(wxCommandEvent& event);
 	void OnLayoutMoveRight(wxCommandEvent& event);
 	void OnLayoutMoveUp(wxCommandEvent& event);
@@ -98,24 +112,62 @@ private:
 	void OnViewZoomIn(wxCommandEvent& event);
 	void OnViewZoomOut(wxCommandEvent& event);
 
-	void OnProjectItemSelChanged(wxTreeEvent& event);
-	void OnProjectRightClick(wxTreeEvent& event);
-	void OnImagePieceChanged(wxImagePieceEvent& event);
+	void OnProjectPieceItemSelChanged(wxTreeEvent& event);
+	void OnProjectPieceRightClick(wxTreeEvent& event);
 	
+	void OnProjectImageItemSelChanged(wxTreeEvent& event);
 	void OnProjectImageViewRightClick(wxTreeEvent& event);
+	void OnImagePieceChanged(wxImagePieceEvent& event);
+
+	void OnPiecePropertyGridChange(wxPropertyGridEvent &event);
+	void UpDatePieceProterty(const UIImagePieceDocument::PIECE_INFO& PieceInfo);
+
+	void OnImagePropertyGridChange(wxPropertyGridEvent& event);
+	void UpdateImageProterty(const UIImagePieceDocument::IMAGE_INFO& ImageInfo);
+	
+	void OnProjectImportItemSleChanged(wxTreeEvent& event);
+	void OnProjectImportRightClick(wxTreeEvent& event);
+	void UpdateImportPieceProterty(const UIImagePieceView::PIECEVIEW_INFO& PieceInfo);
+	void OnImportPropertyGridChange(wxPropertyGridEvent& event);
 
 	void OnAddImageInfo(wxCommandEvent& event);
 	void OnDeleteImageInfo(wxCommandEvent& event);
-
+	
 	void OnAddPieceInfo(wxCommandEvent& event);
 	void OnDeletePieceInfo(wxCommandEvent& event);
+	void OnCutPiece(wxCommandEvent& event);
+	void OnDelteImportPiece(wxCommandEvent& event);
+	void OnLoadImportPiece(wxCommandEvent& event);
 private:
 	wxAuiManager m_auiManager;
-	wxTreeCtrl* m_pProjectView;
+	wxTreeCtrl* m_pProjectViewPiece;
 	wxTreeCtrl* m_pProjectViewImage;
+	wxTreeCtrl* m_pImportPieceView;
 	UIImagePieceView* m_pImagePieceView;
 	UIImagePieceDocument* m_pImagePieceDocument;
+
 	wxTextCtrl* m_pOutputView;
-	wxTreeItemId m_CurTreeItemId;
+
+	wxTreeItemId m_CurPieceTreeItemId;
+	wxTreeItemId m_CurImageTreeItemId;
+	wxTreeItemId m_CurImportTreeItemId;
+	//Piece and Image proterty view point;
+	wxPropertyGrid* m_pPieceProperty;
+	wxPGProperty* m_pProtertyStrID;
+	wxPGProperty* m_pProtertyX;
+	wxPGProperty* m_pProtertyY;
+	wxPGProperty* m_pProtertyWidth;
+	wxPGProperty* m_pProtertyHight;
+
+	wxPropertyGrid* m_pImageProperty;
+	wxPGProperty* m_pImageFileNameProterty;
+	wxPGProperty* m_pImageIDProterty;
+
+	wxPropertyGrid* m_pImportPieceProperty;
+	wxPGProperty* m_pImportPieceFileName;
+	wxPGProperty* m_pImageID;
+	wxPGProperty* m_pImportPieceX;
+	wxPGProperty* m_pImportPieceY;
+
 };
 #endif // __UIDESIGNERFRAME_H__

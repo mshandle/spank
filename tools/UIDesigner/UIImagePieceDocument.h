@@ -20,7 +20,7 @@ public:
 		int nID;
 		wxString strFile;
 	} IMAGE_INFO;
-
+	
 	typedef std::map<int, IMAGE_INFO> TM_IMAGE_INFO;
 
 	typedef struct PIECE_INFO_tag
@@ -42,12 +42,12 @@ public:
 	virtual const wxString& GetFileName() const;
 
 	TM_IMAGE_INFO& GetImageMap();
-	const wxString& FindImage(int nID) const;
+	const wxString& FindImage(int nID) const ;
 	void AddPieceInfo(const PIECE_INFO& PieceInfo);
 	void AddImageInfo(const IMAGE_INFO& ImageInfo);
 	TM_PIECE_INFO& GetPieceInfoMap();
 	int GetImageMapKeyValue(const wxString& strValue);
-	const PIECE_INFO* FindPieceInfo(const wxString& strID) const;
+	 PIECE_INFO* FindPieceInfo(const wxString& strID) ;
 	
 	void UpdateImagePiece(const PIECE_INFO& pieceInfo);
 	void Clear();

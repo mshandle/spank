@@ -178,6 +178,14 @@
 	</References>
 	<Files>
 		<File
+			RelativePath=".\CombinaPiece.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\CombinaPiece.h"
+			>
+		</File>
+		<File
 			RelativePath=".\UIAddImageInfoView.cpp"
 			>
 		</File>
@@ -234,19 +242,19 @@
 			>
 		</File>
 		<File
+			RelativePath=".\UIImportPieceView.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\UIImportPieceView.h"
+			>
+		</File>
+		<File
 			RelativePath=".\UINewImagePieceView.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\UINewImagePieceView.h"
-			>
-		</File>
-		<File
-			RelativePath=".\UITipsDialogView.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\UITipsDialogView.h"
 			>
 		</File>
 		<File

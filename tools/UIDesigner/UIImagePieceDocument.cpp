@@ -134,9 +134,9 @@ const wxString& UIImagePieceDocument::FindImage(int nID) const
 	return m_PieceInfoMap;
 }
 
-const UIImagePieceDocument::PIECE_INFO* UIImagePieceDocument::FindPieceInfo(const wxString& strID) const
+ UIImagePieceDocument::PIECE_INFO* UIImagePieceDocument::FindPieceInfo(const wxString& strID) 
 {
-	TM_PIECE_INFO::const_iterator itfound = m_PieceInfoMap.find(strID);
+	TM_PIECE_INFO::iterator itfound = m_PieceInfoMap.find(strID);
 	if (itfound == m_PieceInfoMap.end()) return NULL;
 	return &itfound->second;
 }
