@@ -332,7 +332,7 @@ void UIDesignerFrame::CreateProjectView()
 	m_pProjectViewPiece = new wxTreeCtrl( this, IDC_PROJECT, wxDefaultPosition, wxSize(200, 100), wxTR_SINGLE );
 	m_auiManager.AddPane(m_pProjectViewPiece, wxAuiPaneInfo()
 		.Name(_T("PieceView")).CaptionVisible(true).CloseButton(false).DestroyOnClose(false).Resizable(true).Floatable(false));
-
+	/*m_auiManager.LoadPaneInfo(_T("PieceView"), wxAuiPaneInfo().Name(_T("PieceView")).CaptionVisible(true).CloseButton(false).DestroyOnClose(false).Resizable(true).Floatable(false).Hide());*/
 	m_pProjectViewImage = new wxTreeCtrl( this, IDC_PROJECTIMAGE, wxDefaultPosition, wxSize(200, 100), wxTR_SINGLE );
 	m_auiManager.AddPane(m_pProjectViewImage, wxAuiPaneInfo()
 		.Name(_T("ImageView")).CaptionVisible(true).CloseButton(false).DestroyOnClose(false).Resizable(true).Floatable(false));
@@ -340,7 +340,6 @@ void UIDesignerFrame::CreateProjectView()
 	m_pImportPieceView = new wxTreeCtrl(this,IDC_IMAPORT_PIECE_VIEW, wxDefaultPosition, wxSize(300, 300),wxTR_SINGLE);
 	m_auiManager.AddPane(m_pImportPieceView, wxAuiPaneInfo()
 		.Name(_T("ImportPiece")).CaptionVisible(true).CloseButton(false).DestroyOnClose(false).Resizable(true).Floatable(false));
-
 }
 
 void UIDesignerFrame::CreatePropertyView()
@@ -385,7 +384,7 @@ void UIDesignerFrame::CreatePropertyView()
 		.Resizable(true)
 		.Floatable(false)
 		.FloatingSize(wxSize(300, 500))
-		.Movable(false));
+		.Movable(false).Hide());
 
 	m_auiManager.AddPane(m_pImageProperty, wxAuiPaneInfo()
 		.Name(wxT("ImageProerty"))
@@ -398,7 +397,7 @@ void UIDesignerFrame::CreatePropertyView()
 		.Resizable(true)
 		.Floatable(false)
 		.FloatingSize(wxSize(300, 500))
-		.Movable(false));
+		.Movable(false).Hide());
 
 	m_auiManager.AddPane(m_pImportPieceProperty, wxAuiPaneInfo()
 		.Name(wxT("ImportPieceProterty"))
@@ -411,7 +410,7 @@ void UIDesignerFrame::CreatePropertyView()
 		.Resizable(true)
 		.Floatable(false)
 		.FloatingSize(wxSize(300, 500))
-		.Movable(false));
+		.Movable(false).Hide());
 }
 
 void UIDesignerFrame::CreateInputView()
@@ -649,6 +648,11 @@ void UIDesignerFrame::OnProjectPieceItemSelChanged(wxTreeEvent& event)
 	if (!pPieceInfo) return;
 	UpdateImagePieceView(pPieceInfo);
 	UpDatePieceProterty(*pPieceInfo);
+	//Hide the ImageProterty view
+	m_auiManager.GetPane(m_pPieceProperty).Show(true);
+	m_auiManager.GetPane(m_pImageProperty).Hide();
+	m_auiManager.GetPane(m_pImportPieceProperty).Hide();
+	m_auiManager.Update();
 }
 void UIDesignerFrame::OnPiecePropertyGridChange(wxPropertyGridEvent &event)
 {
@@ -693,6 +697,10 @@ void UIDesignerFrame::OnProjectImageItemSelChanged(wxTreeEvent& event)
 	UIImagePieceDocument::TM_IMAGE_INFO::iterator it = m_pImagePieceDocument->GetImageMap().find(KeyValue);
 	if(it != m_pImagePieceDocument->GetImageMap().end())
 		UpdateImageProterty(it->second);
+	m_auiManager.GetPane(m_pImageProperty).Show();
+	m_auiManager.GetPane(m_pImportPieceProperty).Hide();
+	m_auiManager.GetPane(m_pPieceProperty).Hide();
+	m_auiManager.Update();
 }
 
 void UIDesignerFrame::UpdateImageProterty(const UIImagePieceDocument::IMAGE_INFO& ImageInfo)
@@ -844,6 +852,11 @@ void UIDesignerFrame::OnProjectImportItemSleChanged(wxTreeEvent& event)
 	m_pImportPieceY->SetValue((*pieceInof).second.rect.y);
 	m_pImagePieceView->Update();
 	m_pImagePieceView->SetSelectedPiece(strItemID);
+	
+	m_auiManager.GetPane(m_pPieceProperty).Hide();
+	m_auiManager.GetPane(m_pImageProperty).Hide();
+	m_auiManager.GetPane(m_pImportPieceProperty).Show();
+	m_auiManager.Update();
 }
 
 void UIDesignerFrame::OnProjectImportRightClick(wxTreeEvent& event)
