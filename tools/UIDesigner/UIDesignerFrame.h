@@ -69,6 +69,7 @@ public:
 		IDC_IMPORT_PROPERTY = 10074,
 		IDC_DELETE_IMPORTPIECE = 10100,
 		IDC_LOAD_IMPORTPIECE = 10101,
+		IDC_SORT_PIECE = 10102,
 	};
 
 public:
@@ -103,6 +104,7 @@ private:
 	void OnExit(wxCommandEvent& event);
 	void OnImport(wxCommandEvent& event);
 
+	void OnSortPiece(wxCommandEvent& event);
 	void OnLayoutMoveLeft(wxCommandEvent& event);
 	void OnLayoutMoveRight(wxCommandEvent& event);
 	void OnLayoutMoveUp(wxCommandEvent& event);

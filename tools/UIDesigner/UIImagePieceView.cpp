@@ -216,6 +216,11 @@ void UIImagePieceView::AddImportPiece(PIECEVIEW_INFO ImpotPiece)
 	m_vPiece.insert(std::make_pair(ImpotPiece.StrImage, ImpotPiece));
 }
 
+void UIImagePieceView::UpdateBitMapCache()
+{
+	TM_BITMAP_CACHE::iterator it = m_vBitmap.find(m_strImage);
+	m_dcImage.SelectObject(*(it->second));
+}
 UIImagePieceView::TM_PIECE& UIImagePieceView::GetPieceMap()
 {
 	return m_vPiece;

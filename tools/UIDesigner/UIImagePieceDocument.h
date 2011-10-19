@@ -47,7 +47,7 @@ public:
 	void AddImageInfo(const IMAGE_INFO& ImageInfo);
 	TM_PIECE_INFO& GetPieceInfoMap();
 	int GetImageMapKeyValue(const wxString& strValue);
-	 PIECE_INFO* FindPieceInfo(const wxString& strID) ;
+	PIECE_INFO* FindPieceInfo(const wxString& strID) ;
 	
 	void UpdateImagePiece(const PIECE_INFO& pieceInfo);
 	void Clear();

@@ -100,14 +100,14 @@ public:
 	void Update();
 	void SaveImage();
 	bool LoadImageFromFile(const wxString& strImage);
-	const wxString GetBackFileName() const;
 	void AddImportPiece(PIECEVIEW_INFO ImpotPiece);
-	TM_PIECE& GetPieceMap();
-	TM_BITMAP_CACHE& GetBitCacheMap();
-
+	void UpdateBitMapCache();
 	void SetSelectedPiece(const UIImagePieceDocument::PIECE_INFO* pPieceInfo);
 	void SetSelectedPiece(const wxString  StrImportView);
 	const UIImagePieceDocument::PIECE_INFO* GetSelectedPiece() const;
+	const wxString GetBackFileName() const;
+	TM_PIECE& GetPieceMap();
+	TM_BITMAP_CACHE& GetBitCacheMap();
 
 	bool ZoomIn();
 	bool ZoomOut();

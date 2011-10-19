@@ -15,6 +15,7 @@
 #include "UINewImagePieceView.h"
 #include "UITipsDialogView.h"
 #include "UIImportPieceView.h"
+#include "CombinaPiece.h"
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
@@ -51,6 +52,7 @@ BEGIN_EVENT_TABLE(UIDesignerFrame, wxFrame)
 	EVT_IMAGE_PIECE_CHANGED(IDC_INPUT_VIEW, UIDesignerFrame::OnImagePieceChanged)
 	EVT_MENU(IDC_DELETE_IMPORTPIECE, UIDesignerFrame::OnDelteImportPiece)
 	EVT_MENU(IDC_LOAD_IMPORTPIECE, UIDesignerFrame::OnLoadImportPiece)
+	EVT_MENU(IDC_SORT_PIECE, UIDesignerFrame::OnSortPiece)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(UIDesignerFrame, wxFrame)
@@ -137,6 +139,7 @@ void UIDesignerFrame::CreateMenu()
 	pMenuItemEdit->Append(ID_EDIT_CUT, wxT("Cu&t\tCtrl+X"), wxEmptyString, wxITEM_NORMAL);
 	pMenuItemEdit->Append(ID_EDIT_PAST, wxT("&Past\tCtrl+V"), wxEmptyString, wxITEM_NORMAL);
 	pMenuItemEdit->Append(ID_EDIT_DELETE, wxT("&Delete\tDel"), wxEmptyString, wxITEM_NORMAL);
+	pMenuItemEdit->Append(IDC_SORT_PIECE, wxT("&Sort Piece"), wxEmptyString, wxITEM_NORMAL);
 	pMenuBar->Append(pMenuItemEdit, wxT("&Edit"));
 
 	// layer
@@ -723,7 +726,7 @@ void UIDesignerFrame::OnAddPieceInfo(wxCommandEvent& event)
 {
 	if(m_pImagePieceDocument->GetImageMap().size() ==0) 
 	{
-		m_pOutputView->AppendText("Error: Don't hava any Image\n");
+		m_pOutputView->AppendText("Error: Don't have any Image\n");
 		return;
 	}
 	AddImageDialog pAddImage(this, ID_ADDIMAGE, wxT("Add Image"));
@@ -798,7 +801,8 @@ void UIDesignerFrame::OnCutPiece(wxCommandEvent& event)
 
 	m_pImagePieceView->GetBitCacheMap().insert(std::make_pair(StrBackImageFileName, pNewBitmap));
 	//Modify the next code; add the UIImagePieceView function to frush the imageView
-	m_pImagePieceView->LoadImageFromFile(m_pImagePieceView->GetBackFileName());
+	//m_pImagePieceView->LoadImageFromFile(m_pImagePieceView->GetBackFileName());
+	m_pImagePieceView->UpdateBitMapCache();
 	//Delete the Cur ImagePiece Item;
 	m_pImagePieceDocument->GetPieceInfoMap().erase(strItemID);
 	UpdateProjectView();
@@ -840,7 +844,6 @@ void UIDesignerFrame::OnProjectImportItemSleChanged(wxTreeEvent& event)
 	m_pImportPieceY->SetValue((*pieceInof).second.rect.y);
 	m_pImagePieceView->Update();
 	m_pImagePieceView->SetSelectedPiece(strItemID);
-
 }
 
 void UIDesignerFrame::OnProjectImportRightClick(wxTreeEvent& event)
@@ -865,6 +868,8 @@ void UIDesignerFrame::OnImportPropertyGridChange(wxPropertyGridEvent& event)
 	
 	UIImagePieceDocument::TM_IMAGE_INFO::iterator it = m_pImagePieceDocument->GetImageMap().find(ImageID);
 	if(it == m_pImagePieceDocument->GetImageMap().end()) return;
+	
+	
 	pieceInof->second.StrBackGroundImage = it->second.strFile;
 	pieceInof->second.rect.x = nX;
 	pieceInof->second.rect.y = nY;
@@ -897,4 +902,11 @@ void UIDesignerFrame::OnLoadImportPiece(wxCommandEvent& event)
 	{
 		wxMessageBox("Load " + StrFileName + " Success");
 	}
+}
+
+void UIDesignerFrame::OnSortPiece(wxCommandEvent& event)
+{
+	CombinaPiece::SortPiece(m_pImagePieceDocument->GetPieceInfoMap(), m_pImagePieceView->GetBitCacheMap(), m_pImagePieceDocument->GetImageMap());
+	UpdateProjectView();
+	m_pImagePieceView->UpdateBitMapCache();
 }
