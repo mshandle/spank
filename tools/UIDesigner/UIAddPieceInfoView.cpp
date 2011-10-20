@@ -3,8 +3,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS( AddImageDialog, wxDialog )
 BEGIN_EVENT_TABLE( AddImageDialog, wxDialog )
- EVT_BUTTON(wxID_CLOSE, AddImageDialog::OnClose)
- EVT_BUTTON(wxID_ADD, AddImageDialog::OnAdd)
+ EVT_BUTTON(wxID_CANCEL, AddImageDialog::OnClose)
+ EVT_BUTTON(wxID_OK, AddImageDialog::OnAdd)
 END_EVENT_TABLE()
 
 AddImageDialog::AddImageDialog(void)
@@ -27,6 +27,10 @@ bool AddImageDialog::Create(wxWindow* parent, wxWindowID id /*= SYMBOL_ADDIMAGED
 	SetExtraStyle(wxWS_EX_BLOCK_EVENTS);
 	wxDialog::Create( parent, id, caption, pos, size, style );
 	CreateControls();
+	if (GetSizer())
+	{
+		GetSizer()->SetSizeHints(this);
+	}
 	Centre();
 	return true;
 }
@@ -39,25 +43,73 @@ void AddImageDialog::Init()
 void AddImageDialog::CreateControls()
 {
 	AddImageDialog* itemDialog1 = this;
-	wxStaticText* itemStaticText2 = new wxStaticText( itemDialog1, wxID_STATIC, _("ImageID"), wxPoint(0, 0), wxSize(60, 20), 0 );
-	wxStaticText* itemStaticText4 = new wxStaticText( itemDialog1, wxID_STATIC, _("X"), wxPoint(0, 40), wxDefaultSize, 0 );
-	wxStaticText* itemStaticText5 = new wxStaticText( itemDialog1, wxID_STATIC, _("Y"), wxPoint(0, 80), wxDefaultSize, 0 );
-	wxStaticText* itemStaticText8 = new wxStaticText( itemDialog1, wxID_STATIC, _("Width"), wxPoint(0, 120), wxDefaultSize, 0 );
-	wxStaticText* itemStaticText9 = new wxStaticText(itemDialog1, wxID_STATIC, _("Height"), wxPoint(0, 160), wxDefaultSize, 0);
+	wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
+	itemDialog1->SetSizer(itemBoxSizer2);
+
+	wxBoxSizer* itemBoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
+	itemBoxSizer2->Add(itemBoxSizer3, 0, wxALIGN_RIGHT|wxALL, 5);
 	wxTextValidator validator(wxFILTER_NUMERIC); 
-	m_pTextX = new wxTextCtrl( itemDialog1, ID_IMAGEX, wxEmptyString, wxPoint(60, 40), wxDefaultSize, 0 ,validator);
-	m_pTextCtrlY = new wxTextCtrl( itemDialog1, ID_IMAGEY, wxEmptyString, wxPoint(60, 80), wxDefaultSize, 0,validator );
-	m_pTextCtrlWidth = new wxTextCtrl( itemDialog1, ID_IMAGEWIDTH, wxEmptyString, wxPoint(60, 120), wxDefaultSize, 0 ,validator);
-	m_pTextCtrlImageID = new wxTextCtrl( itemDialog1, ID_IMAGEINPUT, wxEmptyString, wxPoint(60, 0), wxDefaultSize, 0 ,validator);
-	m_pTextCtrlHeight = new wxTextCtrl( itemDialog1, ID_IMAGEHEIGHT, wxEmptyString, wxPoint(60, 160), wxDefaultSize, 0 ,validator);
+	wxStaticText* itemStaticText4 = new wxStaticText( itemDialog1, wxID_STATIC, _("ImageID"), wxDefaultPosition, wxDefaultSize, 0 );
+	itemBoxSizer3->Add(itemStaticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	wxStaticText* itemStaticText10 = new wxStaticText(itemDialog1, wxID_STATIC, _("StrID"), wxPoint(0, 200), wxDefaultSize, 0);
-	m_pTextCtrlStrID = new wxTextCtrl( itemDialog1, ID_IMAGENAME, wxEmptyString, wxPoint(60, 200), wxDefaultSize, 0 );
+	m_pTextCtrlImageID = new wxTextCtrl( itemDialog1, ID_IMAGEINPUT, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 ,validator);
+	itemBoxSizer3->Add(m_pTextCtrlImageID, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	wxButton* AddButton = new wxButton( itemDialog1, wxID_ADD, _("Add"), wxPoint(0, 230), wxSize(70, 30), 0 );
-	AddButton->SetDefault();
-	wxButton* CanclButtont = new wxButton( itemDialog1, wxID_CLOSE, _("Cancel"), wxPoint(120, 230), wxSize(70, 30), 0 );
-	CanclButtont->SetDefault();
+	wxBoxSizer* itemBoxSizer6 = new wxBoxSizer(wxHORIZONTAL);
+	itemBoxSizer2->Add(itemBoxSizer6, 0, wxALIGN_RIGHT|wxALL, 5);
+
+	wxStaticText* itemStaticText7 = new wxStaticText( itemDialog1, wxID_STATIC, _("PieceName"), wxDefaultPosition, wxDefaultSize, 0 );
+	itemBoxSizer6->Add(itemStaticText7, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+	m_pTextCtrlStrID = new wxTextCtrl( itemDialog1, ID_IMAGENAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	itemBoxSizer6->Add(m_pTextCtrlStrID, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+	wxBoxSizer* itemBoxSizer9 = new wxBoxSizer(wxHORIZONTAL);
+	itemBoxSizer2->Add(itemBoxSizer9, 0, wxALIGN_RIGHT|wxALL, 5);
+
+	wxStaticText* itemStaticText10 = new wxStaticText( itemDialog1, wxID_STATIC, _("X"), wxDefaultPosition, wxDefaultSize, 0 );
+	itemBoxSizer9->Add(itemStaticText10, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+	m_pTextX = new wxTextCtrl( itemDialog1, ID_IMAGEX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 ,validator);
+	itemBoxSizer9->Add(m_pTextX, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+	wxBoxSizer* itemBoxSizer12 = new wxBoxSizer(wxHORIZONTAL);
+	itemBoxSizer2->Add(itemBoxSizer12, 0, wxALIGN_RIGHT|wxALL, 5);
+
+	wxStaticText* itemStaticText13 = new wxStaticText( itemDialog1, wxID_STATIC, _("Y"), wxDefaultPosition, wxDefaultSize, 0 );
+	itemBoxSizer12->Add(itemStaticText13, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+	m_pTextCtrlY = new wxTextCtrl( itemDialog1, ID_IMAGEY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, validator );
+	itemBoxSizer12->Add(m_pTextCtrlY, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+	wxBoxSizer* itemBoxSizer15 = new wxBoxSizer(wxHORIZONTAL);
+	itemBoxSizer2->Add(itemBoxSizer15, 0, wxALIGN_RIGHT|wxALL, 5);
+
+	wxStaticText* itemStaticText16 = new wxStaticText( itemDialog1, wxID_STATIC, _("Width"), wxDefaultPosition, wxDefaultSize, 0 );
+	itemBoxSizer15->Add(itemStaticText16, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+	m_pTextCtrlWidth = new wxTextCtrl( itemDialog1, ID_IMAGEWIDTH, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, validator );
+	itemBoxSizer15->Add(m_pTextCtrlWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+	wxBoxSizer* itemBoxSizer18 = new wxBoxSizer(wxHORIZONTAL);
+	itemBoxSizer2->Add(itemBoxSizer18, 0, wxALIGN_RIGHT|wxALL, 5);
+
+	wxStaticText* itemStaticText19 = new wxStaticText( itemDialog1, wxID_STATIC, _("Height"), wxDefaultPosition, wxDefaultSize, 0 );
+	itemBoxSizer18->Add(itemStaticText19, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+	m_pTextCtrlHeight = new wxTextCtrl( itemDialog1, ID_IMAGEHEIGHT, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, validator );
+	itemBoxSizer18->Add(m_pTextCtrlHeight, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+	wxStdDialogButtonSizer* itemStdDialogButtonSizer21 = new wxStdDialogButtonSizer;
+
+	itemBoxSizer2->Add(itemStdDialogButtonSizer21, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+	wxButton* itemButton22 = new wxButton( itemDialog1, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0 );
+	itemStdDialogButtonSizer21->AddButton(itemButton22);
+
+	wxButton* itemButton23 = new wxButton( itemDialog1, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	itemStdDialogButtonSizer21->AddButton(itemButton23);
+
+	itemStdDialogButtonSizer21->Realize();
 }	
 
 void AddImageDialog::OnClose(wxCommandEvent& event)
@@ -129,7 +181,7 @@ void AddImageDialog::OnAdd(wxCommandEvent& event)
 	m_pTextCtrlStrID->Clear();
 	Strvalue.Clear();
 
-	EndModal(wxAPPLY);
+	EndModal(wxID_OK);
 }
 
 UIImagePieceDocument::PIECE_INFO AddImageDialog::GetValue() 

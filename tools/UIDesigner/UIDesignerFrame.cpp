@@ -574,11 +574,13 @@ void UIDesignerFrame::OnExit(wxCommandEvent& event)
 void UIDesignerFrame::OnImport(wxCommandEvent& event)
 {
 	if(m_pImagePieceDocument->GetImageMap().size() == 0) return;
-	UIImportPieceView dialog(NULL);
-	if(dialog.ShowModal() == wxID_OK)
+
+	UIAddImageInfoView uiAddImage(this, ID_ADDPIECE);
+	if(uiAddImage.ShowModal() == wxID_OK)
 	{
-		wxString strFileName = dialog.GetFilePath();
-		int nImageID = dialog.GetImageID();
+		UIImagePieceDocument::IMAGE_INFO ImageInfo = uiAddImage.GetValue();
+		wxString strFileName = ImageInfo.strFile;
+		int nImageID = ImageInfo.nID;
 		wxBitmap* pBitMap = new wxBitmap();
 		if(!pBitMap->LoadFile(strFileName, wxBITMAP_TYPE_PNG))
 		{
@@ -739,7 +741,7 @@ void UIDesignerFrame::OnAddPieceInfo(wxCommandEvent& event)
 	}
 	AddImageDialog pAddImage(this, ID_ADDIMAGE, wxT("Add Image"));
 
-	if(pAddImage.ShowModal() == wxAPPLY)
+	if(pAddImage.ShowModal() == wxID_OK)
 	{
 		UIImagePieceDocument::PIECE_INFO vlaue = pAddImage.GetValue();
 		if(m_pImagePieceDocument->FindImage(vlaue.nImageID) == wxEmptyString)
@@ -808,24 +810,26 @@ void UIDesignerFrame::OnCutPiece(wxCommandEvent& event)
 	wxBitmap* pNewBitmap = new wxBitmap(BackGroundImage, 32);
 
 	m_pImagePieceView->GetBitCacheMap().insert(std::make_pair(StrBackImageFileName, pNewBitmap));
-	//Modify the next code; add the UIImagePieceView function to frush the imageView
-	//m_pImagePieceView->LoadImageFromFile(m_pImagePieceView->GetBackFileName());
 	m_pImagePieceView->UpdateBitMapCache();
-	//Delete the Cur ImagePiece Item;
 	m_pImagePieceDocument->GetPieceInfoMap().erase(strItemID);
 	UpdateProjectView();
 }
 void UIDesignerFrame::OnAddImageInfo(wxCommandEvent& event)
 {
 	UIAddImageInfoView uiAddImage(this, ID_ADDPIECE);
-	if(uiAddImage.ShowModal()== wxOK)
+	int value = uiAddImage.ShowModal();
+	if(value == wxID_OK)
 	{
 		UIImagePieceDocument::IMAGE_INFO ImageInfo = uiAddImage.GetValue();
 		if(m_pImagePieceDocument->FindImage(ImageInfo.nID) != wxEmptyString)
+		{
 			m_pOutputView->AppendText("Error:Have the same ID\n");
+			return;
+		}
 		m_pImagePieceDocument->AddImageInfo(ImageInfo);
 		UpDateProjectImageView();
 	}
+
 }
 
 void UIDesignerFrame::OnDeleteImageInfo(wxCommandEvent& event)

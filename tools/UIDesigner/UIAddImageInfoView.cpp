@@ -13,8 +13,8 @@ IMPLEMENT_DYNAMIC_CLASS( UIAddImageInfoView, wxDialog )
 
 BEGIN_EVENT_TABLE( UIAddImageInfoView, wxDialog )
 
-    EVT_BUTTON( ID_ButtonOk, UIAddImageInfoView::OnButtonOkClick )
-    EVT_BUTTON( ID_BUTTONCANCEL, UIAddImageInfoView::OnButtoncancelClick )
+    EVT_BUTTON( wxID_OK, UIAddImageInfoView::OnButtonOkClick )
+    EVT_BUTTON( wxID_CANCEL, UIAddImageInfoView::OnButtoncancelClick )
     EVT_BUTTON( ID_BUTTONBROW, UIAddImageInfoView::OnButtonbrowClick )
 
 END_EVENT_TABLE()
@@ -37,6 +37,10 @@ bool UIAddImageInfoView::Create( wxWindow* parent, wxWindowID id, const wxString
     SetExtraStyle(wxWS_EX_BLOCK_EVENTS);
     wxDialog::Create( parent, id, caption, pos, size, style );
     CreateControls();
+	if (GetSizer())
+	{
+		GetSizer()->SetSizeHints(this);
+	}
     Centre();
     return true;
 }
@@ -54,29 +58,54 @@ void UIAddImageInfoView::Init()
 
 void UIAddImageInfoView::CreateControls()
 {    
-    UIAddImageInfoView* itemDialog1 = this;
 
-    wxStaticText* itemStaticText3 = new wxStaticText( itemDialog1, wxID_STATIC, _("FileName"), wxPoint(20, 20), wxDefaultSize, 0 );
-    m_pTextCtrlFileName = new wxTextCtrl( itemDialog1, ID_FILENAME, wxEmptyString, wxPoint(80, 20), wxDefaultSize, 0 );
+	UIAddImageInfoView* itemDialog1 = this;
 
-    wxStaticText* itemStaticText5 = new wxStaticText( itemDialog1, wxID_STATIC, _("ImageID"), wxPoint(20, 60), wxDefaultSize, 0 );
-    m_pTextCtrlImageID = new wxTextCtrl( itemDialog1, ID_TEXTCTRL, wxEmptyString, wxPoint(80, 60), wxDefaultSize, 0 );
+	wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
+	itemDialog1->SetSizer(itemBoxSizer2);
 
-    wxButton* itemButton7 = new wxButton( itemDialog1, ID_ButtonOk, _("Enter"), wxPoint(-1, 160), wxDefaultSize, 0 );
-    wxButton* itemButton8 = new wxButton( itemDialog1, ID_BUTTONCANCEL, _("Cancel"), wxPoint(200, 160), wxDefaultSize, 0 );
-    wxButton* itemButton9 = new wxButton( itemDialog1, ID_BUTTONBROW, _("Browse"), wxPoint(200, 20), wxDefaultSize, 0 );
+	wxBoxSizer* itemBoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
+	itemBoxSizer2->Add(itemBoxSizer3, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
+	wxStaticText* itemStaticText4 = new wxStaticText( itemDialog1, wxID_STATIC, _("FileName"), wxDefaultPosition, wxDefaultSize, 0 );
+	itemBoxSizer3->Add(itemStaticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+	m_pTextCtrlFileName = new wxTextCtrl( itemDialog1, ID_FILENAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	itemBoxSizer3->Add(m_pTextCtrlFileName, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+	wxButton* itemButton6 = new wxButton( itemDialog1, ID_BUTTONBROW, _("Brow"), wxDefaultPosition, wxDefaultSize, 0 );
+	itemBoxSizer3->Add(itemButton6, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+	wxBoxSizer* itemBoxSizer7 = new wxBoxSizer(wxHORIZONTAL);
+	itemBoxSizer2->Add(itemBoxSizer7, 0, wxALIGN_LEFT|wxALL, 5);
+
+	wxStaticText* itemStaticText8 = new wxStaticText( itemDialog1, wxID_STATIC, _("ImageID"), wxDefaultPosition, wxDefaultSize, 0 );
+	itemBoxSizer7->Add(itemStaticText8, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+	m_pTextCtrlImageID = new wxTextCtrl( itemDialog1, ID_TEXTCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	itemBoxSizer7->Add(m_pTextCtrlImageID, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+	wxStdDialogButtonSizer* itemStdDialogButtonSizer10 = new wxStdDialogButtonSizer;
+
+	itemBoxSizer2->Add(itemStdDialogButtonSizer10, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+	wxButton* itemButton11 = new wxButton( itemDialog1, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0 );
+	itemStdDialogButtonSizer10->AddButton(itemButton11);
+
+	wxButton* itemButton12 = new wxButton( itemDialog1, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	itemStdDialogButtonSizer10->AddButton(itemButton12);
+
+	itemStdDialogButtonSizer10->Realize();
 }
 
 void UIAddImageInfoView::OnButtonOkClick( wxCommandEvent& event )
 {
-	EndDialog(wxOK);
+	EndDialog(wxID_OK);
     event.Skip();
 }
 
 void UIAddImageInfoView::OnButtoncancelClick( wxCommandEvent& event )
 {
-	EndDialog(wxCANCEL);
+	EndDialog(wxID_CANCEL);
     event.Skip();
 }
 
