@@ -13,8 +13,8 @@ class WindowConfig
 public:
 	enum CONST_DEFINE
 	{
-		SURFACE_WIDTH = 1024,
-		SURFACE_HEIGHT = 768,
+		SURFACE_WIDTH = 800,
+		SURFACE_HEIGHT = 480,
 	};
 };
 #endif // __WINMAIN_H__

@@ -293,6 +293,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\msg\MsgKey.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\include\msg\MsgKey.h"
+				>
+			</File>
+			<File
 				RelativePath=".\source\msg\MsgMgr.cpp"
 				>
 			</File>
@@ -766,14 +774,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\source\platforms\win32\RenderDevice_Win32_Impl.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\source\platforms\win32\RenderDevice_Win32_Impl.h"
-			>
-		</File>
-		<File
 			RelativePath=".\source\Renderer2D_Impl.cpp"
 			>
 		</File>
@@ -827,6 +827,30 @@
 		</File>
 		<File
 			RelativePath=".\include\StreamWriter.h"
+			>
+		</File>
+		<File
+			RelativePath=".\source\platforms\win32\SurfaceView_Win32_Gdi_Impl.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\source\platforms\win32\SurfaceView_Win32_Gdi_Impl.h"
+			>
+		</File>
+		<File
+			RelativePath=".\source\platforms\win32\SurfaceView_Win32_Ogl_Impl.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\source\platforms\win32\SurfaceView_Win32_Ogl_Impl.h"
+			>
+		</File>
+		<File
+			RelativePath=".\source\platforms\win32\SurfaceViewMgr_Win32_Impl.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\source\platforms\win32\SurfaceViewMgr_Win32_Impl.h"
 			>
 		</File>
 		<File

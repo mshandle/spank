@@ -86,4 +86,5 @@ LIBSPANK_SOURCE_FILES := \
 		$(LIBSPANK_SOURCE)/StreamWriter.cpp \
 		$(LIBSPANK_SOURCE)/Texture_Impl.cpp \
 		$(LIBSPANK_SOURCE)/TextureMgr_Impl.cpp \
+		$(LIBSPANK_SOURCE)/Tile.cpp \
 		$(LIBSPANK_SOURCE)/VertexAttribute.cpp \

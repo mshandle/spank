@@ -9,6 +9,7 @@
 #include <util/IDebugUtil.h>
 #include <msg/MsgMgr.h>
 #include <msg/MsgTouch.h>
+#include <msg/MsgKey.h>
 
 InputMgr& InputMgr::GetInstance()
 {
@@ -64,4 +65,16 @@ void InputMgr::OnTouchEnd(int nIndex, float x, float y)
 	// send message to notify input event
 	MsgTouch* pMsgTouchEvent = new MsgTouch(MsgTouch::TT_END, 0, x, y);
 	MsgMgr::GetInstance().SendMessage(pMsgTouchEvent);
+}
+
+void InputMgr::OnKeyHome()
+{
+	MsgKey* pMsgKeyEvent = new MsgKey(MsgKey::KT_HOME);
+	MsgMgr::GetInstance().SendMessage(pMsgKeyEvent);
+}
+
+void InputMgr::OnKeyReturn()
+{
+	MsgKey* pMsgKeyEvent = new MsgKey(MsgKey::KT_RETURN);
+	MsgMgr::GetInstance().SendMessage(pMsgKeyEvent);
 }

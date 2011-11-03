@@ -10,6 +10,7 @@
 #include <util/IDebugUtil.h>
 #include <msg/MsgMgr.h>
 #include <msg/MsgTouch.h>
+#include <msg/MsgKey.h>
 
 #include <ui/uimsg/MsgClick.h>
 #include <ui/uimsg/UIMsgID.h>
@@ -17,6 +18,9 @@
 #include <ui/IUISystem.h>
 #include <ui/UITextView.h>
 #include <IResourceMgr.h>
+#include <ISurfaceViewMgr.h>
+#include <ICore.h>
+
 #include "UserMsgID.h"
 #include "UITestCase.h"
 #include "SpriteTestCase.h"
@@ -39,6 +43,8 @@ GameApp::GameApp()
 	m_pCurrTestCase = NULL;
 	m_pMainScreen = NULL;
 	m_vTextViewPos = IMath::VEC2_ZERO;
+	memset(m_pSurfaceView, 0, sizeof(m_pSurfaceView));
+	m_nIndex = 0;
 }
 
 GameApp::~GameApp()
@@ -49,34 +55,42 @@ GameApp::~GameApp()
 bool GameApp::Initialize()
 {
 	MsgMgr::GetInstance().SubscribeMessage(MI_TOUCH, this, (MSG_CALLBACK)&GameApp::OnMsgTouch);
+	MsgMgr::GetInstance().SubscribeMessage(MI_KEY, this, (MSG_CALLBACK)&GameApp::OnMsgKey);
 
-	IResourceMgr::GetInstance().AddImagePieceList("test_case.xml");
-	IResourceMgr::GetInstance().AddImagePieceList("Porker.xml");
-	m_pMainScreen = IUISystem::GetInstance().GetCurrentScreen();
+	m_pSurfaceView[0] = ISurfaceViewMgr::GetInstance().CreateSurfaceViewNormal();
+	m_pSurfaceView[1] = ISurfaceViewMgr::GetInstance().CreateSurfaceViewOpenGL();
+	m_nIndex = 0;
+ 	ICore::GetInstance().SetSurfaceView(m_pSurfaceView[m_nIndex]);
 
-	// add test case
-	AddTestCase(new UITestCase(), m_pMainScreen);
-	AddTestCase(new SpriteTestCase(), m_pMainScreen);
-	AddTestCase(new ActionTestCase(), m_pMainScreen);
-	AddTestCase(new ParticleTestCase(), m_pMainScreen);
-	AddTestCase(new MapTestCase(), m_pMainScreen);
-	AddTestCase(new Box2DTestCase(), m_pMainScreen);
-	AddTestCase(new ClipRectTestCase(), m_pMainScreen);
-	AddTestCase(new TweenTestCase(), m_pMainScreen);
-	AddTestCase(new PorkerTestCase(), m_pMainScreen);
+// 	IResourceMgr::GetInstance().AddImagePieceList("test_case.xml");
+// 	IResourceMgr::GetInstance().AddImagePieceList("Porker.xml");
+// 	m_pMainScreen = IUISystem::GetInstance().GetCurrentScreen();
+// 
+// 	// add test case
+// 	AddTestCase(new UITestCase(), m_pMainScreen);
+// 	AddTestCase(new SpriteTestCase(), m_pMainScreen);
+// 	AddTestCase(new ActionTestCase(), m_pMainScreen);
+// 	AddTestCase(new ParticleTestCase(), m_pMainScreen);
+// 	AddTestCase(new MapTestCase(), m_pMainScreen);
+// 	AddTestCase(new Box2DTestCase(), m_pMainScreen);
+// 	AddTestCase(new ClipRectTestCase(), m_pMainScreen);
+// 	AddTestCase(new TweenTestCase(), m_pMainScreen);
+// 	AddTestCase(new PorkerTestCase(), m_pMainScreen);
 	return true;
 }
 
 void GameApp::Terminate()
 {
-	FreeCurrTestCase();
-
-	// free test case
-	for (TV_TEST_CASE::iterator it = m_vTestCase.begin(); it != m_vTestCase.end(); ++it)
-	{
-		TestCase* pTestCase = (*it);
-		SAFE_DELETE(pTestCase);
-	}
+// 	FreeCurrTestCase();
+// 
+// 	// free test case
+// 	for (TV_TEST_CASE::iterator it = m_vTestCase.begin(); it != m_vTestCase.end(); ++it)
+// 	{
+// 		TestCase* pTestCase = (*it);
+// 		SAFE_DELETE(pTestCase);
+// 	}
+	SAFE_RELEASE(m_pSurfaceView[0]);
+	SAFE_RELEASE(m_pSurfaceView[1]);
 }
 
 void GameApp::Update(float dt)
@@ -95,18 +109,34 @@ bool GameApp::OnMsgTouch(IMsgBase* pMsg)
 
 	if (pMsgTouch->IsTouchBegin())
 	{
-// 		LOGD("touch begin: (%.02f, %.02f)", pMsgTouch->GetPosition().x, pMsgTouch->GetPosition().y);
-		IUISystem::GetInstance().ProcessTouchEvent(pMsgTouch->GetPosition(), UTET_BEGIN);
+ 		LOGD("touch begin: (%.02f, %.02f)", pMsgTouch->GetPosition().x, pMsgTouch->GetPosition().y);
+// 		IUISystem::GetInstance().ProcessTouchEvent(pMsgTouch->GetPosition(), UTET_BEGIN);
 	}
 	else if (pMsgTouch->IsTouchMove())
 	{
-// 		LOGD("touch move: (%.02f, %.02f)", pMsgTouch->GetPosition().x, pMsgTouch->GetPosition().y);
-		IUISystem::GetInstance().ProcessTouchEvent(pMsgTouch->GetPosition(), UTET_MOVE);
+ 		LOGD("touch move: (%.02f, %.02f)", pMsgTouch->GetPosition().x, pMsgTouch->GetPosition().y);
+// 		IUISystem::GetInstance().ProcessTouchEvent(pMsgTouch->GetPosition(), UTET_MOVE);
 	}
 	else if (pMsgTouch->IsTouchEnd())
 	{
-// 		LOGD("touch end: (%.02f, %.02f)", pMsgTouch->GetPosition().x, pMsgTouch->GetPosition().y);
-		IUISystem::GetInstance().ProcessTouchEvent(pMsgTouch->GetPosition(), UTET_END);
+ 		LOGD("touch end: (%.02f, %.02f)", pMsgTouch->GetPosition().x, pMsgTouch->GetPosition().y);
+// 		IUISystem::GetInstance().ProcessTouchEvent(pMsgTouch->GetPosition(), UTET_END);
+	}
+
+	return true;
+}
+
+bool GameApp::OnMsgKey(IMsgBase* pMsg)
+{
+	MsgKey* pMsgKey = (MsgKey*)pMsg;
+	if (pMsgKey->IsHome())
+	{
+		ICore::GetInstance().End();
+	}
+	else if (pMsgKey->IsReturn())
+	{
+		m_nIndex = (m_nIndex + 1) % 2;
+		ICore::GetInstance().SetSurfaceView(m_pSurfaceView[m_nIndex]);
 	}
 
 	return true;

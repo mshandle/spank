@@ -7,8 +7,8 @@
  */
 #include "Renderer2D_Impl.h"
 #include <BaseTypeEx.h>
-#include <IRenderDevice.h>
 #include <IShaderMgr.h>
+#include <ICore.h>
 #include <util/IDebugUtil.h>
 #include <util/ScreenUtil.h>
 #include <GLES2/gl2.h>
@@ -34,8 +34,11 @@ bool Renderer2D_Impl::Initialize()
 {
 	m_matModelView = IMath::MAT4X4_IDENTITY;
 
-	float fSurfaceWidth = (float)IRenderDevice::GetInstance().GetSurfaceWidth();
-	float fSurfaceHeight = (float)IRenderDevice::GetInstance().GetSurfaceHeight();
+	ISurfaceView* pSurfaceView = ICore::GetInstance().GetSurfaceView();
+	if (!pSurfaceView) return false;
+
+	float fSurfaceWidth = (float)pSurfaceView->GetSurfaceWidth();
+	float fSurfaceHeight = (float)pSurfaceView->GetSurfaceHeight();
 	IMath::BuildOrthoMatrix(m_matProj, -fSurfaceWidth/2.0f, fSurfaceWidth/2.0f, -fSurfaceHeight/2.0f, fSurfaceHeight/2.0f, -1000.0f, 1000.0f);
 
 	float fDegree = ScreenUtil::GetInstance().GetRotationDegree();

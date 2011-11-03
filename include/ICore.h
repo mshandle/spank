@@ -9,6 +9,7 @@
 #define __ICORE_H__
 
 #include "ISingleton.h"
+#include "ISurfaceView.h"
 #include "INode.h"
 
 class ICore : public ISingleton
@@ -18,10 +19,15 @@ public:
 
 	static ICore& GetInstance();
 
+	virtual bool SetSurfaceView(ISurfaceView* pView) = 0;
+	virtual ISurfaceView* GetSurfaceView() = 0;
+
 	virtual INode* GetRootNode() = 0;
 
 	virtual void Update(float dt) = 0;
 	virtual void Render() = 0;
 
+	virtual void End() = 0;
+	virtual bool IsRunning() const = 0;
 };
 #endif // __ICORE_H__

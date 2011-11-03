@@ -33,6 +33,9 @@ public:
 	void OnTouchMove(int nIndex, float x, float y);
 	void OnTouchEnd(int nIndex, float x, float y);
 
+	virtual void OnKeyHome();
+	virtual void OnKeyReturn();
+
 private:
 	bool m_bTouchDown[MAX_TOUCH_SUPPORT];
 

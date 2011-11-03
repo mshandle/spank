@@ -21,10 +21,16 @@ public:
 	virtual bool Initialize();
 	virtual void Terminate();
 
+	virtual bool SetSurfaceView(ISurfaceView* pView);
+	virtual ISurfaceView* GetSurfaceView();
+
 	virtual INode* GetRootNode();
 
 	virtual void Update(float dt);
 	virtual void Render();
+
+	virtual void End();
+	virtual bool IsRunning() const;
 
 private:
 	bool PreInitialize();
@@ -41,6 +47,8 @@ private:
 
 private:
 	INode* m_pRootNode;
+	ISurfaceView* m_pSurfaceView;
+	bool m_bRunning;
 
 };
 #endif // __CORE_IMPL_H__

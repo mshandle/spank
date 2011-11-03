@@ -12,7 +12,6 @@
 #include <msg/MsgMgr.h>
 #include <util/ScreenUtil.h>
 #include <InputMgr.h>
-#include <IRenderDevice.h>
 #include <ITextureMgr.h>
 #include <IResourceMgr.h>
 #include <IShaderMgr.h>
@@ -32,6 +31,8 @@ ICore& ICore::GetInstance()
 Core_Impl::Core_Impl()
 {
 	m_pRootNode = NULL;
+	m_pSurfaceView = NULL;
+	m_bRunning = false;
 }
 
 Core_Impl::~Core_Impl()
@@ -47,24 +48,29 @@ bool Core_Impl::PreInitialize()
 
 bool Core_Impl::Initialize()
 {
+	// initialize common utilities
 	if (!ConfigUtil::GetInstance().Initialize()) return false;
 	if (!IDebugUtil::GetInstance().Initialize()) return false;
 	if (!IFileUtil::GetInstance().Initialize()) return false;
 	if (!MsgMgr::GetInstance().Initialize()) return false;
 	if (!ScreenUtil::GetInstance().Initialize()) return false;
 	if (!InputMgr::GetInstance().Initialize()) return false;
-	if (!IRenderDevice::GetInstance().Initialize()) return false;
-	if (!ITextureMgr::GetInstance().Initialize()) return false;
-	if (!IResourceMgr::GetInstance().Initialize()) return false;
-	if (!IShaderMgr::GetInstance().Initialize()) return false;
-	if (!IRenderer2D::GetInstance().Initialize()) return false;
-	if (!IRendererUI::GetInstance().Initialize()) return false;
-	if (!IUIResMgr::GetInstance().Initialize()) return false;
-	if (!IUISystem::GetInstance().Initialize()) return false;
+
+// 	// 
+// 	if (!ITextureMgr::GetInstance().Initialize()) return false;
+// 	if (!IResourceMgr::GetInstance().Initialize()) return false;
+// 	if (!IShaderMgr::GetInstance().Initialize()) return false;
+// 	if (!IRenderer2D::GetInstance().Initialize()) return false;
+// 	if (!IRendererUI::GetInstance().Initialize()) return false;
+// 	if (!IUIResMgr::GetInstance().Initialize()) return false;
+// 	if (!IUISystem::GetInstance().Initialize()) return false;
+
 	if (!PreInitialize()) return false;
 	if (!IGameApp::GetInstance().Initialize()) return false;
 
 	if (!PostInitialize()) return false;
+
+	m_bRunning = true;
 	return true;
 }
 
@@ -83,14 +89,16 @@ void Core_Impl::Terminate()
 {
 	IGameApp::GetInstance().Terminate();
 	PreTerminate();
-	IUISystem::GetInstance().Terminate();
-	IUIResMgr::GetInstance().Terminate();
-	IRendererUI::GetInstance().Terminate();
-	IRenderer2D::GetInstance().Terminate();
-	IShaderMgr::GetInstance().Terminate();
-	IResourceMgr::GetInstance().Terminate();
-	ITextureMgr::GetInstance().Terminate();
-	IRenderDevice::GetInstance().Terminate();
+// 	IUISystem::GetInstance().Terminate();
+// 	IUIResMgr::GetInstance().Terminate();
+// 	IRendererUI::GetInstance().Terminate();
+// 	IRenderer2D::GetInstance().Terminate();
+// 	IShaderMgr::GetInstance().Terminate();
+// 	IResourceMgr::GetInstance().Terminate();
+// 	ITextureMgr::GetInstance().Terminate();
+// 	IRenderDevice::GetInstance().Terminate();
+
+	// free common utilities
 	InputMgr::GetInstance().Terminate();
 	ScreenUtil::GetInstance().Terminate();
 	MsgMgr::GetInstance().Terminate();
@@ -104,6 +112,26 @@ void Core_Impl::Terminate()
 void Core_Impl::PostTerminate()
 {
 	// nothing to do
+}
+
+bool Core_Impl::SetSurfaceView(ISurfaceView* pView)
+{
+	// free old view
+	if (m_pSurfaceView != NULL)
+	{
+		m_pSurfaceView->DeactiveView();
+	}
+
+	// switch surface view
+	m_pSurfaceView = pView;
+	if (m_pSurfaceView) m_pSurfaceView->ActiveView();
+
+	return true;
+}
+
+ISurfaceView* Core_Impl::GetSurfaceView()
+{
+	return m_pSurfaceView;
 }
 
 INode* Core_Impl::GetRootNode()
@@ -146,24 +174,34 @@ void Core_Impl::PreRender()
 
 void Core_Impl::Render()
 {
-	IRenderDevice::GetInstance().BeginRender();
-	PreRender();
-
-	// render scene
-	IRenderer2D::GetInstance().BeginRender();
-	IGameApp::GetInstance().Render();
-	IRenderer2D::GetInstance().EndRender();
-
-	// render ui
-	IRendererUI::GetInstance().BeginRender();
-	IUISystem::GetInstance().Render();
-	IRendererUI::GetInstance().EndRender();
-
-	PostRender();
-	IRenderDevice::GetInstance().EndRender();
+ 	if (m_pSurfaceView) m_pSurfaceView->BeginRender();
+// 	PreRender();
+// 
+// 	// render scene
+// 	IRenderer2D::GetInstance().BeginRender();
+// 	IGameApp::GetInstance().Render();
+// 	IRenderer2D::GetInstance().EndRender();
+// 
+// 	// render ui
+// 	IRendererUI::GetInstance().BeginRender();
+// 	IUISystem::GetInstance().Render();
+// 	IRendererUI::GetInstance().EndRender();
+// 
+// 	PostRender();
+ 	if (m_pSurfaceView) m_pSurfaceView->EndRender();
 }
 
 void Core_Impl::PostRender()
 {
 	// TODO: 
+}
+
+void Core_Impl::End()
+{
+	m_bRunning = false;
+}
+
+bool Core_Impl::IsRunning() const
+{
+	return m_bRunning;
 }
