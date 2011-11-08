@@ -33,26 +33,10 @@ JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_update
 
 /*
  * Class:     com_zjhlogo_spank_SpankLibrary
- * Method:    initializeRenderer
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_initializeRenderer
-  (JNIEnv *, jclass);
-
-/*
- * Class:     com_zjhlogo_spank_SpankLibrary
  * Method:    render
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_render
-  (JNIEnv *, jclass);
-
-/*
- * Class:     com_zjhlogo_spank_SpankLibrary
- * Method:    terminateRenderer
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_terminateRenderer
   (JNIEnv *, jclass);
 
 /*

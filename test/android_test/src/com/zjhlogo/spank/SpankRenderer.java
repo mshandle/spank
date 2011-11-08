@@ -93,15 +93,12 @@ public class SpankRenderer {
 			Log.d("TestCase_OpenGLES20", "make current context failed");
         	return false;
         }
-        
-        SpankLibrary.initializeRenderer();
+
         return true;
 	}
 	
 	public void terminateRenderer()
 	{
-		SpankLibrary.terminateRenderer();
-		
         mEgl.eglMakeCurrent(mEglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
         mEgl.eglDestroySurface(mEglDisplay, mEglSurface);
         mEgl.eglDestroyContext(mEglDisplay, mEglContext);

@@ -12,26 +12,13 @@
 
 SurfaceView_Android_Normal_Impl::SurfaceView_Android_Normal_Impl()
 {
-	m_nSurfaceWidth = 0;
-	m_nSurfaceHeight = 0;
 	m_nViewId = 0;
-
 	m_bOK = CreateView();
 }
 
 SurfaceView_Android_Normal_Impl::~SurfaceView_Android_Normal_Impl()
 {
 	// TODO: 
-}
-
-int SurfaceView_Android_Normal_Impl::GetSurfaceWidth() const
-{
-	return m_nSurfaceWidth;
-}
-
-int SurfaceView_Android_Normal_Impl::GetSurfaceHeight() const
-{
-	return m_nSurfaceHeight;
 }
 
 bool SurfaceView_Android_Normal_Impl::ActiveView()

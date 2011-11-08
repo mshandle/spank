@@ -79,6 +79,8 @@ LIBSPANK_SOURCE_FILES := \
 		$(LIBSPANK_SOURCE)/InputMgr.cpp \
 		$(LIBSPANK_SOURCE)/IObject.cpp \
 		$(LIBSPANK_SOURCE)/IRtti.cpp \
+		$(LIBSPANK_SOURCE)/IViewNormal.cpp \
+		$(LIBSPANK_SOURCE)/IViewOpenGL.cpp \
 		$(LIBSPANK_SOURCE)/Level2D.cpp \
 		$(LIBSPANK_SOURCE)/Node_Impl.cpp \
 		$(LIBSPANK_SOURCE)/Renderer2D_Impl.cpp \

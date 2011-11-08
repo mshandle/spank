@@ -98,20 +98,8 @@ JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_update(JNIEnv* env, j
 	}
 
 	ICore::GetInstance().Update((g_nCurrTime - g_nPrevTime)/1000.0f);
-	ICore::GetInstance().Update();
 
 	g_nPrevTime = g_nCurrTime;
-}
-
-/*
- * Class:     com_zjhlogo_spank_SpankLibrary
- * Method:    initializeRenderer
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_initializeRenderer(JNIEnv* env, jclass cls)
-{
-	LOGD("initialize renderer");
-	ICore::GetInstance().InitializeRenderer();
 }
 
 /*
@@ -122,17 +110,6 @@ JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_initializeRenderer(JN
 JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_render(JNIEnv* env, jclass cls)
 {
 	ICore::GetInstance().Render();
-}
-
-/*
- * Class:     com_zjhlogo_spank_SpankLibrary
- * Method:    terminateRenderer
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_terminateRenderer(JNIEnv* env, jclass cls)
-{
-	LOGD("terminate renderer");
-	ICore::GetInstance().TerminateRenderer();
 }
 
 /*

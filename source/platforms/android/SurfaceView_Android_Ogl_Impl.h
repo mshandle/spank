@@ -18,9 +18,6 @@ public:
 	SurfaceView_Android_Ogl_Impl();
 	virtual ~SurfaceView_Android_Ogl_Impl();
 
-	virtual int GetSurfaceWidth() const;
-	virtual int GetSurfaceHeight() const;
-
 	virtual bool ActiveView();
 	virtual void DeactiveView();
 
@@ -32,8 +29,6 @@ private:
 	void DestroyView();
 
 private:
-	int m_nSurfaceWidth;
-	int m_nSurfaceHeight;
 	int m_nViewId;
 
 };
