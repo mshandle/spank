@@ -6,7 +6,7 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "SpriteTestCase.h"
-#include <ICore.h>
+#include <IResourceMgr.h>
 #include <ui/UIButton.h>
 #include <ui/UISliderBar.h>
 #include <ui/uimsg/UIMsgID.h>
@@ -16,7 +16,7 @@ SpriteTestCase::SpriteTestCase()
 :TestCase("SpriteTestCase")
 {
 	m_pSprite = NULL;
-	m_pSpriteNode = NULL;
+	m_pRootNode = NULL;
 }
 
 SpriteTestCase::~SpriteTestCase()
@@ -26,11 +26,11 @@ SpriteTestCase::~SpriteTestCase()
 
 bool SpriteTestCase::Initialize(UIScreen* pUIScreen)
 {
-	m_pSpriteNode = ICore::GetInstance().GetRootNode()->CreateChildNode();
+	m_pRootNode = IResourceMgr::GetInstance().CreateRootNode();
 	m_pSprite = new Sprite("test_sprite.xml");
 	if (!m_pSprite) return false;
 
-	m_pSpriteNode->AttachObject(m_pSprite);
+	m_pRootNode->AttachObject(m_pSprite);
 
 	UIButton* pButtonStart = new UIButton(pUIScreen, Vector2(10.0f, 100.0f), "Start");
 	pButtonStart->ConnectEvent(UMI_CLICKED, this, (MSG_CALLBACK)&SpriteTestCase::OnBtnStartClicked);
@@ -51,9 +51,23 @@ bool SpriteTestCase::Initialize(UIScreen* pUIScreen)
 
 void SpriteTestCase::Terminate()
 {
-	ICore::GetInstance().GetRootNode()->RemoveChildNode(m_pSpriteNode);
-	m_pSpriteNode = NULL;
+	SAFE_RELEASE(m_pRootNode);
 	SAFE_DELETE(m_pSprite);
+}
+
+void SpriteTestCase::Update(float dt)
+{
+	// update actions
+	m_pRootNode->UpdateAction(dt);
+	// update objects
+	m_pRootNode->UpdateObjects(dt);
+	// update matrix
+	m_pRootNode->UpdateMatrix(dt);
+}
+
+void SpriteTestCase::Render()
+{
+	m_pRootNode->RenderObjects();
 }
 
 bool SpriteTestCase::OnBtnStartClicked(IMsgBase* pMsg)

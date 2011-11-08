@@ -9,11 +9,19 @@ public class SpankActivity extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        
-        // set the resource package path
-		String packageName = getPackageResourcePath();
-        SpankLibrary.setPackagePath(packageName);
-        
-        setContentView(new SpankView(getApplicationContext()));
+        SpankLibrary.startApp(this);
     }
+
+	@Override
+	protected void onDestroy()
+	{
+		SpankLibrary.stopApp();
+		super.onDestroy();
+	}
+
+	@Override
+	public void onBackPressed()
+	{
+		SpankLibrary.onKeyReturn();
+	}
 }

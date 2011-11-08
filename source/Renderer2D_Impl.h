@@ -33,8 +33,6 @@ public:
 	virtual void BeginRender();
 	virtual void EndRender();
 
-// 	virtual void DrawPoints(const void* pVerts, uint nNumVerts, IShader* pShader);
-// 	virtual void DrawLineList(const void* pVerts, uint nNumVerts, const ushort* pIndis, uint nNumIndis, IShader* pShader);
 	virtual void DrawTriangleList(const void* pVerts, uint nNumVerts, const ushort* pIndis, uint nNumIndis, IShader* pShader);
 	virtual void DrawTriangleStrip(const void* pVerts, uint nNumVerts, const ushort* pIndis, uint nNumIndis, IShader* pShader);
 

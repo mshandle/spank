@@ -10,15 +10,10 @@
 
 #include <IGameApp.h>
 #include <msg/IMsgBase.h>
-#include "TestCase.h"
-#include <vector>
-#include <ISurfaceView.h>
+#include <IViewNormal.h>
 
 class GameApp : public IGameApp
 {
-public:
-	typedef std::vector<TestCase*> TV_TEST_CASE;
-
 public:
 	DECLARE_RTTI(GameApp, IGameApp);
 
@@ -28,26 +23,11 @@ public:
 	virtual bool Initialize();
 	virtual void Terminate();
 
-	virtual void Update(float dt);
-	virtual void Render();
-
 private:
-	bool OnMsgTouch(IMsgBase* pMsg);
 	bool OnMsgKey(IMsgBase* pMsg);
 
-	bool OnBtnTestCaseClicked(IMsgBase* pMsg);
-	bool OnBtnReturnClicked(IMsgBase* pMsg);
-
-	bool AddTestCase(TestCase* pTestCase, UIScreen* pScreen);
-	void FreeCurrTestCase();
-	bool SwitchTestCase(int nIndex);
-
 private:
-	TV_TEST_CASE m_vTestCase;
-	TestCase* m_pCurrTestCase;
-	UIScreen* m_pMainScreen;
-	Vector2 m_vTextViewPos;
-	ISurfaceView* m_pSurfaceView[2];
+	IViewNormal* m_pView[2];
 	int m_nIndex;
 
 };

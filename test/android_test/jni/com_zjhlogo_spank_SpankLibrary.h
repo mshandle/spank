@@ -9,19 +9,11 @@ extern "C" {
 #endif
 /*
  * Class:     com_zjhlogo_spank_SpankLibrary
- * Method:    setPackagePath
- * Signature: (Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_setPackagePath
-  (JNIEnv *, jclass, jstring);
-
-/*
- * Class:     com_zjhlogo_spank_SpankLibrary
  * Method:    initialize
- * Signature: (II)Z
+ * Signature: (Ljava/lang/String;II)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_zjhlogo_spank_SpankLibrary_initialize
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jstring, jint, jint);
 
 /*
  * Class:     com_zjhlogo_spank_SpankLibrary
@@ -33,10 +25,34 @@ JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_terminate
 
 /*
  * Class:     com_zjhlogo_spank_SpankLibrary
- * Method:    step
+ * Method:    update
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_step
+JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_update
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_zjhlogo_spank_SpankLibrary
+ * Method:    initializeRenderer
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_initializeRenderer
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_zjhlogo_spank_SpankLibrary
+ * Method:    render
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_render
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_zjhlogo_spank_SpankLibrary
+ * Method:    terminateRenderer
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_terminateRenderer
   (JNIEnv *, jclass);
 
 /*
@@ -62,6 +78,22 @@ JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_touchMove
  */
 JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_touchEnd
   (JNIEnv *, jclass, jint, jfloat, jfloat);
+
+/*
+ * Class:     com_zjhlogo_spank_SpankLibrary
+ * Method:    onKeyReturn
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_onKeyReturn
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_zjhlogo_spank_SpankLibrary
+ * Method:    onKeyHome
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_zjhlogo_spank_SpankLibrary_onKeyHome
+  (JNIEnv *, jclass);
 
 #ifdef __cplusplus
 }

@@ -214,6 +214,22 @@
 			>
 		</File>
 		<File
+			RelativePath="..\source\NormalView.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\source\NormalView.h"
+			>
+		</File>
+		<File
+			RelativePath="..\source\OpenGLView.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\source\OpenGLView.h"
+			>
+		</File>
+		<File
 			RelativePath="..\source\ParticleTestCase.cpp"
 			>
 		</File>

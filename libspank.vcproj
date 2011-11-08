@@ -750,6 +750,22 @@
 			>
 		</File>
 		<File
+			RelativePath=".\source\IViewNormal.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\IViewNormal.h"
+			>
+		</File>
+		<File
+			RelativePath=".\source\IViewOpenGL.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\IViewOpenGL.h"
+			>
+		</File>
+		<File
 			RelativePath=".\source\Level2D.cpp"
 			>
 		</File>

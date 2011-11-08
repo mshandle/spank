@@ -18,42 +18,25 @@ SurfaceView_Win32_Ogl_Impl::SurfaceView_Win32_Ogl_Impl()
 	m_EGLDisplay = NULL;
 	m_EGLSurface = NULL;
 	m_EGLContext = NULL;
-	m_hWindow = NULL;
-	m_nSurfaceWidth = 0;
-	m_nSurfaceHeight = 0;
-
-	m_bOK = CreateView();
+	m_bOK = true;
 }
 
 SurfaceView_Win32_Ogl_Impl::~SurfaceView_Win32_Ogl_Impl()
 {
-	DestroyView();
-}
-
-int SurfaceView_Win32_Ogl_Impl::GetSurfaceWidth() const
-{
-	return m_nSurfaceWidth;
-}
-
-int SurfaceView_Win32_Ogl_Impl::GetSurfaceHeight() const
-{
-	return m_nSurfaceHeight;
+	// TODO: 
 }
 
 bool SurfaceView_Win32_Ogl_Impl::ActiveView()
 {
-	if (!m_hWindow) return false;
-
-	// show window
-	ShowWindow(m_hWindow, SW_SHOW);
-	SetForegroundWindow(m_hWindow);
-	SetFocus(m_hWindow);
-
 	// bind opengl es to window
-	if (!InitializeEGL(m_hWindow)) return false;
+	if (!InitializeEGL()) return false;
+
+	int nSurfaceWidth = ConfigUtil::GetInstance().GetInt("SURFACE_WIDTH");
+	int nSurfaceHeight = ConfigUtil::GetInstance().GetInt("SURFACE_HEIGHT");
+	if (nSurfaceWidth <= 0 || nSurfaceHeight <= 0) return false;
 
 	// set view port
-	glViewport(0, 0, m_nSurfaceWidth, m_nSurfaceHeight);
+	glViewport(0, 0, nSurfaceWidth, nSurfaceHeight);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -66,8 +49,10 @@ bool SurfaceView_Win32_Ogl_Impl::ActiveView()
 
 void SurfaceView_Win32_Ogl_Impl::DeactiveView()
 {
-	if (m_hWindow) ShowWindow(m_hWindow, SW_HIDE);
 	TerminateEGL();
+
+	HWND hWindow = (HWND)ConfigUtil::GetInstance().GetPointer("NATIVE_WINDOW", NULL);
+	if (hWindow) InvalidateRect(hWindow, NULL, TRUE);
 }
 
 void SurfaceView_Win32_Ogl_Impl::BeginRender()
@@ -90,128 +75,7 @@ void SurfaceView_Win32_Ogl_Impl::EndRender()
 	eglSwapBuffers(m_EGLDisplay, m_EGLSurface);
 }
 
-bool SurfaceView_Win32_Ogl_Impl::CreateView()
-{
-	m_nSurfaceWidth = ConfigUtil::GetInstance().GetInt("SURFACE_WIDTH");
-	m_nSurfaceHeight = ConfigUtil::GetInstance().GetInt("SURFACE_HEIGHT");
-	if (m_nSurfaceWidth <= 0 || m_nSurfaceHeight <= 0) return false;
-
-	return InitializeWindow();
-}
-
-void SurfaceView_Win32_Ogl_Impl::DestroyView()
-{
-	DeactiveView();
-	TerminateWindow();
-}
-
-bool SurfaceView_Win32_Ogl_Impl::InitializeWindow()
-{
-	HINSTANCE hInstance = GetModuleHandle(NULL);
-
-	WNDCLASS winClass;
-	memset(&winClass, 0, sizeof(winClass));
-	winClass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-	winClass.lpfnWndProc = (WNDPROC)SurfaceView_Win32_Ogl_Impl::MainWndProc;
-	winClass.cbClsExtra = 0;
-	winClass.cbWndExtra = 0;
-	winClass.hInstance = hInstance;
-	winClass.hIcon = LoadIcon(NULL, IDI_WINLOGO);
-	winClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	winClass.hbrBackground = NULL;
-	winClass.lpszMenuName = NULL;
-	winClass.lpszClassName = ConfigUtil::GetInstance().GetString("WINDOW_CLASS_OGL");
-	RegisterClass(&winClass);
-
-	// screen width, height
-	int nScreenWidth = GetSystemMetrics(SM_CXSCREEN);
-	int nScreenHeight = GetSystemMetrics(SM_CYSCREEN);
-
-	// window width, height
-	DWORD dwStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU;
-	RECT rc = {0, 0, m_nSurfaceWidth, m_nSurfaceHeight};
-	AdjustWindowRect(&rc, dwStyle, FALSE);
-	int nAdjustWidth = rc.right - rc.left;
-	int nAdjustHeight = rc.bottom - rc.top;
-
-	// create the window
-	m_hWindow = CreateWindow(
-		ConfigUtil::GetInstance().GetString("WINDOW_CLASS_OGL"),
-		ConfigUtil::GetInstance().GetString("WINDOW_TITLE"),
-		dwStyle,
-		(nScreenWidth-nAdjustWidth)/2,
-		(nScreenHeight-nAdjustHeight)/2,
-		nAdjustWidth,
-		nAdjustHeight,
-		NULL, NULL, hInstance, NULL);
-
-	LOGD("window initialized");
-	return true;
-}
-
-void SurfaceView_Win32_Ogl_Impl::TerminateWindow()
-{
-	if (m_hWindow)
-	{
-		DestroyWindow(m_hWindow);
-		m_hWindow = NULL;
-	}
-	LOGD("window terminated");
-}
-
-LRESULT CALLBACK SurfaceView_Win32_Ogl_Impl::MainWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	switch(uMsg)
-	{
-	case WM_LBUTTONDOWN:
-		{
-			int nPosX = (int)(short)LOWORD(lParam);
-			int nPosY = (int)(short)HIWORD(lParam);
-			Vector2 vPos;
-			ScreenUtil::GetInstance().DevicePointToScreen(vPos, (float)nPosX, (float)nPosY);
-			InputMgr::GetInstance().OnTouchStart(0, vPos.x, vPos.y);
-		}
-		break;
-	case WM_MOUSEMOVE:
-		{
-			int nPosX = (int)(short)LOWORD(lParam);
-			int nPosY = (int)(short)HIWORD(lParam);
-			Vector2 vPos;
-			ScreenUtil::GetInstance().DevicePointToScreen(vPos, (float)nPosX, (float)nPosY);
-			InputMgr::GetInstance().OnTouchMove(0, vPos.x, vPos.y);
-		}
-		break;
-	case WM_LBUTTONUP:
-		{
-			int nPosX = (int)(short)LOWORD(lParam);
-			int nPosY = (int)(short)HIWORD(lParam);
-			Vector2 vPos;
-			ScreenUtil::GetInstance().DevicePointToScreen(vPos, (float)nPosX, (float)nPosY);
-			InputMgr::GetInstance().OnTouchEnd(0, vPos.x, vPos.y);
-		}
-		break;
-	case WM_KEYDOWN:
-		{
-			if (wParam == VK_ESCAPE) InputMgr::GetInstance().OnKeyHome();
-			if (wParam == VK_BACK) InputMgr::GetInstance().OnKeyReturn();
-		}
-		break;
-	case WM_DESTROY:
-		{
- 			PostQuitMessage(0);
-		}
-		break;
-	default:
-		{
-			return DefWindowProc(hWnd, uMsg, wParam, lParam);
-		}
-		break;
-	}
-
-	return 0;
-}
-
-bool SurfaceView_Win32_Ogl_Impl::InitializeEGL(HWND hWindow)
+bool SurfaceView_Win32_Ogl_Impl::InitializeEGL()
 {
 	static const EGLint s_EGLAttributes[] =
 	{
@@ -231,6 +95,9 @@ bool SurfaceView_Win32_Ogl_Impl::InitializeEGL(HWND hWindow)
 	};
 
 	if (IsEGLInitialized()) return true;
+
+	HWND hWindow = (HWND)ConfigUtil::GetInstance().GetPointer("NATIVE_WINDOW", NULL);
+	if (!hWindow) return false;
 
 	HDC hDisplay = GetDC(NULL);
 	if (!hDisplay) return false;

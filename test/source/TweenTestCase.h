@@ -33,21 +33,22 @@ public:
 
 	virtual bool Initialize(UIScreen* pUIScreen);
 	virtual void Terminate();
+
+	virtual void Update(float dt);
 	virtual void Render();
 
-	bool OnPrvButton(IMsgBase* pMsg);
-	bool OnNextButton(IMsgBase* pMsg);
-	bool OnEASEInButton(IMsgBase* pMsg);
-	bool OnEASEOutButton(IMsgBase* pMsg);
-	bool OnEASEInOutButton(IMsgBase* pMsg);
-
 private:
+	bool OnBtnPrevClicked(IMsgBase* pMsg);
+	bool OnBtnNextClicked(IMsgBase* pMsg);
+	bool OnBtnEaseInClicked(IMsgBase* pMsg);
+	bool OnBtnEaseOutClicked(IMsgBase* pMsg);
+	bool OnEASEInOutButton(IMsgBase* pMsg);
 	void UpdateTween();
 
 private:
 	IShader* m_pShader;
 	Sprite* m_pSpriteAction;
-	INode* m_pActionNode;
+	INode* m_pRootNode;
 	uint m_nIndexTween;
 	uint m_nEffectIndex;
 	UITextView* m_pUiText;

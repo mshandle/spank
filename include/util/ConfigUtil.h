@@ -17,6 +17,7 @@ class ConfigUtil : public ISingleton
 public:
 	typedef std::map<std::string, std::string> TM_STRING;
 	typedef std::map<std::string, int> TM_INT;
+	typedef std::map<std::string, void*> TM_POINTER;
 
 public:
 	DECLARE_RTTI(ConfigUtil, ISingleton);
@@ -35,9 +36,13 @@ public:
 	void AddInt(const char* pszKey, int nValue);
 	int GetInt(const char* pszKey, int nDefaultValue = 0);
 
+	void AddPointer(const char* pszKey, void* pValue);
+	void* GetPointer(const char* pszKey, void* pDefaultValue = NULL);
+
 private:
 	TM_STRING m_mapString;
 	TM_INT m_mapInt;
+	TM_POINTER m_mapPointer;
 
 };
 #endif // __CONFIGUTIL_H__

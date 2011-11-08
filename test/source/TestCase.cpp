@@ -62,16 +62,6 @@ void TestCase::InternalTerminate()
 	m_pUIScreen = NULL;
 }
 
-void TestCase::Update(float dt)
-{
-	// TODO: 
-}
-
-void TestCase::Render()
-{
-	// TODO: 
-}
-
 void TestCase::AddReturnButton(UIScreen* pUIScreen)
 {
 	UITextView* pTextView = new UITextView(pUIScreen, IMath::VEC2_ZERO, "RETURN");

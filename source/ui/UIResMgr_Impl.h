@@ -52,6 +52,8 @@ private:
 	bool InitDefaultRadioButtonStyle();
 	bool InitDefaultSliderBarStyle();
 
+	void ZeroData();
+
 private:
 	TM_FONT m_mapFont;
 	IFont* m_pDefaultFont;

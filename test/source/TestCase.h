@@ -30,8 +30,8 @@ public:
 	virtual bool Initialize(UIScreen* pUIScreen) = 0;
 	virtual void Terminate() = 0;
 
-	virtual void Update(float dt);
-	virtual void Render();
+	virtual void Update(float dt) = 0;
+	virtual void Render() = 0;
 
 private:
 	void AddReturnButton(UIScreen* pUIScreen);

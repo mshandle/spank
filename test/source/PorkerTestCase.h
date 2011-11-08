@@ -25,15 +25,18 @@ public:
 	virtual bool Initialize(UIScreen* pUIScreen);
 	virtual void Terminate();
 
+	virtual void Update(float dt);
 	virtual void Render();
-	bool OnNormalButtonClick(IMsgBase* pMsg);
-	bool OnGrayButtonClick(IMsgBase* pMsg);
+
+private:
+	bool OnNormalButtonClicked(IMsgBase* pMsg);
+	bool OnGrayButtonClicked(IMsgBase* pMsg);
 
 private:
 	 IShader* m_pShader;	
 	 const IMAGE_PIECE* m_pBackGroundImagePiece;
 	 Tile* m_pTile;
-	 INode* m_pNode;
+	 INode* m_pRootNode;
 };
 
 #endif//__PORKERTESTCASE_H_

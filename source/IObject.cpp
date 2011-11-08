@@ -63,3 +63,8 @@ int IObject::GetRef() const
 {
 	return m_nRef;
 }
+
+void IObject::SetRef(int ref)
+{
+	m_nRef = ref;
+}

@@ -21,10 +21,8 @@ public:
 	virtual bool Initialize();
 	virtual void Terminate();
 
-	virtual bool SetSurfaceView(ISurfaceView* pView);
-	virtual ISurfaceView* GetSurfaceView();
-
-	virtual INode* GetRootNode();
+	virtual bool SetCurrentView(IViewNormal* pView);
+	virtual IViewNormal* GetCurrentView();
 
 	virtual void Update(float dt);
 	virtual void Render();
@@ -33,21 +31,7 @@ public:
 	virtual bool IsRunning() const;
 
 private:
-	bool PreInitialize();
-	bool PostInitialize();
-
-	void PreTerminate();
-	void PostTerminate();
-
-	void PreRender();
-	void PostRender();
-
-	void PreUpdate(float dt);
-	void PostUpdate(float dt);
-
-private:
-	INode* m_pRootNode;
-	ISurfaceView* m_pSurfaceView;
+	IViewNormal* m_pCurrentView;
 	bool m_bRunning;
 
 };

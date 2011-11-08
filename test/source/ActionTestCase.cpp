@@ -6,7 +6,7 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "ActionTestCase.h"
-#include <ICore.h>
+#include <IResourceMgr.h>
 #include <action/ActionMoveTo.h>
 #include <action/ActionRotateTo.h>
 #include <action/ActionScaleTo.h>
@@ -17,7 +17,7 @@ ActionTestCase::ActionTestCase()
 :TestCase("ActionTestCase")
 {
 	m_pSprite = NULL;
-	m_pActionNode = NULL;
+	m_pRootNode = NULL;
 }
 
 ActionTestCase::~ActionTestCase()
@@ -30,8 +30,8 @@ bool ActionTestCase::Initialize(UIScreen* pUIScreen)
 	m_pSprite = new Sprite("test_sprite.xml");
 	if (!m_pSprite) return true;
 
-	m_pActionNode = ICore::GetInstance().GetRootNode()->CreateChildNode();
-	m_pActionNode->AttachObject(m_pSprite);
+	m_pRootNode = IResourceMgr::GetInstance().CreateRootNode();
+	m_pRootNode->AttachObject(m_pSprite);
 
 	ActionSequeue* pActionFregment = new ActionSequeue();
 	pActionFregment->AddAction(new ActionMoveTo(Vector3(-200.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), 3.0f));
@@ -43,14 +43,28 @@ bool ActionTestCase::Initialize(UIScreen* pUIScreen)
 	pActionSequeue->AddAction(pActionFregment->CloneInverse());
 	ActionLoop * pActionLoop = new ActionLoop(pActionSequeue);
 
-	m_pActionNode->RunAction(pActionLoop);
+	m_pRootNode->RunAction(pActionLoop);
 
 	return true;
 }
 
 void ActionTestCase::Terminate()
 {
-	ICore::GetInstance().GetRootNode()->RemoveChildNode(m_pActionNode);
-	m_pActionNode = NULL;
+	SAFE_RELEASE(m_pRootNode);
 	SAFE_DELETE(m_pSprite);
+}
+
+void ActionTestCase::Update(float dt)
+{
+	// update actions
+	m_pRootNode->UpdateAction(dt);
+	// update objects
+	m_pRootNode->UpdateObjects(dt);
+	// update matrix
+	m_pRootNode->UpdateMatrix(dt);
+}
+
+void ActionTestCase::Render()
+{
+	m_pRootNode->RenderObjects();
 }

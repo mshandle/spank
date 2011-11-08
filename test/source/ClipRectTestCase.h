@@ -21,6 +21,8 @@ public:
 
 	virtual bool Initialize(UIScreen* pUIScreen);
 	virtual void Terminate();
+
+	virtual void Update(float dt);
 	virtual void Render();
 
 private:

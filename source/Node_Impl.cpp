@@ -22,6 +22,7 @@ Node_Impl::Node_Impl()
 	m_matLocal = IMath::MAT4X4_IDENTITY;
 	m_matFinal = IMath::MAT4X4_IDENTITY;
 	m_bNeedUpdateMatrix = true;
+	m_bOK = true;
 }
 
 Node_Impl::~Node_Impl()

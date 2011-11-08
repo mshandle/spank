@@ -22,17 +22,22 @@ IUIResMgr& IUIResMgr::GetInstance()
 
 UIResMgr_Impl::UIResMgr_Impl()
 {
+	ZeroData();
+}
+
+UIResMgr_Impl::~UIResMgr_Impl()
+{
+	// TODO: 
+}
+
+void UIResMgr_Impl::ZeroData()
+{
 	m_pDefaultFont = NULL;
 	StringUtil::ZeroMemory(m_pButtonStyle, sizeof(m_pButtonStyle));
 	StringUtil::ZeroMemory(m_pCheckButtonStyle, sizeof(m_pCheckButtonStyle));
 	StringUtil::ZeroMemory(m_pRadioButtonStyle, sizeof(m_pRadioButtonStyle));
 	m_pDefaultFrame = NULL;
 	StringUtil::ZeroMemory(m_pSliderBarStyle, sizeof(m_pSliderBarStyle));
-}
-
-UIResMgr_Impl::~UIResMgr_Impl()
-{
-	// TODO: 
 }
 
 bool UIResMgr_Impl::Initialize()
@@ -56,6 +61,18 @@ bool UIResMgr_Impl::Initialize()
 void UIResMgr_Impl::Terminate()
 {
 	SAFE_RELEASE(m_pDefaultFont);
+
+	for (TM_FONT::iterator it = m_mapFont.begin(); it != m_mapFont.end(); ++it)
+	{
+		IFont* pFont = it->second;
+		LOGE("un-released font: %s, ref: %d", it->first.c_str(), pFont->GetRef());
+		pFont->SetRef(0);
+		SAFE_RELEASE(pFont);
+	}
+	m_mapFont.clear();
+	m_mapImageFrame.clear();
+
+	ZeroData();
 }
 
 IFont* UIResMgr_Impl::CreateFont(const char* pszFontFile)

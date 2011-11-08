@@ -22,9 +22,12 @@ public:
 	virtual bool Initialize(UIScreen* pUIScreen);
 	virtual void Terminate();
 
+	virtual void Update(float dt);
+	virtual void Render();
+
 private:
 	Sprite* m_pSprite;
-	INode* m_pActionNode;
+	INode* m_pRootNode;
 
 };
 #endif // __ACTIONTESTCASE_H__

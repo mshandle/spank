@@ -34,6 +34,7 @@ LIBSPANK_SOURCE_FILES := \
 		$(LIBSPANK_SOURCE)/msg/IMsgHandler.cpp \
 		$(LIBSPANK_SOURCE)/msg/MsgActionUpdate.cpp \
 		$(LIBSPANK_SOURCE)/msg/MsgCommon.cpp \
+		$(LIBSPANK_SOURCE)/msg/MsgKey.cpp \
 		$(LIBSPANK_SOURCE)/msg/MsgMgr.cpp \
 		$(LIBSPANK_SOURCE)/msg/MsgTouch.cpp \
 		$(LIBSPANK_SOURCE)/particle/IEmmiter.cpp \
@@ -43,7 +44,10 @@ LIBSPANK_SOURCE_FILES := \
 		$(LIBSPANK_SOURCE)/particle/SnowParticle.cpp \
 		$(LIBSPANK_SOURCE)/particle/SnowParticleSystem.cpp \
 		$(LIBSPANK_SOURCE)/platforms/android/Mutex_Android_Impl.cpp \
-		$(LIBSPANK_SOURCE)/platforms/android/RenderDevice_Android_Impl.cpp \
+		$(LIBSPANK_SOURCE)/platforms/android/SpankLibrary.cpp \
+		$(LIBSPANK_SOURCE)/platforms/android/SurfaceView_Android_Normal_Impl.cpp \
+		$(LIBSPANK_SOURCE)/platforms/android/SurfaceView_Android_Ogl_Impl.cpp \
+		$(LIBSPANK_SOURCE)/platforms/android/SurfaceViewMgr_Android_Impl.cpp \
 		$(LIBSPANK_SOURCE)/platforms/android/util/DebugUtil_Android_Impl.cpp \
 		$(LIBSPANK_SOURCE)/platforms/android/util/FileUtil_Android_Impl.cpp \
 		$(LIBSPANK_SOURCE)/platforms/android/unzip/unzip.cpp \

@@ -12,15 +12,9 @@
 #include <msg/MsgMgr.h>
 #include <util/ScreenUtil.h>
 #include <InputMgr.h>
-#include <ITextureMgr.h>
-#include <IResourceMgr.h>
-#include <IShaderMgr.h>
-#include <IRenderer2D.h>
-#include <ui/IRendererUI.h>
-#include <ui/IUIResMgr.h>
-#include <ui/IUISystem.h>
+#include <ISurfaceViewMgr.h>
 #include <IGameApp.h>
-#include "Node_Impl.h"
+#include <IViewOpenGL.h>
 
 ICore& ICore::GetInstance()
 {
@@ -30,20 +24,13 @@ ICore& ICore::GetInstance()
 
 Core_Impl::Core_Impl()
 {
-	m_pRootNode = NULL;
-	m_pSurfaceView = NULL;
+	m_pCurrentView = NULL;
 	m_bRunning = false;
 }
 
 Core_Impl::~Core_Impl()
 {
 	// TODO: 
-}
-
-bool Core_Impl::PreInitialize()
-{
-	m_pRootNode = new Node_Impl();
-	return true;
 }
 
 bool Core_Impl::Initialize()
@@ -55,145 +42,78 @@ bool Core_Impl::Initialize()
 	if (!MsgMgr::GetInstance().Initialize()) return false;
 	if (!ScreenUtil::GetInstance().Initialize()) return false;
 	if (!InputMgr::GetInstance().Initialize()) return false;
-
-// 	// 
-// 	if (!ITextureMgr::GetInstance().Initialize()) return false;
-// 	if (!IResourceMgr::GetInstance().Initialize()) return false;
-// 	if (!IShaderMgr::GetInstance().Initialize()) return false;
-// 	if (!IRenderer2D::GetInstance().Initialize()) return false;
-// 	if (!IRendererUI::GetInstance().Initialize()) return false;
-// 	if (!IUIResMgr::GetInstance().Initialize()) return false;
-// 	if (!IUISystem::GetInstance().Initialize()) return false;
-
-	if (!PreInitialize()) return false;
+	if (!ISurfaceViewMgr::GetInstance().Initialize()) return false;
 	if (!IGameApp::GetInstance().Initialize()) return false;
-
-	if (!PostInitialize()) return false;
 
 	m_bRunning = true;
 	return true;
 }
 
-bool Core_Impl::PostInitialize()
-{
-	m_pRootNode->UpdateMatrix(0.0f);
-	return true;
-}
-
-void Core_Impl::PreTerminate()
-{
-	SAFE_DELETE(m_pRootNode);
-}
-
 void Core_Impl::Terminate()
 {
 	IGameApp::GetInstance().Terminate();
-	PreTerminate();
-// 	IUISystem::GetInstance().Terminate();
-// 	IUIResMgr::GetInstance().Terminate();
-// 	IRendererUI::GetInstance().Terminate();
-// 	IRenderer2D::GetInstance().Terminate();
-// 	IShaderMgr::GetInstance().Terminate();
-// 	IResourceMgr::GetInstance().Terminate();
-// 	ITextureMgr::GetInstance().Terminate();
-// 	IRenderDevice::GetInstance().Terminate();
-
-	// free common utilities
+	ISurfaceViewMgr::GetInstance().Terminate();
 	InputMgr::GetInstance().Terminate();
 	ScreenUtil::GetInstance().Terminate();
 	MsgMgr::GetInstance().Terminate();
 	IFileUtil::GetInstance().Terminate();
 	IDebugUtil::GetInstance().Terminate();
 	ConfigUtil::GetInstance().Terminate();
-
-	PostTerminate();
 }
 
-void Core_Impl::PostTerminate()
+bool Core_Impl::SetCurrentView(IViewNormal* pView)
 {
-	// nothing to do
-}
+	if (m_pCurrentView == pView) return true;
 
-bool Core_Impl::SetSurfaceView(ISurfaceView* pView)
-{
-	// free old view
-	if (m_pSurfaceView != NULL)
+	// dettach current view
+	if (m_pCurrentView)
 	{
-		m_pSurfaceView->DeactiveView();
+		if (!m_pCurrentView->OnDettachWindow())
+		{
+			LOGE("detach view from window failed");
+			m_pCurrentView = NULL;
+			return false;
+		}
 	}
+	m_pCurrentView = NULL;
 
-	// switch surface view
-	m_pSurfaceView = pView;
-	if (m_pSurfaceView) m_pSurfaceView->ActiveView();
+	// attach new view
+	if (pView)
+	{
+		if (!pView->OnAttachWindow())
+		{
+			pView->OnDettachWindow();
+			LOGE("attach to window failed");
+			return false;
+		}
+		m_pCurrentView = pView;
+	}
 
 	return true;
 }
 
-ISurfaceView* Core_Impl::GetSurfaceView()
+IViewNormal* Core_Impl::GetCurrentView()
 {
-	return m_pSurfaceView;
-}
-
-INode* Core_Impl::GetRootNode()
-{
-	return 	m_pRootNode;
-}
-
-void Core_Impl::PreUpdate(float dt)
-{
-	MsgMgr::GetInstance().DispatchMessage();
+	return m_pCurrentView;
 }
 
 void Core_Impl::Update(float dt)
 {
-	PreUpdate(dt);
+	MsgMgr::GetInstance().DispatchMessage();
 
-	IGameApp::GetInstance().Update(dt);
-	IUISystem::GetInstance().Update(dt);
-
-	PostUpdate(dt);
-}
-
-void Core_Impl::PostUpdate(float dt)
-{
-	// update actions
-	m_pRootNode->UpdateAction(dt);
-
-	// update objects
-	m_pRootNode->UpdateObjects(dt);
-
-	// update matrix
-	m_pRootNode->UpdateMatrix(dt);
-}
-
-void Core_Impl::PreRender()
-{
-	// render system objects
-	m_pRootNode->RenderObjects();
+	if (m_pCurrentView) m_pCurrentView->Update(dt);
 }
 
 void Core_Impl::Render()
 {
- 	if (m_pSurfaceView) m_pSurfaceView->BeginRender();
-// 	PreRender();
-// 
-// 	// render scene
-// 	IRenderer2D::GetInstance().BeginRender();
-// 	IGameApp::GetInstance().Render();
-// 	IRenderer2D::GetInstance().EndRender();
-// 
-// 	// render ui
-// 	IRendererUI::GetInstance().BeginRender();
-// 	IUISystem::GetInstance().Render();
-// 	IRendererUI::GetInstance().EndRender();
-// 
-// 	PostRender();
- 	if (m_pSurfaceView) m_pSurfaceView->EndRender();
-}
+	if (m_pCurrentView && m_pCurrentView->GetRtti()->IsDerived(IViewOpenGL::__RttiData()))
+	{
+		IViewOpenGL* pView = (IViewOpenGL*) m_pCurrentView;
 
-void Core_Impl::PostRender()
-{
-	// TODO: 
+		pView->BeginRender();
+		pView->Render();
+		pView->EndRender();
+	}
 }
 
 void Core_Impl::End()

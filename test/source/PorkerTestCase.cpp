@@ -22,7 +22,7 @@ PorkerTestCase::PorkerTestCase()
 	m_pBackGroundImagePiece = NULL;
 	m_pShader = NULL;
 	m_pTile = NULL;
-	m_pNode = NULL;
+	m_pRootNode = NULL;
 }
 
 PorkerTestCase::~PorkerTestCase()
@@ -32,43 +32,52 @@ PorkerTestCase::~PorkerTestCase()
 
 bool PorkerTestCase::Initialize(UIScreen* pUIScreen)
 {
-
 	m_pBackGroundImagePiece = IResourceMgr::GetInstance().FindImagePiece("backgorund");
 	if(!m_pBackGroundImagePiece) return false;
 	
 	m_pTile = new Tile(m_pBackGroundImagePiece);
-	m_pNode = ICore::GetInstance().GetRootNode()->CreateChildNode();
-	m_pNode->AttachObject(m_pTile);
+	m_pRootNode = IResourceMgr::GetInstance().CreateRootNode();
+	m_pRootNode->AttachObject(m_pTile);
 
 	UIButton* pButtonNormal = new UIButton(pUIScreen);
 	pButtonNormal->SetText("Normal");
-	pButtonNormal->ConnectEvent(UMI_CLICKED, this, (MSG_CALLBACK)&PorkerTestCase::OnNormalButtonClick);
+	pButtonNormal->ConnectEvent(UMI_CLICKED, this, (MSG_CALLBACK)&PorkerTestCase::OnNormalButtonClicked);
 
 	UIButton* pButtonGray = new UIButton(pUIScreen);
 	pButtonGray->SetText("Gray");
 	pButtonGray->SetPosition(0.0f, 60.0f);
-	pButtonGray->ConnectEvent(UMI_CLICKED, this, (MSG_CALLBACK)& PorkerTestCase::OnGrayButtonClick);
+	pButtonGray->ConnectEvent(UMI_CLICKED, this, (MSG_CALLBACK)& PorkerTestCase::OnGrayButtonClicked);
 	return true;
 }
 
 void PorkerTestCase::Terminate()
 {
 	SAFE_RELEASE(m_pShader);
-	ICore::GetInstance().GetRootNode()->RemoveChildNode(m_pNode);
+	SAFE_RELEASE(m_pRootNode);
+}
+
+void PorkerTestCase::Update(float dt)
+{
+	// update actions
+	m_pRootNode->UpdateAction(dt);
+	// update objects
+	m_pRootNode->UpdateObjects(dt);
+	// update matrix
+	m_pRootNode->UpdateMatrix(dt);
 }
 
 void PorkerTestCase::Render()
 {
-	
+	m_pRootNode->RenderObjects();
 }
 
-bool PorkerTestCase::OnNormalButtonClick(IMsgBase* pMsg)
+bool PorkerTestCase::OnNormalButtonClicked(IMsgBase* pMsg)
 {
 	m_pTile->SetRenderType(Tile::NORMAL);
 	return true;
 }
 
-bool PorkerTestCase::OnGrayButtonClick(IMsgBase* pMsg)
+bool PorkerTestCase::OnGrayButtonClicked(IMsgBase* pMsg)
 {
 	m_pTile->SetRenderType(Tile::GRAY);
 	return true;

@@ -32,6 +32,7 @@ void ConfigUtil::Terminate()
 {
 	m_mapString.clear();
 	m_mapInt.clear();
+	m_mapPointer.clear();
 }
 
 void ConfigUtil::AddString(const char* pszKey, const char* pszValue)
@@ -61,6 +62,21 @@ int ConfigUtil::GetInt(const char* pszKey, int nDefaultValue /* = 0 */)
 	std::string strKey = pszKey;
 	TM_INT::iterator itfound = m_mapInt.find(strKey);
 	if (itfound == m_mapInt.end()) return nDefaultValue;
+
+	return itfound->second;
+}
+
+void ConfigUtil::AddPointer(const char* pszKey, void* pValue)
+{
+	std::string strKey = pszKey;
+	m_mapPointer.insert(std::make_pair(strKey, pValue));
+}
+
+void* ConfigUtil::GetPointer(const char* pszKey, void* pDefaultValue /*= NULL*/)
+{
+	std::string strKey = pszKey;
+	TM_POINTER::iterator itfound = m_mapPointer.find(strKey);
+	if (itfound == m_mapPointer.end()) return pDefaultValue;
 
 	return itfound->second;
 }

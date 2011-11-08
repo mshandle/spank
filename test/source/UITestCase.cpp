@@ -95,6 +95,16 @@ void UITestCase::Terminate()
 	// TODO: 
 }
 
+void UITestCase::Update(float dt)
+{
+	// TODO: 
+}
+
+void UITestCase::Render()
+{
+	// TODO: 
+}
+
 bool UITestCase::OnButtonClicked(IMsgBase* pMsg)
 {
 	MsgClick* pMsgClick = (MsgClick*)pMsg;

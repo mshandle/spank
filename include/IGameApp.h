@@ -18,8 +18,5 @@ public:
 
 	static IGameApp& GetInstance();
 
-	virtual void Update(float dt) = 0;
-	virtual void Render() = 0;
-
 };
 #endif // __IGAMEAPP_H__

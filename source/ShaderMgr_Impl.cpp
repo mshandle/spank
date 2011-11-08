@@ -41,6 +41,15 @@ bool ShaderMgr_Impl::Initialize()
 void ShaderMgr_Impl::Terminate()
 {
 	SAFE_RELEASE(m_pDefaultShader);
+
+	for (TM_SHADER::iterator it = m_mapShader.begin(); it != m_mapShader.end(); ++it)
+	{
+		IShader* pShader = it->second;
+		LOGE("un-released shader: %d, ref: %d", it->first, pShader->GetRef());
+		pShader->SetRef(0);
+		SAFE_RELEASE(pShader);
+	}
+	m_mapShader.clear();
 }
 
 IShader* ShaderMgr_Impl::CreateShader(const char* pszShaderFile)

@@ -22,6 +22,9 @@ public:
 	virtual bool Initialize(UIScreen* pUIScreen);
 	virtual void Terminate();
 
+	virtual void Update(float dt);
+	virtual void Render();
+
 private:
 	bool OnBtnStartClicked(IMsgBase* pMsg);
 	bool OnBtnPauseClicked(IMsgBase* pMsg);
@@ -31,7 +34,7 @@ private:
 
 private:
 	Sprite* m_pSprite;
-	INode* m_pSpriteNode;
+	INode* m_pRootNode;
 
 };
 #endif // __SPRITETESTCASE_H__

@@ -33,6 +33,8 @@ public:
 
 	virtual const IMAGE_PIECE* FindImagePiece(const char* pszName);
 
+	virtual INode* CreateRootNode();
+
 private:
 	ITexture* FindTexture(TM_TEXTURE_INFO textureInfoMap, int nID);
 

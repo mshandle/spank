@@ -15,9 +15,6 @@ class ISurfaceView : public IObject
 public:
 	DECLARE_RTTI(ISurfaceView, IObject);
 
-	virtual int GetSurfaceWidth() const = 0;
-	virtual int GetSurfaceHeight() const = 0;
-
 	virtual bool ActiveView() = 0;
 	virtual void DeactiveView() = 0;
 

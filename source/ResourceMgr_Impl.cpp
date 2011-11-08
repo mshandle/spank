@@ -10,6 +10,7 @@
 #include <util/IFileUtil.h>
 #include <util/StringUtil.h>
 #include <tinyxml-2.6.2/tinyxml.h>
+#include "Node_Impl.h"
 
 IResourceMgr& IResourceMgr::GetInstance()
 {
@@ -29,7 +30,6 @@ ResourceMgr_Impl::~ResourceMgr_Impl()
 
 bool ResourceMgr_Impl::Initialize()
 {
-	// TODO: 
 	return true;
 }
 
@@ -42,6 +42,8 @@ void ResourceMgr_Impl::Terminate()
 	}
 	m_vTextures.clear();
 	m_TexturePieceMap.clear();
+
+	// TODO: print out INode that un-released
 }
 
 bool ResourceMgr_Impl::AddImagePieceList(const char* pszFile)
@@ -138,6 +140,18 @@ const IMAGE_PIECE* ResourceMgr_Impl::FindImagePiece(const char* pszName)
 	if (itfound == m_TexturePieceMap.end()) return NULL;
 
 	return &(itfound->second);
+}
+
+INode* ResourceMgr_Impl::CreateRootNode()
+{
+	INode* pNode = new Node_Impl();
+	if (!pNode || !pNode->IsOK())
+	{
+		SAFE_DELETE(pNode);
+		return NULL;
+	}
+
+	return pNode;
 }
 
 ITexture* ResourceMgr_Impl::FindTexture(TM_TEXTURE_INFO textureInfoMap, int nID)

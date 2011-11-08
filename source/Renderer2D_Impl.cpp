@@ -8,9 +8,9 @@
 #include "Renderer2D_Impl.h"
 #include <BaseTypeEx.h>
 #include <IShaderMgr.h>
-#include <ICore.h>
 #include <util/IDebugUtil.h>
 #include <util/ScreenUtil.h>
+#include <util/ConfigUtil.h>
 #include <GLES2/gl2.h>
 #include <math.h>
 
@@ -34,11 +34,10 @@ bool Renderer2D_Impl::Initialize()
 {
 	m_matModelView = IMath::MAT4X4_IDENTITY;
 
-	ISurfaceView* pSurfaceView = ICore::GetInstance().GetSurfaceView();
-	if (!pSurfaceView) return false;
+	float fSurfaceWidth = (float)ConfigUtil::GetInstance().GetInt("SURFACE_WIDTH");
+	float fSurfaceHeight = (float)ConfigUtil::GetInstance().GetInt("SURFACE_HEIGHT");
+	if (fSurfaceWidth <= 0.0f || fSurfaceHeight <= 0.0f) return false;
 
-	float fSurfaceWidth = (float)pSurfaceView->GetSurfaceWidth();
-	float fSurfaceHeight = (float)pSurfaceView->GetSurfaceHeight();
 	IMath::BuildOrthoMatrix(m_matProj, -fSurfaceWidth/2.0f, fSurfaceWidth/2.0f, -fSurfaceHeight/2.0f, fSurfaceHeight/2.0f, -1000.0f, 1000.0f);
 
 	float fDegree = ScreenUtil::GetInstance().GetRotationDegree();
@@ -103,23 +102,6 @@ void Renderer2D_Impl::EndRender()
 {
 	// TODO: 
 }
-
-// void Renderer2D_Impl::DrawPoints(const void* pVerts, uint nNumVerts, IShader* pShader)
-// {
-// 	if(!pShader) return;
-// 
-// 	pShader->Commit(pVerts);
-// 	glDrawArrays(GL_POINTS, 0, nNumVerts);
-// }
-// 
-// void Renderer2D_Impl::DrawLineList(const void* pVerts, uint nNumVerts, const ushort* pIndis, uint nNumIndis, IShader* pShader)
-// {
-// 	if(!pShader) return;
-// 
-// 	pShader->Commit(pVerts);
-// // 	glLineWidth(2.0f);
-// 	glDrawElements(GL_LINES, nNumIndis, GL_UNSIGNED_SHORT, pIndis);
-// }
 
 void Renderer2D_Impl::DrawTriangleList(const void* pVerts, uint nNumVerts, const ushort* pIndis, uint nNumIndis, IShader* pShader)
 {

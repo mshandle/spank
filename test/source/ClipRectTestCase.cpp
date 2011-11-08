@@ -12,24 +12,27 @@
 ClipRectTestCase::ClipRectTestCase()
 :TestCase("ClipRectTestCase")
 {
-	//TODO:
 	IUIResMgr::GetInstance().SetupDefaultButtonTextures(m_pStyle);
 }
 
 ClipRectTestCase::~ClipRectTestCase()
 {
-	//TODO:
+	// TODO: 
 }
 
 bool ClipRectTestCase::Initialize(UIScreen* pUIScreen)
 {
-	////TODO:
 	return true;
 }
 
 void ClipRectTestCase::Terminate()
 {
-	//TODO:
+	// TODO: 
+}
+
+void ClipRectTestCase::Update(float dt)
+{
+	// TODO: 
 }
 
 void ClipRectTestCase::Render()

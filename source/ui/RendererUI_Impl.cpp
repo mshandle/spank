@@ -22,14 +22,10 @@ IRendererUI& IRendererUI::GetInstance()
 
 RendererUI_Impl::RendererUI_Impl()
 {
-// 	StringUtil::ZeroMemory(m_pCaches_POS_RGB, sizeof(m_pCaches_POS_RGB));
-// 	m_pShader_POS_RGB = NULL;
-
 	StringUtil::ZeroMemory(m_pCaches_POS_UV, sizeof(m_pCaches_POS_UV));
 	m_pShader_POS_UV = NULL;
 
 	m_pTexture = NULL;
-// 	m_vColor = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 	m_bRenderBegan = false;
 }
 
@@ -40,17 +36,6 @@ RendererUI_Impl::~RendererUI_Impl()
 
 bool RendererUI_Impl::Initialize()
 {
-// 	m_pShader_POS_RGB = IShaderMgr::GetInstance().CreateShader("line_shader.xml");
-// 	if (!m_pShader_POS_RGB) return false;
-// 
-// 	for (int i = 0; i < NUM_POS_RGB_CACHE; ++i)
-// 	{
-// 		int nVertexAttributeSize = m_pShader_POS_RGB->GetVertexAttribute()->GetStride();
-// 		m_pCaches_POS_RGB[i] = new VertexCache(4*NUM_POS_RGB_PRIMETIVE_PER_CACHE*nVertexAttributeSize, 8*NUM_POS_RGB_PRIMETIVE_PER_CACHE);
-// 		if (!m_pCaches_POS_RGB[i] || !m_pCaches_POS_RGB[i]->IsOK()) return false;
-// 		m_pCaches_POS_RGB[i]->ConnectEvent(MI_RENDERER_UI_FLUSH, this, CAST_MSG_CALLBACK(&RendererUI_Impl::OnLineCacheFlushed));
-// 	}
-
 	m_pShader_POS_UV = IShaderMgr::GetInstance().CreateShader(SSI_DEFAULT);
 	if (!m_pShader_POS_UV) return false;
 
@@ -67,12 +52,6 @@ bool RendererUI_Impl::Initialize()
 
 void RendererUI_Impl::Terminate()
 {
-// 	for (int i = 0; i < NUM_POS_RGB_CACHE; ++i)
-// 	{
-// 		SAFE_DELETE(m_pCaches_POS_RGB[i]);
-// 	}
-// 	SAFE_RELEASE(m_pShader_POS_RGB);
-
 	for (int i = 0; i < NUM_POS_UV_CACHE; ++i)
 	{
 		SAFE_DELETE(m_pCaches_POS_UV[i]);
@@ -84,65 +63,6 @@ void RendererUI_Impl::SetTexture(ITexture* pTexture)
 {
 	m_pTexture = pTexture;
 }
-
-// void RendererUI_Impl::SetColor(float r, float g, float b, float a)
-// {
-// 	m_vColor.x = r;
-// 	m_vColor.y = g;
-// 	m_vColor.z = b;
-// 	m_vColor.w = a;
-// }
-// 
-// void RendererUI_Impl::DrawLineList(const VATTR_POS_RGB* pVerts, uint nVerts, const ushort* pIndis, uint nIndis)
-// {
-// 	AddPrimetive(m_pCaches_POS_RGB, NUM_POS_RGB_CACHE, m_pShader_POS_RGB, NULL, pVerts, nVerts, pIndis, nIndis);
-// }
-// 
-// void RendererUI_Impl::DrawLineRect(const QUAD_VERT_POS_RGB& quad)
-// {
-// 	static const ushort s_Indis[8] = {0, 1, 1, 3, 3, 2, 2, 0};
-// 	AddPrimetive(m_pCaches_POS_RGB, NUM_POS_RGB_CACHE, m_pShader_POS_RGB, NULL, &quad.verts[0], 4, s_Indis, 8);
-// }
-// 
-// void RendererUI_Impl::DrawLineRect(const Vector2& pos, const Vector2& size)
-// {
-// 	DrawLineRect(pos.x, pos.y, size.x, size.y);
-// }
-// 
-// void RendererUI_Impl::DrawLineRect(float x, float y, float width, float height)
-// {
-// 	static QUAD_VERT_POS_RGB s_quad;
-// 
-// 	s_quad.verts[0].x = x;
-// 	s_quad.verts[0].y = y + height;
-// 	s_quad.verts[0].z = 0.0f;
-// 	s_quad.verts[0].r = m_vColor.x;
-// 	s_quad.verts[0].g = m_vColor.y;
-// 	s_quad.verts[0].b = m_vColor.z;
-// 
-// 	s_quad.verts[1].x = x;
-// 	s_quad.verts[1].y = y;
-// 	s_quad.verts[1].z = 0.0f;
-// 	s_quad.verts[1].r = m_vColor.x;
-// 	s_quad.verts[1].g = m_vColor.y;
-// 	s_quad.verts[1].b = m_vColor.z;
-// 
-// 	s_quad.verts[2].x = x + width;
-// 	s_quad.verts[2].y = y + height;
-// 	s_quad.verts[2].z = 0.0f;
-// 	s_quad.verts[2].r = m_vColor.x;
-// 	s_quad.verts[2].g = m_vColor.y;
-// 	s_quad.verts[2].b = m_vColor.z;
-// 
-// 	s_quad.verts[3].x = x + width;
-// 	s_quad.verts[3].y = y;
-// 	s_quad.verts[3].z = 0.0f;
-// 	s_quad.verts[3].r = m_vColor.x;
-// 	s_quad.verts[3].g = m_vColor.y;
-// 	s_quad.verts[3].b = m_vColor.z;
-// 
-// 	DrawLineRect(s_quad);
-// }
 
 void RendererUI_Impl::DrawTriangleList(const VATTR_POS_UV* pVerts, uint nVerts, const ushort* pIndis, uint nIndis)
 {
@@ -396,13 +316,6 @@ void RendererUI_Impl::EndRender()
 {
 	if (!m_bRenderBegan) return;
 
-// 	for (int i = 0; i < NUM_POS_RGB_CACHE; ++i)
-// 	{
-// 		m_pCaches_POS_RGB[i]->Flush();
-// 		m_pCaches_POS_RGB[i]->SetShader(NULL);
-// 		m_pCaches_POS_RGB[i]->SetTexture(NULL);
-// 	}
-
 	for (int i = 0; i < NUM_POS_UV_CACHE; ++i)
 	{
 		m_pCaches_POS_UV[i]->Flush();
@@ -410,7 +323,6 @@ void RendererUI_Impl::EndRender()
 		m_pCaches_POS_UV[i]->SetTexture(NULL);
 	}
 
-// 	m_pShader_POS_RGB->Reset();
 	m_pShader_POS_UV->Reset();
 
 	m_pTexture = NULL;
@@ -471,20 +383,6 @@ bool RendererUI_Impl::AddPrimetive(VertexCache** pCache, int nNumCache, IShader*
 
 	return true;
 }
-
-// bool RendererUI_Impl::OnLineCacheFlushed(IMsgBase* pMsg)
-// {
-// 	MsgCommon* pMsgFlush = (MsgCommon*)pMsg;
-// 
-// 	VertexCache* pCache = (VertexCache*)pMsgFlush->GetObject();
-// 	if (!pCache) return false;
-// 
-// 	IShader* pShader = pCache->GetShader();
-// 	pShader->SetMatrix4x4("u_matModelViewProj", IRenderer2D::GetInstance().GetFinalMatrixTranspose());
-// 
-// 	IRenderer2D::GetInstance().DrawLineList(pCache->GetVerts(), pCache->GetNumVerts(), pCache->GetIndis(), pCache->GetNumIndis(), pShader);
-// 	return true;
-// }
 
 bool RendererUI_Impl::OnTriangleCacheFlushed(IMsgBase* pMsg)
 {

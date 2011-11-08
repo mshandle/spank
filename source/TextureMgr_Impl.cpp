@@ -34,7 +34,24 @@ bool TextureMgr_Impl::Initialize()
 
 void TextureMgr_Impl::Terminate()
 {
-	// TODO: check m_TextureMap and m_MemoryTextureSet exist textures
+	// check m_TextureMap and m_MemoryTextureSet exist textures
+	for (TM_TEXTURE::iterator it = m_TextureMap.begin(); it != m_TextureMap.end(); ++it)
+	{
+		ITexture* pTexture = it->second;
+		LOGE("un-released texture: %s, ref: %d", it->first.c_str(), pTexture->GetRef());
+		pTexture->SetRef(0);
+		SAFE_RELEASE(pTexture);
+	}
+	m_TextureMap.clear();
+
+	for (TS_TEXTURE::iterator it = m_MemoryTextureSet.begin(); it != m_MemoryTextureSet.end(); ++it)
+	{
+		ITexture* pTexture = (*it);
+		LOGE("un-released memory texture: %x, ref: %d", pTexture, pTexture->GetRef());
+		pTexture->SetRef(0);
+		SAFE_RELEASE(pTexture);
+	}
+	m_MemoryTextureSet.clear();
 }
 
 ITexture* TextureMgr_Impl::CreateTexture(const char* pszFileName, TEXTURE_SAMPLE_TYPE eSample /* = TST_POINT */)

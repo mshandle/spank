@@ -28,6 +28,7 @@ public:
 	int IncRef();
 	int DecRef();
 	int GetRef() const;
+	void SetRef(int ref);
 
 protected:
 	bool m_bOK;

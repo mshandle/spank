@@ -10,6 +10,7 @@
 
 #include "ISingleton.h"
 #include "BaseTypeEx.h"
+#include "INode.h"
 
 class IResourceMgr : public ISingleton
 {
@@ -21,6 +22,8 @@ public:
 	virtual bool AddImagePieceList(const char* pszFile) = 0;
 	virtual bool RemoveImagePieceList(const char* pszFile) = 0;
 	virtual const IMAGE_PIECE* FindImagePiece(const char* pszName) = 0;
+
+	virtual INode* CreateRootNode() = 0;
 
 };
 #endif // __IRESOURCEMGR_H__
