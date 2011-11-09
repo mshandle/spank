@@ -7,17 +7,15 @@ import android.app.Activity;
 import android.util.DisplayMetrics;
 
 import com.zjhlogo.spank.msg.MsgBase;
-import com.zjhlogo.spank.msg.MsgRequestSetupRenderer;
 
-public class SpankAppRunnable implements Runnable {
+public class SpankAppRunnable implements Runnable
+{
 	private Activity mActivity = null;
 	private boolean mRunning = false;
-	private boolean mRendering = false;
-	private SpankRenderer mRenderer = null;
 	
 	private Queue<MsgBase> mMsgQueue = new LinkedList<MsgBase>();
 	private byte[] lock = new byte[0];
-	
+
 	public SpankAppRunnable(Activity activity)
 	{
 		mActivity = activity;
@@ -45,7 +43,6 @@ public class SpankAppRunnable implements Runnable {
 		if (initializeApp())
 		{
 			mRunning = true;
-			mRendering = false;
 			
 			while (mRunning)
 			{
@@ -59,13 +56,8 @@ public class SpankAppRunnable implements Runnable {
 				// update
 				SpankLibrary.update();
 				
-				// render
-				if (mRendering)
-				{
-					mRenderer.BeginRender();
-					SpankLibrary.render();
-					mRenderer.EndRender();
-				}
+				// render if nessary
+				SpankLibrary.renderIfNessary();
 			}
 		}
 		
@@ -94,30 +86,6 @@ public class SpankAppRunnable implements Runnable {
 		case MI_REQUEST_STOP_APP:
 		{
 			mRunning = false;
-		}
-		break;
-		case MI_REQUEST_SETUP_RENDERER:
-		{
-			MsgRequestSetupRenderer rsr = (MsgRequestSetupRenderer) msg;
-			if (mRenderer != null)
-			{
-				mRenderer.terminateRenderer();
-				mRenderer = null;
-				mRendering = false;
-			}
-			
-			mRenderer = new SpankRenderer(rsr.getHolder());
-			mRendering = mRenderer.initializeRenderer();
-		}
-		break;
-		case MI_REQUEST_STOP_RENDERER:
-		{
-			if (mRenderer != null)
-			{
-				mRenderer.terminateRenderer();
-				mRenderer = null;
-				mRendering = false;
-			}
 		}
 		break;
 		}

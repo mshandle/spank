@@ -1,42 +1,93 @@
 package com.zjhlogo.spank;
 
 import android.app.Activity;
-import android.view.View;
 
-public class BaseView
+public abstract class BaseView
 {
-	private int mResId = R.layout.layout_empty;
+	private int mLayoutId = R.layout.layout_empty;
 	private boolean mLock = false;
 	
-	public BaseView(int resId)
+	public class ActiveRunnable implements Runnable
 	{
-		mResId = resId;
+		private BaseView mView = null;
+		private Activity mActivity = null;
+		
+		public ActiveRunnable(BaseView view, Activity activity)
+		{
+			mView = view;
+			mActivity = activity;
+		}
+		
+		public void run()
+		{
+			mView.activeOnUiThread(mActivity);
+		}
+	}
+
+	public class DeactiveRunnable implements Runnable
+	{
+		private BaseView mView = null;
+		private Activity mActivity = null;
+		
+		public DeactiveRunnable(BaseView view, Activity activity)
+		{
+			mView = view;
+			mActivity = activity;
+		}
+		
+		public void run()
+		{
+			mView.deactiveOnUiThread(mActivity);
+		}
+	}
+
+	public BaseView(int layoutId)
+	{
+		mLayoutId = layoutId;
+	}
+	
+	public int getLayoutId()
+	{
+		return mLayoutId;
 	}
 	
 	public boolean active(Activity activity)
 	{
-		View view = activity.getLayoutInflater().inflate(mResId, null, false);
-		activity.setContentView(view);
-		return true;
+		// request active view
+		blockThread();
+		activity.runOnUiThread(new ActiveRunnable(this, activity));
+		while (isBlocking());		// 等待UI线程执行结束
+
+		return activeOnGameThread(activity);
 	}
 
 	public void deactive(Activity activity)
 	{
-		activity.setContentView(R.layout.layout_empty);
+		deactiveOnGameThread(activity);
+		
+		// request active view
+		blockThread();
+		activity.runOnUiThread(new DeactiveRunnable(this, activity));
+		while (isBlocking());		// 等待UI线程执行结束
 	}
-	
-	public void Lock()
+
+	public void blockThread()
 	{
 		mLock = true;
 	}
 	
-	public void Unlock()
+	public void unblockThread()
 	{
 		mLock = false;
 	}
 	
-	public boolean isLocked()
+	public boolean isBlocking()
 	{
 		return mLock;
 	}
+
+	public abstract boolean activeOnUiThread(Activity activity);
+	public abstract void deactiveOnUiThread(Activity activity);
+	public abstract boolean activeOnGameThread(Activity activity);
+	public abstract void deactiveOnGameThread(Activity activity);
 }

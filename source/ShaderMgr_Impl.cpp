@@ -167,7 +167,7 @@ IShader* ShaderMgr_Impl::InternalCreateShader(int nShaderID, const char* pszVert
 		SAFE_RELEASE(pVertexShader);
 		SAFE_RELEASE(pFregmentShader);
 
-		LOGE("create shader failed");
+		LOGE("create shader failed, shader id: %d", nShaderID);
 		return NULL;
 	}
 

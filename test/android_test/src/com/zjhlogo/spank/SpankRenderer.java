@@ -6,8 +6,6 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 
-import android.graphics.PixelFormat;
-import android.opengl.GLES20;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
@@ -47,9 +45,6 @@ public class SpankRenderer {
 	
 	public boolean initializeRenderer()
 	{
-		// set holder pixel format
-		mHolder.setFormat(PixelFormat.TRANSLUCENT);
-		
 		// initialize EGL
 		mEgl = (EGL10) EGLContext.getEGL();
 		
@@ -57,7 +52,7 @@ public class SpankRenderer {
 		mEglDisplay = mEgl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
 		if (mEglDisplay == EGL10.EGL_NO_DISPLAY)
 		{
-			Log.d("TestCase_OpenGLES20", "get the default display failed");
+			Log.e("spank", "get the default display failed");
 			return false;
 		}
 		
@@ -65,7 +60,7 @@ public class SpankRenderer {
 		int[] version = new int[2];
 		if (!mEgl.eglInitialize(mEglDisplay, version))
 		{
-			Log.d("TestCase_OpenGLES20", "initialize EGL for display failed");
+			Log.e("spank", "initialize EGL for display failed");
 			return false;
 		}
 		// setup config chooser
@@ -75,7 +70,7 @@ public class SpankRenderer {
         mEglContext = createContext(mEgl, mEglDisplay, mEglConfig);
         if (mEglContext == null || mEglContext == EGL10.EGL_NO_CONTEXT)
         {
-			Log.d("TestCase_OpenGLES20", "create EGL context failed");
+			Log.e("spank", "create EGL context failed");
         	return false;
         }
 
@@ -83,14 +78,14 @@ public class SpankRenderer {
         mEglSurface = mEgl.eglCreateWindowSurface(mEglDisplay, mEglConfig, mHolder, null);
         if (mEglSurface == null || mEglSurface == EGL10.EGL_NO_SURFACE)
         {
-			Log.d("TestCase_OpenGLES20", "create egl surface failed: " + mEgl.eglGetError());
+			Log.e("spank", "create egl surface failed: " + mEgl.eglGetError());
         	return false;
         }
 
         // make current context
         if (!mEgl.eglMakeCurrent(mEglDisplay, mEglSurface, mEglSurface, mEglContext))
         {
-			Log.d("TestCase_OpenGLES20", "make current context failed");
+			Log.e("spank", "make current context failed");
         	return false;
         }
 
@@ -112,9 +107,7 @@ public class SpankRenderer {
 	
 	public void BeginRender()
 	{
-		// clear screen
-        GLES20.glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
-        GLES20.glClear( GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
+		// nothing to do
 	}
 	
 	public void EndRender()

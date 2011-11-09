@@ -171,7 +171,11 @@ void Shader_Impl::FreeProgram()
 GLuint Shader_Impl::CreateShader(const char* pszShaderSource, GLenum eType)
 {
 	GLuint glShader = glCreateShader(eType);
-	if (glShader == 0) return 0;
+	if (glShader == 0)
+	{
+		LOGE("glCreateShader failed");
+		return 0;
+	}
 
 	glShaderSource(glShader, 1, &pszShaderSource, NULL);
 	glCompileShader(glShader);
@@ -181,6 +185,7 @@ GLuint Shader_Impl::CreateShader(const char* pszShaderSource, GLenum eType)
 	glGetShaderiv(glShader, GL_COMPILE_STATUS, &glCompiled);
 	if (glCompiled != GL_TRUE)
 	{
+		LOGE("compiling shader failed %s", pszShaderSource);
 		GLint nErrorLength = 0;
 		glGetShaderiv(glShader, GL_INFO_LOG_LENGTH, &nErrorLength);
 		if (nErrorLength > 0)

@@ -36,7 +36,7 @@ bool GameApp::Initialize()
 
 	m_pView[0] = new NormalView();
 	m_pView[1] = new OpenGLView();
-	m_nIndex = 1;
+	m_nIndex = 0;
 
 	ICore::GetInstance().SetCurrentView(m_pView[m_nIndex]);
 

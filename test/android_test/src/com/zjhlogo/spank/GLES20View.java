@@ -1,46 +1,103 @@
 package com.zjhlogo.spank;
 
 import android.app.Activity;
+import android.graphics.PixelFormat;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.View.OnTouchListener;
 
-import com.zjhlogo.spank.msg.MSG_ID;
-import com.zjhlogo.spank.msg.MsgCommand;
-import com.zjhlogo.spank.msg.MsgRequestSetupRenderer;
-
-public class GLES20View extends BaseView
+public class GLES20View extends BaseView implements SurfaceHolder.Callback, OnTouchListener
 {
-	private SurfaceView mSurfaceView = null;
-	
-	public GLES20View(int resId)
+	public GLES20View()
 	{
-		super(resId);
+		super(R.layout.layout_opengles_20);
 	}
 
 	@Override
-	public boolean active(Activity activity)
+	public boolean activeOnUiThread(Activity activity)
 	{
-		if (!super.active(activity)) return false;
-		
-		mSurfaceView = (SurfaceView) activity.findViewById(R.id.surfaceView1);
-		if (mSurfaceView == null) return false;
+		View view = activity.getLayoutInflater().inflate(getLayoutId(), null, false);
+		activity.setContentView(view);
 
-		SurfaceHolder holder = mSurfaceView.getHolder();
+		SurfaceView surfaceView = (SurfaceView) activity.findViewById(R.id.surfaceView1);
+		if (surfaceView == null) return false;
+
+		surfaceView.setOnTouchListener(this);
+		
+		SurfaceHolder holder = surfaceView.getHolder();
 		if (holder == null) return false;
-		
-		// request setup renderer
-		MsgRequestSetupRenderer rsr = new MsgRequestSetupRenderer(holder);
-		SpankLibrary.request(rsr);
-		
+
+		// set holder pixel format
+		holder.setFormat(PixelFormat.TRANSLUCENT);
+		holder.addCallback(this);
+
 		return true;
 	}
 
 	@Override
-	public void deactive(Activity activity)
+	public void deactiveOnUiThread(Activity activity)
 	{
-		// request uninstall renderer
-		SpankLibrary.request(new MsgCommand(MSG_ID.MI_REQUEST_STOP_RENDERER));
-		
-		super.deactive(activity);
+		activity.setContentView(R.layout.layout_empty);
+		unblockThread();
+	}
+
+	@Override
+	public boolean activeOnGameThread(Activity activity)
+	{
+		SurfaceView surfaceView = (SurfaceView) activity.findViewById(R.id.surfaceView1);
+		if (surfaceView == null) return false;
+
+		SurfaceHolder holder = surfaceView.getHolder();
+		if (holder == null) return false;
+
+		return SpankLibrary.initializeRenderer(holder);
+	}
+	
+	@Override
+	public void deactiveOnGameThread(Activity activity)
+	{
+		SpankLibrary.terminateRenderer();
+	}
+
+	public void surfaceCreated(SurfaceHolder holder)
+	{
+		unblockThread();
+	}
+
+	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height)
+	{
+		// nothing to do
+	}
+
+	public void surfaceDestroyed(SurfaceHolder holder)
+	{
+		// TODO: send message to game thread to deactive the renderer
+	}
+
+	public boolean onTouch(View v, MotionEvent event)
+	{
+		switch (event.getAction())
+		{
+		case MotionEvent.ACTION_DOWN:
+			{
+				SpankLibrary.touchBegin(0, event.getX(), event.getY());
+			}
+			break;
+		case MotionEvent.ACTION_MOVE:
+			{
+				SpankLibrary.touchMove(0, event.getX(), event.getY());
+			}
+			break;
+		case MotionEvent.ACTION_UP:
+		case MotionEvent.ACTION_CANCEL:
+			{
+				SpankLibrary.touchEnd(0, event.getX(), event.getY());
+			}
+			break;
+		}
+
+		return true;
 	}
 }
