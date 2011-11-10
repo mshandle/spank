@@ -13,11 +13,12 @@
 #include <math/IMath.h>
 #include <GLES2/gl2.h>
 
-SurfaceView_Win32_Ogl_Impl::SurfaceView_Win32_Ogl_Impl()
+SurfaceView_Win32_Ogl_Impl::SurfaceView_Win32_Ogl_Impl(HWND hWindow)
 {
 	m_EGLDisplay = NULL;
 	m_EGLSurface = NULL;
 	m_EGLContext = NULL;
+	m_hWindow = hWindow;
 	m_bOK = true;
 }
 
@@ -96,9 +97,6 @@ bool SurfaceView_Win32_Ogl_Impl::InitializeEGL()
 
 	if (IsEGLInitialized()) return true;
 
-	HWND hWindow = (HWND)ConfigUtil::GetInstance().GetPointer("NATIVE_WINDOW", NULL);
-	if (!hWindow) return false;
-
 	HDC hDisplay = GetDC(NULL);
 	if (!hDisplay) return false;
 
@@ -109,7 +107,7 @@ bool SurfaceView_Win32_Ogl_Impl::InitializeEGL()
 	EGLConfig eglConfigs[1] = {NULL};
 	eglChooseConfig(m_EGLDisplay, s_EGLAttributes, eglConfigs, 1, &numEGLConfigs);
 
-	m_EGLSurface = eglCreateWindowSurface(m_EGLDisplay, eglConfigs[0], (EGLNativeWindowType)hWindow, NULL);
+	m_EGLSurface = eglCreateWindowSurface(m_EGLDisplay, eglConfigs[0], (EGLNativeWindowType)m_hWindow, NULL);
 	if (m_EGLSurface == EGL_NO_SURFACE) return false;
 
 	m_EGLContext = eglCreateContext(m_EGLDisplay, eglConfigs[0], EGL_NO_CONTEXT, s_EGLContextAttributes);
@@ -141,4 +139,9 @@ void SurfaceView_Win32_Ogl_Impl::TerminateEGL()
 bool SurfaceView_Win32_Ogl_Impl::IsEGLInitialized()
 {
 	return (m_EGLDisplay != NULL);
+}
+
+HWND SurfaceView_Win32_Ogl_Impl::GetWindow() const
+{
+	return m_hWindow;
 }

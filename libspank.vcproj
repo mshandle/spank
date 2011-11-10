@@ -709,6 +709,18 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="osui"
+			>
+			<File
+				RelativePath=".\source\platforms\win32\osui\OSUISystem_Win32_Impl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\source\platforms\win32\osui\OSUISystem_Win32_Impl.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\source\Core_Impl.cpp"
 			>

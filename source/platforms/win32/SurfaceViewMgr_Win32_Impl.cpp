@@ -6,6 +6,7 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "SurfaceViewMgr_Win32_Impl.h"
+#include <util/ConfigUtil.h>
 #include "SurfaceView_Win32_Gdi_Impl.h"
 #include "SurfaceView_Win32_Ogl_Impl.h"
 
@@ -38,12 +39,18 @@ void SurfaceViewMgr_Win32_Impl::Terminate()
 
 ISurfaceView* SurfaceViewMgr_Win32_Impl::CreateSurfaceViewNormal()
 {
+	HWND hWindow = (HWND)ConfigUtil::GetInstance().GetPointer("NATIVE_WINDOW", NULL);
+	if (!hWindow) return NULL;
+
 	// TODO: reference the view
-	return new SurfaceView_Win32_Gdi_Impl();
+	return new SurfaceView_Win32_Gdi_Impl(hWindow);
 }
 
 ISurfaceView* SurfaceViewMgr_Win32_Impl::CreateSurfaceViewOpenGL()
 {
+	HWND hWindow = (HWND)ConfigUtil::GetInstance().GetPointer("NATIVE_WINDOW", NULL);
+	if (!hWindow) return NULL;
+
 	// TODO: reference the view
-	return new SurfaceView_Win32_Ogl_Impl();
+	return new SurfaceView_Win32_Ogl_Impl(hWindow);
 }

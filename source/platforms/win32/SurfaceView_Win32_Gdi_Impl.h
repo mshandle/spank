@@ -9,13 +9,14 @@
 #define __SURFACEVIEW_WIN32_GDI_IMPL_H__
 
 #include <ISurfaceView.h>
+#include <windows.h>
 
 class SurfaceView_Win32_Gdi_Impl : public ISurfaceView
 {
 public:
 	DECLARE_RTTI(SurfaceView_Win32_Gdi_Impl, ISurfaceView);
 
-	SurfaceView_Win32_Gdi_Impl();
+	SurfaceView_Win32_Gdi_Impl(HWND hWindow);
 	virtual ~SurfaceView_Win32_Gdi_Impl();
 
 	virtual bool ActiveView();
@@ -23,6 +24,11 @@ public:
 
 	virtual void BeginRender();
 	virtual void EndRender();
+
+	HWND GetWindow() const;
+
+private:
+	HWND m_hWindow;
 
 };
 #endif // __SURFACEVIEW_WIN32_GDI_IMPL_H__

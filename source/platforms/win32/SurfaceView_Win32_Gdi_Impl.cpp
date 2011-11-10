@@ -12,8 +12,9 @@
 #include <InputMgr.h>
 #include <math/IMath.h>
 
-SurfaceView_Win32_Gdi_Impl::SurfaceView_Win32_Gdi_Impl()
+SurfaceView_Win32_Gdi_Impl::SurfaceView_Win32_Gdi_Impl(HWND hWindow)
 {
+	m_hWindow = hWindow;
 	m_bOK = true;
 }
 
@@ -40,4 +41,9 @@ void SurfaceView_Win32_Gdi_Impl::BeginRender()
 void SurfaceView_Win32_Gdi_Impl::EndRender()
 {
 	// TODO: 
+}
+
+HWND SurfaceView_Win32_Gdi_Impl::GetWindow() const
+{
+	return m_hWindow;
 }

@@ -6,10 +6,11 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "NormalView.h"
+#include <osui/IOSUISystem.h>
 
 NormalView::NormalView()
 {
-	// TODO: 
+	m_pButton = NULL;
 }
 
 NormalView::~NormalView()
@@ -19,12 +20,16 @@ NormalView::~NormalView()
 
 bool NormalView::Initialize()
 {
+	m_pButton = IOSUISystem::GetInstance().CreateButton(GetSurfaceView(), 100, 100, 100, 30);
+	if (!m_pButton) return false;
+
 	return true;
 }
 
 void NormalView::Terminate()
 {
-	// TODO: 
+	IOSUISystem::GetInstance().DestroyButton(m_pButton);
+	m_pButton = NULL;
 }
 
 void NormalView::Update(float dt)

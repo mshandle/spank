@@ -23,5 +23,8 @@ public:
 
 	virtual void Update(float dt);
 
+private:
+	void* m_pButton;
+
 };
 #endif // __NORMALVIEW_H__

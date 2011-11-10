@@ -9,6 +9,7 @@
 #define __SURFACEVIEW_WIN32_OGL_IMPL_H__
 
 #include <ISurfaceView.h>
+#include <windows.h>
 #include <EGL/egl.h>
 
 class SurfaceView_Win32_Ogl_Impl : public ISurfaceView
@@ -16,7 +17,7 @@ class SurfaceView_Win32_Ogl_Impl : public ISurfaceView
 public:
 	DECLARE_RTTI(SurfaceView_Win32_Ogl_Impl, ISurfaceView);
 
-	SurfaceView_Win32_Ogl_Impl();
+	SurfaceView_Win32_Ogl_Impl(HWND hWindow);
 	virtual ~SurfaceView_Win32_Ogl_Impl();
 
 	virtual bool ActiveView();
@@ -24,6 +25,8 @@ public:
 
 	virtual void BeginRender();
 	virtual void EndRender();
+
+	HWND GetWindow() const;
 
 private:
 	bool InitializeEGL();
@@ -34,6 +37,7 @@ private:
 	EGLDisplay m_EGLDisplay;
 	EGLSurface m_EGLSurface;
 	EGLContext m_EGLContext;
+	HWND m_hWindow;
 
 };
 #endif // __SURFACEVIEW_WIN32_OGL_IMPL_H__

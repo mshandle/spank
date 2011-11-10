@@ -28,6 +28,8 @@ public:
 
 	virtual void Update(float dt) = 0;
 
+	ISurfaceView* GetSurfaceView() const;
+
 protected:
 	void SetSurfaceView(ISurfaceView* pSurfaceView);
 

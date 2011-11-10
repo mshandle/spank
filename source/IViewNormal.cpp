@@ -46,3 +46,8 @@ bool IViewNormal::OnDettachWindow()
 	m_pSurfaceView->DeactiveView();
 	return true;
 }
+
+ISurfaceView* IViewNormal::GetSurfaceView() const
+{
+	return m_pSurfaceView;
+}
