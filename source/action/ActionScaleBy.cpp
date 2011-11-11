@@ -39,8 +39,8 @@ void ActionScaleBy::Update(float dt)
 		return;
 	}
 
-	float alpha = m_fCurrTime / m_fTime;
-	//TODO:
+//	float alpha = m_fCurrTime / m_fTime;
+//	//TODO:
 }
 
 IActionBase* ActionScaleBy::Clone()

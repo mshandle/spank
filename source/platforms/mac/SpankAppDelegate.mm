@@ -1,21 +1,80 @@
 /*!
- * \file OpenGLAppDelegate.cpp
+ * \file SpankAppDelegate.cpp
  * \date 7-20-2011 10:58:15
  * 
  * 
  * \author zjhlogo (zjhlogo@gmail.com)
  */
-#import "OpenGLAppDelegate.h"
-#include <util/ConfigUtil.h>
-#include <util/ScreenUtil.h>
+#import "SpankAppDelegate.h"
+#import "ViewOpenGL.h"
+#import "ViewNormal.h"
+#import <util/ConfigUtil.h>
+#import <util/ScreenUtil.h>
+#import <ICore.h>
 
-@implementation OpenGLAppDelegate
+SpankAppDelegate* g_pInstance = NULL;
 
-@synthesize glView;
-@synthesize glWindow;
+@implementation SpankAppDelegate
+
+@synthesize window;
+
++ (SpankAppDelegate*)GetInstance
+{
+	return g_pInstance;
+}
+
+- (int)createNormalView
+{
+	CGRect screenBounds = [[UIScreen mainScreen] bounds];
+	pViewArray[nextViewIndex] = [[[ViewNormal alloc] initWithFrame:screenBounds] autorelease];
+	return nextViewIndex++;
+}
+
+- (int)createOpenGLView
+{
+	CGRect screenBounds = [[UIScreen mainScreen] bounds];
+	pViewArray[nextViewIndex] = [[[ViewOpenGL alloc] initWithFrame:screenBounds] autorelease];
+	return nextViewIndex++;
+}
+
+- (void)destroyView:(int)viewId
+{
+	// TODO: 
+}
+
+- (BOOL)attachView:(int)viewId
+{
+	UIView* view = pViewArray[viewId];
+	
+	[self.window addSubview:view];
+	if ([view isKindOfClass:[ViewOpenGL class]] == TRUE)
+	{
+		ViewOpenGL* openglView = (ViewOpenGL*)view;
+		[openglView startLoop];
+	}
+	
+	return TRUE;
+}
+
+- (void)dettachView:(int)viewId
+{
+	UIView* view = pViewArray[viewId];
+
+	if ([view isKindOfClass:[ViewOpenGL class]] == TRUE)
+	{
+		ViewOpenGL* openglView = (ViewOpenGL*)view;
+		[openglView stopLoop];
+	}
+	
+	[view removeFromSuperview];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+	g_pInstance = self;
+	memset(pViewArray, 0, sizeof(pViewArray));
+	nextViewIndex = 1;
+
 	[[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight];
 	ConfigUtil::GetInstance().AddInt("SCREEN_ROTATION", ScreenUtil::SR_P90);
 	
@@ -24,16 +83,19 @@
 	const char* pszRootPath = [rootPath cStringUsingEncoding: [NSString defaultCStringEncoding]];
 	ConfigUtil::GetInstance().AddString("RESOURCE_DIR", pszRootPath);
 
-    // Override point for customization after application launch.
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+	// Override point for customization after application launch.
+	CGRect screenBounds = [[UIScreen mainScreen] bounds];
 	ConfigUtil::GetInstance().AddInt("SURFACE_WIDTH", screenBounds.size.width);
 	ConfigUtil::GetInstance().AddInt("SURFACE_HEIGHT", screenBounds.size.height);
 	
-    self.glView = [[[OpenGLView alloc] initWithFrame:screenBounds] autorelease];
-	
-    [self.glWindow addSubview: self.glView];
-    [self.glWindow makeKeyAndVisible];
-    return YES;
+	// create window
+	self.window = [[[UIWindow alloc] initWithFrame:screenBounds] autorelease];
+
+	// initialize
+	if (!ICore::GetInstance().Initialize()) return FALSE;
+
+	[self.window makeKeyAndVisible];
+    return TRUE;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -73,12 +135,11 @@
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
+	ICore::GetInstance().Terminate();
 }
 
 - (void)dealloc
 {
-    [glView release];
-    [glWindow release];
     [super dealloc];
 }
 

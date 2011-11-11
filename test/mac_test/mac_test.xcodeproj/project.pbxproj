@@ -54,13 +54,13 @@
 		CE7B2BAB1429AD02000A09CD /* Image.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE7B2BAA1429AD02000A09CD /* Image.mm */; };
 		CE7F646913F8D3C100301751 /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE7F646713F8D3C100301751 /* Sprite.cpp */; };
 		CE7F647413F8D3ED00301751 /* StringUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE7F647313F8D3ED00301751 /* StringUtil.cpp */; };
+		CE866FD8146CBB56003C90C4 /* SpankAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE866FD7146CBB56003C90C4 /* SpankAppDelegate.mm */; };
 		CE86B2DE140489DC00BA033E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE86B2DD140489DC00BA033E /* libz.dylib */; };
 		CE87F77813F0BFD50012B2CD /* Matrix2x2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE87F77613F0BFD50012B2CD /* Matrix2x2.cpp */; };
 		CE87F77913F0BFD50012B2CD /* Vector2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE87F77713F0BFD50012B2CD /* Vector2.cpp */; };
 		CE89542A13EA939100A83D7D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE89542913EA939100A83D7D /* CoreGraphics.framework */; };
 		CE9173C313F520E1005B82E3 /* VertexAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9173C213F520E1005B82E3 /* VertexAttribute.cpp */; };
 		CE9173C813F520F5005B82E3 /* Mutex_Mac_Impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9173C413F520F5005B82E3 /* Mutex_Mac_Impl.cpp */; };
-		CE9173C913F520F5005B82E3 /* RenderDevice_Mac_Impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9173C613F520F5005B82E3 /* RenderDevice_Mac_Impl.cpp */; };
 		CE9173CE13F5210E005B82E3 /* DebugUtil_Mac_Impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9173CA13F5210E005B82E3 /* DebugUtil_Mac_Impl.cpp */; };
 		CE9173CF13F5210E005B82E3 /* FileUtil_Mac_Impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9173CC13F5210E005B82E3 /* FileUtil_Mac_Impl.cpp */; };
 		CE93C00414218D3000BE6121 /* ActionTestCase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE93BFF414218D3000BE6121 /* ActionTestCase.cpp */; };
@@ -128,6 +128,20 @@
 		CE93C15B1421B6FC00BE6121 /* MsgSlider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE93C1571421B6FC00BE6121 /* MsgSlider.cpp */; };
 		CE9B293B13E9372C00AF7A03 /* GameApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9B293913E9372C00AF7A03 /* GameApp.cpp */; };
 		CE9B2AD113E93EF300AF7A03 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9B2ACA13E93EF300AF7A03 /* main.m */; };
+		CE9D0F28146B7B78009250A8 /* IViewNormal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0F25146B7B78009250A8 /* IViewNormal.cpp */; };
+		CE9D0F29146B7B78009250A8 /* IViewOpenGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0F26146B7B78009250A8 /* IViewOpenGL.cpp */; };
+		CE9D0F2A146B7B78009250A8 /* Tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0F27146B7B78009250A8 /* Tile.cpp */; };
+		CE9D0F2F146B7BC7009250A8 /* MsgKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0F2E146B7BC7009250A8 /* MsgKey.cpp */; };
+		CE9D0F37146B7C1D009250A8 /* NormalView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0F33146B7C1D009250A8 /* NormalView.cpp */; };
+		CE9D0F38146B7C1D009250A8 /* OpenGLView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0F35146B7C1D009250A8 /* OpenGLView.cpp */; };
+		CE9D0F4C146B7CBF009250A8 /* OSUISystem_Mac_Impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0F4B146B7CBF009250A8 /* OSUISystem_Mac_Impl.cpp */; };
+		CE9D0F65146B7F7D009250A8 /* SurfaceViewMgr_Mac_Impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0F64146B7F7D009250A8 /* SurfaceViewMgr_Mac_Impl.cpp */; };
+		CE9D0F96146B82B2009250A8 /* Gray_shader.fs in Resources */ = {isa = PBXBuildFile; fileRef = CE9D0F94146B82B2009250A8 /* Gray_shader.fs */; };
+		CE9D0F97146B82B2009250A8 /* Gray_shader.xml in Resources */ = {isa = PBXBuildFile; fileRef = CE9D0F95146B82B2009250A8 /* Gray_shader.xml */; };
+		CE9D0FC8146BA9EA009250A8 /* SurfaceView_Mac_Ogl_Impl.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0FC7146BA9EA009250A8 /* SurfaceView_Mac_Ogl_Impl.mm */; };
+		CE9D0FCB146BAA12009250A8 /* SurfaceView_Mac_Normal_Impl.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0FCA146BAA12009250A8 /* SurfaceView_Mac_Normal_Impl.mm */; };
+		CE9D0FD0146BACFB009250A8 /* ViewNormal.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0FCD146BACFB009250A8 /* ViewNormal.mm */; };
+		CE9D0FD1146BACFB009250A8 /* ViewOpenGL.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0FCF146BACFB009250A8 /* ViewOpenGL.mm */; };
 		CEA9F486142B2E3700A564F6 /* 40px_arial_black_0.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA9F470142B2E3700A564F6 /* 40px_arial_black_0.png */; };
 		CEA9F487142B2E3700A564F6 /* 40px_arial_black.fnt in Resources */ = {isa = PBXBuildFile; fileRef = CEA9F471142B2E3700A564F6 /* 40px_arial_black.fnt */; };
 		CEA9F488142B2E3700A564F6 /* background_1024_v2.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA9F472142B2E3700A564F6 /* background_1024_v2.png */; };
@@ -150,8 +164,6 @@
 		CEA9F499142B2E3700A564F6 /* ui_default_frame.xml in Resources */ = {isa = PBXBuildFile; fileRef = CEA9F483142B2E3700A564F6 /* ui_default_frame.xml */; };
 		CEA9F49A142B2E3700A564F6 /* ui_default.xml in Resources */ = {isa = PBXBuildFile; fileRef = CEA9F484142B2E3700A564F6 /* ui_default.xml */; };
 		CEA9F49B142B2E3700A564F6 /* ui.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA9F485142B2E3700A564F6 /* ui.png */; };
-		CEA9F4C1142B2FE800A564F6 /* mac_test-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEA9F4BF142B2FE800A564F6 /* mac_test-Info.plist */; };
-		CEA9F4C2142B2FE800A564F6 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEA9F4C0142B2FE800A564F6 /* MainWindow.xib */; };
 		CED1C18113EF711C00C21EC9 /* tinystr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED1C17B13EF711C00C21EC9 /* tinystr.cpp */; };
 		CED1C18213EF711C00C21EC9 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED1C17D13EF711C00C21EC9 /* tinyxml.cpp */; };
 		CED1C18313EF711C00C21EC9 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED1C17F13EF711C00C21EC9 /* tinyxmlerror.cpp */; };
@@ -164,8 +176,6 @@
 		CED5EF3C13F36258006137BE /* StreamReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED5EF3813F36258006137BE /* StreamReader.cpp */; };
 		CED5EF3D13F36258006137BE /* StreamWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED5EF3913F36258006137BE /* StreamWriter.cpp */; };
 		CED5EFFD13F393F9006137BE /* ScreenUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED5EFFC13F393F9006137BE /* ScreenUtil.cpp */; };
-		CEDB10A813EBF7AA00CFA7E3 /* OpenGLAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEDB10A513EBF7AA00CFA7E3 /* OpenGLAppDelegate.mm */; };
-		CEDB10A913EBF7AA00CFA7E3 /* OpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEDB10A713EBF7AA00CFA7E3 /* OpenGLView.mm */; };
 		CEDF5D7C13EC04B300A15B8D /* IMath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEDF5D3713EC04B300A15B8D /* IMath.cpp */; };
 		CEDF5D7D13EC04B300A15B8D /* Matrix3x3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEDF5D3813EC04B300A15B8D /* Matrix3x3.cpp */; };
 		CEDF5D7E13EC04B300A15B8D /* Matrix4x4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEDF5D3913EC04B300A15B8D /* Matrix4x4.cpp */; };
@@ -269,6 +279,10 @@
 		CE7F646713F8D3C100301751 /* Sprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sprite.cpp; path = ../../source/Sprite.cpp; sourceTree = SOURCE_ROOT; };
 		CE7F647313F8D3ED00301751 /* StringUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringUtil.cpp; sourceTree = "<group>"; };
 		CE7F647513F8D3FC00301751 /* StringUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StringUtil.h; path = ../../include/util/StringUtil.h; sourceTree = SOURCE_ROOT; };
+		CE866FD6146CBB56003C90C4 /* SpankAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpankAppDelegate.h; path = ../../source/platforms/mac/SpankAppDelegate.h; sourceTree = SOURCE_ROOT; };
+		CE866FD7146CBB56003C90C4 /* SpankAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SpankAppDelegate.mm; path = ../../source/platforms/mac/SpankAppDelegate.mm; sourceTree = SOURCE_ROOT; };
+		CE867052146CCB19003C90C4 /* IViewNormal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IViewNormal.h; path = ../../include/IViewNormal.h; sourceTree = SOURCE_ROOT; };
+		CE867053146CCB19003C90C4 /* IViewOpenGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IViewOpenGL.h; path = ../../include/IViewOpenGL.h; sourceTree = SOURCE_ROOT; };
 		CE86B2DD140489DC00BA033E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		CE87F77613F0BFD50012B2CD /* Matrix2x2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix2x2.cpp; sourceTree = "<group>"; };
 		CE87F77713F0BFD50012B2CD /* Vector2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector2.cpp; sourceTree = "<group>"; };
@@ -284,8 +298,6 @@
 		CE9173C213F520E1005B82E3 /* VertexAttribute.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VertexAttribute.cpp; path = ../../source/VertexAttribute.cpp; sourceTree = SOURCE_ROOT; };
 		CE9173C413F520F5005B82E3 /* Mutex_Mac_Impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Mutex_Mac_Impl.cpp; path = ../../source/platforms/mac/Mutex_Mac_Impl.cpp; sourceTree = SOURCE_ROOT; };
 		CE9173C513F520F5005B82E3 /* Mutex_Mac_Impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mutex_Mac_Impl.h; path = ../../source/platforms/mac/Mutex_Mac_Impl.h; sourceTree = SOURCE_ROOT; };
-		CE9173C613F520F5005B82E3 /* RenderDevice_Mac_Impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderDevice_Mac_Impl.cpp; path = ../../source/platforms/mac/RenderDevice_Mac_Impl.cpp; sourceTree = SOURCE_ROOT; };
-		CE9173C713F520F5005B82E3 /* RenderDevice_Mac_Impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderDevice_Mac_Impl.h; path = ../../source/platforms/mac/RenderDevice_Mac_Impl.h; sourceTree = SOURCE_ROOT; };
 		CE9173CA13F5210E005B82E3 /* DebugUtil_Mac_Impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DebugUtil_Mac_Impl.cpp; path = ../../source/platforms/mac/util/DebugUtil_Mac_Impl.cpp; sourceTree = SOURCE_ROOT; };
 		CE9173CB13F5210E005B82E3 /* DebugUtil_Mac_Impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DebugUtil_Mac_Impl.h; path = ../../source/platforms/mac/util/DebugUtil_Mac_Impl.h; sourceTree = SOURCE_ROOT; };
 		CE9173CC13F5210E005B82E3 /* FileUtil_Mac_Impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FileUtil_Mac_Impl.cpp; path = ../../source/platforms/mac/util/FileUtil_Mac_Impl.cpp; sourceTree = SOURCE_ROOT; };
@@ -420,6 +432,30 @@
 		CE9B293913E9372C00AF7A03 /* GameApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameApp.cpp; path = ../source/GameApp.cpp; sourceTree = SOURCE_ROOT; };
 		CE9B293A13E9372C00AF7A03 /* GameApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameApp.h; path = ../source/GameApp.h; sourceTree = SOURCE_ROOT; };
 		CE9B2ACA13E93EF300AF7A03 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		CE9D0F25146B7B78009250A8 /* IViewNormal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IViewNormal.cpp; path = ../../source/IViewNormal.cpp; sourceTree = SOURCE_ROOT; };
+		CE9D0F26146B7B78009250A8 /* IViewOpenGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IViewOpenGL.cpp; path = ../../source/IViewOpenGL.cpp; sourceTree = SOURCE_ROOT; };
+		CE9D0F27146B7B78009250A8 /* Tile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Tile.cpp; path = ../../source/Tile.cpp; sourceTree = SOURCE_ROOT; };
+		CE9D0F2B146B7BA3009250A8 /* Tile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tile.h; path = ../../include/Tile.h; sourceTree = SOURCE_ROOT; };
+		CE9D0F2E146B7BC7009250A8 /* MsgKey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MsgKey.cpp; sourceTree = "<group>"; };
+		CE9D0F30146B7BD8009250A8 /* MsgKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MsgKey.h; path = ../../include/msg/MsgKey.h; sourceTree = SOURCE_ROOT; };
+		CE9D0F33146B7C1D009250A8 /* NormalView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NormalView.cpp; path = ../source/NormalView.cpp; sourceTree = SOURCE_ROOT; };
+		CE9D0F34146B7C1D009250A8 /* NormalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NormalView.h; path = ../source/NormalView.h; sourceTree = SOURCE_ROOT; };
+		CE9D0F35146B7C1D009250A8 /* OpenGLView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OpenGLView.cpp; path = ../source/OpenGLView.cpp; sourceTree = SOURCE_ROOT; };
+		CE9D0F36146B7C1D009250A8 /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLView.h; path = ../source/OpenGLView.h; sourceTree = SOURCE_ROOT; };
+		CE9D0F4A146B7CBF009250A8 /* OSUISystem_Mac_Impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSUISystem_Mac_Impl.h; path = ../../source/platforms/mac/osui/OSUISystem_Mac_Impl.h; sourceTree = SOURCE_ROOT; };
+		CE9D0F4B146B7CBF009250A8 /* OSUISystem_Mac_Impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OSUISystem_Mac_Impl.cpp; path = ../../source/platforms/mac/osui/OSUISystem_Mac_Impl.cpp; sourceTree = SOURCE_ROOT; };
+		CE9D0F63146B7F7D009250A8 /* SurfaceViewMgr_Mac_Impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurfaceViewMgr_Mac_Impl.h; path = ../../source/platforms/mac/SurfaceViewMgr_Mac_Impl.h; sourceTree = SOURCE_ROOT; };
+		CE9D0F64146B7F7D009250A8 /* SurfaceViewMgr_Mac_Impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SurfaceViewMgr_Mac_Impl.cpp; path = ../../source/platforms/mac/SurfaceViewMgr_Mac_Impl.cpp; sourceTree = SOURCE_ROOT; };
+		CE9D0F94146B82B2009250A8 /* Gray_shader.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Gray_shader.fs; path = ../resources/Gray_shader.fs; sourceTree = SOURCE_ROOT; };
+		CE9D0F95146B82B2009250A8 /* Gray_shader.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Gray_shader.xml; path = ../resources/Gray_shader.xml; sourceTree = SOURCE_ROOT; };
+		CE9D0FC6146BA9EA009250A8 /* SurfaceView_Mac_Ogl_Impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurfaceView_Mac_Ogl_Impl.h; path = ../../source/platforms/mac/SurfaceView_Mac_Ogl_Impl.h; sourceTree = SOURCE_ROOT; };
+		CE9D0FC7146BA9EA009250A8 /* SurfaceView_Mac_Ogl_Impl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SurfaceView_Mac_Ogl_Impl.mm; path = ../../source/platforms/mac/SurfaceView_Mac_Ogl_Impl.mm; sourceTree = SOURCE_ROOT; };
+		CE9D0FC9146BAA12009250A8 /* SurfaceView_Mac_Normal_Impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurfaceView_Mac_Normal_Impl.h; path = ../../source/platforms/mac/SurfaceView_Mac_Normal_Impl.h; sourceTree = SOURCE_ROOT; };
+		CE9D0FCA146BAA12009250A8 /* SurfaceView_Mac_Normal_Impl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SurfaceView_Mac_Normal_Impl.mm; path = ../../source/platforms/mac/SurfaceView_Mac_Normal_Impl.mm; sourceTree = SOURCE_ROOT; };
+		CE9D0FCC146BACFB009250A8 /* ViewNormal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewNormal.h; path = ../../source/platforms/mac/ViewNormal.h; sourceTree = SOURCE_ROOT; };
+		CE9D0FCD146BACFB009250A8 /* ViewNormal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ViewNormal.mm; path = ../../source/platforms/mac/ViewNormal.mm; sourceTree = SOURCE_ROOT; };
+		CE9D0FCE146BACFB009250A8 /* ViewOpenGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewOpenGL.h; path = ../../source/platforms/mac/ViewOpenGL.h; sourceTree = SOURCE_ROOT; };
+		CE9D0FCF146BACFB009250A8 /* ViewOpenGL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ViewOpenGL.mm; path = ../../source/platforms/mac/ViewOpenGL.mm; sourceTree = SOURCE_ROOT; };
 		CEA9F470142B2E3700A564F6 /* 40px_arial_black_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 40px_arial_black_0.png; path = ../resources/40px_arial_black_0.png; sourceTree = SOURCE_ROOT; };
 		CEA9F471142B2E3700A564F6 /* 40px_arial_black.fnt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = 40px_arial_black.fnt; path = ../resources/40px_arial_black.fnt; sourceTree = SOURCE_ROOT; };
 		CEA9F472142B2E3700A564F6 /* background_1024_v2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background_1024_v2.png; path = ../resources/background_1024_v2.png; sourceTree = SOURCE_ROOT; };
@@ -442,8 +478,6 @@
 		CEA9F483142B2E3700A564F6 /* ui_default_frame.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = ui_default_frame.xml; path = ../resources/ui_default_frame.xml; sourceTree = SOURCE_ROOT; };
 		CEA9F484142B2E3700A564F6 /* ui_default.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = ui_default.xml; path = ../resources/ui_default.xml; sourceTree = SOURCE_ROOT; };
 		CEA9F485142B2E3700A564F6 /* ui.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ui.png; path = ../resources/ui.png; sourceTree = SOURCE_ROOT; };
-		CEA9F4BF142B2FE800A564F6 /* mac_test-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "mac_test-Info.plist"; sourceTree = "<group>"; };
-		CEA9F4C0142B2FE800A564F6 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		CED1C17B13EF711C00C21EC9 /* tinystr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinystr.cpp; path = "../../vendor/tinyxml-2.6.2/tinystr.cpp"; sourceTree = SOURCE_ROOT; };
 		CED1C17C13EF711C00C21EC9 /* tinystr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tinystr.h; path = "../../vendor/tinyxml-2.6.2/tinystr.h"; sourceTree = SOURCE_ROOT; };
 		CED1C17D13EF711C00C21EC9 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxml.cpp; path = "../../vendor/tinyxml-2.6.2/tinyxml.cpp"; sourceTree = SOURCE_ROOT; };
@@ -464,10 +498,6 @@
 		CED5EF4113F3626F006137BE /* StreamWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StreamWriter.h; path = ../../include/StreamWriter.h; sourceTree = SOURCE_ROOT; };
 		CED5EFFC13F393F9006137BE /* ScreenUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScreenUtil.cpp; sourceTree = "<group>"; };
 		CED5EFFE13F3940D006137BE /* ScreenUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScreenUtil.h; path = ../../include/util/ScreenUtil.h; sourceTree = SOURCE_ROOT; };
-		CEDB10A413EBF7AA00CFA7E3 /* OpenGLAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLAppDelegate.h; sourceTree = "<group>"; };
-		CEDB10A513EBF7AA00CFA7E3 /* OpenGLAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenGLAppDelegate.mm; sourceTree = "<group>"; };
-		CEDB10A613EBF7AA00CFA7E3 /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLView.h; sourceTree = "<group>"; };
-		CEDB10A713EBF7AA00CFA7E3 /* OpenGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenGLView.mm; sourceTree = "<group>"; };
 		CEDF5D3513EC04B300A15B8D /* Core_Impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Core_Impl.h; path = ../../source/Core_Impl.h; sourceTree = SOURCE_ROOT; };
 		CEDF5D3713EC04B300A15B8D /* IMath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IMath.cpp; sourceTree = "<group>"; };
 		CEDF5D3813EC04B300A15B8D /* Matrix3x3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix3x3.cpp; sourceTree = "<group>"; };
@@ -507,28 +537,32 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				CE9B2AC913E93ED400AF7A03 /* mac_impl */,
 				CE93BFF414218D3000BE6121 /* ActionTestCase.cpp */,
-				CE93BFF614218D3000BE6121 /* Box2DTestCase.cpp */,
-				CE7B2B751429ABC2000A09CD /* ClipRectTestCase.cpp */,
-				CE9B293913E9372C00AF7A03 /* GameApp.cpp */,
-				CE93BFF814218D3000BE6121 /* MapTestCase.cpp */,
-				CE93BFFA14218D3000BE6121 /* ParticleTestCase.cpp */,
-				CE7B2B771429ABC2000A09CD /* PorkerTestCase.cpp */,
-				CE93BFFD14218D3000BE6121 /* SpriteTestCase.cpp */,
-				CE93BFFF14218D3000BE6121 /* TestCase.cpp */,
-				CE7B2B791429ABC2000A09CD /* TweenTestCase.cpp */,
-				CE93C00114218D3000BE6121 /* UITestCase.cpp */,
 				CE93BFF514218D3000BE6121 /* ActionTestCase.h */,
+				CE93BFF614218D3000BE6121 /* Box2DTestCase.cpp */,
 				CE93BFF714218D3000BE6121 /* Box2DTestCase.h */,
+				CE7B2B751429ABC2000A09CD /* ClipRectTestCase.cpp */,
 				CE7B2B761429ABC2000A09CD /* ClipRectTestCase.h */,
+				CE9B293913E9372C00AF7A03 /* GameApp.cpp */,
 				CE9B293A13E9372C00AF7A03 /* GameApp.h */,
+				CE9B2ACA13E93EF300AF7A03 /* main.m */,
+				CE93BFF814218D3000BE6121 /* MapTestCase.cpp */,
 				CE93BFF914218D3000BE6121 /* MapTestCase.h */,
+				CE9D0F33146B7C1D009250A8 /* NormalView.cpp */,
+				CE9D0F34146B7C1D009250A8 /* NormalView.h */,
+				CE9D0F35146B7C1D009250A8 /* OpenGLView.cpp */,
+				CE9D0F36146B7C1D009250A8 /* OpenGLView.h */,
+				CE93BFFA14218D3000BE6121 /* ParticleTestCase.cpp */,
 				CE93BFFB14218D3000BE6121 /* ParticleTestCase.h */,
+				CE7B2B771429ABC2000A09CD /* PorkerTestCase.cpp */,
 				CE7B2B781429ABC2000A09CD /* PorkerTestCase.h */,
+				CE93BFFD14218D3000BE6121 /* SpriteTestCase.cpp */,
 				CE93BFFE14218D3000BE6121 /* SpriteTestCase.h */,
+				CE93BFFF14218D3000BE6121 /* TestCase.cpp */,
 				CE93C00014218D3000BE6121 /* TestCase.h */,
+				CE7B2B791429ABC2000A09CD /* TweenTestCase.cpp */,
 				CE7B2B7A1429ABC2000A09CD /* TweenTestCase.h */,
+				CE93C00114218D3000BE6121 /* UITestCase.cpp */,
 				CE93C00214218D3000BE6121 /* UITestCase.h */,
 				CE93C00314218D3000BE6121 /* UserMsgID.h */,
 			);
@@ -560,30 +594,30 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				CEA9F4BF142B2FE800A564F6 /* mac_test-Info.plist */,
-				CEA9F4C0142B2FE800A564F6 /* MainWindow.xib */,
-				CEA9F470142B2E3700A564F6 /* 40px_arial_black_0.png */,
 				CEA9F471142B2E3700A564F6 /* 40px_arial_black.fnt */,
-				CEA9F472142B2E3700A564F6 /* background_1024_v2.png */,
 				CEA9F473142B2E3700A564F6 /* default_shader.fs */,
-				CEA9F474142B2E3700A564F6 /* default_shader.vs */,
-				CEA9F475142B2E3700A564F6 /* default_shader.xml */,
-				CEA9F476142B2E3700A564F6 /* isometric_tileset.png */,
-				CEA9F477142B2E3700A564F6 /* level.l2d */,
+				CE9D0F94146B82B2009250A8 /* Gray_shader.fs */,
 				CEA9F478142B2E3700A564F6 /* line_shader.fs */,
-				CEA9F479142B2E3700A564F6 /* line_shader.vs */,
-				CEA9F47A142B2E3700A564F6 /* line_shader.xml */,
+				CEA9F481142B2E3700A564F6 /* trans_shader.fs */,
+				CEA9F477142B2E3700A564F6 /* level.l2d */,
+				CEA9F470142B2E3700A564F6 /* 40px_arial_black_0.png */,
+				CEA9F472142B2E3700A564F6 /* background_1024_v2.png */,
+				CEA9F476142B2E3700A564F6 /* isometric_tileset.png */,
 				CEA9F47B142B2E3700A564F6 /* newcomponent.png */,
+				CEA9F47E142B2E3700A564F6 /* test_case.png */,
+				CEA9F485142B2E3700A564F6 /* ui.png */,
+				CEA9F474142B2E3700A564F6 /* default_shader.vs */,
+				CEA9F479142B2E3700A564F6 /* line_shader.vs */,
+				CEA9F475142B2E3700A564F6 /* default_shader.xml */,
+				CE9D0F95146B82B2009250A8 /* Gray_shader.xml */,
+				CEA9F47A142B2E3700A564F6 /* line_shader.xml */,
 				CEA9F47C142B2E3700A564F6 /* Porker.xml */,
 				CEA9F47D142B2E3700A564F6 /* test_ball.xml */,
-				CEA9F47E142B2E3700A564F6 /* test_case.png */,
 				CEA9F47F142B2E3700A564F6 /* test_case.xml */,
 				CEA9F480142B2E3700A564F6 /* test_sprite.xml */,
-				CEA9F481142B2E3700A564F6 /* trans_shader.fs */,
 				CEA9F482142B2E3700A564F6 /* trans_shader.xml */,
-				CEA9F483142B2E3700A564F6 /* ui_default_frame.xml */,
 				CEA9F484142B2E3700A564F6 /* ui_default.xml */,
-				CEA9F485142B2E3700A564F6 /* ui.png */,
+				CEA9F483142B2E3700A564F6 /* ui_default_frame.xml */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -658,6 +692,8 @@
 		CE35882313FDF9B400F071CB /* msg */ = {
 			isa = PBXGroup;
 			children = (
+				CE9D0F30146B7BD8009250A8 /* MsgKey.h */,
+				CE9D0F2E146B7BC7009250A8 /* MsgKey.cpp */,
 				CE35882413FDF9B400F071CB /* IMsgBase.cpp */,
 				CE35882513FDF9B400F071CB /* IMsgHandler.cpp */,
 				CE35882613FDF9B400F071CB /* MsgActionUpdate.cpp */,
@@ -889,65 +925,79 @@
 			path = uimsg;
 			sourceTree = "<group>";
 		};
-		CE9B2AC913E93ED400AF7A03 /* mac_impl */ = {
+		CE9D0F3E146B7C3F009250A8 /* osui */ = {
 			isa = PBXGroup;
 			children = (
-				CE9B2ACA13E93EF300AF7A03 /* main.m */,
-				CEDB10A413EBF7AA00CFA7E3 /* OpenGLAppDelegate.h */,
-				CEDB10A513EBF7AA00CFA7E3 /* OpenGLAppDelegate.mm */,
-				CEDB10A613EBF7AA00CFA7E3 /* OpenGLView.h */,
-				CEDB10A713EBF7AA00CFA7E3 /* OpenGLView.mm */,
+				CE9D0F4A146B7CBF009250A8 /* OSUISystem_Mac_Impl.h */,
+				CE9D0F4B146B7CBF009250A8 /* OSUISystem_Mac_Impl.cpp */,
 			);
-			name = mac_impl;
+			name = osui;
 			sourceTree = "<group>";
 		};
 		CEDF5D1E13EC046C00A15B8D /* libspank */ = {
 			isa = PBXGroup;
 			children = (
 				CE35881413FDF9B400F071CB /* action */,
-				CEDF5D3613EC04B300A15B8D /* math */,
-				CE35882313FDF9B400F071CB /* msg */,
-				CE35882A13FDF9B400F071CB /* particle */,
-				CE93C0DF1421901F00BE6121 /* ui */,
-				CEDF5D7613EC04B300A15B8D /* util */,
 				CED1C22413EF74FC00C21EC9 /* Core_Impl.cpp */,
-				CED5EF3713F36258006137BE /* InputMgr.cpp */,
-				CE35882013FDF9B400F071CB /* IObject.cpp */,
-				CE93C00C14218D7F00BE6121 /* IRtti.cpp */,
-				CE35882213FDF9B400F071CB /* Level2D.cpp */,
-				CE9173C413F520F5005B82E3 /* Mutex_Mac_Impl.cpp */,
-				CEDF5D3D13EC04B300A15B8D /* Node_Impl.cpp */,
-				CE9173C613F520F5005B82E3 /* RenderDevice_Mac_Impl.cpp */,
-				CED1C22513EF74FC00C21EC9 /* Renderer2D_Impl.cpp */,
-				CE93C00D14218D7F00BE6121 /* ResourceMgr_Impl.cpp */,
-				CED1C22613EF74FC00C21EC9 /* Shader_Impl.cpp */,
-				CEDF5D6E13EC04B300A15B8D /* ShaderMgr_Impl.cpp */,
-				CE7F646713F8D3C100301751 /* Sprite.cpp */,
-				CED5EF3813F36258006137BE /* StreamReader.cpp */,
-				CED5EF3913F36258006137BE /* StreamWriter.cpp */,
-				CEDF5D7213EC04B300A15B8D /* Texture_Impl.cpp */,
-				CEDF5D7413EC04B300A15B8D /* TextureMgr_Impl.cpp */,
-				CE9173C213F520E1005B82E3 /* VertexAttribute.cpp */,
 				CEDF5D3513EC04B300A15B8D /* Core_Impl.h */,
 				CED5EF3E13F3626F006137BE /* Image.h */,
-				CED5EF3F13F3626F006137BE /* InputMgr.h */,
-				CE35886A13FDFA9300F071CB /* IObject.h */,
-				CE93C01114218D9400BE6121 /* IRtti.h */,
-				CE35886C13FDFA9300F071CB /* Level2D.h */,
-				CE9173C513F520F5005B82E3 /* Mutex_Mac_Impl.h */,
-				CEDF5D3E13EC04B300A15B8D /* Node_Impl.h */,
-				CE9173C713F520F5005B82E3 /* RenderDevice_Mac_Impl.h */,
-				CEDF5D6C13EC04B300A15B8D /* Renderer2D_Impl.h */,
-				CE93C00E14218D7F00BE6121 /* ResourceMgr_Impl.h */,
-				CEDF5D6D13EC04B300A15B8D /* Shader_Impl.h */,
-				CEDF5D6F13EC04B300A15B8D /* ShaderMgr_Impl.h */,
-				CE7F646513F8D3B000301751 /* Sprite.h */,
-				CED5EF4013F3626F006137BE /* StreamReader.h */,
-				CED5EF4113F3626F006137BE /* StreamWriter.h */,
-				CEDF5D7313EC04B300A15B8D /* Texture_Impl.h */,
-				CEDF5D7513EC04B300A15B8D /* TextureMgr_Impl.h */,
-				CE9173D013F52126005B82E3 /* VertexAttribute.h */,
 				CE7B2BAA1429AD02000A09CD /* Image.mm */,
+				CED5EF3713F36258006137BE /* InputMgr.cpp */,
+				CED5EF3F13F3626F006137BE /* InputMgr.h */,
+				CE35882013FDF9B400F071CB /* IObject.cpp */,
+				CE35886A13FDFA9300F071CB /* IObject.h */,
+				CE93C00C14218D7F00BE6121 /* IRtti.cpp */,
+				CE93C01114218D9400BE6121 /* IRtti.h */,
+				CE9D0F25146B7B78009250A8 /* IViewNormal.cpp */,
+				CE867052146CCB19003C90C4 /* IViewNormal.h */,
+				CE9D0F26146B7B78009250A8 /* IViewOpenGL.cpp */,
+				CE867053146CCB19003C90C4 /* IViewOpenGL.h */,
+				CE35882213FDF9B400F071CB /* Level2D.cpp */,
+				CE35886C13FDFA9300F071CB /* Level2D.h */,
+				CEDF5D3613EC04B300A15B8D /* math */,
+				CE35882313FDF9B400F071CB /* msg */,
+				CE9173C413F520F5005B82E3 /* Mutex_Mac_Impl.cpp */,
+				CE9173C513F520F5005B82E3 /* Mutex_Mac_Impl.h */,
+				CEDF5D3D13EC04B300A15B8D /* Node_Impl.cpp */,
+				CEDF5D3E13EC04B300A15B8D /* Node_Impl.h */,
+				CE9D0F3E146B7C3F009250A8 /* osui */,
+				CE35882A13FDF9B400F071CB /* particle */,
+				CED1C22513EF74FC00C21EC9 /* Renderer2D_Impl.cpp */,
+				CEDF5D6C13EC04B300A15B8D /* Renderer2D_Impl.h */,
+				CE93C00D14218D7F00BE6121 /* ResourceMgr_Impl.cpp */,
+				CE93C00E14218D7F00BE6121 /* ResourceMgr_Impl.h */,
+				CED1C22613EF74FC00C21EC9 /* Shader_Impl.cpp */,
+				CEDF5D6D13EC04B300A15B8D /* Shader_Impl.h */,
+				CEDF5D6E13EC04B300A15B8D /* ShaderMgr_Impl.cpp */,
+				CEDF5D6F13EC04B300A15B8D /* ShaderMgr_Impl.h */,
+				CE866FD6146CBB56003C90C4 /* SpankAppDelegate.h */,
+				CE866FD7146CBB56003C90C4 /* SpankAppDelegate.mm */,
+				CE7F646713F8D3C100301751 /* Sprite.cpp */,
+				CE7F646513F8D3B000301751 /* Sprite.h */,
+				CED5EF3813F36258006137BE /* StreamReader.cpp */,
+				CED5EF4013F3626F006137BE /* StreamReader.h */,
+				CED5EF3913F36258006137BE /* StreamWriter.cpp */,
+				CED5EF4113F3626F006137BE /* StreamWriter.h */,
+				CE9D0FC9146BAA12009250A8 /* SurfaceView_Mac_Normal_Impl.h */,
+				CE9D0FCA146BAA12009250A8 /* SurfaceView_Mac_Normal_Impl.mm */,
+				CE9D0FC6146BA9EA009250A8 /* SurfaceView_Mac_Ogl_Impl.h */,
+				CE9D0FC7146BA9EA009250A8 /* SurfaceView_Mac_Ogl_Impl.mm */,
+				CE9D0F64146B7F7D009250A8 /* SurfaceViewMgr_Mac_Impl.cpp */,
+				CE9D0F63146B7F7D009250A8 /* SurfaceViewMgr_Mac_Impl.h */,
+				CEDF5D7213EC04B300A15B8D /* Texture_Impl.cpp */,
+				CEDF5D7313EC04B300A15B8D /* Texture_Impl.h */,
+				CEDF5D7413EC04B300A15B8D /* TextureMgr_Impl.cpp */,
+				CEDF5D7513EC04B300A15B8D /* TextureMgr_Impl.h */,
+				CE9D0F27146B7B78009250A8 /* Tile.cpp */,
+				CE9D0F2B146B7BA3009250A8 /* Tile.h */,
+				CE93C0DF1421901F00BE6121 /* ui */,
+				CEDF5D7613EC04B300A15B8D /* util */,
+				CE9173C213F520E1005B82E3 /* VertexAttribute.cpp */,
+				CE9173D013F52126005B82E3 /* VertexAttribute.h */,
+				CE9D0FCC146BACFB009250A8 /* ViewNormal.h */,
+				CE9D0FCD146BACFB009250A8 /* ViewNormal.mm */,
+				CE9D0FCE146BACFB009250A8 /* ViewOpenGL.h */,
+				CE9D0FCF146BACFB009250A8 /* ViewOpenGL.mm */,
 			);
 			name = libspank;
 			sourceTree = "<group>";
@@ -1069,8 +1119,8 @@
 				CEA9F499142B2E3700A564F6 /* ui_default_frame.xml in Resources */,
 				CEA9F49A142B2E3700A564F6 /* ui_default.xml in Resources */,
 				CEA9F49B142B2E3700A564F6 /* ui.png in Resources */,
-				CEA9F4C1142B2FE800A564F6 /* mac_test-Info.plist in Resources */,
-				CEA9F4C2142B2FE800A564F6 /* MainWindow.xib in Resources */,
+				CE9D0F96146B82B2009250A8 /* Gray_shader.fs in Resources */,
+				CE9D0F97146B82B2009250A8 /* Gray_shader.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1083,8 +1133,6 @@
 			files = (
 				CE9B293B13E9372C00AF7A03 /* GameApp.cpp in Sources */,
 				CE9B2AD113E93EF300AF7A03 /* main.m in Sources */,
-				CEDB10A813EBF7AA00CFA7E3 /* OpenGLAppDelegate.mm in Sources */,
-				CEDB10A913EBF7AA00CFA7E3 /* OpenGLView.mm in Sources */,
 				CEDF5D7C13EC04B300A15B8D /* IMath.cpp in Sources */,
 				CEDF5D7D13EC04B300A15B8D /* Matrix3x3.cpp in Sources */,
 				CEDF5D7E13EC04B300A15B8D /* Matrix4x4.cpp in Sources */,
@@ -1111,7 +1159,6 @@
 				CED5EFFD13F393F9006137BE /* ScreenUtil.cpp in Sources */,
 				CE9173C313F520E1005B82E3 /* VertexAttribute.cpp in Sources */,
 				CE9173C813F520F5005B82E3 /* Mutex_Mac_Impl.cpp in Sources */,
-				CE9173C913F520F5005B82E3 /* RenderDevice_Mac_Impl.cpp in Sources */,
 				CE9173CE13F5210E005B82E3 /* DebugUtil_Mac_Impl.cpp in Sources */,
 				CE9173CF13F5210E005B82E3 /* FileUtil_Mac_Impl.cpp in Sources */,
 				CE7F646913F8D3C100301751 /* Sprite.cpp in Sources */,
@@ -1220,6 +1267,19 @@
 				CE7B2B9A1429AC05000A09CD /* ActionQuintMoveTo.cpp in Sources */,
 				CE7B2B9B1429AC05000A09CD /* ActionSineMoveTo.cpp in Sources */,
 				CE7B2BAB1429AD02000A09CD /* Image.mm in Sources */,
+				CE9D0F28146B7B78009250A8 /* IViewNormal.cpp in Sources */,
+				CE9D0F29146B7B78009250A8 /* IViewOpenGL.cpp in Sources */,
+				CE9D0F2A146B7B78009250A8 /* Tile.cpp in Sources */,
+				CE9D0F2F146B7BC7009250A8 /* MsgKey.cpp in Sources */,
+				CE9D0F37146B7C1D009250A8 /* NormalView.cpp in Sources */,
+				CE9D0F38146B7C1D009250A8 /* OpenGLView.cpp in Sources */,
+				CE9D0F4C146B7CBF009250A8 /* OSUISystem_Mac_Impl.cpp in Sources */,
+				CE9D0F65146B7F7D009250A8 /* SurfaceViewMgr_Mac_Impl.cpp in Sources */,
+				CE9D0FC8146BA9EA009250A8 /* SurfaceView_Mac_Ogl_Impl.mm in Sources */,
+				CE9D0FCB146BAA12009250A8 /* SurfaceView_Mac_Normal_Impl.mm in Sources */,
+				CE9D0FD0146BACFB009250A8 /* ViewNormal.mm in Sources */,
+				CE9D0FD1146BACFB009250A8 /* ViewOpenGL.mm in Sources */,
+				CE866FD8146CBB56003C90C4 /* SpankAppDelegate.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

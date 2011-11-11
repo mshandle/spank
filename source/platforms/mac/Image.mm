@@ -24,12 +24,12 @@ Image::~Image()
 	SAFE_DELETE_ARRAY(m_pPixelData);
 }
 
-uint Image::GetWidth() const
+int Image::GetWidth() const
 {
 	return m_nImageWidth;
 }
 
-uint Image::GetHeight() const
+int Image::GetHeight() const
 {
 	return m_nImageHeight;
 }
@@ -39,7 +39,7 @@ void* Image::GetPixelData()
 	return m_pPixelData;
 }
 
-uint Image::GetBPP() const
+int Image::GetBPP() const
 {
 	return m_nBPP;
 }

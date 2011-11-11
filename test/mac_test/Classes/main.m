@@ -1,17 +1,17 @@
-//
-//  main.m
-//  HelloOpenGL
-//
-//  Created by Ray Wenderlich on 5/24/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
-//
-
+/*!
+ * \file main.m
+ * \date 27-08-2011 04:51:45
+ * 
+ * 
+ * \author zjhlogo (zjhlogo@gmail.com)
+ */
 #import <UIKit/UIKit.h>
+#import "SpankAppDelegate.h"
 
 int main(int argc, char *argv[])
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    int retVal = UIApplicationMain(argc, argv, nil, nil);
+    int retVal = UIApplicationMain(argc, argv, nil, NSStringFromClass([SpankAppDelegate class]));
     [pool release];
     return retVal;
 }

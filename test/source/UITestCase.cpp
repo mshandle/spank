@@ -30,12 +30,12 @@ UITestCase::~UITestCase()
 
 bool UITestCase::Initialize(UIScreen* pUIScreen)
 {
-	static const char* s_pszText = "This program will allow you to generate\n"
-								   "bitmap fonts from TrueType fonts.\n\n"
-								   "The application generates both image\n"
-								   "files and character descriptions that\n"
-								   "can be read by a game for easy\n"
-								   "rendering of fonts.";
+//	static const char* s_pszText = "This program will allow you to generate\n"
+//								   "bitmap fonts from TrueType fonts.\n\n"
+//								   "The application generates both image\n"
+//								   "files and character descriptions that\n"
+//								   "can be read by a game for easy\n"
+//								   "rendering of fonts.";
 
 	int nID = 1;
 

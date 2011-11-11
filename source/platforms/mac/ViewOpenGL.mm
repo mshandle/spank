@@ -1,20 +1,19 @@
-//
-//  OpenGLView.m
-//  HelloOpenGL
-//
-//  Created by Ray Wenderlich on 5/24/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
-//
-
-#import "OpenGLView.h"
+/*!
+ * \file ViewOpenGL.mm
+ * \date 11-10-2011
+ * 
+ * 
+ * \author zjhlogo (zjhlogo@gmail.com)
+ */
+#import "ViewOpenGL.h"
 #import <GLES2/gl2.h>
 #import <GLES2/gl2ext.h>
-#include <util/ScreenUtil.h>
-#include <ICore.h>
-#include <InputMgr.h>
-#include <IRenderer2D.h>
+#import <util/ScreenUtil.h>
+#import <ICore.h>
+#import <InputMgr.h>
+#import <IRenderer2D.h>
 
-@implementation OpenGLView
+@implementation ViewOpenGL
 
 + (Class)layerClass {
     return [CAEAGLLayer class];
@@ -59,16 +58,23 @@
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
 }
 
+- (void)setupDisplayLink {
+    displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
+}
+
+-(void) startLoop {
+    [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+}
+
+-(void) stopLoop {
+    [displayLink removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+}
+
 - (void)render:(CADisplayLink*)displayLink {
 	ICore::GetInstance().Update(1.0f/60.0f);
 	ICore::GetInstance().Render();
-
+	
     [_context presentRenderbuffer:GL_RENDERBUFFER];
-}
-
-- (void)setupDisplayLink {
-    CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
-    [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -80,7 +86,6 @@
         [self setupDepthBuffer];
         [self setupRenderBuffer];
         [self setupFrameBuffer];
-		ICore::GetInstance().Initialize();
         [self setupDisplayLink];
     }
     return self;
@@ -120,7 +125,6 @@
 
 - (void)dealloc
 {
-	ICore::GetInstance().Terminate();
     [_context release];
     _context = nil;
     [super dealloc];

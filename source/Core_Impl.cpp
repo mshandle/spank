@@ -81,7 +81,7 @@ bool Core_Impl::SetCurrentView(IViewNormal* pView)
 	if (pView)
 	{
 		if (!pView->OnAttachWindow())
-		{
+		{ 
 			pView->OnDettachWindow();
 			LOGE("attach to window failed");
 			return false;

@@ -20,8 +20,8 @@ NormalView::~NormalView()
 
 bool NormalView::Initialize()
 {
-	m_pButton = IOSUISystem::GetInstance().CreateButton(GetSurfaceView(), 100, 100, 100, 30);
-	if (!m_pButton) return false;
+//	m_pButton = IOSUISystem::GetInstance().CreateButton(GetSurfaceView(), 100, 100, 100, 30);
+//	if (!m_pButton) return false;
 
 	return true;
 }
