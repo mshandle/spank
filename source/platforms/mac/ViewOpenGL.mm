@@ -12,6 +12,13 @@
 #import <ICore.h>
 #import <InputMgr.h>
 #import <IRenderer2D.h>
+#import <mach/mach_time.h>
+
+float GetCurrentTime()
+{
+	double currentTime = (double)mach_absolute_time() / 1000000000.0f;
+	return (float)currentTime;
+}
 
 @implementation ViewOpenGL
 
@@ -64,6 +71,8 @@
 
 -(void) startLoop {
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+	currentTime = GetCurrentTime();
+	lastTime = currentTime;
 }
 
 -(void) stopLoop {
@@ -71,7 +80,12 @@
 }
 
 - (void)render:(CADisplayLink*)displayLink {
-	ICore::GetInstance().Update(1.0f/60.0f);
+	float detail = currentTime - lastTime;
+	
+	lastTime = currentTime;
+	currentTime = GetCurrentTime();
+	
+	ICore::GetInstance().Update(detail);
 	ICore::GetInstance().Render();
 	
     [_context presentRenderbuffer:GL_RENDERBUFFER];

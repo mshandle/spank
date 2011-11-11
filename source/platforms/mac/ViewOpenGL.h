@@ -16,6 +16,9 @@
     GLuint _colorRenderBuffer;
     GLuint _depthRenderBuffer;
 	CADisplayLink* displayLink;
+	
+	float currentTime;
+	float lastTime;
 }
 
 - (void)startLoop;
