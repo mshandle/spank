@@ -22,6 +22,11 @@ SurfaceView_Android_Ogl_Impl::~SurfaceView_Android_Ogl_Impl()
 	// TODO: 
 }
 
+int SurfaceView_Android_Ogl_Impl::GetViewId() const
+{
+	return m_nViewId;
+}
+
 bool SurfaceView_Android_Ogl_Impl::ActiveView()
 {
 	// bind opengl to current view

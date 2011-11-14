@@ -9,9 +9,18 @@
 #define __OSUISYSTEM_WIN32_IMPL_H__
 
 #include <osui/IOSUISystem.h>
+#include <map>
 
 class OSUISystem_Win32_Impl : public IOSUISystem
 {
+public:
+	enum CONST_DEFINE
+	{
+		CONTROL_ID_BASE = 10000,
+	};
+
+	typedef std::map<int, void*> TM_CONTROL_ID;
+
 public:
 	DECLARE_RTTI(OSUISystem_Win32_Impl, IOSUISystem);
 
@@ -21,14 +30,15 @@ public:
 	virtual bool Initialize();
 	virtual void Terminate();
 
-	virtual void* CreateButton(ISurfaceView* pSurfaceView, int x, int y, int width, int height);
-	virtual void DestroyButton(void* pHandler);
+	virtual int CreateButton(ISurfaceView* pSurfaceView, int x, int y, int width, int height, const char* pszText);
+	virtual void DestroyButton(ISurfaceView* pSurfaceView, int nId);
 
 private:
 	int GenNextId();
 
 private:
 	int m_nGenNextId;
+	TM_CONTROL_ID m_ControlMap;
 
 };
 #endif // __OSUISYSTEM_WIN32_IMPL_H__

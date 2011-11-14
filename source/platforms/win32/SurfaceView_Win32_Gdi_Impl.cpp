@@ -23,6 +23,11 @@ SurfaceView_Win32_Gdi_Impl::~SurfaceView_Win32_Gdi_Impl()
 	// TODO: 
 }
 
+int SurfaceView_Win32_Gdi_Impl::GetViewId() const
+{
+	return 0;
+}
+
 bool SurfaceView_Win32_Gdi_Impl::ActiveView()
 {
 	return true;

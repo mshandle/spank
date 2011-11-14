@@ -16,7 +16,7 @@ IOSUISystem& IOSUISystem::GetInstance()
 
 OSUISystem_Win32_Impl::OSUISystem_Win32_Impl()
 {
-	m_nGenNextId = 1000;
+	m_nGenNextId = CONTROL_ID_BASE;
 }
 
 OSUISystem_Win32_Impl::~OSUISystem_Win32_Impl()
@@ -26,7 +26,7 @@ OSUISystem_Win32_Impl::~OSUISystem_Win32_Impl()
 
 bool OSUISystem_Win32_Impl::Initialize()
 {
-	m_nGenNextId = 1000;
+	m_nGenNextId = CONTROL_ID_BASE;
 	return true;
 }
 
@@ -35,23 +35,29 @@ void OSUISystem_Win32_Impl::Terminate()
 	// TODO: 
 }
 
-void* OSUISystem_Win32_Impl::CreateButton(ISurfaceView* pSurfaceView, int x, int y, int width, int height)
+int OSUISystem_Win32_Impl::CreateButton(ISurfaceView* pSurfaceView, int x, int y, int width, int height, const char* pszText)
 {
-	if (!pSurfaceView->GetRtti()->IsDerived(SurfaceView_Win32_Gdi_Impl::__RttiData())) return NULL;
+	if (!pSurfaceView->GetRtti()->IsDerived(SurfaceView_Win32_Gdi_Impl::__RttiData())) return 0;
 
 	SurfaceView_Win32_Gdi_Impl* pGdiView = (SurfaceView_Win32_Gdi_Impl*)pSurfaceView;
 	HWND hParent = pGdiView->GetWindow();
 
-	HWND hWnd = CreateWindow("BUTTON", "Button", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y, width, height, hParent, (HMENU)GenNextId(), NULL, NULL);
-	return (void*)hWnd;
+	int nId = GenNextId();
+	HWND hWnd = CreateWindow("BUTTON", pszText, WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y, width, height, hParent, (HMENU)nId, NULL, NULL);
+
+	m_ControlMap.insert(std::make_pair(nId, hWnd));
+	return nId;
 }
 
-void OSUISystem_Win32_Impl::DestroyButton(void* pHandler)
+void OSUISystem_Win32_Impl::DestroyButton(ISurfaceView* pSurfaceView, int nId)
 {
-	if (!pHandler) return;
+	TM_CONTROL_ID::iterator itfound = m_ControlMap.find(nId);
+	if (itfound == m_ControlMap.end()) return;
 
-	HWND hWnd = (HWND)pHandler;
+	HWND hWnd = (HWND)itfound->second;
 	DestroyWindow(hWnd);
+
+	m_ControlMap.erase(itfound);
 }
 
 int OSUISystem_Win32_Impl::GenNextId()

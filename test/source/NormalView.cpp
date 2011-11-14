@@ -10,7 +10,7 @@
 
 NormalView::NormalView()
 {
-	m_pButton = NULL;
+	// TODO: 
 }
 
 NormalView::~NormalView()
@@ -20,16 +20,20 @@ NormalView::~NormalView()
 
 bool NormalView::Initialize()
 {
-//	m_pButton = IOSUISystem::GetInstance().CreateButton(GetSurfaceView(), 100, 100, 100, 30);
-//	if (!m_pButton) return false;
+	int nId = IOSUISystem::GetInstance().CreateButton(GetSurfaceView(), 100, 100, 100, 30, "Button1");
+	nId = IOSUISystem::GetInstance().CreateButton(GetSurfaceView(), 100, 150, 100, 30, "Button2");
+	IOSUISystem::GetInstance().DestroyButton(GetSurfaceView(), nId);
+	nId = IOSUISystem::GetInstance().CreateButton(GetSurfaceView(), 100, 200, 100, 30, "Button3");
+	nId = IOSUISystem::GetInstance().CreateButton(GetSurfaceView(), 100, 250, 100, 30, "Button4");
+	IOSUISystem::GetInstance().DestroyButton(GetSurfaceView(), nId);
+	nId = IOSUISystem::GetInstance().CreateButton(GetSurfaceView(), 100, 300, 100, 30, "Button5");
 
 	return true;
 }
 
 void NormalView::Terminate()
 {
-	IOSUISystem::GetInstance().DestroyButton(m_pButton);
-	m_pButton = NULL;
+	// TODO: 
 }
 
 void NormalView::Update(float dt)

@@ -20,6 +20,8 @@ public:
 	SurfaceView_Win32_Ogl_Impl(HWND hWindow);
 	virtual ~SurfaceView_Win32_Ogl_Impl();
 
+	virtual int GetViewId() const;
+
 	virtual bool ActiveView();
 	virtual void DeactiveView();
 

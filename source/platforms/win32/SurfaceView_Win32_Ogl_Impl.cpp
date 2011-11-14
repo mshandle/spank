@@ -27,6 +27,11 @@ SurfaceView_Win32_Ogl_Impl::~SurfaceView_Win32_Ogl_Impl()
 	// TODO: 
 }
 
+int SurfaceView_Win32_Ogl_Impl::GetViewId() const
+{
+	return 0;
+}
+
 bool SurfaceView_Win32_Ogl_Impl::ActiveView()
 {
 	// bind opengl es to window

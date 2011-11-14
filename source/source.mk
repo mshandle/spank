@@ -48,6 +48,7 @@ LIBSPANK_SOURCE_FILES := \
 		$(LIBSPANK_SOURCE)/platforms/android/SurfaceView_Android_Normal_Impl.cpp \
 		$(LIBSPANK_SOURCE)/platforms/android/SurfaceView_Android_Ogl_Impl.cpp \
 		$(LIBSPANK_SOURCE)/platforms/android/SurfaceViewMgr_Android_Impl.cpp \
+		$(LIBSPANK_SOURCE)/platforms/android/osui/OSUISystem_Android_Impl.cpp \
 		$(LIBSPANK_SOURCE)/platforms/android/util/DebugUtil_Android_Impl.cpp \
 		$(LIBSPANK_SOURCE)/platforms/android/util/FileUtil_Android_Impl.cpp \
 		$(LIBSPANK_SOURCE)/platforms/android/unzip/unzip.cpp \

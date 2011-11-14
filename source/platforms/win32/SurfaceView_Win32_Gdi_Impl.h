@@ -19,6 +19,8 @@ public:
 	SurfaceView_Win32_Gdi_Impl(HWND hWindow);
 	virtual ~SurfaceView_Win32_Gdi_Impl();
 
+	virtual int GetViewId() const;
+
 	virtual bool ActiveView();
 	virtual void DeactiveView();
 

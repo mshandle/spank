@@ -21,6 +21,11 @@ SurfaceView_Android_Normal_Impl::~SurfaceView_Android_Normal_Impl()
 	// TODO: 
 }
 
+int SurfaceView_Android_Normal_Impl::GetViewId() const
+{
+	return m_nViewId;
+}
+
 bool SurfaceView_Android_Normal_Impl::ActiveView()
 {
 	// bind current view

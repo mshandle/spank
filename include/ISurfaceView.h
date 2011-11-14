@@ -15,6 +15,7 @@ class ISurfaceView : public IObject
 public:
 	DECLARE_RTTI(ISurfaceView, IObject);
 
+	virtual int GetViewId() const = 0;
 	virtual bool ActiveView() = 0;
 	virtual void DeactiveView() = 0;
 
