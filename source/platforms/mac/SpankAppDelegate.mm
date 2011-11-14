@@ -27,6 +27,15 @@ SpankAppDelegate* g_pInstance = NULL;
 {
 	CGRect screenBounds = [[UIScreen mainScreen] bounds];
 	pViewArray[nextViewIndex] = [[[ViewNormal alloc] initWithFrame:screenBounds] autorelease];
+	
+	pViewArray[nextViewIndex].frame = CGRectMake(0, 0, screenBounds.size.height, screenBounds.size.width);
+	pViewArray[nextViewIndex].center = CGPointMake(screenBounds.size.width / 2.0, screenBounds.size.height / 2.0);
+	
+	// Rotate the view 90 degrees around its new center point. 
+	CGAffineTransform transform = pViewArray[nextViewIndex].transform;
+	transform = CGAffineTransformRotate(transform, (M_PI / 2.0));
+	pViewArray[nextViewIndex].transform = transform;
+
 	return nextViewIndex++;
 }
 
@@ -69,11 +78,42 @@ SpankAppDelegate* g_pInstance = NULL;
 	[view removeFromSuperview];
 }
 
+- (int)createButton:(int)viewId x:(int)x y:(int)y width:(int)width height:(int)height text:(const char*)text
+{
+	UIView* view = pViewArray[viewId];
+	if (view == nil) return 0;
+	
+	UIButton* myButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+	myButton.tag = nextControlId++;
+    myButton.frame = CGRectMake(x, y, width, height); // position in the parent view and set the size of the button
+	
+	NSString* strText = [NSString stringWithUTF8String:text];
+    [myButton setTitle:strText forState:UIControlStateNormal];
+//    // add targets and actions
+//    [myButton addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    // add to a view
+    [view addSubview:myButton];
+	
+	return myButton.tag;
+}
+
+- (void)destroyButton:(int)viewId buttonId:(int)buttonId
+{
+	UIView* view = pViewArray[viewId];
+	if (view == nil) return;
+	
+	UIView* control = [view viewWithTag:buttonId];
+	if (control == nil) return;
+	
+	[control removeFromSuperview];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	g_pInstance = self;
 	memset(pViewArray, 0, sizeof(pViewArray));
 	nextViewIndex = 1;
+	nextControlId = BASE_CONTROL_ID;
 
 	[[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight];
 	ConfigUtil::GetInstance().AddInt("SCREEN_ROTATION", ScreenUtil::SR_P90);

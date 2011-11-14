@@ -21,6 +21,11 @@ SurfaceView_Mac_Ogl_Impl::~SurfaceView_Mac_Ogl_Impl()
 	// TODO: 
 }
 
+int SurfaceView_Mac_Ogl_Impl::GetViewId() const
+{
+	return m_nViewId;
+}
+
 bool SurfaceView_Mac_Ogl_Impl::ActiveView()
 {
 	if ([[SpankAppDelegate GetInstance] attachView:m_nViewId] == FALSE) return false;

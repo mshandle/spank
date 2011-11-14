@@ -21,8 +21,8 @@ public:
 	virtual bool Initialize();
 	virtual void Terminate();
 	
-	virtual void* CreateButton(ISurfaceView* pSurfaceView, int x, int y, int width, int height);
-	virtual void DestroyButton(void* pHandler);
+	virtual int CreateButton(ISurfaceView* pSurfaceView, int x, int y, int width, int height, const char* pszText);
+	virtual void DestroyButton(ISurfaceView* pSurfaceView, int nId);
 	
 };
 #endif // __OSUISYSTEM_MAC_IMPL_H__

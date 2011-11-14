@@ -7,10 +7,16 @@
  */
 #import <UIKit/UIKit.h>
 
+enum CONST_DEFINE
+{
+	BASE_CONTROL_ID = 10000,
+};
+
 @interface SpankAppDelegate : NSObject <UIApplicationDelegate> {
 	UIWindow* window;
 	UIView* pViewArray[100];
 	int nextViewIndex;
+	int nextControlId;
 }
 
 @property (nonatomic, retain) UIWindow *window;
@@ -23,5 +29,8 @@
 
 - (BOOL)attachView:(int)viewId;
 - (void)dettachView:(int)viewId;
+
+- (int)createButton:(int)viewId x:(int)x y:(int)y width:(int)width height:(int)height text:(const char*)text;
+- (void)destroyButton:(int)viewId buttonId:(int)buttonId;
 
 @end

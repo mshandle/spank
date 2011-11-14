@@ -134,7 +134,7 @@
 		CE9D0F2F146B7BC7009250A8 /* MsgKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0F2E146B7BC7009250A8 /* MsgKey.cpp */; };
 		CE9D0F37146B7C1D009250A8 /* NormalView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0F33146B7C1D009250A8 /* NormalView.cpp */; };
 		CE9D0F38146B7C1D009250A8 /* OpenGLView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0F35146B7C1D009250A8 /* OpenGLView.cpp */; };
-		CE9D0F4C146B7CBF009250A8 /* OSUISystem_Mac_Impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0F4B146B7CBF009250A8 /* OSUISystem_Mac_Impl.cpp */; };
+		CE9D0F4C146B7CBF009250A8 /* OSUISystem_Mac_Impl.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0F4B146B7CBF009250A8 /* OSUISystem_Mac_Impl.mm */; };
 		CE9D0F65146B7F7D009250A8 /* SurfaceViewMgr_Mac_Impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9D0F64146B7F7D009250A8 /* SurfaceViewMgr_Mac_Impl.cpp */; };
 		CE9D0F96146B82B2009250A8 /* Gray_shader.fs in Resources */ = {isa = PBXBuildFile; fileRef = CE9D0F94146B82B2009250A8 /* Gray_shader.fs */; };
 		CE9D0F97146B82B2009250A8 /* Gray_shader.xml in Resources */ = {isa = PBXBuildFile; fileRef = CE9D0F95146B82B2009250A8 /* Gray_shader.xml */; };
@@ -443,7 +443,7 @@
 		CE9D0F35146B7C1D009250A8 /* OpenGLView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OpenGLView.cpp; path = ../source/OpenGLView.cpp; sourceTree = SOURCE_ROOT; };
 		CE9D0F36146B7C1D009250A8 /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLView.h; path = ../source/OpenGLView.h; sourceTree = SOURCE_ROOT; };
 		CE9D0F4A146B7CBF009250A8 /* OSUISystem_Mac_Impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSUISystem_Mac_Impl.h; path = ../../source/platforms/mac/osui/OSUISystem_Mac_Impl.h; sourceTree = SOURCE_ROOT; };
-		CE9D0F4B146B7CBF009250A8 /* OSUISystem_Mac_Impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OSUISystem_Mac_Impl.cpp; path = ../../source/platforms/mac/osui/OSUISystem_Mac_Impl.cpp; sourceTree = SOURCE_ROOT; };
+		CE9D0F4B146B7CBF009250A8 /* OSUISystem_Mac_Impl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OSUISystem_Mac_Impl.mm; path = ../../source/platforms/mac/osui/OSUISystem_Mac_Impl.mm; sourceTree = SOURCE_ROOT; };
 		CE9D0F63146B7F7D009250A8 /* SurfaceViewMgr_Mac_Impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SurfaceViewMgr_Mac_Impl.h; path = ../../source/platforms/mac/SurfaceViewMgr_Mac_Impl.h; sourceTree = SOURCE_ROOT; };
 		CE9D0F64146B7F7D009250A8 /* SurfaceViewMgr_Mac_Impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SurfaceViewMgr_Mac_Impl.cpp; path = ../../source/platforms/mac/SurfaceViewMgr_Mac_Impl.cpp; sourceTree = SOURCE_ROOT; };
 		CE9D0F94146B82B2009250A8 /* Gray_shader.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Gray_shader.fs; path = ../resources/Gray_shader.fs; sourceTree = SOURCE_ROOT; };
@@ -929,7 +929,7 @@
 			isa = PBXGroup;
 			children = (
 				CE9D0F4A146B7CBF009250A8 /* OSUISystem_Mac_Impl.h */,
-				CE9D0F4B146B7CBF009250A8 /* OSUISystem_Mac_Impl.cpp */,
+				CE9D0F4B146B7CBF009250A8 /* OSUISystem_Mac_Impl.mm */,
 			);
 			name = osui;
 			sourceTree = "<group>";
@@ -1273,7 +1273,7 @@
 				CE9D0F2F146B7BC7009250A8 /* MsgKey.cpp in Sources */,
 				CE9D0F37146B7C1D009250A8 /* NormalView.cpp in Sources */,
 				CE9D0F38146B7C1D009250A8 /* OpenGLView.cpp in Sources */,
-				CE9D0F4C146B7CBF009250A8 /* OSUISystem_Mac_Impl.cpp in Sources */,
+				CE9D0F4C146B7CBF009250A8 /* OSUISystem_Mac_Impl.mm in Sources */,
 				CE9D0F65146B7F7D009250A8 /* SurfaceViewMgr_Mac_Impl.cpp in Sources */,
 				CE9D0FC8146BA9EA009250A8 /* SurfaceView_Mac_Ogl_Impl.mm in Sources */,
 				CE9D0FCB146BAA12009250A8 /* SurfaceView_Mac_Normal_Impl.mm in Sources */,

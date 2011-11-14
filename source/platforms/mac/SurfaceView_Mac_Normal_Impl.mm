@@ -19,6 +19,11 @@ SurfaceView_Mac_Normal_Impl::~SurfaceView_Mac_Normal_Impl()
 	// TODO: 
 }
 
+int SurfaceView_Mac_Normal_Impl::GetViewId() const
+{
+	return m_nViewId;
+}
+
 bool SurfaceView_Mac_Normal_Impl::ActiveView()
 {
 	if ([[SpankAppDelegate GetInstance] attachView:m_nViewId] == TRUE) return true;

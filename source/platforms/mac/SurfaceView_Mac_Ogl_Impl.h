@@ -18,6 +18,8 @@ public:
 	SurfaceView_Mac_Ogl_Impl();
 	virtual ~SurfaceView_Mac_Ogl_Impl();
 	
+	virtual int GetViewId() const;
+
 	virtual bool ActiveView();
 	virtual void DeactiveView();
 	
