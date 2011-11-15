@@ -304,9 +304,9 @@ void UIWindow::RenderChildrenWindow(const RenderParam& param)
 
 void UIWindow::RenderBorder(const RenderParam& param)
 {
-	Vector2 posAbs = param.m_vBasePos + GetPosition();
-	const Vector2& size = GetSize();
-	IRendererUI::GetInstance().DrawRect(posAbs, size, IUIResMgr::GetInstance().GetDefaultImageFrame());
+// 	Vector2 posAbs = param.m_vBasePos + GetPosition();
+// 	const Vector2& size = GetSize();
+// 	IRendererUI::GetInstance().DrawRect(posAbs, size, IUIResMgr::GetInstance().GetDefaultImageFrame());
 }
 
 bool UIWindow::OnClicked(const Vector2& pos)

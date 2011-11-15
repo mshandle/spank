@@ -7,7 +7,7 @@
  */
 #include "TestCase.h"
 #include <ui/IUISystem.h>
-#include <ui/UITextView.h>
+#include <ui/UIButton.h>
 #include <util/ScreenUtil.h>
 #include <msg/MsgCommon.h>
 #include <ui/uimsg/UIMsgID.h>
@@ -64,11 +64,11 @@ void TestCase::InternalTerminate()
 
 void TestCase::AddReturnButton(UIScreen* pUIScreen)
 {
-	UITextView* pTextView = new UITextView(pUIScreen, IMath::VEC2_ZERO, "RETURN");
+	UIButton* pButton = new UIButton(pUIScreen, IMath::VEC2_ZERO, "RETURN");
 
-	Vector2 pos(0.0f, ScreenUtil::GetInstance().GetScreenHeight() - pTextView->GetSize().y);
-	pTextView->SetPosition(pos);
-	pTextView->ConnectEvent(UMI_CLICKED, this, (MSG_CALLBACK)&TestCase::OnBtnReturnClicked);
+	Vector2 pos(0.0f, ScreenUtil::GetInstance().GetScreenHeight() - pButton->GetSize().y);
+	pButton->SetPosition(pos);
+	pButton->ConnectEvent(UMI_CLICKED, this, (MSG_CALLBACK)&TestCase::OnBtnReturnClicked);
 }
 
 bool TestCase::OnBtnReturnClicked(IMsgBase* pMsg)

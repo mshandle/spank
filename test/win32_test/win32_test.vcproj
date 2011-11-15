@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winmm.lib libs\libEGL.lib libs\libGLESv2.lib"
+				AdditionalDependencies="winmm.lib ws2_32.lib libs\libEGL.lib libs\libGLESv2.lib"
 				OutputFile="$(ProjectDir)bin\$(ProjectName)_D.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winmm.lib libs\libEGL.lib libs\libGLESv2.lib"
+				AdditionalDependencies="winmm.lib ws2_32.lib libs\libEGL.lib libs\libGLESv2.lib"
 				OutputFile="$(ProjectDir)bin\$(ProjectName).exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
@@ -214,6 +214,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\source\NetworkTestCase.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\source\NetworkTestCase.h"
+			>
+		</File>
+		<File
 			RelativePath="..\source\NormalView.cpp"
 			>
 		</File>
@@ -235,6 +243,22 @@
 		</File>
 		<File
 			RelativePath="..\source\ParticleTestCase.h"
+			>
+		</File>
+		<File
+			RelativePath="..\source\PokerMessages.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\source\PokerMessages.h"
+			>
+		</File>
+		<File
+			RelativePath="..\source\PokerMsgHandler.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\source\PokerMsgHandler.h"
 			>
 		</File>
 		<File

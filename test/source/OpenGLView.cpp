@@ -31,6 +31,7 @@
 #include "ClipRectTestCase.h"
 #include "TweenTestCase.h"
 #include "PorkerTestCase.h"
+#include "NetworkTestCase.h"
 
 OpenGLView::OpenGLView()
 {
@@ -67,6 +68,7 @@ bool OpenGLView::Initialize()
 	AddTestCase(new ClipRectTestCase(), m_pMainScreen);
 	AddTestCase(new TweenTestCase(), m_pMainScreen);
 	AddTestCase(new PorkerTestCase(), m_pMainScreen);
+	AddTestCase(new NetworkTestCase(), m_pMainScreen);
 
 	return true;
 }
@@ -111,17 +113,17 @@ bool OpenGLView::OnMsgTouch(IMsgBase* pMsg)
 
 	if (pMsgTouch->IsTouchBegin())
 	{
-		LOGD("touch begin: (%.02f, %.02f)", pMsgTouch->GetPosition().x, pMsgTouch->GetPosition().y);
+// 		LOGD("touch begin: (%.02f, %.02f)", pMsgTouch->GetPosition().x, pMsgTouch->GetPosition().y);
 		IUISystem::GetInstance().ProcessTouchEvent(pMsgTouch->GetPosition(), UTET_BEGIN);
 	}
 	else if (pMsgTouch->IsTouchMove())
 	{
-		LOGD("touch move: (%.02f, %.02f)", pMsgTouch->GetPosition().x, pMsgTouch->GetPosition().y);
+// 		LOGD("touch move: (%.02f, %.02f)", pMsgTouch->GetPosition().x, pMsgTouch->GetPosition().y);
 		IUISystem::GetInstance().ProcessTouchEvent(pMsgTouch->GetPosition(), UTET_MOVE);
 	}
 	else if (pMsgTouch->IsTouchEnd())
 	{
-		LOGD("touch end: (%.02f, %.02f)", pMsgTouch->GetPosition().x, pMsgTouch->GetPosition().y);
+// 		LOGD("touch end: (%.02f, %.02f)", pMsgTouch->GetPosition().x, pMsgTouch->GetPosition().y);
 		IUISystem::GetInstance().ProcessTouchEvent(pMsgTouch->GetPosition(), UTET_END);
 	}
 

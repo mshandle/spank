@@ -18,11 +18,7 @@ StreamWriter::StreamWriter()
 
 StreamWriter::~StreamWriter()
 {
-	if (m_pBuffer)
-	{
-		delete[] m_pBuffer;
-		m_pBuffer = NULL;
-	}
+	SAFE_DELETE_ARRAY(m_pBuffer);
 }
 
 bool StreamWriter::Write(const void* pData, int nSize)

@@ -18,6 +18,7 @@ enum MESSAGE_ID
 	MI_TOUCH,
 	MI_KEY,
 	MI_ACTION_UPDATE,
+	MI_NET_MESSAGE,
 
 	MI_UI_BEGIN,
 	// leave the space for ui

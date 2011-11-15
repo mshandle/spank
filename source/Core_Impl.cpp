@@ -13,6 +13,7 @@
 #include <util/ScreenUtil.h>
 #include <InputMgr.h>
 #include <ISurfaceViewMgr.h>
+#include <net/INetMgr.h>
 #include <IGameApp.h>
 #include <IViewOpenGL.h>
 
@@ -43,6 +44,7 @@ bool Core_Impl::Initialize()
 	if (!ScreenUtil::GetInstance().Initialize()) return false;
 	if (!InputMgr::GetInstance().Initialize()) return false;
 	if (!ISurfaceViewMgr::GetInstance().Initialize()) return false;
+	if (!INetMgr::GetInstance().Initialize()) return false;
 	if (!IGameApp::GetInstance().Initialize()) return false;
 
 	m_bRunning = true;
@@ -52,6 +54,7 @@ bool Core_Impl::Initialize()
 void Core_Impl::Terminate()
 {
 	IGameApp::GetInstance().Terminate();
+	INetMgr::GetInstance().Initialize();
 	ISurfaceViewMgr::GetInstance().Terminate();
 	InputMgr::GetInstance().Terminate();
 	ScreenUtil::GetInstance().Terminate();

@@ -80,7 +80,6 @@ public:
 	 */
 	void DispatchMessage();
 
-	
 	/*!
 	 * \brief subscribe a message
 	 *

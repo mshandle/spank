@@ -8,8 +8,10 @@
 #include "WinMain.h"
 #include <util/ConfigUtil.h>
 #include <util/ScreenUtil.h>
+#include <util/IDebugUtil.h>
 #include <InputMgr.h>
 #include <ICore.h>
+#include <net/INetMgr.h>
 #include <windows.h>
 
 LRESULT CALLBACK MainWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -47,6 +49,66 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 			if (wParam == VK_ESCAPE) InputMgr::GetInstance().OnKeyHome();
 			if (wParam == VK_BACK) InputMgr::GetInstance().OnKeyReturn();
+		}
+		break;
+	case WindowConfig::WM_SOCKET:
+		{
+			if (WSAGETSELECTERROR(lParam))
+			{
+				// display the error and close the socket
+				LOGE("WSAGETSELECTERROR(lParam) Error");
+				closesocket((SOCKET)wParam);
+				break;
+			}
+
+			switch (WSAGETSELECTEVENT(lParam))
+			{
+			case FD_CONNECT:
+				{
+					LOGD("receive socket connect message");
+				}
+				break;
+			case FD_READ:
+				{
+					LOGD("receive socket read message");
+
+					SOCKET socket = (SOCKET)wParam;
+					char buffer[1024];
+					int result = recv(socket, buffer, 1024, 0);
+
+					while (true)
+					{
+						if (result > 0)
+						{
+							INetMgr::GetInstance().HandlerDataBlock(buffer, result);
+							if (result < 1024) break;
+						}
+						else
+						{
+							LOGE("receive data failed result:%d", result);
+							break;
+						}
+						result = recv(socket, buffer, 1024, 0);
+					}
+				}
+				break;
+			case FD_WRITE:
+				{
+					LOGD("receive socket write message");
+				}
+				break;
+			case FD_CLOSE:
+				{
+					LOGD("receive socket close message");
+					closesocket((SOCKET)wParam);
+				}
+				break;
+			default:
+				{
+					LOGD("receive socket unknown message %d", WSAGETSELECTEVENT(lParam));
+				}
+				break;
+			}
 		}
 		break;
 	case WM_DESTROY:

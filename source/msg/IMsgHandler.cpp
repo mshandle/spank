@@ -24,7 +24,7 @@ bool IMsgHandler::ConnectEvent(uint nMsgID, IMsgHandler* pHandler, MSG_CALLBACK 
 
 	if (FindConnectInfo(nMsgID, pHandler) != m_ConnectionMap.end())
 	{
-		LOGD("duplicate connect event %d", nMsgID);
+		LOGE("duplicate connect event %d", nMsgID);
 		return false;
 	}
 

@@ -721,6 +721,26 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="net"
+			>
+			<File
+				RelativePath=".\source\net\INetMsgBase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\include\net\INetMsgBase.h"
+				>
+			</File>
+			<File
+				RelativePath=".\source\platforms\win32\net\NetMgr_Win32_Impl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\source\platforms\win32\net\NetMgr_Win32_Impl.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\source\Core_Impl.cpp"
 			>
