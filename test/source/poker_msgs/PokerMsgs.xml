@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<PokerMsgs>
+	<message class_name="MsgClientLoginToLFor91" id="2600">
+		<property name="uid" type="char" array="52" />
+		<property name="sessionId" type="char" array="128" />
+	</message>
+	<message class_name="MsgLoginServerValidate" id="1004">
+		<property name="userId" type="int64" comment="facebook 用户 id" />
+		<property name="ip" type="char" array="16" comment="game server 的 ip 地址" />
+		<property name="port" type="int" comment="game server 端口" />
+		<property name="checkoutText" type="char" array="24" comment="(二进制串,非字符串) login server 产生的验证串" />
+	</message>
+</PokerMsgs>

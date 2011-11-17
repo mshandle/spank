@@ -173,6 +173,34 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="poker_msgs"
+			>
+			<File
+				RelativePath="..\source\poker_msgs\MsgClientLoginToLFor91.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\poker_msgs\MsgClientLoginToLFor91.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\poker_msgs\MsgLoginServerValidate.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\poker_msgs\MsgLoginServerValidate.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\poker_msgs\PokerMsgBase.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\poker_msgs\PokerMsgBase.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\source\ActionTestCase.cpp"
 			>
@@ -243,14 +271,6 @@
 		</File>
 		<File
 			RelativePath="..\source\ParticleTestCase.h"
-			>
-		</File>
-		<File
-			RelativePath="..\source\PokerMessages.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\source\PokerMessages.h"
 			>
 		</File>
 		<File

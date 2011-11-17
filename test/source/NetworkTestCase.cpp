@@ -10,7 +10,8 @@
 #include <ui/UIButton.h>
 #include <ui/uimsg/UIMsgID.h>
 #include <net/INetMgr.h>
-#include "PokerMessages.h"
+#include "poker_msgs/MsgClientLoginToLFor91.h"
+#include "poker_msgs/MsgLoginServerValidate.h"
 
 NetworkTestCase::NetworkTestCase()
 :TestCase("Network")
