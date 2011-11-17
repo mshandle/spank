@@ -186,6 +186,11 @@
 		CEDF5D8F13EC04B300A15B8D /* ShaderMgr_Impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEDF5D6E13EC04B300A15B8D /* ShaderMgr_Impl.cpp */; };
 		CEDF5D9113EC04B300A15B8D /* Texture_Impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEDF5D7213EC04B300A15B8D /* Texture_Impl.cpp */; };
 		CEDF5D9213EC04B300A15B8D /* TextureMgr_Impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEDF5D7413EC04B300A15B8D /* TextureMgr_Impl.cpp */; };
+		CEE6B7D31474CF4300A0266A /* NetMgr_Mac_Impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE6B7D11474CF4300A0266A /* NetMgr_Mac_Impl.cpp */; };
+		CEE6B7D61474CF8200A0266A /* INetMsgBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE6B7D51474CF8200A0266A /* INetMsgBase.cpp */; };
+		CEE6B7DD1474CF9E00A0266A /* NetworkTestCase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE6B7D71474CF9E00A0266A /* NetworkTestCase.cpp */; };
+		CEE6B7DE1474CF9E00A0266A /* PokerMessages.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE6B7D91474CF9E00A0266A /* PokerMessages.cpp */; };
+		CEE6B7DF1474CF9E00A0266A /* PokerMsgHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE6B7DB1474CF9E00A0266A /* PokerMsgHandler.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -515,6 +520,16 @@
 		CEDF5D7313EC04B300A15B8D /* Texture_Impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Texture_Impl.h; path = ../../source/Texture_Impl.h; sourceTree = SOURCE_ROOT; };
 		CEDF5D7413EC04B300A15B8D /* TextureMgr_Impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextureMgr_Impl.cpp; path = ../../source/TextureMgr_Impl.cpp; sourceTree = SOURCE_ROOT; };
 		CEDF5D7513EC04B300A15B8D /* TextureMgr_Impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureMgr_Impl.h; path = ../../source/TextureMgr_Impl.h; sourceTree = SOURCE_ROOT; };
+		CEE6B7D11474CF4300A0266A /* NetMgr_Mac_Impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NetMgr_Mac_Impl.cpp; path = ../../source/platforms/mac/net/NetMgr_Mac_Impl.cpp; sourceTree = SOURCE_ROOT; };
+		CEE6B7D21474CF4300A0266A /* NetMgr_Mac_Impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NetMgr_Mac_Impl.h; path = ../../source/platforms/mac/net/NetMgr_Mac_Impl.h; sourceTree = SOURCE_ROOT; };
+		CEE6B7D41474CF7500A0266A /* INetMsgBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = INetMsgBase.h; path = ../../include/net/INetMsgBase.h; sourceTree = SOURCE_ROOT; };
+		CEE6B7D51474CF8200A0266A /* INetMsgBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = INetMsgBase.cpp; path = ../../source/net/INetMsgBase.cpp; sourceTree = SOURCE_ROOT; };
+		CEE6B7D71474CF9E00A0266A /* NetworkTestCase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NetworkTestCase.cpp; path = ../source/NetworkTestCase.cpp; sourceTree = SOURCE_ROOT; };
+		CEE6B7D81474CF9E00A0266A /* NetworkTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NetworkTestCase.h; path = ../source/NetworkTestCase.h; sourceTree = SOURCE_ROOT; };
+		CEE6B7D91474CF9E00A0266A /* PokerMessages.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PokerMessages.cpp; path = ../source/PokerMessages.cpp; sourceTree = SOURCE_ROOT; };
+		CEE6B7DA1474CF9E00A0266A /* PokerMessages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PokerMessages.h; path = ../source/PokerMessages.h; sourceTree = SOURCE_ROOT; };
+		CEE6B7DB1474CF9E00A0266A /* PokerMsgHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PokerMsgHandler.cpp; path = ../source/PokerMsgHandler.cpp; sourceTree = SOURCE_ROOT; };
+		CEE6B7DC1474CF9E00A0266A /* PokerMsgHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PokerMsgHandler.h; path = ../source/PokerMsgHandler.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -548,12 +563,18 @@
 				CE9B2ACA13E93EF300AF7A03 /* main.m */,
 				CE93BFF814218D3000BE6121 /* MapTestCase.cpp */,
 				CE93BFF914218D3000BE6121 /* MapTestCase.h */,
+				CEE6B7D71474CF9E00A0266A /* NetworkTestCase.cpp */,
+				CEE6B7D81474CF9E00A0266A /* NetworkTestCase.h */,
 				CE9D0F33146B7C1D009250A8 /* NormalView.cpp */,
 				CE9D0F34146B7C1D009250A8 /* NormalView.h */,
 				CE9D0F35146B7C1D009250A8 /* OpenGLView.cpp */,
 				CE9D0F36146B7C1D009250A8 /* OpenGLView.h */,
 				CE93BFFA14218D3000BE6121 /* ParticleTestCase.cpp */,
 				CE93BFFB14218D3000BE6121 /* ParticleTestCase.h */,
+				CEE6B7D91474CF9E00A0266A /* PokerMessages.cpp */,
+				CEE6B7DA1474CF9E00A0266A /* PokerMessages.h */,
+				CEE6B7DB1474CF9E00A0266A /* PokerMsgHandler.cpp */,
+				CEE6B7DC1474CF9E00A0266A /* PokerMsgHandler.h */,
 				CE7B2B771429ABC2000A09CD /* PorkerTestCase.cpp */,
 				CE7B2B781429ABC2000A09CD /* PorkerTestCase.h */,
 				CE93BFFD14218D3000BE6121 /* SpriteTestCase.cpp */,
@@ -958,6 +979,7 @@
 				CE35882313FDF9B400F071CB /* msg */,
 				CE9173C413F520F5005B82E3 /* Mutex_Mac_Impl.cpp */,
 				CE9173C513F520F5005B82E3 /* Mutex_Mac_Impl.h */,
+				CEE6B7D01474CF1400A0266A /* net */,
 				CEDF5D3D13EC04B300A15B8D /* Node_Impl.cpp */,
 				CEDF5D3E13EC04B300A15B8D /* Node_Impl.h */,
 				CE9D0F3E146B7C3F009250A8 /* osui */,
@@ -1043,6 +1065,17 @@
 			name = util;
 			path = ../../source/util;
 			sourceTree = SOURCE_ROOT;
+		};
+		CEE6B7D01474CF1400A0266A /* net */ = {
+			isa = PBXGroup;
+			children = (
+				CEE6B7D51474CF8200A0266A /* INetMsgBase.cpp */,
+				CEE6B7D41474CF7500A0266A /* INetMsgBase.h */,
+				CEE6B7D11474CF4300A0266A /* NetMgr_Mac_Impl.cpp */,
+				CEE6B7D21474CF4300A0266A /* NetMgr_Mac_Impl.h */,
+			);
+			name = net;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -1280,6 +1313,11 @@
 				CE9D0FD0146BACFB009250A8 /* ViewNormal.mm in Sources */,
 				CE9D0FD1146BACFB009250A8 /* ViewOpenGL.mm in Sources */,
 				CE866FD8146CBB56003C90C4 /* SpankAppDelegate.mm in Sources */,
+				CEE6B7D31474CF4300A0266A /* NetMgr_Mac_Impl.cpp in Sources */,
+				CEE6B7D61474CF8200A0266A /* INetMsgBase.cpp in Sources */,
+				CEE6B7DD1474CF9E00A0266A /* NetworkTestCase.cpp in Sources */,
+				CEE6B7DE1474CF9E00A0266A /* PokerMessages.cpp in Sources */,
+				CEE6B7DF1474CF9E00A0266A /* PokerMsgHandler.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
