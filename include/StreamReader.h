@@ -19,6 +19,7 @@ public:
 	virtual ~StreamReader();
 
 	bool Read(void* pDataOut, int nSize);
+	bool Skip(int nSize);
 
 	void Reset();
 	const void* GetBuffer();

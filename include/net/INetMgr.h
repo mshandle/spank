@@ -19,6 +19,8 @@ public:
 
 	static INetMgr& GetInstance();
 
+	virtual void Update(float dt) = 0;
+
 	virtual bool ConnectToServer(const char* ip, ushort port) = 0;
 	virtual bool ConnectToServer(uint ip, ushort port) = 0;
 	virtual void Disconnect() = 0;

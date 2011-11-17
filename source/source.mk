@@ -37,6 +37,7 @@ LIBSPANK_SOURCE_FILES := \
 		$(LIBSPANK_SOURCE)/msg/MsgKey.cpp \
 		$(LIBSPANK_SOURCE)/msg/MsgMgr.cpp \
 		$(LIBSPANK_SOURCE)/msg/MsgTouch.cpp \
+		$(LIBSPANK_SOURCE)/net/INetMsgBase.cpp \
 		$(LIBSPANK_SOURCE)/particle/IEmmiter.cpp \
 		$(LIBSPANK_SOURCE)/particle/IParticle.cpp \
 		$(LIBSPANK_SOURCE)/particle/IParticleSystem.cpp \
@@ -48,6 +49,7 @@ LIBSPANK_SOURCE_FILES := \
 		$(LIBSPANK_SOURCE)/platforms/android/SurfaceView_Android_Normal_Impl.cpp \
 		$(LIBSPANK_SOURCE)/platforms/android/SurfaceView_Android_Ogl_Impl.cpp \
 		$(LIBSPANK_SOURCE)/platforms/android/SurfaceViewMgr_Android_Impl.cpp \
+		$(LIBSPANK_SOURCE)/platforms/android/net/NetMgr_Android_Impl.cpp \
 		$(LIBSPANK_SOURCE)/platforms/android/osui/OSUISystem_Android_Impl.cpp \
 		$(LIBSPANK_SOURCE)/platforms/android/util/DebugUtil_Android_Impl.cpp \
 		$(LIBSPANK_SOURCE)/platforms/android/util/FileUtil_Android_Impl.cpp \

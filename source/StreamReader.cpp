@@ -36,6 +36,13 @@ bool StreamReader::Read(void* pDataOut, int nSize)
 	return true;
 }
 
+bool StreamReader::Skip(int nSize)
+{
+	if (nSize + m_nReadPos > m_nBufferSize) return false;
+	m_nReadPos += nSize;
+	return true;
+}
+
 void StreamReader::Reset()
 {
 	m_nReadPos = 0;

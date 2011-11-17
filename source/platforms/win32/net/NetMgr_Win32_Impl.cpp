@@ -40,6 +40,11 @@ void NetMgr_Win32_Impl::Terminate()
 	WSACleanup();
 }
 
+void NetMgr_Win32_Impl::Update(float dt)
+{
+	// nothing to do
+}
+
 bool NetMgr_Win32_Impl::ConnectToServer(const char* ip, ushort port)
 {
 	bool bOk = ConnectToServer(inet_addr(ip), port);

@@ -75,7 +75,7 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	uint64 userID; // Facebook用户ID
+	int64 userID; // Facebook用户ID
 	char ip[16]; // GameServer的IP地址
 	int port; // GameServer端口
 	char checkoutText[24]; // (二进制串，非字符串) LoginServer产生的验证串

@@ -88,6 +88,11 @@ public class SpankAppRunnable implements Runnable
 			mRunning = false;
 		}
 		break;
+		case MI_SURFACE_DESTROIED:
+		{
+			SpankLibrary.terminateRenderer();
+		}
+		break;
 		}
 	}
 }

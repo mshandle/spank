@@ -8,6 +8,9 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
+import com.zjhlogo.spank.msg.MSG_ID;
+import com.zjhlogo.spank.msg.MsgCommand;
+
 public class GLES20View extends BaseView implements SurfaceHolder.Callback, OnTouchListener
 {
 	public GLES20View()
@@ -73,7 +76,9 @@ public class GLES20View extends BaseView implements SurfaceHolder.Callback, OnTo
 
 	public void surfaceDestroyed(SurfaceHolder holder)
 	{
-		// TODO: send message to game thread to deactive the renderer
+		// skip rendering
+		MsgCommand msg = new MsgCommand(MSG_ID.MI_SURFACE_DESTROIED);
+		SpankLibrary.request(msg);
 	}
 
 	public boolean onTouch(View v, MotionEvent event)

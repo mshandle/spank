@@ -32,7 +32,7 @@ public class SpankLibrary
 	private static Thread mThread = null;
 
 	private static SpankRenderer mRenderer = null;
-
+	
 	static
 	{
 		System.loadLibrary("android_test");

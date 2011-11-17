@@ -102,6 +102,7 @@ IViewNormal* Core_Impl::GetCurrentView()
 
 void Core_Impl::Update(float dt)
 {
+	INetMgr::GetInstance().Update(dt);
 	MsgMgr::GetInstance().DispatchMessage();
 
 	if (m_pCurrentView) m_pCurrentView->Update(dt);

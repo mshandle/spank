@@ -26,6 +26,7 @@ public:
 
 	bool Write(const void* pData, int nSize);
 
+	void Reset();
 	const void* GetBuffer();
 	int GetBufferSize();
 

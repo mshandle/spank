@@ -53,6 +53,11 @@ bool StreamWriter::Expend(int nRequireSize)
 	return true;
 }
 
+void StreamWriter::Reset()
+{
+	m_nPos = 0;
+}
+
 const void* StreamWriter::GetBuffer()
 {
 	return m_pBuffer;
