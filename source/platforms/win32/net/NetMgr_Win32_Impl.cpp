@@ -31,6 +31,7 @@ bool NetMgr_Win32_Impl::Initialize()
 	WSADATA wsaData;
 	if (WSAStartup(0x0202, &wsaData) != 0) return false;
 
+	m_SendBuffer.Reset();
 	return true;
 }
 
@@ -91,6 +92,8 @@ bool NetMgr_Win32_Impl::ConnectToServer(uint ip, ushort port)
 
 void NetMgr_Win32_Impl::Disconnect()
 {
+	m_SendBuffer.Reset();
+
 	if (m_socketClient)
 	{
 		closesocket(m_socketClient);
@@ -109,22 +112,10 @@ bool NetMgr_Win32_Impl::SendNetMessage(INetMsgBase* pMsg)
 	}
 
 	int length = writer.GetBufferSize();
-	const char* pszBuffer = (const char*)writer.GetBuffer();
+	const void* pszBuffer = writer.GetBuffer();
+	m_SendBuffer.Write(pszBuffer, length);
 
-	int result = send(m_socketClient, pszBuffer, length, 0);
-	if (result == SOCKET_ERROR)
-	{
-		int error = WSAGetLastError();
-		LOGE("SendNetMessage %s failed with error code %d", pMsg->GetRtti()->GetTypeName(), error);
-		return false;
-	}
-
-	if (result != length)
-	{
-		LOGE("SendNetMessage %s size miss-match origin:%d, sent:%d", pMsg->GetRtti()->GetTypeName(), length, result);
-		return false;
-	}
-
+	SendOnce();
 	return true;
 }
 
@@ -147,4 +138,32 @@ bool NetMgr_Win32_Impl::HandlerDataBlock(const void* pData, int nLength)
 	}
 
 	return m_pNetMsgHandler->DecodeData(pData, nLength);
+}
+
+void NetMgr_Win32_Impl::SendOnce()
+{
+	StreamReader reader(m_SendBuffer.GetBuffer(), m_SendBuffer.GetBufferSize());
+	if (reader.GetSize() <= 0) return;
+
+	int result = send(m_socketClient, (const char*)reader.GetBuffer(), reader.GetSize(), 0);
+	while (true)
+	{
+		if (result <= 0)
+		{
+			if (result == SOCKET_ERROR)
+			{
+				// TODO: send failed
+			}
+			break;
+		}
+
+		reader.Skip(result);
+		if (reader.GetSize() <= 0) break;
+
+		result = send(m_socketClient, (const char*)reader.GetBuffer(), reader.GetSize(), 0);
+	}
+
+	m_SendBuffer.Reset();
+	// warring: copy the same memory block can be lose data
+	m_SendBuffer.Write(reader.GetBuffer(), reader.GetSize());
 }

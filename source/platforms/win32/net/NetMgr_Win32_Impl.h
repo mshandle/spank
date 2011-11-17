@@ -41,7 +41,11 @@ public:
 	virtual bool HandlerDataBlock(const void* pData, int nLength);
 
 private:
+	void SendOnce();
+
+private:
 	SOCKET m_socketClient;
+	StreamWriter m_SendBuffer;
 	INetMsgHandler* m_pNetMsgHandler;
 
 };

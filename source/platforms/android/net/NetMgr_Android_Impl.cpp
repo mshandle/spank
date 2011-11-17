@@ -42,7 +42,6 @@ bool NetMgr_Android_Impl::Initialize()
 void NetMgr_Android_Impl::Terminate()
 {
 	Disconnect();
-	m_SendBuffer.Reset();
 }
 
 void NetMgr_Android_Impl::Update(float dt)
@@ -113,6 +112,8 @@ bool NetMgr_Android_Impl::ConnectToServer(uint ip, ushort port)
 
 void NetMgr_Android_Impl::Disconnect()
 {
+	m_SendBuffer.Reset();
+
 	if (m_nSocket != 0)
 	{
 		close(m_nSocket);
