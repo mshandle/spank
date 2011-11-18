@@ -37,60 +37,68 @@ void UISliderBar::Render(const RenderParam& param)
 {
 	RenderBorder(param);
 
-	Vector2 posAbs = param.m_vBasePos + GetPosition();
+	Vector2 vRenderPos = param.m_renderOffset + GetPosition();
+	UIRect dispRect(vRenderPos, GetSize());
+	if (!IRendererUI::GetInstance().ClipRect(dispRect, param.m_parentRect)) return;
 
-	//AdjustPosition
-	if (m_pStyle[DUS_SLIDERBAR_THUMB_DEFAULT]->height > m_pStyle[DUS_SLIDERBAR_BACKGROUND]->height)
-	{
-		posAbs.y = posAbs.y + (m_pStyle[DUS_SLIDERBAR_THUMB_DEFAULT]->height - m_pStyle[DUS_SLIDERBAR_BACKGROUND]->height) /2.0f;
-	}
-
+	// setup image piece
+	const IMAGE_PIECE* pImagePieceThumb = m_pStyle[DUS_SLIDERBAR_THUMB_DEFAULT];
+	const IMAGE_PIECE* pImagePieceBg = m_pStyle[DUS_SLIDERBAR_BACKGROUND];
+	const IMAGE_PIECE* pImagePieceFg = m_pStyle[DUS_SLIDERBAR_FOREGROUND];
 	if (!IsEnable() || !param.IsEnable())
 	{
-		//render disabled state;
-		IRendererUI::GetInstance().DrawRect(posAbs, m_pStyle[DUS_SLIDERBAR_THUMB_DISABLED]);
+		pImagePieceThumb = m_pStyle[DUS_SLIDERBAR_THUMB_DISABLED];
 	}
-	else
+	else if (IsPressed())
 	{
-		//render the background
-		IRendererUI::GetInstance().DrawRect(posAbs, m_pStyle[DUS_SLIDERBAR_BACKGROUND]);
+		pImagePieceThumb = m_pStyle[DUS_SLIDERBAR_THUMB_PRESSED];
+	}
 
-		//render the foreground
-		QUAD_VERT_POS_UV quad;
-		IRendererUI::GetInstance().SetupQuad(quad, m_pStyle[DUS_SLIDERBAR_FOREGROUND], posAbs);
-		IRendererUI::GetInstance().SetTexture(m_pStyle[DUS_SLIDERBAR_FOREGROUND]->pTexture);
-		//calculate the size of the new foreground to render
-		float fAlpha = (float) m_nCurrentPos / (m_nMaxRange - m_nMinRange);
-		if (IRendererUI::GetInstance().ClipRect(quad, posAbs.x, posAbs.y, fAlpha*m_pStyle[DUS_SLIDERBAR_FOREGROUND]->width, m_pStyle[DUS_SLIDERBAR_FOREGROUND]->height))
-		{	
+	// render background
+	Vector2 vBgSize(pImagePieceBg->width, pImagePieceBg->height);
+	Vector2 vBgPos = vRenderPos + (GetSize() - vBgSize) * 0.5f;
+	vBgPos.x = vRenderPos.x;
+	QUAD_VERT_POS_UV quad;
+	IRendererUI::GetInstance().SetupQuad(quad, pImagePieceBg, vBgPos);
+	if (IRendererUI::GetInstance().ClipRect(quad, dispRect.pos, dispRect.size))
+	{
+		IRendererUI::GetInstance().SetTexture(pImagePieceBg->pTexture);
+		IRendererUI::GetInstance().DrawRect(quad);
+	}
+
+	float fAlpha = (float) m_nCurrentPos / (m_nMaxRange - m_nMinRange);
+
+	//render the foreground
+	if (fAlpha > 0.0f)
+	{
+		Vector2 vFgSize(fAlpha*pImagePieceFg->width, pImagePieceFg->height);
+		IRendererUI::GetInstance().SetupQuad(quad, pImagePieceFg, vBgPos);
+		if (IRendererUI::GetInstance().ClipRect(quad, vBgPos, vFgSize) && IRendererUI::GetInstance().ClipRect(quad, dispRect.pos, dispRect.size))
+		{
+			IRendererUI::GetInstance().SetTexture(pImagePieceFg->pTexture);
 			IRendererUI::GetInstance().DrawRect(quad);
 		}
-	
-		if (IsPressed())
-		{
-			// render pressed state
-			//calculate the position of the Arrow to render
-			float fposx = posAbs.x + m_pStyle[DUS_SLIDERBAR_BACKGROUND]->width * fAlpha - m_pStyle[DUS_SLIDERBAR_THUMB_PRESSED]->width / 2.0f;
-			float fposy = posAbs.y - (m_pStyle[DUS_SLIDERBAR_THUMB_PRESSED]->height - m_pStyle[DUS_SLIDERBAR_BACKGROUND]->height) / 2.0f;
-			IRendererUI::GetInstance().DrawRect(fposx, fposy, m_pStyle[DUS_SLIDERBAR_THUMB_PRESSED]);
-		}
-		else
-		{
-			// render default state
-			//calculate the position of the Arrow to render
-			float fposx = posAbs.x + m_pStyle[DUS_SLIDERBAR_BACKGROUND]->width * fAlpha - m_pStyle[DUS_SLIDERBAR_THUMB_DEFAULT]->width / 2.0f;
-			float fposy = posAbs.y - (m_pStyle[DUS_SLIDERBAR_THUMB_DEFAULT]->height - m_pStyle[DUS_SLIDERBAR_BACKGROUND]->height) / 2.0f;
-			IRendererUI::GetInstance().DrawRect(fposx, fposy, m_pStyle[DUS_SLIDERBAR_THUMB_DEFAULT]);
-		}
+	}
+
+	// render the thumb
+	Vector2 vThumbPos;
+	vThumbPos.x = vRenderPos.x + fAlpha*GetSize().x - pImagePieceThumb->width / 2.0f;
+	vThumbPos.y = vRenderPos.y + (GetSize().y - pImagePieceThumb->height) / 2.0f;
+	IRendererUI::GetInstance().SetupQuad(quad, pImagePieceThumb, vThumbPos);
+	if (IRendererUI::GetInstance().ClipRect(quad, dispRect.pos, dispRect.size))
+	{
+		IRendererUI::GetInstance().SetTexture(pImagePieceThumb->pTexture);
+		IRendererUI::GetInstance().DrawRect(quad);
 	}
 }
 
 Vector2 UISliderBar::GetBestSize()
 {
-	// TODO: calculate the boundary of the sliderbar
+	// calculate the boundary of the sliderbar
 	Vector2 sizeMax = Vector2(m_pStyle[DUS_SLIDERBAR_BACKGROUND]->width, m_pStyle[DUS_SLIDERBAR_BACKGROUND]->height);
-	if (sizeMax.x < m_pStyle[DUS_SLIDERBAR_FOREGROUND]->width) sizeMax.x = m_pStyle[DUS_SLIDERBAR_FOREGROUND]->width;
-	if (sizeMax.y < m_pStyle[DUS_SLIDERBAR_FOREGROUND]->height) sizeMax.y = m_pStyle[DUS_SLIDERBAR_FOREGROUND]->height;
+	if (sizeMax.x < m_pStyle[DUS_SLIDERBAR_BACKGROUND]->width) sizeMax.x = m_pStyle[DUS_SLIDERBAR_BACKGROUND]->width;
+
+	if (sizeMax.y < m_pStyle[DUS_SLIDERBAR_BACKGROUND]->height) sizeMax.y = m_pStyle[DUS_SLIDERBAR_BACKGROUND]->height;
 	if (sizeMax.y < m_pStyle[DUS_SLIDERBAR_THUMB_DEFAULT]->height) sizeMax.y = m_pStyle[DUS_SLIDERBAR_THUMB_DEFAULT]->height;
 
 	return sizeMax;

@@ -609,6 +609,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\ui\UIRect.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\include\ui\UIRect.h"
+				>
+			</File>
+			<File
 				RelativePath=".\source\ui\UIResMgr_Impl.cpp"
 				>
 			</File>
@@ -622,6 +630,14 @@
 			</File>
 			<File
 				RelativePath=".\include\ui\UIScreen.h"
+				>
+			</File>
+			<File
+				RelativePath=".\source\ui\UIScrollWindow.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\include\ui\UIScrollWindow.h"
 				>
 			</File>
 			<File

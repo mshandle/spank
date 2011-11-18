@@ -8,6 +8,7 @@
 #include "OpenGLView.h"
 #include <util/ScreenUtil.h>
 #include <util/IDebugUtil.h>
+#include <util/StringUtil.h>
 #include <msg/MsgMgr.h>
 #include <msg/MsgTouch.h>
 #include <msg/MsgKey.h>
@@ -37,6 +38,9 @@ OpenGLView::OpenGLView()
 {
 	m_pCurrTestCase = NULL;
 	m_pMainScreen = NULL;
+	m_pFPS = NULL;
+	m_nFPS = 0;
+	m_fFPSTime = 0.0f;
 	m_vTextViewPos = IMath::VEC2_ZERO;
 	m_nIndex = 0;
 }
@@ -51,12 +55,14 @@ bool OpenGLView::Initialize()
 	MsgMgr::GetInstance().SubscribeMessage(MI_TOUCH, this, (MSG_CALLBACK)&OpenGLView::OnMsgTouch);
 
 	m_pCurrTestCase = NULL;
-	m_pMainScreen = NULL;
 	m_vTextViewPos = IMath::VEC2_ZERO;
 
 	IResourceMgr::GetInstance().AddImagePieceList("test_case.xml");
 	IResourceMgr::GetInstance().AddImagePieceList("Porker.xml");
 	m_pMainScreen = IUISystem::GetInstance().GetCurrentScreen();
+	m_pFPS = new UIString("FPS: %d");
+	m_nFPS = 0;
+	m_fFPSTime = 0.0f;
 
 	// add test case
 	AddTestCase(new UITestCase(), m_pMainScreen);
@@ -75,7 +81,11 @@ bool OpenGLView::Initialize()
 
 void OpenGLView::Terminate()
 {
-	FreeCurrTestCase();
+	RemoveCurrTestCase();
+
+	SAFE_DELETE(m_pFPS);
+	m_nFPS = 0;
+	m_fFPSTime = 0.0f;
 
 	// free test case
 	for (TV_TEST_CASE::iterator it = m_vTestCase.begin(); it != m_vTestCase.end(); ++it)
@@ -90,6 +100,17 @@ void OpenGLView::Terminate()
 
 void OpenGLView::Update(float dt)
 {
+	m_fFPSTime += dt;
+	m_nFPS++;
+	if (m_fFPSTime > 1.0f)
+	{
+		m_fFPSTime -= 1.0f;
+		char szBuffer[128];
+		StringUtil::Format(szBuffer, 128, "FPS: %d", m_nFPS);
+		m_pFPS->SetText(szBuffer);
+		m_nFPS = 0;
+	}
+
 	if (m_pCurrTestCase) m_pCurrTestCase->Update(dt);
 	IUISystem::GetInstance().Update(dt);
 }
@@ -104,6 +125,7 @@ void OpenGLView::Render()
 	// render ui
 	IRendererUI::GetInstance().BeginRender();
 	IUISystem::GetInstance().Render();
+	if (m_pFPS) m_pFPS->Render(Vector2(0.0f, 0.0f), Vector2(0.0f, 0.0f), m_pFPS->GetSize());
 	IRendererUI::GetInstance().EndRender();
 }
 
@@ -143,7 +165,7 @@ bool OpenGLView::OnBtnTestCaseClicked(IMsgBase* pMsg)
 bool OpenGLView::OnBtnReturnClicked(IMsgBase* pMsg)
 {
 	// free current test case
-	FreeCurrTestCase();
+	RemoveCurrTestCase();
 	return true;
 }
 
@@ -167,7 +189,7 @@ bool OpenGLView::AddTestCase(TestCase* pTestCase, UIScreen* pScreen)
 	return true;
 }
 
-void OpenGLView::FreeCurrTestCase()
+void OpenGLView::RemoveCurrTestCase()
 {
 	if (m_pCurrTestCase)
 	{
@@ -182,7 +204,7 @@ bool OpenGLView::SwitchTestCase(int nIndex)
 	if (nIndex < 0 && nIndex >= (int)m_vTestCase.size()) return false;
 
 	TestCase* pTestCase = m_vTestCase[nIndex];
-	if (pTestCase != m_pCurrTestCase) FreeCurrTestCase();
+	if (pTestCase != m_pCurrTestCase) RemoveCurrTestCase();
 
 	if (!pTestCase->InternalInitialize())
 	{

@@ -20,6 +20,7 @@ public:
 	static int StringLength(const char* pszString);
 	static bool IsEqual(const char* psz1, const char* psz2);
 	static int Utf8ToUnicode(ushort* pUnicodeOut, int nUnicodeLength, const char* pszUtf8);
+	static bool Format(char* pszBuffer, int nBufferSize, const char* pszFormat, ...);
 
 };
 #endif // __STRINGUTIL_H__

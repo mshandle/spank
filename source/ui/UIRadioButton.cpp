@@ -37,75 +37,60 @@ void UIRadioButton::Render(const RenderParam& param)
 {
 	RenderBorder(param);
 
-	Vector2 posAbs = param.m_vBasePos + GetPosition();
-	Vector2 posStroff = (GetSize() - m_pString->GetSize());
-	posStroff.y = posStroff.y / 2.0f;
+	Vector2 vRenderPos = param.m_renderOffset + GetPosition();
+	UIRect dispRect(vRenderPos, GetSize());
+	if (!IRendererUI::GetInstance().ClipRect(dispRect, param.m_parentRect)) return;
+
+	// setup image piece
+	const IMAGE_PIECE* pImagePiece = m_pStyle[DUS_RADIOBUTTON_CHECK];
 	if (IsChecked())
 	{
 		if (!IsEnable() || !param.IsEnable())
 		{
-			// render disabled state
-			Vector2 vbutPosOff;
-			vbutPosOff.x = 0.0f;
-			vbutPosOff.y = (GetSize().y - m_pStyle[DUS_RADIOBUTTON_CHECK_DISABLED]->height) / 2.0f;
-			IRendererUI::GetInstance().DrawRect(posAbs +vbutPosOff, m_pStyle[DUS_RADIOBUTTON_CHECK_DISABLED]);
-			// TODO: render string disabled state
-			m_pString->Render(posAbs + posStroff);
+			pImagePiece = m_pStyle[DUS_RADIOBUTTON_CHECK_DISABLED];
 		}
 		else if (IsPressed())
 		{
-			// render pressed state
-			Vector2 vbutPosOff;
-			vbutPosOff.x = 0.0f;
-			vbutPosOff.y = (GetSize().y - m_pStyle[DUS_RADIOBUTTON_CHECK_PRESSED]->height) / 2.0f;
-			IRendererUI::GetInstance().DrawRect(posAbs + vbutPosOff, m_pStyle[DUS_RADIOBUTTON_CHECK_PRESSED]);
-			// TODO: render string pressed state
-			m_pString->Render(posAbs + posStroff);
+			pImagePiece = m_pStyle[DUS_RADIOBUTTON_CHECK_PRESSED];
 		}
 		else
 		{
-			// render default state
-			Vector2 vbutPosOff;
-			vbutPosOff.x = 0.0f;
-			vbutPosOff.y = (GetSize().y - m_pStyle[DUS_RADIOBUTTON_CHECK]->height) / 2.0f;
-			IRendererUI::GetInstance().DrawRect(posAbs + vbutPosOff, m_pStyle[DUS_RADIOBUTTON_CHECK]);
-			// TODO: render string pressed state
-			m_pString->Render(posAbs + posStroff);
+			pImagePiece = m_pStyle[DUS_RADIOBUTTON_CHECK];
 		}
 	}
 	else
 	{
 		if (!IsEnable() || !param.IsEnable())
 		{
-			// render disabled state
-			Vector2 vButPosOff;
-			vButPosOff.x = 0.0f;
-			vButPosOff.y = (GetSize().y - m_pStyle[DUS_RADIOBUTTON_UNCHECK_DISABLED]->height) / 2.0f;
-			IRendererUI::GetInstance().DrawRect(posAbs + vButPosOff, m_pStyle[DUS_RADIOBUTTON_UNCHECK_DISABLED]);
-			// TODO: render string disabled state
-			m_pString->Render(posAbs + posStroff);
+			pImagePiece = m_pStyle[DUS_RADIOBUTTON_UNCHECK_DISABLED];
 		}
 		else if (IsPressed())
 		{
-			// render pressed state
-			Vector2 vbutPosOff;
-			vbutPosOff.x = 0.0f;
-			vbutPosOff.y = (GetSize().y - m_pStyle[DUS_RADIOBUTTON_UNCHECK_PRESSED]->height) / 2.0f;
-			IRendererUI::GetInstance().DrawRect(posAbs + vbutPosOff, m_pStyle[DUS_RADIOBUTTON_UNCHECK_PRESSED]);
-			// TODO: render string pressed state
-			m_pString->Render(posAbs + posStroff);
+			pImagePiece = m_pStyle[DUS_RADIOBUTTON_UNCHECK_PRESSED];
 		}
 		else
 		{
-			// render default state
-			Vector2 vbutPosOff;
-			vbutPosOff.x = 0.0f;
-			vbutPosOff.y = (GetSize().y - m_pStyle[DUS_RADIOBUTTON_UNCHECK]->height) / 2.0f;
-			IRendererUI::GetInstance().DrawRect(posAbs + vbutPosOff, m_pStyle[DUS_RADIOBUTTON_UNCHECK]);
-			// TODO: render string pressed state
-			m_pString->Render(posAbs + posStroff);
+			pImagePiece = m_pStyle[DUS_RADIOBUTTON_UNCHECK];
 		}
 	}
+
+	// render button image
+	Vector2 vImageSize(pImagePiece->width, pImagePiece->height);
+	Vector2 vImagePos = vRenderPos + (GetSize() - vImageSize) * 0.5f;
+	vImagePos.x = vRenderPos.x;
+	QUAD_VERT_POS_UV quad;
+	IRendererUI::GetInstance().SetupQuad(quad, pImagePiece, vImagePos);
+	if (IRendererUI::GetInstance().ClipRect(quad, dispRect.pos, dispRect.size))
+	{
+		IRendererUI::GetInstance().SetTexture(pImagePiece->pTexture);
+		IRendererUI::GetInstance().DrawRect(quad);
+	}
+
+	//calculate the off size of string in the right;
+	Vector2 vTextPos = vRenderPos + (GetSize() - m_pString->GetSize()) * 0.5f;
+	vTextPos.x = vRenderPos.x + vImageSize.x;
+	// TODO: render string disabled state
+	m_pString->Render(vTextPos, dispRect.pos, dispRect.size);
 }
 
 Vector2 UIRadioButton::GetBestSize()

@@ -75,7 +75,7 @@ Vector3 ActionSineMoveTo::Tween()
 	case  ATT_EASE_IN_OUT:
 		alpha = m_fCurrTime / m_fTime;
 		alpha = cosf( alpha * IMath::F_PI) - 1.0f;
-		vPos = -(m_vPosEnd - m_vPosStart) / 2.0f * alpha + m_vPosStart;
+		vPos = -(m_vPosEnd - m_vPosStart) * 0.5f * alpha + m_vPosStart;
 		return vPos;
 	default:
 		return vPos;

@@ -9,6 +9,7 @@
 #define __UISTRING_H__
 
 #include "IFont.h"
+#include "UIRect.h"
 #include "../math/IMath.h"
 #include <vector>
 
@@ -26,7 +27,7 @@ public:
 	virtual ~UIString();
 
 	void Update(float dt);
-	void Render(const Vector2& pos);
+	void Render(const Vector2& pos, const Vector2& clipRectPos, const Vector2& clipRectSize);
 
 	bool SetText(const char* pszText);
 	const Vector2& GetSize() const;

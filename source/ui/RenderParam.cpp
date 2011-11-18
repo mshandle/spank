@@ -7,17 +7,22 @@
  */
 #include <ui/RenderParam.h>
 
-RenderParam::RenderParam(const Vector2& pos, const Vector2& size)
+RenderParam::RenderParam()
 {
-	m_vBasePos = pos;
-	m_vBaseSize = size;
+	// TODO: 
+}
+
+RenderParam::RenderParam(const Vector2& renderOffset, const UIRect& parentRect)
+{
+	m_renderOffset = renderOffset;
+	m_parentRect = parentRect;
 	m_nRenderState = URS_DEFAULT;
 }
 
 RenderParam::RenderParam(const RenderParam& param)
 {
-	m_vBasePos = param.m_vBasePos;
-	m_vBaseSize = param.m_vBaseSize;
+	m_renderOffset = param.m_renderOffset;
+	m_parentRect = param.m_parentRect;
 	m_nRenderState = URS_DEFAULT;
 }
 
@@ -28,8 +33,8 @@ RenderParam::~RenderParam()
 
 RenderParam& RenderParam::operator=(const RenderParam& param)
 {
-	m_vBasePos = param.m_vBasePos;
-	m_vBaseSize = param.m_vBaseSize;
+	m_renderOffset = param.m_renderOffset;
+	m_parentRect = param.m_parentRect;
 	m_nRenderState = param.m_nRenderState;
 	return (*this);
 }

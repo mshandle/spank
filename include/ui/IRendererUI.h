@@ -10,6 +10,7 @@
 
 #include "../ISingleton.h"
 #include "BaseTypeUI.h"
+#include "UIRect.h"
 
 class IRendererUI : public ISingleton
 {
@@ -34,6 +35,7 @@ public:
 
 	virtual bool ClipRect(QUAD_VERT_POS_UV& quadInOut, const Vector2& pos, const Vector2& size) = 0;
 	virtual bool ClipRect(QUAD_VERT_POS_UV& quadInOut, float x, float y, float width, float height) = 0;
+	virtual bool ClipRect(UIRect& rectInOut, const UIRect& rect) = 0;
 
 	virtual bool SetupQuad(QUAD_VERT_POS_UV& quadOut, const IMAGE_PIECE* pImagePiece, const Vector2& pos) = 0;
 	virtual bool SetupQuad(QUAD_VERT_POS_UV& quadOut, const IMAGE_PIECE* pImagePiece, float x, float y) = 0;

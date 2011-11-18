@@ -10,11 +10,13 @@
 
 #include "../math/IMath.h"
 #include "BaseTypeUI.h"
+#include "UIRect.h"
 
 class RenderParam
 {
 public:
-	RenderParam(const Vector2& pos, const Vector2& size);
+	RenderParam();
+	RenderParam(const Vector2& renderOffset, const UIRect& parentRect);
 	RenderParam(const RenderParam& param);
 	~RenderParam();
 
@@ -27,8 +29,8 @@ public:
 	bool IsEnable() const;
 
 public:
-	Vector2 m_vBasePos;
-	Vector2 m_vBaseSize;
+	Vector2 m_renderOffset;
+	UIRect m_parentRect;
 	uint m_nRenderState;
 
 };

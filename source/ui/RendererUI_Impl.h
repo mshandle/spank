@@ -49,6 +49,7 @@ public:
 
 	virtual bool ClipRect(QUAD_VERT_POS_UV& quadInOut, const Vector2& pos, const Vector2& size);
 	virtual bool ClipRect(QUAD_VERT_POS_UV& quadInOut, float x, float y, float width, float height);
+	virtual bool ClipRect(UIRect& rectInOut, const UIRect& rect);
 
 	virtual bool SetupQuad(QUAD_VERT_POS_UV& quadOut, const IMAGE_PIECE* pImagePiece, const Vector2& pos);
 	virtual bool SetupQuad(QUAD_VERT_POS_UV& quadOut, const IMAGE_PIECE* pImagePiece, float x, float y);

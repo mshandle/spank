@@ -47,13 +47,13 @@ public:
 	void SetID(int nID);
 
 	const Vector2& GetPosition() const;
-	Vector2 GetPositionAbsolute();
-	void SetPosition(const Vector2& pos);
-	void SetPosition(float x, float y);
+	virtual Vector2 GetPositionAbsolute();
+	virtual void SetPosition(const Vector2& pos);
+	virtual void SetPosition(float x, float y);
 
 	const Vector2& GetSize() const;
 	void SetSize(const Vector2& size);
-	void SetSize(float width, float height);
+	virtual void SetSize(float width, float height);
 
 	void SetMargin(float left, float top, float right, float bottom);
 	const Vector2& GetMarginLeftTop() const;
@@ -87,14 +87,15 @@ public:
 	virtual void OnTouchLost();
 	
 protected:
-	void AddChild(UIWindow* pWindow);
-	void RemoveChild(UIWindow* pWindow);
+	virtual void AddChild(UIWindow* pWindow);
+	virtual void RemoveChild(UIWindow* pWindow);
+	virtual TV_WINDOW& GetChildrenList();
 
-	void UpdateChildrenWindow(float dt);
-	void RenderChildrenWindow(const RenderParam& param);
-	void RenderBorder(const RenderParam& param);
+	virtual void UpdateChildrenWindow(float dt);
+	virtual void RenderChildrenWindow(const RenderParam& param);
+	virtual void RenderBorder(const RenderParam& param);
 
-	UIWindow* FindChildUnderPoint(const Vector2& pos);
+	virtual UIWindow* FindChildUnderPoint(const Vector2& pos);
 
 private:
 	TV_WINDOW m_vChildren;

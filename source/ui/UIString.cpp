@@ -33,7 +33,7 @@ void UIString::Update(float dt)
 	// TODO: 
 }
 
-void UIString::Render(const Vector2& pos)
+void UIString::Render(const Vector2& pos, const Vector2& clipRectPos, const Vector2& clipRectSize)
 {
 	float fBasePosX = pos.x;
 	float fBasePosY = pos.y;
@@ -78,8 +78,11 @@ void UIString::Render(const Vector2& pos)
 		quad.verts[3].u = pCharInfo->u+pCharInfo->du;
 		quad.verts[3].v = pCharInfo->v+pCharInfo->dv;
 
-		IRendererUI::GetInstance().SetTexture(pCharInfo->pTexture);
-		IRendererUI::GetInstance().DrawRect(quad);
+		if (IRendererUI::GetInstance().ClipRect(quad, clipRectPos, clipRectSize))
+		{
+			IRendererUI::GetInstance().SetTexture(pCharInfo->pTexture);
+			IRendererUI::GetInstance().DrawRect(quad);
+		}
 
 		fBasePosX += pCharInfo->advance;
 	}

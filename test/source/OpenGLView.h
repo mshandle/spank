@@ -10,6 +10,7 @@
 
 #include <IViewOpenGL.h>
 #include "TestCase.h"
+#include <ui/UIString.h>
 #include <vector>
 
 class OpenGLView : public IViewOpenGL
@@ -35,7 +36,7 @@ private:
 	bool OnBtnReturnClicked(IMsgBase* pMsg);
 
 	bool AddTestCase(TestCase* pTestCase, UIScreen* pScreen);
-	void FreeCurrTestCase();
+	void RemoveCurrTestCase();
 	bool SwitchTestCase(int nIndex);
 
 	bool InitializeTestCase();
@@ -45,6 +46,9 @@ private:
 	TV_TEST_CASE m_vTestCase;
 	TestCase* m_pCurrTestCase;
 	UIScreen* m_pMainScreen;
+	UIString* m_pFPS;
+	int m_nFPS;
+	float m_fFPSTime;
 	Vector2 m_vTextViewPos;
 	int m_nIndex;
 

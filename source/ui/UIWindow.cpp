@@ -280,6 +280,11 @@ void UIWindow::RemoveChild(UIWindow* pWindow)
 	}
 }
 
+UIWindow::TV_WINDOW& UIWindow::GetChildrenList()
+{
+	return m_vChildren;
+}
+
 void UIWindow::UpdateChildrenWindow(float dt)
 {
 	for (TV_WINDOW::iterator it = m_vChildren.begin(); it != m_vChildren.end(); ++it)
@@ -291,9 +296,10 @@ void UIWindow::UpdateChildrenWindow(float dt)
 
 void UIWindow::RenderChildrenWindow(const RenderParam& param)
 {
-	RenderParam childParam = param;
-	childParam.m_vBasePos += m_vPosition;
-	childParam.m_vBaseSize = m_vSize;
+	RenderParam childParam;
+	childParam.m_renderOffset = param.m_renderOffset + m_vPosition;
+	childParam.m_parentRect.SetRect(childParam.m_renderOffset, m_vSize);
+	childParam.m_nRenderState = param.m_nRenderState;
 
 	for (TV_WINDOW::iterator it = m_vChildren.begin(); it != m_vChildren.end(); ++it)
 	{

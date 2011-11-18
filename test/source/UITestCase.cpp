@@ -11,6 +11,7 @@
 #include <ui/UICheckButton.h>
 #include <ui/UIRadioButton.h>
 #include <ui/UISliderBar.h>
+#include <ui/UIScrollWindow.h>
 #include <ui/uimsg/MsgClick.h>
 #include <ui/uimsg/MsgCheck.h>
 #include <ui/uimsg/MsgSlider.h>
@@ -37,6 +38,9 @@ bool UITestCase::Initialize(UIScreen* pUIScreen)
 //								   "can be read by a game for easy\n"
 //								   "rendering of fonts.";
 
+ 	UIWindow* pWindow = new UIScrollWindow(pUIScreen, Vector2(100.0f, 20.0f));
+ 	pWindow->SetSize(400.0f, 400.0f);
+
 	int nID = 1;
 
 // 	{
@@ -47,7 +51,7 @@ bool UITestCase::Initialize(UIScreen* pUIScreen)
 
 	{
 		/*Test show a normal button*/
-		UIButton* pButton = new UIButton(pUIScreen);
+		UIButton* pButton = new UIButton(pWindow);
 		pButton->SetID(nID++);
 		pButton->SetPosition(Vector2(10.0f, 10.0f));
 		pButton->SetText("Button1");
@@ -58,7 +62,7 @@ bool UITestCase::Initialize(UIScreen* pUIScreen)
 		/* Test, show a list of Check button. you can set a callback funtion for the each CheckButton */
 		for (int i = 0; i < 3; ++i)
 		{
-			UICheckButton* pUICheck = new UICheckButton(pUIScreen);
+			UICheckButton* pUICheck = new UICheckButton(pWindow);
 			pUICheck->SetID(nID++);
 			pUICheck->SetPosition(Vector2(10.0f, 100.0f+i*50.0f));
 			pUICheck->SetText("Check");
@@ -70,7 +74,7 @@ bool UITestCase::Initialize(UIScreen* pUIScreen)
 		/*Test, show a list Radio button, you should get a RadioGroup first*/
 		for (int i = 0; i < 3; ++i)
 		{
-			UIRadioButton* pUIRadio = new UIRadioButton(pUIScreen);
+			UIRadioButton* pUIRadio = new UIRadioButton(pWindow);
 			pUIRadio->SetID(nID++);
 			pUIRadio->SetPosition(Vector2(210.0f, 100.0f+i*50.0f));
 			pUIRadio->SetText("Radio");
@@ -80,7 +84,7 @@ bool UITestCase::Initialize(UIScreen* pUIScreen)
 
 	{
 		/*Test, show a Slider, you should set a maskTexture.at last*/
-		UISliderBar* pSlider = new UISliderBar(pUIScreen);
+		UISliderBar* pSlider = new UISliderBar(pWindow);
 		pSlider->SetID(nID++);
 		pSlider->SetPosition(Vector2(10.0f, 250.0f));
 		pSlider->SetSliderRange(0, 10);

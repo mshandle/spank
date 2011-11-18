@@ -54,7 +54,8 @@ void UISystem_Impl::Render()
 {
 	if (!m_pCurrScreen) return;
 
-	RenderParam param(IMath::VEC2_ZERO, ScreenUtil::GetInstance().GetScreenSize());
+	UIRect rect(IMath::VEC2_ZERO, ScreenUtil::GetInstance().GetScreenSize());
+	RenderParam param(IMath::VEC2_ZERO, rect);
 	m_pCurrScreen->Render(param);
 }
 

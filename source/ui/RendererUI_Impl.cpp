@@ -251,6 +251,27 @@ bool RendererUI_Impl::ClipRect(QUAD_VERT_POS_UV& quadInOut, float x, float y, fl
 	return true;
 }
 
+bool RendererUI_Impl::ClipRect(UIRect& rectInOut, const UIRect& rect)
+{
+	if (rectInOut.pos.x >= rect.pos.x + rect.size.x) return false;
+	if (rectInOut.pos.y >= rect.pos.y + rect.size.y) return false;
+	if (rectInOut.pos.x + rectInOut.size.x <= rect.pos.x) return false;
+	if (rectInOut.pos.y + rectInOut.size.y <= rect.pos.y) return false;
+
+	rectInOut.pos.x = rectInOut.pos.x > rect.pos.x ? rectInOut.pos.x : rect.pos.x;
+	rectInOut.pos.y = rectInOut.pos.y > rect.pos.y ? rectInOut.pos.y : rect.pos.y;
+
+	Vector2 vRightBottom;
+	vRightBottom.x = rectInOut.pos.x + rectInOut.size.x;
+	if (vRightBottom.x > rect.pos.x + rect.size.x) vRightBottom.x = rect.pos.x + rect.size.x;
+
+	vRightBottom.y = rectInOut.pos.y + rectInOut.size.y;
+	if (vRightBottom.y > rect.pos.y + rect.size.y) vRightBottom.y = rect.pos.y + rect.size.y;
+
+	rectInOut.size = vRightBottom - rectInOut.pos;
+	return true;
+}
+
 bool RendererUI_Impl::SetupQuad(QUAD_VERT_POS_UV& quadOut, const IMAGE_PIECE* pImagePiece, const Vector2& pos)
 {
 	return SetupQuad(quadOut, pImagePiece, pos.x, pos.y, pImagePiece->width, pImagePiece->height);

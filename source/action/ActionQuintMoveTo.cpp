@@ -48,7 +48,7 @@ float ActionQuintMoveTo::Interpolate()
 		if(alpha < 1.0f)
 		{
 			alpha = alpha * alpha * alpha * alpha * alpha;
-			vPos = (m_vPosEnd - m_vPosStart) / 2.0f * alpha + m_vPosStart;
+			vPos = (m_vPosEnd - m_vPosStart) * 0.5f * alpha + m_vPosStart;
 			alpha /= 2.0f;
 			alpha *= alpha;
 		}

@@ -7,6 +7,8 @@
  */
 #include <util/StringUtil.h>
 #include <string.h>
+#include <stdarg.h>
+#include <stdio.h>
 
 void StringUtil::ZeroMemory(void* pBuffer, int nSize)
 {
@@ -119,4 +121,15 @@ int StringUtil::Utf8ToUnicode(ushort* pUnicodeOut, int nUnicodeLength, const cha
 	}
 
 	return nFinalLength;
+}
+
+bool StringUtil::Format(char* pszBuffer, int nBufferSize, const char* pszFormat, ...)
+{
+	va_list marker;
+	va_start(marker, pszFormat);
+
+	int nLength = vsnprintf(pszBuffer, nBufferSize, pszFormat, marker);
+	va_end(marker);
+
+	return true;
 }
