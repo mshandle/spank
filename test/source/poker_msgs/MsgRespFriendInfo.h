@@ -2,7 +2,7 @@
  * \file MsgRespFriendInfo.h
  * \date unknown
  * 
- * 
+ * 在线好友/牌友信息，每次一个，可发多个
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGRESPFRIENDINFO_H__
@@ -30,16 +30,16 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 nUserId;
-	int64 nFriendUserId;
-	char nInFacebook;
-	uchar nLevel;
-	char _dummy[2];
-	int64 nCoins;
-	int64 nMostCoins;
-	int nCash;
+	int64 nUserId;	// 玩家ID
+	int64 nFriendUserId;	// 好友ID
+	char nInFacebook;	// 是否 Facebook 好友
+	uchar nLevel;	// 等级
+	char _dummy[2];	// 补齐位
+	int64 nCoins;	// 总资产
+	int64 nMostCoins;	// 总资产的历史最高记录
+	int nCash;	// 充值
 	uint nLogoutTime;
-	int64 nWinThisWeek;
+	int64 nWinThisWeek;	// 本周赢额
 
 };
 

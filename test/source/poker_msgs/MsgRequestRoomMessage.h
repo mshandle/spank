@@ -2,7 +2,7 @@
  * \file MsgRequestRoomMessage.h
  * \date unknown
  * 
- * 
+ * 玩家房间内聊天请示
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGREQUESTROOMMESSAGE_H__
@@ -30,11 +30,11 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 nUserId;
-	short nMsgLength;
+	int64 nUserId;	// 本玩家ID
+	short nMsgLength;	// 聊天信息长度.
 	char _dummy[2];
-	int64 nDest;
-	char szMessage[128];
+	int64 nDest;	// 目标玩家, 须是同房间内的玩家。-1: 房间内群发
+	char szMessage[128];	// 聊天信息内容
 
 };
 

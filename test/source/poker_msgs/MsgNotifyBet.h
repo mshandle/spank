@@ -2,7 +2,7 @@
  * \file MsgNotifyBet.h
  * \date unknown
  * 
- * 
+ * 通知下注
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGNOTIFYBET_H__
@@ -31,10 +31,10 @@ public:
 
 public:
 	int64 nUserId;
-	char nSeatId;
-	char nTime;
-	char nTotalTime;
-	char _dummy;
+	char nSeatId;	// 座位ID
+	char nTime;	// 剩余等待时间, 单位为秒
+	char nTotalTime;	// 总的等待时间, 用于播放倒计时动画
+	char _dummy;	// 补齐位.
 
 };
 

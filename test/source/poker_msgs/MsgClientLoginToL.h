@@ -2,7 +2,7 @@
  * \file MsgClientLoginToL.h
  * \date unknown
  * 
- * 
+ * 登入LoginServer
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGCLIENTLOGINTOL_H__
@@ -30,12 +30,12 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int nSeqId;
+	int nSeqId;	// 序列号 目前无用 只是预留
 	int64 nUserId;
 	char szSessionKey[128];
 	char szLoginSessionKey[128];
 	char szLoginPassWord[128];
-	uint nGroupId;
+	uint nGroupId;	// 登录的服务器组ID(服务器的类型 如 英文版 土耳其版 类型为)
 
 };
 

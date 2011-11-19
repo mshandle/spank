@@ -2,7 +2,7 @@
  * \file MsgSeatUpdate.h
  * \date unknown
  * 
- * 
+ * 更新单个座位的信息
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGSEATUPDATE_H__
@@ -31,9 +31,9 @@ public:
 
 public:
 	int64 nUserId;
-	char nSeatId;
+	char nSeatId;	// 座位号
 	char _dummy[3];
-	NET_SEAT_INFO stSeatInfo;
+	NET_SEAT_INFO stSeatInfo;	// 座位信息
 
 };
 

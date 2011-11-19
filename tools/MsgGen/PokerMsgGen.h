@@ -20,6 +20,7 @@ public:
 	{
 		const char* pszName;
 		const char* pszType;
+		const char* pszComment;
 		int nTypeSizeInByte;
 		int nArraySize;
 	} PROPERTY_INFO;
@@ -29,6 +30,7 @@ public:
 	{
 		const char* pszClassName;
 		const char* pszMsgId;
+		const char* pszComment;
 		int nTotalDataSize;
 		TV_PROPERTY_INFO vPropertys;
 	} MSG_INFO;

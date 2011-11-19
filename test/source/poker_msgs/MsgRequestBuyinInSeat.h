@@ -2,7 +2,7 @@
  * \file MsgRequestBuyinInSeat.h
  * \date unknown
  * 
- * 
+ * 请求在座位上买筹码
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGREQUESTBUYININSEAT_H__
@@ -30,8 +30,8 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 nUserId;
-	int64 nBuyIn;
+	int64 nUserId;	// 玩家ID
+	int64 nBuyIn;	// 买入的筹码数
 
 };
 

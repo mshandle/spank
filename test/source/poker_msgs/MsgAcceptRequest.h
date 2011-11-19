@@ -2,7 +2,7 @@
  * \file MsgAcceptRequest.h
  * \date unknown
  * 
- * 
+ * 玩家点击赞助
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGACCEPTREQUEST_H__
@@ -30,10 +30,10 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 nAcceptUserId;
-	int64 nRequestUserId;
-	int64 nRequestId;
-	uint nRequestType;
+	int64 nAcceptUserId;	// 点击accept赞助的玩家
+	int64 nRequestUserId;	// 发送请求的玩家
+	int64 nRequestId;	// 请求的ID
+	uint nRequestType;	// 请求赞助的类型
 
 };
 

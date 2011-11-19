@@ -2,7 +2,7 @@
  * \file MsgSendRequest.h
  * \date unknown
  * 
- * 
+ * 向玩家发送请求
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGSENDREQUEST_H__
@@ -30,9 +30,9 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 nUserId;
-	int64 nFriendUserId;
-	uint nRType;
+	int64 nUserId;	// 玩家ID
+	int64 nFriendUserId;	// 好友的ID
+	uint nRType;	// 请求的类型 
 
 };
 

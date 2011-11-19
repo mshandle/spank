@@ -2,7 +2,7 @@
  * \file MsgRespRoomList.h
  * \date unknown
  * 
- * 
+ * 客户端房间列表请求的应答
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGRESPROOMLIST_H__
@@ -31,7 +31,7 @@ public:
 
 public:
 	short nRoomNum;
-	char _dummy[2];
+	char _dummy[2];	// 补齐位
 	NET_ROOM_INFO stRooms[26];
 
 };

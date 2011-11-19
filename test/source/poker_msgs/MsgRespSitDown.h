@@ -2,7 +2,7 @@
  * \file MsgRespSitDown.h
  * \date unknown
  * 
- * 
+ * 坐下请求的回复
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGRESPSITDOWN_H__
@@ -31,10 +31,10 @@ public:
 
 public:
 	int64 nUserId;
-	int nRoomId;
-	char nSeatId;
+	int nRoomId;	// 房间ID
+	char nSeatId;	// 座位ID -1: 表示没有坐下
 	char _dummy[3];
-	int64 nCounter;
+	int64 nCounter;	// 持有筹码
 
 };
 

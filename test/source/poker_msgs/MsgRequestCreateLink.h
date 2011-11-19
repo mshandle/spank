@@ -2,7 +2,7 @@
  * \file MsgRequestCreateLink.h
  * \date unknown
  * 
- * 
+ * client请求发布幸运筹码
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGREQUESTCREATELINK_H__
@@ -31,7 +31,7 @@ public:
 
 public:
 	int64 nUserId;
-	uint nType;
+	uint nType;	// 发送幸运筹码的类型 1 幸运筹码 2 新年宝箱
 
 };
 

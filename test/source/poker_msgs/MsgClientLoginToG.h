@@ -2,7 +2,7 @@
  * \file MsgClientLoginToG.h
  * \date unknown
  * 
- * 
+ * 登入GameServer
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGCLIENTLOGINTOG_H__
@@ -30,9 +30,9 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int nSeqId;
+	int nSeqId;	// 序列号
 	int64 nUserId;
-	char szCheckOutText[24];
+	char szCheckOutText[24];	// 校验码
 	char szSessionKey[128];
 	char szSignInLocale[32];
 

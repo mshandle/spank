@@ -2,7 +2,7 @@
  * \file MsgPing.h
  * \date unknown
  * 
- * 
+ * Ping包
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGPING_H__
@@ -30,8 +30,8 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int nId;
-	int nTimestamp;
+	int nId;	// id, 由客户端自己定义, 可填0, 将原样返回
+	int nTimestamp;	// 时间戳由客户端提供, 将原样返回
 
 };
 

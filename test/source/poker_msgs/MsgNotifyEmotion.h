@@ -2,7 +2,7 @@
  * \file MsgNotifyEmotion.h
  * \date unknown
  * 
- * 
+ * 服务器广播表情
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGNOTIFYEMOTION_H__
@@ -30,10 +30,10 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 nUserId;
-	char nSeat;
-	short nEmot;
-	char _dummy;
+	int64 nUserId;	// 玩家ID
+	char nSeat;	// 座位ID
+	short nEmot;	// 表情ID, 实际表情由客户端指定
+	char _dummy;	// 对齐位
 
 };
 

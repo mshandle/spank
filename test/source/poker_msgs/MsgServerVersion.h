@@ -2,7 +2,7 @@
  * \file MsgServerVersion.h
  * \date unknown
  * 
- * 
+ * 服务器版本信息
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGSERVERVERSION_H__

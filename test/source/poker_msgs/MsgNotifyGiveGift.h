@@ -2,7 +2,7 @@
  * \file MsgNotifyGiveGift.h
  * \date unknown
  * 
- * 
+ * ิ๙หอฮ๏ฦท
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGNOTIFYGIVEGIFT_H__

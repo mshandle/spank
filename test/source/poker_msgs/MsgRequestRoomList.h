@@ -2,7 +2,7 @@
  * \file MsgRequestRoomList.h
  * \date unknown
  * 
- * 
+ * 客户端请求房间列表
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGREQUESTROOMLIST_H__
@@ -31,7 +31,7 @@ public:
 
 public:
 	int64 nUserId;
-	int nRoomType;
+	int nRoomType;	// 0: 普通房, 6: 快速房, 10: Sit  Go房间, 11: 快速Sit  Go房间, 
 
 };
 

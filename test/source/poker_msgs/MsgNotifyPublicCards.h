@@ -2,7 +2,7 @@
  * \file MsgNotifyPublicCards.h
  * \date unknown
  * 
- * 
+ * 公牌显示
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGNOTIFYPUBLICCARDS_H__
@@ -31,9 +31,9 @@ public:
 
 public:
 	int64 nUserId;
-	char nCount;
-	char nCards[5];
-	char _dummy[2];
+	char nCount;	// 牌数, 第一次发牌为3张, 第二次4张, 第三次5张
+	char nCards[5];	// 范围为0~51, 表示52张牌中的一张
+	char _dummy[2];	// 补齐位
 
 };
 

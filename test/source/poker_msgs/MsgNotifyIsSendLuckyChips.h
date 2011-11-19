@@ -2,7 +2,7 @@
  * \file MsgNotifyIsSendLuckyChips.h
  * \date unknown
  * 
- * 
+ * 通知client是否发布过幸运筹码
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGNOTIFYISSENDLUCKYCHIPS_H__

@@ -74,6 +74,8 @@ bool PokerMsgGen::ParseXmlMessage(MSG_INFO& infoOut, TiXmlElement* pElmMessage)
 	infoOut.pszMsgId = pElmMessage->Attribute("id");
 	if (!infoOut.pszMsgId) return false;
 
+	infoOut.pszComment = pElmMessage->Attribute("comment");
+
 	infoOut.nTotalDataSize = 0;
 	TiXmlElement* pElmProperty = pElmMessage->FirstChildElement("property");
 	while (pElmProperty)
@@ -81,6 +83,7 @@ bool PokerMsgGen::ParseXmlMessage(MSG_INFO& infoOut, TiXmlElement* pElmMessage)
 		PROPERTY_INFO prop;
 		prop.pszName = pElmProperty->Attribute("name");
 		prop.pszType = pElmProperty->Attribute("type");
+		prop.pszComment = pElmProperty->Attribute("comment");
 		prop.nTypeSizeInByte = GetTypeSize(prop.pszType);
 		if (prop.nTypeSizeInByte <= 0)
 		{
@@ -119,7 +122,7 @@ bool PokerMsgGen::GenerateH(const MSG_INFO& info, const char* pszDir)
 		" * \\file %1.h\n"
 		" * \\date unknown\n"
 		" * \n"
-		" * \n"
+		" * %6\n"
 		" * \\author Auto Generate by MsgGen\n"
 		" */\n"
 		"#ifndef __%2_H__\n"
@@ -155,6 +158,7 @@ bool PokerMsgGen::GenerateH(const MSG_INFO& info, const char* pszDir)
 	// class name
 	std::string strContent = s_pszTemplate;
 	StringReplace(strContent, "%1", info.pszClassName);
+	StringReplace(strContent, "%6", info.pszComment);
 
 	// class name upper
 	std::string strClassNameUpper = info.pszClassName;
@@ -261,12 +265,20 @@ bool PokerMsgGen::GenPropertysDeclare(std::string& strInOut, const MSG_INFO& inf
 			strInOut += "[";
 			_itoa_s(prop.nArraySize, szBuffer, 10);
 			strInOut += szBuffer;
-			strInOut += "];\n";
+			strInOut += "];";
 		}
 		else
 		{
-			strInOut += ";\n";
+			strInOut += ";";
 		}
+
+		if (prop.pszComment)
+		{
+			strInOut += "\t// ";
+			strInOut += prop.pszComment;
+		}
+
+		strInOut += "\n";
 	}
 
 	return true;

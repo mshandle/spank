@@ -2,7 +2,7 @@
  * \file MsgLoginServerValidate.h
  * \date unknown
  * 
- * 
+ * 通知GameServer服务器地址
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGLOGINSERVERVALIDATE_H__
@@ -33,7 +33,7 @@ public:
 	int64 nUserId;
 	char szIp[16];
 	int nPort;
-	char szCheckOutText[24];
+	char szCheckOutText[24];	// 校验码
 	int64 nIggId;
 
 };

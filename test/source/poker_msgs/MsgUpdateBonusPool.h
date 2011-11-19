@@ -2,7 +2,7 @@
  * \file MsgUpdateBonusPool.h
  * \date unknown
  * 
- * 
+ * 奖池更新包
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGUPDATEBONUSPOOL_H__
@@ -31,7 +31,7 @@ public:
 
 public:
 	int64 nUserId;
-	int64 nPool[8];
+	int64 nPool[8];	// 最多8个奖池, 主奖池编号为 0
 
 };
 

@@ -2,7 +2,7 @@
  * \file MsgNotifyTournamentStatus.h
  * \date unknown
  * 
- * 
+ * 通知客户端房间状态
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGNOTIFYTOURNAMENTSTATUS_H__
@@ -31,7 +31,7 @@ public:
 
 public:
 	int64 nUserId;
-	uchar nRoomStatus;
+	uchar nRoomStatus;	// 1.running  0.stopping
 	char _dummy[3];
 
 };

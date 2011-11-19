@@ -2,7 +2,7 @@
  * \file MsgNotifySmallBlind.h
  * \date unknown
  * 
- * 
+ * 告知客户端小盲注的值
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGNOTIFYSMALLBLIND_H__

@@ -2,7 +2,7 @@
  * \file MsgRequestFriendList.h
  * \date unknown
  * 
- * 
+ * 玩家请求在线好友/牌友列表
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGREQUESTFRIENDLIST_H__
@@ -30,7 +30,7 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 nUserId;
+	int64 nUserId;	// 玩家ID
 
 };
 

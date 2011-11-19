@@ -2,7 +2,7 @@
  * \file MsgRespSendLuckyChips.h
  * \date unknown
  * 
- * 
+ * 回复幸运筹码发布结果
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGRESPSENDLUCKYCHIPS_H__
@@ -31,7 +31,7 @@ public:
 
 public:
 	char nLinkId[36];
-	uint nType;
+	uint nType;	// 返回的类型
 
 };
 

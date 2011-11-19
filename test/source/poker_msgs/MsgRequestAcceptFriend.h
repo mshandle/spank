@@ -2,7 +2,7 @@
  * \file MsgRequestAcceptFriend.h
  * \date unknown
  * 
- * 
+ * 玩家接受好友的请求包
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGREQUESTACCEPTFRIEND_H__
@@ -30,8 +30,8 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 nUserId;
-	char nSourceSeatId;
+	int64 nUserId;	// 本玩家ID
+	char nSourceSeatId;	// 接受此座位的玩家的好友请求
 	char _dummy[3];
 
 };

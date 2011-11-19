@@ -2,7 +2,7 @@
  * \file MsgRequestBet.h
  * \date unknown
  * 
- * 
+ * 玩家下注包
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGREQUESTBET_H__
@@ -31,9 +31,9 @@ public:
 
 public:
 	int64 nUserId;
-	uchar nSeatId;
+	uchar nSeatId;	// 座位ID
 	char _dummy[3];
-	int64 nBet;
+	int64 nBet;	// 下注的筹码, -1为弃牌, 其它时候必须大于等于零
 
 };
 

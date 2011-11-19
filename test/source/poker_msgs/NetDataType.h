@@ -8,6 +8,8 @@
 #ifndef __NETDATATYPE_H__
 #define __NETDATATYPE_H__
 
+#include <BaseType.h>
+
 typedef struct NET_ITEM_INFO_tag
 {
 	int64 nItemId;		// 物品的数据库序列ID   -1: 表示空
@@ -72,4 +74,5 @@ typedef struct NET_SEAT_INFO_tag
 	char _dummy[3];
 	int nTrinket;			// 饰品
 } NET_SEAT_INFO;
+
 #endif // __NETDATATYPE_H__

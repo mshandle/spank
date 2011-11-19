@@ -2,7 +2,7 @@
  * \file MsgRespFriendStatusEnd.h
  * \date unknown
  * 
- * 
+ * 好友/牌友状态回复的结束包
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGRESPFRIENDSTATUSEND_H__
@@ -30,7 +30,7 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 nUserId;
+	int64 nUserId;	// 玩家ID
 
 };
 

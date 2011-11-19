@@ -2,7 +2,7 @@
  * \file MsgRequestUseItem.h
  * \date unknown
  * 
- * 
+ * 客户端请求使用道具
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGREQUESTUSEITEM_H__
@@ -31,7 +31,7 @@ public:
 
 public:
 	int64 nUserId;
-	int64 nItemId;
+	int64 nItemId;	// 要使用的物品Id -1: 表示取消饰品
 
 };
 

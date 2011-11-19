@@ -2,7 +2,7 @@
  * \file MsgAccountForceOut.h
  * \date unknown
  * 
- * 
+ * 通知客户端帐号被封存
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGACCOUNTFORCEOUT_H__

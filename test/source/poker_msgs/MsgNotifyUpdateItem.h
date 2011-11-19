@@ -2,7 +2,7 @@
  * \file MsgNotifyUpdateItem.h
  * \date unknown
  * 
- * 
+ * 通知client道具列表中获得新道具或删除道具
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGNOTIFYUPDATEITEM_H__
@@ -31,9 +31,9 @@ public:
 
 public:
 	int64 nUserId;
-	char nType;
+	char nType;	// 1: 添加 0: 删除 2: 更新
 	char _dummy[3];
-	NET_ITEM_INFO stItem;
+	NET_ITEM_INFO nItem;
 
 };
 

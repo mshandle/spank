@@ -1,132 +1,132 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="gb2312" standalone="yes" ?>
 <PokerMsgs>
-	<message name="MsgAcceptRequest" id="2146" comment="çŽ©å®¶ç‚¹å‡»èµžåŠ©">
-		<property name="nAcceptUserId" type="int64" comment="ç‚¹å‡»acceptèµžåŠ©çš„çŽ©å®¶"/>
-		<property name="nRequestUserId" type="int64" comment="å‘é€è¯·æ±‚çš„çŽ©å®¶"/>
-		<property name="nRequestId" type="int64" comment="è¯·æ±‚çš„ID"/>
-		<property name="nRequestType" type="uint" comment="è¯·æ±‚èµžåŠ©çš„ç±»åž‹"/>
+	<message name="MsgAcceptRequest" id="2146" comment="Íæ¼Òµã»÷ÔÞÖú">
+		<property name="nAcceptUserId" type="int64" comment="µã»÷acceptÔÞÖúµÄÍæ¼Ò"/>
+		<property name="nRequestUserId" type="int64" comment="·¢ËÍÇëÇóµÄÍæ¼Ò"/>
+		<property name="nRequestId" type="int64" comment="ÇëÇóµÄID"/>
+		<property name="nRequestType" type="uint" comment="ÇëÇóÔÞÖúµÄÀàÐÍ"/>
 	</message>
 
-	<message name="MsgAccountForceOut" id="2121" comment="é€šçŸ¥å®¢æˆ·ç«¯å¸å·è¢«å°å­˜">
+	<message name="MsgAccountForceOut" id="2121" comment="Í¨Öª¿Í»§¶ËÕÊºÅ±»·â´æ">
 	</message>
 
 	<message name="MsgAddRequest" id="2148" comment="    ">
-		<property name="nRequestId" type="int64" comment="REQUESTçš„ID"/>
-		<property name="nUserId" type="int64" comment="å‘é€REQUESTçš„çŽ©å®¶ID"/>
-		<property name="nFriendId" type="int64" comment="æŽ¥æ”¶REQUESTçš„å¥½å‹ID"/>
-		<property name="nRequestType" type="uint" comment="REQUESTç±»åž‹"/>
-		<property name="nPlatformId" type="int" comment="çŽ©å®¶ç™»é™†çš„å¹³å°id, 1è¡¨ç¤ºfacebook, 2è¡¨ç¤ºgoogle, 3è¡¨ç¤ºigg, 4è¡¨ç¤ºmsn, 5è¡¨ç¤ºtwitter, 6è¡¨ç¤ºyahoo"/>
-		<property name="szNickName" type="char" array="32" comment="çŽ©å®¶æ˜µç§°" />
-		<property name="szPlatAccount" type="char" array="255" comment="çŽ©å®¶ç™»é™†çš„å¹³å°è´¦å·" />
+		<property name="nRequestId" type="int64" comment="REQUESTµÄID"/>
+		<property name="nUserId" type="int64" comment="·¢ËÍREQUESTµÄÍæ¼ÒID"/>
+		<property name="nFriendId" type="int64" comment="½ÓÊÕREQUESTµÄºÃÓÑID"/>
+		<property name="nRequestType" type="uint" comment="REQUESTÀàÐÍ"/>
+		<property name="nPlatformId" type="int" comment="Íæ¼ÒµÇÂ½µÄÆ½Ì¨id, 1±íÊ¾facebook, 2±íÊ¾google, 3±íÊ¾igg, 4±íÊ¾msn, 5±íÊ¾twitter, 6±íÊ¾yahoo"/>
+		<property name="szNickName" type="char" array="32" comment="Íæ¼ÒêÇ³Æ" />
+		<property name="szPlatAccount" type="char" array="255" comment="Íæ¼ÒµÇÂ½µÄÆ½Ì¨ÕËºÅ" />
 	</message>
 
-	<message name="MsgNotifyBankupt" id="2098" comment="é€šçŸ¥çŽ©å®¶ç ´äº§ç›¸å…³æ¶ˆæ¯">
-		<property name="nProtectiveMoney" type="int64" comment="æœ¬æ¬¡ä¿æŠ¤é‡‘, å°äºŽç­‰äºŽ0åˆ™ä»£è¡¨ä¸å†æœ‰ä¿æŠ¤é‡‘, å®¢æˆ·ç«¯éœ€è¦è‡ªå·±å®šä¹‰è¿™ç§æƒ…å†µä¸‹çš„è¡Œä¸º"/>
-		<property name="nTime" type="int" comment="ç¬¬å‡ æ¬¡ç ´äº§"/>
+	<message name="MsgNotifyBankupt" id="2098" comment="Í¨ÖªÍæ¼ÒÆÆ²úÏà¹ØÏûÏ¢">
+		<property name="nProtectiveMoney" type="int64" comment="±¾´Î±£»¤½ð, Ð¡ÓÚµÈÓÚ0Ôò´ú±í²»ÔÙÓÐ±£»¤½ð, ¿Í»§¶ËÐèÒª×Ô¼º¶¨ÒåÕâÖÖÇé¿öÏÂµÄÐÐÎª"/>
+		<property name="nTime" type="int" comment="µÚ¼¸´ÎÆÆ²ú"/>
 	</message>
 
-	<message name="MsgClientLoginToL" id="1002" comment="ç™»å…¥LoginServer">
-		<property name="nSeqId" type="int" comment="åºåˆ—å· ç›®å‰æ— ç”¨ åªæ˜¯é¢„ç•™"/>
+	<message name="MsgClientLoginToL" id="1002" comment="µÇÈëLoginServer">
+		<property name="nSeqId" type="int" comment="ÐòÁÐºÅ Ä¿Ç°ÎÞÓÃ Ö»ÊÇÔ¤Áô"/>
 		<property name="nUserId" type="int64" />
 		<property name="szSessionKey" type="char" array="128" />
 		<property name="szLoginSessionKey" type="char" array="128" />
 		<property name="szLoginPassWord" type="char" array="128" />
-		<property name="nGroupId" type="uint" comment="ç™»å½•çš„æœåŠ¡å™¨ç»„ID(æœåŠ¡å™¨çš„ç±»åž‹ å¦‚ è‹±æ–‡ç‰ˆ åœŸè€³å…¶ç‰ˆ ç±»åž‹ä¸º)"/>
+		<property name="nGroupId" type="uint" comment="µÇÂ¼µÄ·þÎñÆ÷×éID(·þÎñÆ÷µÄÀàÐÍ Èç Ó¢ÎÄ°æ ÍÁ¶úÆä°æ ÀàÐÍÎª)"/>
 	</message>
 
-	<message name="MsgClientLoginToG" id="1003" comment="ç™»å…¥GameServer">
-		<property name="nSeqId" type="int" comment="åºåˆ—å·"/>
+	<message name="MsgClientLoginToG" id="1003" comment="µÇÈëGameServer">
+		<property name="nSeqId" type="int" comment="ÐòÁÐºÅ"/>
 		<property name="nUserId" type="int64" />
-		<property name="szCheckOutText" type="char" array="24" comment="æ ¡éªŒç " />
+		<property name="szCheckOutText" type="char" array="24" comment="Ð£ÑéÂë" />
 		<property name="szSessionKey" type="char" array="128" />
 		<property name="szSignInLocale" type="char" array="32" />
 	</message>
 
-	<message name="MsgGameServerLoginResp" id="1005" comment="ç™»å…¥GameServeræ¶ˆæ¯è¿”å›ž">
-		<property name="nLoginResult" type="int" comment="0: ç™»é™†æˆåŠŸ, 1: GameServeræœªå¼€å¯, 2: GameServerè¿žæŽ¥å·²æ»¡, 3: UserServeræœªå¼€å¯, 4: DbServeræœªå¼€å¯, 5: æ•°æ®è¯»å–ä¸å®Œæ•´, 6: IDå·²åœ¨ç™»å½•ä¸­, 7: éªŒè¯å¤±è´¥, 8: éªŒè¯è¶…æ—¶, 9: ç”¨æˆ·æœªå®‰è£…æ¸¸æˆ(fqlæ— permissioné¡¹)"/>
+	<message name="MsgGameServerLoginResp" id="1005" comment="µÇÈëGameServerÏûÏ¢·µ»Ø">
+		<property name="nLoginResult" type="int" comment="0: µÇÂ½³É¹¦, 1: GameServerÎ´¿ªÆô, 2: GameServerÁ¬½ÓÒÑÂú, 3: UserServerÎ´¿ªÆô, 4: DbServerÎ´¿ªÆô, 5: Êý¾Ý¶ÁÈ¡²»ÍêÕû, 6: IDÒÑÔÚµÇÂ¼ÖÐ, 7: ÑéÖ¤Ê§°Ü, 8: ÑéÖ¤³¬Ê±, 9: ÓÃ»§Î´°²×°ÓÎÏ·(fqlÎÞpermissionÏî)"/>
 		<property name="nUserId" type="int64" />
 		<property name="nIggId" type="int64" />
 	</message>
 
-	<message name="MsgInitPlayerInfo" id="2067" comment="ç™»å½•æ—¶åˆå§‹åŒ–çš„çŽ©å®¶ä¿¡æ¯">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nLevel" type="uchar" comment="ç­‰çº§"/>
-		<property name="nFlags" type="uchar" comment="æ ‡å¿—ä½ã€‚0ä½: æ˜¯å¦ç²‰ä¸, (1ä½: æ˜¯å¦åŠ äº†ä¹¦ç­¾, 2ä½: æ˜¯å¦å…è®¸å‘é‚®ä»¶, 3ä½: æ˜¯å¦å…è®¸å‘NewsFeed), 4ä½: æ˜¯å¦VIP, 5ä½: æ˜¯å¦GM æ³¨, ç›®å‰1, 2, 3, 4ä½å·²ç»å¤±æ•ˆã€‚"/>
-		<property name="nShootOutRank" type="uchar" comment="MTTç›®å‰ç­‰çº§"/>
-		<property name="nShootOutPlace" type="char" array="3" comment="MTTåŽ†å²åæ¬¡ä¿¡æ¯" />
-		<property name="nCoins" type="int64" comment="æ€»èµ„äº§"/>
-		<property name="nMostCoins" type="int64" comment="æ€»èµ„äº§çš„åŽ†å²æœ€é«˜è®°å½•"/>
-		<property name="nWinThisWeek" type="int64" comment="æœ¬å‘¨èµ¢é¢"/>
-		<property name="nCash" type="int" comment="å……å€¼"/>
-		<property name="nExp" type="uint" comment="ç»éªŒå€¼"/>
-		<property name="nChampionInBuddiesLastWeek" type="int64" comment="ä¸Šå‘¨å¤§èµ¢å®¶çš„çŽ©å®¶ID"/>
-		<property name="nMostWinInBuddiesLastWeek" type="int64" comment="ä¸Šå‘¨å¤§èµ¢å®¶çš„èµ¢é¢"/>
+	<message name="MsgInitPlayerInfo" id="2067" comment="µÇÂ¼Ê±³õÊ¼»¯µÄÍæ¼ÒÐÅÏ¢">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nLevel" type="uchar" comment="µÈ¼¶"/>
+		<property name="nFlags" type="uchar" comment="±êÖ¾Î»¡£0Î»: ÊÇ·ñ·ÛË¿, (1Î»: ÊÇ·ñ¼ÓÁËÊéÇ©, 2Î»: ÊÇ·ñÔÊÐí·¢ÓÊ¼þ, 3Î»: ÊÇ·ñÔÊÐí·¢NewsFeed), 4Î»: ÊÇ·ñVIP, 5Î»: ÊÇ·ñGM ×¢, Ä¿Ç°1, 2, 3, 4Î»ÒÑ¾­Ê§Ð§¡£"/>
+		<property name="nShootOutRank" type="uchar" comment="MTTÄ¿Ç°µÈ¼¶"/>
+		<property name="nShootOutPlace" type="char" array="3" comment="MTTÀúÊ·Ãû´ÎÐÅÏ¢" />
+		<property name="nCoins" type="int64" comment="×Ü×Ê²ú"/>
+		<property name="nMostCoins" type="int64" comment="×Ü×Ê²úµÄÀúÊ·×î¸ß¼ÇÂ¼"/>
+		<property name="nWinThisWeek" type="int64" comment="±¾ÖÜÓ®¶î"/>
+		<property name="nCash" type="int" comment="³äÖµ"/>
+		<property name="nExp" type="uint" comment="¾­ÑéÖµ"/>
+		<property name="nChampionInBuddiesLastWeek" type="int64" comment="ÉÏÖÜ´óÓ®¼ÒµÄÍæ¼ÒID"/>
+		<property name="nMostWinInBuddiesLastWeek" type="int64" comment="ÉÏÖÜ´óÓ®¼ÒµÄÓ®¶î"/>
 		<property name="nTrinket" type="int" />
-		<property name="nTutorialFlags" type="uint" comment="æ–°æ‰‹æ•™ç¨‹å®Œæˆåº¦æ ‡å¿—ä½"/>
+		<property name="nTutorialFlags" type="uint" comment="ÐÂÊÖ½Ì³ÌÍê³É¶È±êÖ¾Î»"/>
 	</message>
 
-	<message name="MsgLoginServerValidate" id="1004" comment="é€šçŸ¥GameServeræœåŠ¡å™¨åœ°å€">
+	<message name="MsgLoginServerValidate" id="1004" comment="Í¨ÖªGameServer·þÎñÆ÷µØÖ·">
 		<property name="nUserId" type="int64" />
 		<property name="szIp" type="char" array="16" />
 		<property name="nPort" type="int" />
-		<property name="szCheckOutText" type="char" array="24" comment="æ ¡éªŒç " />
+		<property name="szCheckOutText" type="char" array="24" comment="Ð£ÑéÂë" />
 		<property name="nIggId" type="int64" />
 	</message>
 
-	<message name="MsgNotice" id="2063" comment="é€šçŸ¥æ¶ˆæ¯åŒ…">
+	<message name="MsgNotice" id="2063" comment="Í¨ÖªÏûÏ¢°ü">
 		<property name="nUserId" type="int64" />
-		<property name="nType" type="int" comment="é€šçŸ¥æ¶ˆæ¯ç±»åž‹, ç”¨äºŽå†³å®šä½¿ç”¨çš„é€šçŸ¥æ¨¡æ¿ã€‚1: æ¯æ—¥ç™»å½•èŽ·å¾— $Arg1 å¥–åŠ±ç­¹ç ; 2: ä»Žå‘¨é”¦æ ‡èµ›èŽ·å¾— $Arg1 å¥–é‡‘ã€‚3: ä»Žæ–°æ‰‹æ•™ç¨‹èŽ·å¾— $Arg1 ç­¹ç  å’Œ $Arg2 ç»éªŒå€¼ 4: é€šè¿‡é“¾æŽ¥é¢†å–å¥–åŠ± $Arg1 ç­¹ç æ•° $Arg2 é“¾æŽ¥ç±»åž‹(0ä¸ºç³»ç»Ÿå‘å¸ƒçš„é“¾æŽ¥ 1ä¸ºå¹¸è¿ç­¹ç çš„é“¾æŽ¥ 2ä¸ºæ–°å¹´å®ç®±shareçš„é“¾æŽ¥]"/>
-		<property name="nArg1" type="int64" comment="é€šçŸ¥å‚æ•°1"/>
-		<property name="nArg2" type="int64" comment="é€šçŸ¥å‚æ•°2"/>
-		<property name="nTimestamp" type="uint" comment="æ—¶é—´æˆ³"/>
+		<property name="nType" type="int" comment="Í¨ÖªÏûÏ¢ÀàÐÍ, ÓÃÓÚ¾ö¶¨Ê¹ÓÃµÄÍ¨ÖªÄ£°å¡£1: Ã¿ÈÕµÇÂ¼»ñµÃ $Arg1 ½±Àø³ïÂë; 2: ´ÓÖÜ½õ±êÈü»ñµÃ $Arg1 ½±½ð¡£3: ´ÓÐÂÊÖ½Ì³Ì»ñµÃ $Arg1 ³ïÂë ºÍ $Arg2 ¾­ÑéÖµ 4: Í¨¹ýÁ´½ÓÁìÈ¡½±Àø $Arg1 ³ïÂëÊý $Arg2 Á´½ÓÀàÐÍ(0ÎªÏµÍ³·¢²¼µÄÁ´½Ó 1ÎªÐÒÔË³ïÂëµÄÁ´½Ó 2ÎªÐÂÄê±¦ÏäshareµÄÁ´½Ó]"/>
+		<property name="nArg1" type="int64" comment="Í¨Öª²ÎÊý1"/>
+		<property name="nArg2" type="int64" comment="Í¨Öª²ÎÊý2"/>
+		<property name="nTimestamp" type="uint" comment="Ê±¼ä´Á"/>
 	</message>
 
-	<message name="MsgNotifyAcceptFriend" id="2021" comment="æç¤ºæ¡Œé¢ä¸ŠæŸä¸¤åº§ä½çš„çŽ©å®¶å·²æˆä¸ºå¥½å‹">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nSourceSeatId" type="char" comment="å‘èµ·åŠ å¥½å‹è¯·æ±‚çš„çŽ©å®¶åº§ä½ID"/>
-		<property name="nDestSeatId" type="char" comment="æ”¶åˆ°å¥½å‹è¯·æ±‚çš„çŽ©å®¶åº§ä½ID"/>
+	<message name="MsgNotifyAcceptFriend" id="2021" comment="ÌáÊ¾×ÀÃæÉÏÄ³Á½×ùÎ»µÄÍæ¼ÒÒÑ³ÉÎªºÃÓÑ">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nSourceSeatId" type="char" comment="·¢Æð¼ÓºÃÓÑÇëÇóµÄÍæ¼Ò×ùÎ»ID"/>
+		<property name="nDestSeatId" type="char" comment="ÊÕµ½ºÃÓÑÇëÇóµÄÍæ¼Ò×ùÎ»ID"/>
 		<property name="_dummy" type="char" array="2" />
 	</message>
 
-	<message name="MsgNotifyBet" id="2010" comment="é€šçŸ¥ä¸‹æ³¨">
+	<message name="MsgNotifyBet" id="2010" comment="Í¨ÖªÏÂ×¢">
 		<property name="nUserId" type="int64" />
-		<property name="nSeatId" type="char" comment="åº§ä½ID"/>
-		<property name="nTime" type="char" comment="å‰©ä½™ç­‰å¾…æ—¶é—´, å•ä½ä¸ºç§’"/>
-		<property name="nTotalTime" type="char" comment="æ€»çš„ç­‰å¾…æ—¶é—´, ç”¨äºŽæ’­æ”¾å€’è®¡æ—¶åŠ¨ç”»"/>
-		<property name="_dummy" type="char" comment="è¡¥é½ä½."/>
+		<property name="nSeatId" type="char" comment="×ùÎ»ID"/>
+		<property name="nTime" type="char" comment="Ê£ÓàµÈ´ýÊ±¼ä, µ¥Î»ÎªÃë"/>
+		<property name="nTotalTime" type="char" comment="×ÜµÄµÈ´ýÊ±¼ä, ÓÃÓÚ²¥·Åµ¹¼ÆÊ±¶¯»­"/>
+		<property name="_dummy" type="char" comment="²¹ÆëÎ»."/>
 	</message>
 
-	<message name="MsgNotifyEmotion" id="2051" comment="æœåŠ¡å™¨å¹¿æ’­è¡¨æƒ…">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nSeat" type="char" comment="åº§ä½ID"/>
-		<property name="nEmot" type="short" comment="è¡¨æƒ…ID, å®žé™…è¡¨æƒ…ç”±å®¢æˆ·ç«¯æŒ‡å®š"/>
-		<property name="_dummy" type="char" comment="å¯¹é½ä½"/>
+	<message name="MsgNotifyEmotion" id="2051" comment="·þÎñÆ÷¹ã²¥±íÇé">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nSeat" type="char" comment="×ùÎ»ID"/>
+		<property name="nEmot" type="short" comment="±íÇéID, Êµ¼Ê±íÇéÓÉ¿Í»§¶ËÖ¸¶¨"/>
+		<property name="_dummy" type="char" comment="¶ÔÆëÎ»"/>
 	</message>
 
-	<message name="MsgNotifyFirstLogin" id="2090" comment="å‘ŠçŸ¥å®¢æˆ·ç«¯, æ­¤æ¬¡ä¸ºé¦–æ¬¡ç™»å½•">
+	<message name="MsgNotifyFirstLogin" id="2090" comment="¸æÖª¿Í»§¶Ë, ´Ë´ÎÎªÊ×´ÎµÇÂ¼">
 	</message>
 
-	<message name="MsgNotifyGameRank" id="2074" comment="é€šçŸ¥çŽ©å®¶åœ¨èµ›åˆ¶æˆ¿é—´å†…çš„æ¯”èµ›åæ¬¡">
+	<message name="MsgNotifyGameRank" id="2074" comment="Í¨ÖªÍæ¼ÒÔÚÈüÖÆ·¿¼äÄÚµÄ±ÈÈüÃû´Î">
 		<property name="nUserId" type="int64" />
 		<property name="nRank" type="char" />
-		<property name="nBonusType" type="char" comment="å¥–é‡‘çš„ç±»åž‹: 1: ç­¹ç  2: é‡‘å¸"/>
-		<property name="nGameType" type="char" comment="æ¯”èµ›çš„ç±»åž‹: 1: SNG 2: MTT"/>
+		<property name="nBonusType" type="char" comment="½±½ðµÄÀàÐÍ: 1: ³ïÂë 2: ½ð±Ò"/>
+		<property name="nGameType" type="char" comment="±ÈÈüµÄÀàÐÍ: 1: SNG 2: MTT"/>
 		<property name="_dummy" type="char" />
 		<property name="nBonus" type="int64" />
 	</message>
 
-	<message name="MsgNotifyGameState" id="2012" comment="æ¸¸æˆå¼€å±€é€šçŸ¥åŒ…">
+	<message name="MsgNotifyGameState" id="2012" comment="ÓÎÏ·¿ª¾ÖÍ¨Öª°ü">
 		<property name="nUserId" type="int64" />
-		<property name="nBankerSeat" type="char" comment="åº„å®¶åº§ä½ID"/>
-		<property name="nSmallBlindSeat" type="char" comment="å°ç›²æ³¨åº§ä½ID"/>
-		<property name="nBigBlindSeat" type="char" comment="å¤§ç›²æ³¨åº§ä½ID"/>
-		<property name="nGameStatus" type="char" comment="æ¸¸æˆçŠ¶æ€, 0: æœªå¼€å±€, 1: å·²å¼€å±€."/>
-		<property name="nRoomStatus" type="char" comment="æˆ¿é—´çŠ¶æ€: 0: stopping 1: running "/>
-		<property name="nHandCards" type="uchar" array="2" comment="çŽ©å®¶å½“å‰çš„æ‰‹ç‰Œ, èŒƒå›´ä¸º0~51, è¡¨ç¤º52å¼ ç‰Œä¸­çš„ä¸€å¼ , è‹¥æ— æ‰‹ç‰Œ, åˆ™ä¸º255." />
+		<property name="nBankerSeat" type="char" comment="×¯¼Ò×ùÎ»ID"/>
+		<property name="nSmallBlindSeat" type="char" comment="Ð¡Ã¤×¢×ùÎ»ID"/>
+		<property name="nBigBlindSeat" type="char" comment="´óÃ¤×¢×ùÎ»ID"/>
+		<property name="nGameStatus" type="char" comment="ÓÎÏ·×´Ì¬, 0: Î´¿ª¾Ö, 1: ÒÑ¿ª¾Ö."/>
+		<property name="nRoomStatus" type="char" comment="·¿¼ä×´Ì¬: 0: stopping 1: running "/>
+		<property name="nHandCards" type="uchar" array="2" comment="Íæ¼Òµ±Ç°µÄÊÖÅÆ, ·¶Î§Îª0~51, ±íÊ¾52ÕÅÅÆÖÐµÄÒ»ÕÅ, ÈôÎÞÊÖÅÆ, ÔòÎª255." />
 		<property name="_dummy" type="char" array="1" />
 	</message>
 
-	<message name="MsgNotifyGiveGift" id="2113" comment="èµ é€ç‰©å“">
+	<message name="MsgNotifyGiveGift" id="2113" comment="ÔùËÍÎïÆ·">
 		<property name="nUserId" type="int64" />
 		<property name="nItemType" type="int" />
 		<property name="nGiverId" type="int64" />
@@ -136,376 +136,375 @@
 		<property name="_dummy" type="char" array="2" />
 	</message>
 
-	<message name="MsgNotifyHandCards" id="2014" comment="æ‰‹ç‰Œé€šçŸ¥åŒ…">
+	<message name="MsgNotifyHandCards" id="2014" comment="ÊÖÅÆÍ¨Öª°ü">
 		<property name="nUserId" type="int64" />
-		<property name="nSeatId" type="char" comment="åº§ä½å·"/>
-		<property name="nCards" type="uchar" array="2" comment="ä¸¤å¼ æ‰‹ç‰Œ, èŒƒå›´ä¸º0~51, è¡¨ç¤º52å¼ ç‰Œä¸­çš„ä¸€å¼ " />
-		<property name="_dummy" type="char" comment="è¡¥é½ä½"/>
+		<property name="nSeatId" type="char" comment="×ùÎ»ºÅ"/>
+		<property name="nCards" type="uchar" array="2" comment="Á½ÕÅÊÖÅÆ, ·¶Î§Îª0~51, ±íÊ¾52ÕÅÅÆÖÐµÄÒ»ÕÅ" />
+		<property name="_dummy" type="char" comment="²¹ÆëÎ»"/>
 	</message>
 
-	<message name="MsgNotifyIsSendLuckyChips" id="2118" comment="é€šçŸ¥clientæ˜¯å¦å‘å¸ƒè¿‡å¹¸è¿ç­¹ç ">
+	<message name="MsgNotifyIsSendLuckyChips" id="2118" comment="Í¨ÖªclientÊÇ·ñ·¢²¼¹ýÐÒÔË³ïÂë">
 		<property name="nIsSendLuckyChips" type="int" />
 	</message>
 
-	<message name="MsgNotifyLoginGift" id="2064" comment="å¼¹å‡ºç™»å½•å¥–åŠ±é¢†å–æ¡†">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nContinuousLogin" type="char" comment="è¿žç»­ç™»å½•å¤©æ•°(7å¤©ä¸ºä¸Šé™)"/>
-		<property name="nLastContinuousLogin" type="char" comment="ä¸Šæ¬¡è¿žç»­ç™»å½•å¤©æ•°"/>
+	<message name="MsgNotifyLoginGift" id="2064" comment="µ¯³öµÇÂ¼½±ÀøÁìÈ¡¿ò">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nContinuousLogin" type="char" comment="Á¬ÐøµÇÂ¼ÌìÊý(7ÌìÎªÉÏÏÞ)"/>
+		<property name="nLastContinuousLogin" type="char" comment="ÉÏ´ÎÁ¬ÐøµÇÂ¼ÌìÊý"/>
 		<property name="_dummy" type="char" array="2" />
-		<property name="_dummy1" type="int64" array="2" comment="é˜²å®¢æˆ·ç«¯å´©æºƒçš„å ä½ç¬¦, åœ¨å®¢æˆ·åšå®Œä¿®æ”¹åŽåº”è¯¥åˆ åŽ»ã€‚" />
+		<property name="_dummy1" type="int64" array="2" comment="·À¿Í»§¶Ë±ÀÀ£µÄÕ¼Î»·û, ÔÚ¿Í»§×öÍêÐÞ¸ÄºóÓ¦¸ÃÉ¾È¥¡£" />
 	</message>
 
-	<message name="MsgNotifyMakeFriend" id="2019" comment="æç¤ºæ¡Œé¢ä¸ŠæŸåº§ä½çš„çŽ©å®¶è¯·æ±‚åŠ æŸåº§ä½çš„çŽ©å®¶ä¸ºå¥½å‹">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nSourceSeatId" type="char" comment="å‘èµ·åŠ å¥½å‹è¯·æ±‚çš„çŽ©å®¶åº§ä½ID"/>
-		<property name="nDestSeatId" type="char" comment="æ”¶åˆ°å¥½å‹è¯·æ±‚çš„çŽ©å®¶åº§ä½ID"/>
+	<message name="MsgNotifyMakeFriend" id="2019" comment="ÌáÊ¾×ÀÃæÉÏÄ³×ùÎ»µÄÍæ¼ÒÇëÇó¼ÓÄ³×ùÎ»µÄÍæ¼ÒÎªºÃÓÑ">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nSourceSeatId" type="char" comment="·¢Æð¼ÓºÃÓÑÇëÇóµÄÍæ¼Ò×ùÎ»ID"/>
+		<property name="nDestSeatId" type="char" comment="ÊÕµ½ºÃÓÑÇëÇóµÄÍæ¼Ò×ùÎ»ID"/>
 		<property name="_dummy" type="char" array="2" />
 	</message>
 
-	<message name="MsgNotifyMaxCounterRecord" id="2103" comment="é€šçŸ¥å®¢æˆ·ç«¯èµ¢å¾—ç­¹ç æœ€æ–°çºªå½•">
+	<message name="MsgNotifyMaxCounterRecord" id="2103" comment="Í¨Öª¿Í»§¶ËÓ®µÃ³ïÂë×îÐÂ¼ÍÂ¼">
 		<property name="nUserId" type="int64" />
-		<property name="nOldRecordUserId" type="int64" comment="æ—§çºªå½•userId å¦‚æžœä¸º0è¡¨ç¤ºè¿™æ¬¡çºªå½•æ˜¯ç¬¬ä¸€æ¬¡"/>
-		<property name="nOldRecordCounter" type="int64" comment="æ—§çºªå½•ç­¹ç "/>
-		<property name="nNewRecordUserId" type="int64" comment="æ–°çºªå½•userId"/>
-		<property name="nNewRecordCounter" type="int64" comment="æ–°çºªå½•ç­¹ç "/>
-		<property name="nSmallBlind" type="int64" comment="0: è¡¨ç¤ºè¿™æ¬¡çºªå½•æ˜¯å…¨æœçºªå½• ä¸ä¸º0: è¡¨ç¤ºè¯¥å°ç›²æ³¨ç±»åž‹æˆ¿é—´çš„çºªå½•"/>
-		<property name="nCount" type="int" comment="ç¬¬å‡ æ¬¡ç ´è®°å½• å…¨æœè®°å½•ä¸ç»Ÿè®¡è¯¥é¡¹"/>
+		<property name="nOldRecordUserId" type="int64" comment="¾É¼ÍÂ¼userId Èç¹ûÎª0±íÊ¾Õâ´Î¼ÍÂ¼ÊÇµÚÒ»´Î"/>
+		<property name="nOldRecordCounter" type="int64" comment="¾É¼ÍÂ¼³ïÂë"/>
+		<property name="nNewRecordUserId" type="int64" comment="ÐÂ¼ÍÂ¼userId"/>
+		<property name="nNewRecordCounter" type="int64" comment="ÐÂ¼ÍÂ¼³ïÂë"/>
+		<property name="nSmallBlind" type="int64" comment="0: ±íÊ¾Õâ´Î¼ÍÂ¼ÊÇÈ«·þ¼ÍÂ¼ ²»Îª0: ±íÊ¾¸ÃÐ¡Ã¤×¢ÀàÐÍ·¿¼äµÄ¼ÍÂ¼"/>
+		<property name="nCount" type="int" comment="µÚ¼¸´ÎÆÆ¼ÇÂ¼ È«·þ¼ÇÂ¼²»Í³¼Æ¸ÃÏî"/>
 	</message>
 
-	<message name="MsgNotifyMttRank" id="2173" comment="é€šçŸ¥shootoutç­‰çº§">
-		<property name="nRank" type="char" array="3" comment="Rank ä¸º -1æ—¶, æ ‡è¯†å½“å‰ç­‰çº§ä¸å¯ç”¨~" />
-		<property name="nBonus" type="int" array="3" comment="Bonus ä¸º -1æ—¶, æ ‡è¯†å½“å‰ä¸å¯ç”¨~" />
+	<message name="MsgNotifyMttRank" id="2173" comment="Í¨ÖªshootoutµÈ¼¶">
+		<property name="nRank" type="char" array="3" comment="Rank Îª -1Ê±, ±êÊ¶µ±Ç°µÈ¼¶²»¿ÉÓÃ~" />
+		<property name="nBonus" type="int" array="3" comment="Bonus Îª -1Ê±, ±êÊ¶µ±Ç°²»¿ÉÓÃ~" />
 	</message>
 
-	<message name="MsgNotifyPlayerInRoom" id="2095" comment="é€šçŸ¥çŽ©å®¶ç¦»å¼€æˆ¿é—´">
+	<message name="MsgNotifyPlayerInRoom" id="2095" comment="Í¨ÖªÍæ¼ÒÀë¿ª·¿¼ä">
 		<property name="nUserId" type="int64" />
 		<property name="nSourceUserId" type="int64" />
-		<property name="nRoomId" type="int" comment="è¡¨ç¤ºSourceUserIdæ‰€åœ¨çš„æˆ¿é—´ID -1: è¡¨ç¤ºç¦»å¼€æˆ¿é—´"/>
+		<property name="nRoomId" type="int" comment="±íÊ¾SourceUserIdËùÔÚµÄ·¿¼äID -1: ±íÊ¾Àë¿ª·¿¼ä"/>
 	</message>
 
-	<message name="MsgNotifyPlayerLevelUp" id="2076" comment="é€šçŸ¥çŽ©å®¶å‡çº§">
+	<message name="MsgNotifyPlayerLevelUp" id="2076" comment="Í¨ÖªÍæ¼ÒÉý¼¶">
 		<property name="nUserId" type="int64" />
 		<property name="nLevel" type="uchar" />
 		<property name="nExp" type="uchar" />
-		<property name="nSeatId" type="char" comment="-1: è¡¨ç¤ºæœ¬äºº 0-8: è¡¨ç¤ºå…¶ä»–çš„åº§ä½"/>
+		<property name="nSeatId" type="char" comment="-1: ±íÊ¾±¾ÈË 0-8: ±íÊ¾ÆäËûµÄ×ùÎ»"/>
 		<property name="_dummy" type="char" />
 	</message>
 
-	<message name="MsgNotifyPlayerTrinket" id="2112" comment="é€šçŸ¥æˆ¿é—´å†…å…¶ä»–çŽ©å®¶ æŸä½çŽ©å®¶é¥°å“å‘ç”Ÿå˜åŒ–">
+	<message name="MsgNotifyPlayerTrinket" id="2112" comment="Í¨Öª·¿¼äÄÚÆäËûÍæ¼Ò Ä³Î»Íæ¼ÒÊÎÆ··¢Éú±ä»¯">
 		<property name="nUserId" type="int64" />
 		<property name="nTrinket" type="int" />
 		<property name="nSourceUserId" type="int64" />
-		<property name="nSeatId" type="char" comment="-2: è¡¨ç¤ºåœ¨å¤§åŽ…å‘é€è¯¥æ¶ˆæ¯åŒ… 0-8: Roomå‘é€è¯¥æ¶ˆæ¯åŒ… -1: è¡¨ç¤ºæœªåä¸‹"/>
+		<property name="nSeatId" type="char" comment="-2: ±íÊ¾ÔÚ´óÌü·¢ËÍ¸ÃÏûÏ¢°ü 0-8: Room·¢ËÍ¸ÃÏûÏ¢°ü -1: ±íÊ¾Î´×øÏÂ"/>
 		<property name="_dummy" type="char" array="3" />
 	</message>
 
-	<message name="MsgNotifyPublicCards" id="2015" comment="å…¬ç‰Œæ˜¾ç¤º">
+	<message name="MsgNotifyPublicCards" id="2015" comment="¹«ÅÆÏÔÊ¾">
 		<property name="nUserId" type="int64" />
-		<property name="nCount" type="char" comment="ç‰Œæ•°, ç¬¬ä¸€æ¬¡å‘ç‰Œä¸º3å¼ , ç¬¬äºŒæ¬¡4å¼ , ç¬¬ä¸‰æ¬¡5å¼ "/>
-		<property name="nCards" type="char" array="5" comment="èŒƒå›´ä¸º0~51, è¡¨ç¤º52å¼ ç‰Œä¸­çš„ä¸€å¼ " />
-		<property name="_dummy" type="char" array="2" comment="è¡¥é½ä½" />
+		<property name="nCount" type="char" comment="ÅÆÊý, µÚÒ»´Î·¢ÅÆÎª3ÕÅ, µÚ¶þ´Î4ÕÅ, µÚÈý´Î5ÕÅ"/>
+		<property name="nCards" type="char" array="5" comment="·¶Î§Îª0~51, ±íÊ¾52ÕÅÅÆÖÐµÄÒ»ÕÅ" />
+		<property name="_dummy" type="char" array="2" comment="²¹ÆëÎ»" />
 	</message>
 
-	<message name="MsgNotifyRoomMessage" id="2028" comment="é€šçŸ¥æˆ¿é—´å†…çš„èŠå¤©ä¿¡æ¯">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nSenderUserId" type="int64" comment="å‘èµ·èŠå¤©æ¶ˆæ¯çš„çŽ©å®¶ID"/>
-		<property name="nMsgLength" type="short" comment="èŠå¤©ä¿¡æ¯é•¿åº¦."/>
+	<message name="MsgNotifyRoomMessage" id="2028" comment="Í¨Öª·¿¼äÄÚµÄÁÄÌìÐÅÏ¢">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nSenderUserId" type="int64" comment="·¢ÆðÁÄÌìÏûÏ¢µÄÍæ¼ÒID"/>
+		<property name="nMsgLength" type="short" comment="ÁÄÌìÐÅÏ¢³¤¶È."/>
 		<property name="_dummy" type="char" array="2" />
-		<property name="nDest" type="int64" comment="ç›®æ ‡çŽ©å®¶, é¡»æ˜¯åŒæˆ¿é—´å†…çš„çŽ©å®¶ã€‚-1: æˆ¿é—´å†…ç¾¤å‘"/>
-		<property name="nMessage" type="char" array="MAX_CHAT_MESSAGE_LENGTH" comment="èŠå¤©ä¿¡æ¯å†…å®¹" />
+		<property name="nDest" type="int64" comment="Ä¿±êÍæ¼Ò, ÐëÊÇÍ¬·¿¼äÄÚµÄÍæ¼Ò¡£-1: ·¿¼äÄÚÈº·¢"/>
+		<property name="nMessage" type="char" array="MAX_CHAT_MESSAGE_LENGTH" comment="ÁÄÌìÐÅÏ¢ÄÚÈÝ" />
 	</message>
 
-	<message name="MsgNotifyShootoutRank" id="2056" comment="é€šçŸ¥çŽ©å®¶ç›®å‰MTTç­‰çº§">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nShootOutRank" type="char" comment="çŽ©å®¶ç›®å‰è¾¾åˆ°ShootOutçš„ç­‰çº§"/>
+	<message name="MsgNotifyShootoutRank" id="2056" comment="Í¨ÖªÍæ¼ÒÄ¿Ç°MTTµÈ¼¶">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nShootOutRank" type="char" comment="Íæ¼ÒÄ¿Ç°´ïµ½ShootOutµÄµÈ¼¶"/>
 		<property name="_dummp" type="char" array="3" />
 	</message>
 
-	<message name="MsgNotifySmallBlind" id="2091" comment="å‘ŠçŸ¥å®¢æˆ·ç«¯å°ç›²æ³¨çš„å€¼">
+	<message name="MsgNotifySmallBlind" id="2091" comment="¸æÖª¿Í»§¶ËÐ¡Ã¤×¢µÄÖµ">
 		<property name="nUserId" type="int64" />
 		<property name="nSmallBlind" type="int64" />
 	</message>
 
-	<message name="MsgNotifyTournamentStatus" id="2102" comment="é€šçŸ¥å®¢æˆ·ç«¯æˆ¿é—´çŠ¶æ€">
+	<message name="MsgNotifyTournamentStatus" id="2102" comment="Í¨Öª¿Í»§¶Ë·¿¼ä×´Ì¬">
 		<property name="nUserId" type="int64" />
 		<property name="nRoomStatus" type="uchar" comment="1.running  0.stopping"/>
 		<property name="_dummy" type="char" array="3" />
 	</message>
 
-	<message name="MsgNotifyUpdateItem" id="2099" comment="é€šçŸ¥clienté“å…·åˆ—è¡¨ä¸­èŽ·å¾—æ–°é“å…·æˆ–åˆ é™¤é“å…·">
+	<message name="MsgNotifyUpdateItem" id="2099" comment="Í¨ÖªclientµÀ¾ßÁÐ±íÖÐ»ñµÃÐÂµÀ¾ß»òÉ¾³ýµÀ¾ß">
 		<property name="nUserId" type="int64" />
-		<property name="nType" type="char" comment="1: æ·»åŠ  0: åˆ é™¤ 2: æ›´æ–°"/>
+		<property name="nType" type="char" comment="1: Ìí¼Ó 0: É¾³ý 2: ¸üÐÂ"/>
 		<property name="_dummy" type="char" array="3" />
-		<property name="nItem" type="ItemInfo" />
+		<property name="nItem" type="NET_ITEM_INFO" />
 	</message>
 
-	<message name="MsgNotifyWin" id="2016" comment="å…¬ç‰Œé€šçŸ¥åŒ…">
+	<message name="MsgNotifyWin" id="2016" comment="¹«ÅÆÍ¨Öª°ü">
 		<property name="nUserId" type="int64" />
-		<property name="nPoolId" type="uchar" comment="å¥–æ± Id, å¦‚æžœä¸ºå”¯ä¸€æœªå¼ƒç‰Œçš„äººèµ¢çš„æƒ…å†µ, æ­¤é¡¹ä¸º-1, è¡¨ç¤ºæ‰€æœ‰å¥–æ± ä¸€æ¬¡æ€§å‘æ”¾"/>
-		<property name="nSeatIds" type="short" comment="èŽ·å¥–çš„æ‰€æœ‰åº§ä½Id, ä»¥ä½è¡¨ç¤º. ç¬¬0ä½ä¸º1æ—¶, æŒ‡ç¬¬0ä¸ªåº§ä½èŽ·å¾—äº†è¿™ä¸ªå¥–æ± ã€‚å¯ä»¥æŒ‡å®šå¤šä¸ª."/>
+		<property name="nPoolId" type="uchar" comment="½±³ØId, Èç¹ûÎªÎ¨Ò»Î´ÆúÅÆµÄÈËÓ®µÄÇé¿ö, ´ËÏîÎª-1, ±íÊ¾ËùÓÐ½±³ØÒ»´ÎÐÔ·¢·Å"/>
+		<property name="nSeatIds" type="short" comment="»ñ½±µÄËùÓÐ×ùÎ»Id, ÒÔÎ»±íÊ¾. µÚ0Î»Îª1Ê±, Ö¸µÚ0¸ö×ùÎ»»ñµÃÁËÕâ¸ö½±³Ø¡£¿ÉÒÔÖ¸¶¨¶à¸ö."/>
 		<property name="_dummy" type="char" />
-		<property name="nBonus" type="int64" comment="å¥–é‡‘, æ¯ä¸ªäººä»Žè¿™ä¸ªå¥–æ± æ‰€èŽ·å¾—çš„å¥–é‡‘ã€‚"/>
+		<property name="nBonus" type="int64" comment="½±½ð, Ã¿¸öÈË´ÓÕâ¸ö½±³ØËù»ñµÃµÄ½±½ð¡£"/>
 	</message>
 
-	<message name="MsgPing" id="1076" comment="PingåŒ…">
-		<property name="nId" type="int" comment="id, ç”±å®¢æˆ·ç«¯è‡ªå·±å®šä¹‰, å¯å¡«0, å°†åŽŸæ ·è¿”å›ž"/>
-		<property name="nTimestamp" type="int" comment="æ—¶é—´æˆ³ç”±å®¢æˆ·ç«¯æä¾›, å°†åŽŸæ ·è¿”å›ž"/>
-		<type id="_MSG_PING" />
+	<message name="MsgPing" id="1076" comment="Ping°ü">
+		<property name="nId" type="int" comment="id, ÓÉ¿Í»§¶Ë×Ô¼º¶¨Òå, ¿ÉÌî0, ½«Ô­Ñù·µ»Ø"/>
+		<property name="nTimestamp" type="int" comment="Ê±¼ä´ÁÓÉ¿Í»§¶ËÌá¹©, ½«Ô­Ñù·µ»Ø"/>
 	</message>
 
-	<message name="MsgPong" id="1077" comment="PongåŒ…">
-		<property name="nId" type="int" comment="id, ç”±å®¢æˆ·ç«¯è‡ªå·±å®šä¹‰, åŽŸæ ·è¿”å›ž"/>
-		<property name="nTimestamp" type="int" comment="æ—¶é—´æˆ³ç”±å®¢æˆ·ç«¯æä¾›, åŽŸæ ·è¿”å›ž"/>
+	<message name="MsgPong" id="1077" comment="Pong°ü">
+		<property name="nId" type="int" comment="id, ÓÉ¿Í»§¶Ë×Ô¼º¶¨Òå, Ô­Ñù·µ»Ø"/>
+		<property name="nTimestamp" type="int" comment="Ê±¼ä´ÁÓÉ¿Í»§¶ËÌá¹©, Ô­Ñù·µ»Ø"/>
 	</message>
 
-	<message name="MsgPostEmotion" id="2050" comment="è¯·æ±‚å‘é€è¡¨æƒ…">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nEmotionId" type="short" comment="è¡¨æƒ…ID, å®žé™…è¡¨æƒ…ç”±å®¢æˆ·ç«¯æŒ‡å®š"/>
-		<property name="_dummy" type="char" array="2" comment="å¯¹é½ä½" />
+	<message name="MsgPostEmotion" id="2050" comment="ÇëÇó·¢ËÍ±íÇé">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nEmotionId" type="short" comment="±íÇéID, Êµ¼Ê±íÇéÓÉ¿Í»§¶ËÖ¸¶¨"/>
+		<property name="_dummy" type="char" array="2" comment="¶ÔÆëÎ»" />
 	</message>
 
-	<message name="MsgRequestBet" id="2011" comment="çŽ©å®¶ä¸‹æ³¨åŒ…">
+	<message name="MsgRequestBet" id="2011" comment="Íæ¼ÒÏÂ×¢°ü">
 		<property name="nUserId" type="int64" />
-		<property name="nSeatId" type="uchar" comment="åº§ä½ID"/>
+		<property name="nSeatId" type="uchar" comment="×ùÎ»ID"/>
 		<property name="_dummy" type="char" array="3" />
-		<property name="nBet" type="int64" comment="ä¸‹æ³¨çš„ç­¹ç , -1ä¸ºå¼ƒç‰Œ, å…¶å®ƒæ—¶å€™å¿…é¡»å¤§äºŽç­‰äºŽé›¶"/>
+		<property name="nBet" type="int64" comment="ÏÂ×¢µÄ³ïÂë, -1ÎªÆúÅÆ, ÆäËüÊ±ºò±ØÐë´óÓÚµÈÓÚÁã"/>
 	</message>
 
-	<message name="MsgRequestAcceptFriend" id="2020" comment="çŽ©å®¶æŽ¥å—å¥½å‹çš„è¯·æ±‚åŒ…">
-		<property name="nUserId" type="int64" comment="æœ¬çŽ©å®¶ID"/>
-		<property name="nSourceSeatId" type="char" comment="æŽ¥å—æ­¤åº§ä½çš„çŽ©å®¶çš„å¥½å‹è¯·æ±‚"/>
+	<message name="MsgRequestAcceptFriend" id="2020" comment="Íæ¼Ò½ÓÊÜºÃÓÑµÄÇëÇó°ü">
+		<property name="nUserId" type="int64" comment="±¾Íæ¼ÒID"/>
+		<property name="nSourceSeatId" type="char" comment="½ÓÊÜ´Ë×ùÎ»µÄÍæ¼ÒµÄºÃÓÑÇëÇó"/>
 		<property name="_dummy" type="char" array="3" />
 	</message>
 
-	<message name="MsgRequestCreateLink" id="2119" comment="clientè¯·æ±‚å‘å¸ƒå¹¸è¿ç­¹ç ">
+	<message name="MsgRequestCreateLink" id="2119" comment="clientÇëÇó·¢²¼ÐÒÔË³ïÂë">
 		<property name="nUserId" type="int64" />
-		<property name="nType" type="uint" comment="å‘é€å¹¸è¿ç­¹ç çš„ç±»åž‹ 1 å¹¸è¿ç­¹ç  2 æ–°å¹´å®ç®±"/>
+		<property name="nType" type="uint" comment="·¢ËÍÐÒÔË³ïÂëµÄÀàÐÍ 1 ÐÒÔË³ïÂë 2 ÐÂÄê±¦Ïä"/>
 	</message>
 
-	<message name="MsgRequestFriendList" id="2022" comment="çŽ©å®¶è¯·æ±‚åœ¨çº¿å¥½å‹/ç‰Œå‹åˆ—è¡¨">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
+	<message name="MsgRequestFriendList" id="2022" comment="Íæ¼ÒÇëÇóÔÚÏßºÃÓÑ/ÅÆÓÑÁÐ±í">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
 	</message>
 
-	<message name="MsgRequestFriendStatus" id="2024" comment="åœ¨çº¿çŽ©å®¶è¯·æ±‚å¥½å‹/ç‰Œå‹çŠ¶æ€">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
+	<message name="MsgRequestFriendStatus" id="2024" comment="ÔÚÏßÍæ¼ÒÇëÇóºÃÓÑ/ÅÆÓÑ×´Ì¬">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
 	</message>
 
-	<message name="MsgRequestDeleteFriend" id="2029" comment="çŽ©å®¶è¯·æ±‚åˆ é™¤å¥½å‹">
+	<message name="MsgRequestDeleteFriend" id="2029" comment="Íæ¼ÒÇëÇóÉ¾³ýºÃÓÑ">
 		<property name="nUserId" type="int64" />
 		<property name="nFriendUserId" type="int64" />
 	</message>
 
-	<message name="MsgRequestInviteFriend" id="2030" comment="çŽ©å®¶é‚€è¯·å¥½å‹åŠ å…¥æˆ¿é—´">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nFriendUserId" type="int64" comment="è¢«é‚€è¯·çš„å¥½å‹çŽ©å®¶ID"/>
-		<property name="nRoomId" type="int" comment="çŽ©å®¶å½“å‰çš„RoomId"/>
+	<message name="MsgRequestInviteFriend" id="2030" comment="Íæ¼ÒÑûÇëºÃÓÑ¼ÓÈë·¿¼ä">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nFriendUserId" type="int64" comment="±»ÑûÇëµÄºÃÓÑÍæ¼ÒID"/>
+		<property name="nRoomId" type="int" comment="Íæ¼Òµ±Ç°µÄRoomId"/>
 	</message>
 
-	<message name="MsgRequestBuyinInSeat" id="2034" comment="è¯·æ±‚åœ¨åº§ä½ä¸Šä¹°ç­¹ç ">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nBuyIn" type="int64" comment="ä¹°å…¥çš„ç­¹ç æ•°"/>
+	<message name="MsgRequestBuyinInSeat" id="2034" comment="ÇëÇóÔÚ×ùÎ»ÉÏÂò³ïÂë">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nBuyIn" type="int64" comment="ÂòÈëµÄ³ïÂëÊý"/>
 	</message>
 
-	<message name="MsgRequestBuyItem" id="2075" comment="è¯·æ±‚ä¹°å…¥ç‰©å“">
+	<message name="MsgRequestBuyItem" id="2075" comment="ÇëÇóÂòÈëÎïÆ·">
 		<property name="nUserId" type="int64" />
-		<property name="nItemType" type="int" comment="è´­ä¹°ç‰©å“çš„ç±»åž‹"/>
-		<property name="nBuyMethod" type="char" comment="è´­ä¹°æ–¹å¼, 1: æ­£å¸¸chipä»·æ ¼, 2: ç‰¹æ®Šchipä»·æ ¼, 3: VIPchipä»·æ ¼, 4: æ­£å¸¸goldä»·æ ¼, 5: ç‰¹æ®Šgoldä»·æ ¼, 6: VIPgoldä»·æ ¼ "/>
-		<property name="nDestSeatId" type="char" comment="èµ é€çš„ç›®æ ‡åº§ä½Id -2: æ— èµ é€, -1: é€ç»™å…¨æ¡Œ, 0-8: ç›®æ ‡åº§ä½Id"/>
+		<property name="nItemType" type="int" comment="¹ºÂòÎïÆ·µÄÀàÐÍ"/>
+		<property name="nBuyMethod" type="char" comment="¹ºÂò·½Ê½, 1: Õý³£chip¼Û¸ñ, 2: ÌØÊâchip¼Û¸ñ, 3: VIPchip¼Û¸ñ, 4: Õý³£gold¼Û¸ñ, 5: ÌØÊâgold¼Û¸ñ, 6: VIPgold¼Û¸ñ "/>
+		<property name="nDestSeatId" type="char" comment="ÔùËÍµÄÄ¿±ê×ùÎ»Id -2: ÎÞÔùËÍ, -1: ËÍ¸øÈ«×À, 0-8: Ä¿±ê×ùÎ»Id"/>
 		<property name="_dummy" type="char" array="2" />
-		<property name="nCashCouponId" type="int64" comment="å¦‚æžœä½¿ç”¨ä»£é‡‘åˆ¸çš„è¯å‘é€ä»£é‡‘åˆ¸çš„Id å¦åˆ™ä¸º-1"/>
+		<property name="nCashCouponId" type="int64" comment="Èç¹ûÊ¹ÓÃ´ú½ðÈ¯µÄ»°·¢ËÍ´ú½ðÈ¯µÄId ·ñÔòÎª-1"/>
 	</message>
 
-	<message name="MsgRequestJoinRoom" id="2005" comment="è¯·æ±‚è¿›å…¥æˆ¿é—´">
+	<message name="MsgRequestJoinRoom" id="2005" comment="ÇëÇó½øÈë·¿¼ä">
 		<property name="nUserId" type="int64" />
-		<property name="nRoomId" type="int" comment="-1: è¡¨ç¤ºç¦»å¼€æˆ¿é—´ -10 å¿«é€Ÿè¿›å…¥ low -11 å¿«é€Ÿè¿›å…¥ mid -12 å¿«é€Ÿè¿›å…¥ high -20 è¿›å…¥MTT ç­‰çº§1 -21 è¿›å…¥MTTç­‰çº§2 -22 è¿›å…¥MTTç­‰çº§3 -30 è¿›å…¥ å‘¨é”¦æ ‡èµ› -510 å¿«é€Ÿè¿›å…¥5äººæˆ¿"/>
+		<property name="nRoomId" type="int" comment="-1: ±íÊ¾Àë¿ª·¿¼ä -10 ¿ìËÙ½øÈë low -11 ¿ìËÙ½øÈë mid -12 ¿ìËÙ½øÈë high -20 ½øÈëMTT µÈ¼¶1 -21 ½øÈëMTTµÈ¼¶2 -22 ½øÈëMTTµÈ¼¶3 -30 ½øÈë ÖÜ½õ±êÈü -510 ¿ìËÙ½øÈë5ÈË·¿"/>
 	</message>
 
-	<message name="MsgRequestReceiveLoginGift" id="2107" comment="è¯·æ±‚é¢†å–æ¯æ—¥ç™»å½•å¥–åŠ±">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nChoice" type="char" comment="çŽ©å®¶ç‚¹å‡»çš„, èŒƒå›´ä¸º: 0~5"/>
-		<property name="_dummy" type="char" array="3" comment="è¡¥é½ä½" />
+	<message name="MsgRequestReceiveLoginGift" id="2107" comment="ÇëÇóÁìÈ¡Ã¿ÈÕµÇÂ¼½±Àø">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nChoice" type="char" comment="Íæ¼Òµã»÷µÄ, ·¶Î§Îª: 0~5"/>
+		<property name="_dummy" type="char" array="3" comment="²¹ÆëÎ»" />
 	</message>
 
-	<message name="MsgRequestMakeFriend" id="2018" comment="çŽ©å®¶åŠ å¥½å‹è¯·æ±‚åŒ…">
-		<property name="nUserId" type="int64" comment="æœ¬çŽ©å®¶ID"/>
-		<property name="nSeatId" type="char" comment="å¯¹æ–¹çš„åº§ä½ID"/>
+	<message name="MsgRequestMakeFriend" id="2018" comment="Íæ¼Ò¼ÓºÃÓÑÇëÇó°ü">
+		<property name="nUserId" type="int64" comment="±¾Íæ¼ÒID"/>
+		<property name="nSeatId" type="char" comment="¶Ô·½µÄ×ùÎ»ID"/>
 		<property name="_dummy" type="char" array="3" />
-		<property name="nFriendUserId" type="int64" comment="å¯¹æ–¹çš„FacebookID"/>
+		<property name="nFriendUserId" type="int64" comment="¶Ô·½µÄFacebookID"/>
 	</message>
 
-	<message name="MsgRequestRoomList" id="2002" comment="å®¢æˆ·ç«¯è¯·æ±‚æˆ¿é—´åˆ—è¡¨">
+	<message name="MsgRequestRoomList" id="2002" comment="¿Í»§¶ËÇëÇó·¿¼äÁÐ±í">
 		<property name="nUserId" type="int64" />
-		<property name="nRoomType" type="int" comment="0: æ™®é€šæˆ¿, 6: å¿«é€Ÿæˆ¿, 10: Sit & Goæˆ¿é—´, 11: å¿«é€ŸSit & Goæˆ¿é—´, "/>
+		<property name="nRoomType" type="int" comment="0: ÆÕÍ¨·¿, 6: ¿ìËÙ·¿, 10: Sit & Go·¿¼ä, 11: ¿ìËÙSit & Go·¿¼ä, "/>
 	</message>
 
-	<message name="MsgRequestRoomMembers" id="2032" comment="è¯·æ±‚æˆ¿é—´å†…æˆå‘˜ä¿¡æ¯">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nRoomId" type="int" comment="æˆ¿é—´ID"/>
-		<property name="nMemberType" type="char" comment="æˆå‘˜ç±»åž‹, 0: æ‰€æœ‰æˆå‘˜, 1: åœ¨åº§æˆå‘˜, 2: æ—è§‚æˆå‘˜"/>
-		<property name="_dummy" type="char" array="3" comment="è¯·æ±‚æˆ¿é—´å†…æˆå‘˜ä¿¡æ¯ã€‚" />
+	<message name="MsgRequestRoomMembers" id="2032" comment="ÇëÇó·¿¼äÄÚ³ÉÔ±ÐÅÏ¢">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nRoomId" type="int" comment="·¿¼äID"/>
+		<property name="nMemberType" type="char" comment="³ÉÔ±ÀàÐÍ, 0: ËùÓÐ³ÉÔ±, 1: ÔÚ×ù³ÉÔ±, 2: ÅÔ¹Û³ÉÔ±"/>
+		<property name="_dummy" type="char" array="3" comment="ÇëÇó·¿¼äÄÚ³ÉÔ±ÐÅÏ¢¡£" />
 	</message>
 
-	<message name="MsgRequestRoomMessage" id="2027" comment="çŽ©å®¶æˆ¿é—´å†…èŠå¤©è¯·ç¤º">
-		<property name="nUserId" type="int64" comment="æœ¬çŽ©å®¶ID"/>
-		<property name="nMsgLength" type="short" comment="èŠå¤©ä¿¡æ¯é•¿åº¦."/>
+	<message name="MsgRequestRoomMessage" id="2027" comment="Íæ¼Ò·¿¼äÄÚÁÄÌìÇëÊ¾">
+		<property name="nUserId" type="int64" comment="±¾Íæ¼ÒID"/>
+		<property name="nMsgLength" type="short" comment="ÁÄÌìÐÅÏ¢³¤¶È."/>
 		<property name="_dummy" type="char" array="2" />
-		<property name="nDest" type="int64" comment="ç›®æ ‡çŽ©å®¶, é¡»æ˜¯åŒæˆ¿é—´å†…çš„çŽ©å®¶ã€‚-1: æˆ¿é—´å†…ç¾¤å‘"/>
-		<property name="szMessage" type="char" array="128" comment="èŠå¤©ä¿¡æ¯å†…å®¹" />
+		<property name="nDest" type="int64" comment="Ä¿±êÍæ¼Ò, ÐëÊÇÍ¬·¿¼äÄÚµÄÍæ¼Ò¡£-1: ·¿¼äÄÚÈº·¢"/>
+		<property name="szMessage" type="char" array="128" comment="ÁÄÌìÐÅÏ¢ÄÚÈÝ" />
 	</message>
 
-	<message name="MsgRequestSitDown" id="2007" comment="è¯·æ±‚åä¸‹">
+	<message name="MsgRequestSitDown" id="2007" comment="ÇëÇó×øÏÂ">
 		<property name="nUserId" type="int64" />
-		<property name="nSeatId" type="char" comment="åº§ä½ID -1: è¡¨ç¤ºç¦»å¼€åä½"/>
-		<property name="_dummy" type="char" array="3" comment="è¡¥é½ä½" />
-		<property name="nBuyIn" type="int64" comment="ä¹°å…¥ç­¹ç , è¦åä¸‹å¿…é¡»ä¹°å…¥ç­¹ç "/>
+		<property name="nSeatId" type="char" comment="×ùÎ»ID -1: ±íÊ¾Àë¿ª×øÎ»"/>
+		<property name="_dummy" type="char" array="3" comment="²¹ÆëÎ»" />
+		<property name="nBuyIn" type="int64" comment="ÂòÈë³ïÂë, Òª×øÏÂ±ØÐëÂòÈë³ïÂë"/>
 	</message>
 
-	<message name="MsgRequestUseItem" id="2104" comment="å®¢æˆ·ç«¯è¯·æ±‚ä½¿ç”¨é“å…·">
+	<message name="MsgRequestUseItem" id="2104" comment="¿Í»§¶ËÇëÇóÊ¹ÓÃµÀ¾ß">
 		<property name="nUserId" type="int64" />
-		<property name="nItemId" type="int64" comment="è¦ä½¿ç”¨çš„ç‰©å“Id -1: è¡¨ç¤ºå–æ¶ˆé¥°å“"/>
+		<property name="nItemId" type="int64" comment="ÒªÊ¹ÓÃµÄÎïÆ·Id -1: ±íÊ¾È¡ÏûÊÎÆ·"/>
 	</message>
 
-	<message name="MsgRespAcceptFreeChips" id="2049" comment="æŽ¥å—å¥½å‹çš„å…è´¹ç­¹ç çš„å›žå¤">
-		<property name="nResult" type="char" comment="æ“ä½œç»“æžœã€‚0: æˆåŠŸ, 1: å…è´¹ç­¹ç ä¸å­˜åœ¨, å®¢æˆ·ç«¯å¯ç†è§£ä¸ºæ­¤IDå·²ç»è¿‡æœŸ, 2: å·²è¾¾åˆ°æœ¬æ—¥æŽ¥æ”¶ä¸Šé™, è¯·æ˜Žå¤©å†è¯•"/>
-		<property name="_dummy" type="char" comment="è¡¥é½"/>
-		<property name="nUserId" type="int64" comment="çŽ©å®¶çš„ID"/>
-		<property name="nRequsetId" type="int64" comment="è¯·æ±‚çš„ID"/>
-		<property name="nGeneratedChips" type="int64" comment="ç”Ÿæˆçš„ç­¹ç æ•°"/>
+	<message name="MsgRespAcceptFreeChips" id="2049" comment="½ÓÊÜºÃÓÑµÄÃâ·Ñ³ïÂëµÄ»Ø¸´">
+		<property name="nResult" type="char" comment="²Ù×÷½á¹û¡£0: ³É¹¦, 1: Ãâ·Ñ³ïÂë²»´æÔÚ, ¿Í»§¶Ë¿ÉÀí½âÎª´ËIDÒÑ¾­¹ýÆÚ, 2: ÒÑ´ïµ½±¾ÈÕ½ÓÊÕÉÏÏÞ, ÇëÃ÷ÌìÔÙÊÔ"/>
+		<property name="_dummy" type="char" comment="²¹Æë"/>
+		<property name="nUserId" type="int64" comment="Íæ¼ÒµÄID"/>
+		<property name="nRequsetId" type="int64" comment="ÇëÇóµÄID"/>
+		<property name="nGeneratedChips" type="int64" comment="Éú³ÉµÄ³ïÂëÊý"/>
 	</message>
 
-	<message name="MsgRespBuyinInSeat" id="2035" comment="åœ¨åº§ä½ä¸Šä¹°ç­¹ç çš„å›žå¤">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nStatus" type="char" comment="æ‰§è¡Œçš„çŠ¶æ€, 0: æˆåŠŸ, 1: èµ„é‡‘ä¸è¶³, 2: è¶…è¿‡æœ€å¤§ä¹°å…¥å€¼, 3: å°äºŽæœ€å°ä¹°å…¥"/>
-		<property name="_dummy" type="char" array="3" comment="è¡¥é½ä½." />
+	<message name="MsgRespBuyinInSeat" id="2035" comment="ÔÚ×ùÎ»ÉÏÂò³ïÂëµÄ»Ø¸´">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nStatus" type="char" comment="Ö´ÐÐµÄ×´Ì¬, 0: ³É¹¦, 1: ×Ê½ð²»×ã, 2: ³¬¹ý×î´óÂòÈëÖµ, 3: Ð¡ÓÚ×îÐ¡ÂòÈë"/>
+		<property name="_dummy" type="char" array="3" comment="²¹ÆëÎ»." />
 	</message>
 
-	<message name="MsgRespBuyItem" id="2082" comment="ç­”å¤è´­ä¹°é“å…·çš„è¯·æ±‚">
-		<property name="nUserId" type="int64" comment="è´­ä¹°è€…Id"/>
-		<property name="nItemType" type="int" comment="è´­ä¹°åˆ°çš„ç‰©å“ç±»åž‹ -1: è¡¨ç¤ºè´­ä¹°å¤±è´¥"/>
-		<property name="nCashCouponId" type="int64" comment="æ­£åœ¨ä½¿ç”¨çš„ä»£é‡‘åˆ¸Id -1: è¡¨ç¤ºç©º"/>
-		<property name="nCashCouponBalance" type="int" comment="æ­£åœ¨ä½¿ç”¨çš„ä»£é‡‘åˆ¸ä½™é¢ -1: è¡¨ç¤ºç©º"/>
+	<message name="MsgRespBuyItem" id="2082" comment="´ð¸´¹ºÂòµÀ¾ßµÄÇëÇó">
+		<property name="nUserId" type="int64" comment="¹ºÂòÕßId"/>
+		<property name="nItemType" type="int" comment="¹ºÂòµ½µÄÎïÆ·ÀàÐÍ -1: ±íÊ¾¹ºÂòÊ§°Ü"/>
+		<property name="nCashCouponId" type="int64" comment="ÕýÔÚÊ¹ÓÃµÄ´ú½ðÈ¯Id -1: ±íÊ¾¿Õ"/>
+		<property name="nCashCouponBalance" type="int" comment="ÕýÔÚÊ¹ÓÃµÄ´ú½ðÈ¯Óà¶î -1: ±íÊ¾¿Õ"/>
 	</message>
 
-	<message name="MsgRespFriendInfo" id="2023" comment="åœ¨çº¿å¥½å‹/ç‰Œå‹ä¿¡æ¯ï¼Œæ¯æ¬¡ä¸€ä¸ªï¼Œå¯å‘å¤šä¸ª">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nFriendUserId" type="int64" comment="å¥½å‹ID"/>
-		<property name="nInFacebook" type="char" comment="æ˜¯å¦ Facebook å¥½å‹"/>
-		<property name="nLevel" type="uchar" comment="ç­‰çº§"/>
-		<property name="_dummy" type="char" array="2" comment="è¡¥é½ä½" />
-		<property name="nCoins" type="int64" comment="æ€»èµ„äº§"/>
-		<property name="nMostCoins" type="int64" comment="æ€»èµ„äº§çš„åŽ†å²æœ€é«˜è®°å½•"/>
-		<property name="nCash" type="int" comment="å……å€¼"/>
+	<message name="MsgRespFriendInfo" id="2023" comment="ÔÚÏßºÃÓÑ/ÅÆÓÑÐÅÏ¢£¬Ã¿´ÎÒ»¸ö£¬¿É·¢¶à¸ö">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nFriendUserId" type="int64" comment="ºÃÓÑID"/>
+		<property name="nInFacebook" type="char" comment="ÊÇ·ñ Facebook ºÃÓÑ"/>
+		<property name="nLevel" type="uchar" comment="µÈ¼¶"/>
+		<property name="_dummy" type="char" array="2" comment="²¹ÆëÎ»" />
+		<property name="nCoins" type="int64" comment="×Ü×Ê²ú"/>
+		<property name="nMostCoins" type="int64" comment="×Ü×Ê²úµÄÀúÊ·×î¸ß¼ÇÂ¼"/>
+		<property name="nCash" type="int" comment="³äÖµ"/>
 		<property name="nLogoutTime" type="uint" />
-		<property name="nWinThisWeek" type="int64" comment="æœ¬å‘¨èµ¢é¢"/>
+		<property name="nWinThisWeek" type="int64" comment="±¾ÖÜÓ®¶î"/>
 	</message>
 
-	<message name="MsgRespFriendStatus" id="2025" comment="å¥½å‹/ç‰Œå‹çŠ¶æ€å›žå¤">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nCount" type="int" comment="å¥½å‹çŽ©å®¶æ•°é‡"/>
+	<message name="MsgRespFriendStatus" id="2025" comment="ºÃÓÑ/ÅÆÓÑ×´Ì¬»Ø¸´">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nCount" type="int" comment="ºÃÓÑÍæ¼ÒÊýÁ¿"/>
 		<property name="stFriends" type="NET_FRIEND_STATUS" array="20" />
 	</message>
 
-	<message name="MsgRespFriendStatusEnd" id="2026" comment="å¥½å‹/ç‰Œå‹çŠ¶æ€å›žå¤çš„ç»“æŸåŒ…">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
+	<message name="MsgRespFriendStatusEnd" id="2026" comment="ºÃÓÑ/ÅÆÓÑ×´Ì¬»Ø¸´µÄ½áÊø°ü">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
 	</message>
 
-	<message name="MsgRespReceiveLoginGift" id="2108" comment="é¢†å–æ¯æ—¥ç™»å½•å¥–åŠ±çš„ç»“æžœ">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nResult" type="char" comment="0: è¡¨ç¤ºæˆåŠŸé¢†å–, 1: å·²é¢†å–è¿‡, -1: å†…éƒ¨é”™è¯¯"/>
-		<property name="nChoice" type="char" comment="çŽ©å®¶ç‚¹å‡»çš„é¡¹, èŒƒå›´ä¸º: 0~5"/>
+	<message name="MsgRespReceiveLoginGift" id="2108" comment="ÁìÈ¡Ã¿ÈÕµÇÂ¼½±ÀøµÄ½á¹û">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nResult" type="char" comment="0: ±íÊ¾³É¹¦ÁìÈ¡, 1: ÒÑÁìÈ¡¹ý, -1: ÄÚ²¿´íÎó"/>
+		<property name="nChoice" type="char" comment="Íæ¼Òµã»÷µÄÏî, ·¶Î§Îª: 0~5"/>
 		<property name="_dummy" type="char" array="2" />
-		<property name="nPots" type="int64" array="6" comment="å…­ä¸ªå¯é€‰é¡¹" />
-		<property name="nBonus" type="int64" comment="å®žé™…èŽ·å¾—çš„å¥–é‡‘"/>
+		<property name="nPots" type="int64" array="6" comment="Áù¸ö¿ÉÑ¡Ïî" />
+		<property name="nBonus" type="int64" comment="Êµ¼Ê»ñµÃµÄ½±½ð"/>
 	</message>
 
-	<message name="MsgRespRoomList" id="2003" comment="å®¢æˆ·ç«¯æˆ¿é—´åˆ—è¡¨è¯·æ±‚çš„åº”ç­”">
+	<message name="MsgRespRoomList" id="2003" comment="¿Í»§¶Ë·¿¼äÁÐ±íÇëÇóµÄÓ¦´ð">
 		<property name="nRoomNum" type="short" />
-		<property name="_dummy" type="char" array="2" comment="è¡¥é½ä½" />
+		<property name="_dummy" type="char" array="2" comment="²¹ÆëÎ»" />
 		<property name="stRooms" type="NET_ROOM_INFO" array="26" />
 	</message>
 
-	<message name="MsgRespRoomListEnd" id="2004" comment="å®¢æˆ·ç«¯æˆ¿é—´åˆ—è¡¨è¯·æ±‚åº”ç­”çš„ç»“æŸæ ‡è¯†åŒ…">
+	<message name="MsgRespRoomListEnd" id="2004" comment="¿Í»§¶Ë·¿¼äÁÐ±íÇëÇóÓ¦´ðµÄ½áÊø±êÊ¶°ü">
 	</message>
 
-	<message name="MsgRespRoomMembers" id="2033" comment="æˆ¿é—´å†…æˆå‘˜ä¿¡æ¯çš„å›žå¤">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nRoomId" type="int" comment="æˆ¿é—´ID"/>
-		<property name="nMemberType" type="char" comment="æˆå‘˜ç±»åž‹, 0: æ‰€æœ‰æˆå‘˜, 1: åœ¨åº§æˆå‘˜, 2: æ—è§‚æˆå‘˜"/>
-		<property name="nMemberNum" type="char" comment="æ­¤æˆå‘˜åˆ—è¡¨æ€»äººæ•°"/>
+	<message name="MsgRespRoomMembers" id="2033" comment="·¿¼äÄÚ³ÉÔ±ÐÅÏ¢µÄ»Ø¸´">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nRoomId" type="int" comment="·¿¼äID"/>
+		<property name="nMemberType" type="char" comment="³ÉÔ±ÀàÐÍ, 0: ËùÓÐ³ÉÔ±, 1: ÔÚ×ù³ÉÔ±, 2: ÅÔ¹Û³ÉÔ±"/>
+		<property name="nMemberNum" type="char" comment="´Ë³ÉÔ±ÁÐ±í×ÜÈËÊý"/>
 		<property name="_dummy" type="char" array="2" />
-		<property name="stMembers" type="NET_USER_INFO" array="30" comment="æˆå‘˜åˆ—è¡¨" />
+		<property name="stMembers" type="NET_USER_INFO" array="30" comment="³ÉÔ±ÁÐ±í" />
 	</message>
 
-	<message name="MsgRespSendLuckyChips" id="2120" comment="å›žå¤å¹¸è¿ç­¹ç å‘å¸ƒç»“æžœ">
+	<message name="MsgRespSendLuckyChips" id="2120" comment="»Ø¸´ÐÒÔË³ïÂë·¢²¼½á¹û">
 		<property name="nLinkId" type="char" array="36" />
-		<property name="nType" type="uint" comment="è¿”å›žçš„ç±»åž‹"/>
+		<property name="nType" type="uint" comment="·µ»ØµÄÀàÐÍ"/>
 	</message>
 
-	<message name="MsgRespSitDown" id="2008" comment="åä¸‹è¯·æ±‚çš„å›žå¤">
+	<message name="MsgRespSitDown" id="2008" comment="×øÏÂÇëÇóµÄ»Ø¸´">
 		<property name="nUserId" type="int64" />
-		<property name="nRoomId" type="int" comment="æˆ¿é—´ID"/>
-		<property name="nSeatId" type="char" comment="åº§ä½ID -1: è¡¨ç¤ºæ²¡æœ‰åä¸‹"/>
+		<property name="nRoomId" type="int" comment="·¿¼äID"/>
+		<property name="nSeatId" type="char" comment="×ùÎ»ID -1: ±íÊ¾Ã»ÓÐ×øÏÂ"/>
 		<property name="_dummy" type="char" array="3" />
-		<property name="nCounter" type="int64" comment="æŒæœ‰ç­¹ç "/>
+		<property name="nCounter" type="int64" comment="³ÖÓÐ³ïÂë"/>
 	</message>
 
-	<message name="MsgRespUseItem" id="2105" comment="ä½¿ç”¨é“å…·çš„å›žå¤">
+	<message name="MsgRespUseItem" id="2105" comment="Ê¹ÓÃµÀ¾ßµÄ»Ø¸´">
 		<property name="nUserId" type="int64" />
-		<property name="nItemId" type="int64" comment="ä½¿ç”¨çš„ç‰©å“ID"/>
-		<property name="nIsSuccess" type="char" comment="1: ä½¿ç”¨æˆåŠŸ 0: ä½¿ç”¨å¤±è´¥"/>
+		<property name="nItemId" type="int64" comment="Ê¹ÓÃµÄÎïÆ·ID"/>
+		<property name="nIsSuccess" type="char" comment="1: Ê¹ÓÃ³É¹¦ 0: Ê¹ÓÃÊ§°Ü"/>
 		<property name="_dummy" type="char" array="3" />
 	</message>
 
-	<message name="MsgRoomInfo" id="2006" comment="è¿›å…¥æˆ¿é—´åŽçš„å›žå¤">
-		<property name="nUserId" type="int64" comment="ç›®æ ‡ç”¨æˆ·çš„Id"/>
-		<property name="stRoomInfo" type="NET_ROOM_INFO" comment="æˆ¿é—´ä¿¡æ¯"/>
-		<property name="stSeats" type="NET_SEAT_INFO" array="9" comment="åº§ä½ä¿¡æ¯ 0 ä¸ºç‰Œå®˜å·¦æ‰‹è¾¹ç¬¬ä¸€ä¸ª" />
-		<property name="nBanker" type="char" comment="åº„å®¶åº§ä½, è‹¥æ¸¸æˆæœªå¼€å§‹, åˆ™ä¸º-1."/>
-		<property name="nSmallBlind" type="char" comment="å°ç›²æ³¨åº§ä½, è‹¥æ¸¸æˆæœªå¼€å§‹, åˆ™ä¸º-1."/>
-		<property name="nBigBlind" type="char" comment="å¤§ç›²æ³¨åº§ä½, è‹¥æ¸¸æˆæœªå¼€å§‹, åˆ™ä¸º-1."/>
-		<property name="nPublicCards" type="char" array="5" comment="äº”å¼ å…¬ç‰Œ, æ²¡æœ‰çš„ä½ç½®ä¸º-1." />
-		<property name="nPools" type="int64" array="8" comment="8ä¸ªå¥–æ± , æ²¡æœ‰çš„åœ°æ–¹ä¸º0." />
-		<property name="nHandCards" type="uchar" array="2" comment="çŽ©å®¶å½“å‰çš„æ‰‹ç‰Œ, è‹¥æ— æ‰‹ç‰Œ, åˆ™ä¸º255ã€‚" />
+	<message name="MsgRoomInfo" id="2006" comment="½øÈë·¿¼äºóµÄ»Ø¸´">
+		<property name="nUserId" type="int64" comment="Ä¿±êÓÃ»§µÄId"/>
+		<property name="stRoomInfo" type="NET_ROOM_INFO" comment="·¿¼äÐÅÏ¢"/>
+		<property name="stSeats" type="NET_SEAT_INFO" array="9" comment="×ùÎ»ÐÅÏ¢ 0 ÎªÅÆ¹Ù×óÊÖ±ßµÚÒ»¸ö" />
+		<property name="nBanker" type="char" comment="×¯¼Ò×ùÎ», ÈôÓÎÏ·Î´¿ªÊ¼, ÔòÎª-1."/>
+		<property name="nSmallBlind" type="char" comment="Ð¡Ã¤×¢×ùÎ», ÈôÓÎÏ·Î´¿ªÊ¼, ÔòÎª-1."/>
+		<property name="nBigBlind" type="char" comment="´óÃ¤×¢×ùÎ», ÈôÓÎÏ·Î´¿ªÊ¼, ÔòÎª-1."/>
+		<property name="nPublicCards" type="char" array="5" comment="ÎåÕÅ¹«ÅÆ, Ã»ÓÐµÄÎ»ÖÃÎª-1." />
+		<property name="nPools" type="int64" array="8" comment="8¸ö½±³Ø, Ã»ÓÐµÄµØ·½Îª0." />
+		<property name="nHandCards" type="uchar" array="2" comment="Íæ¼Òµ±Ç°µÄÊÖÅÆ, ÈôÎÞÊÖÅÆ, ÔòÎª255¡£" />
 		<property name="_dummy" type="char" array="2" />
 	</message>
 
-	<message name="MsgSeatUpdate" id="2009" comment="æ›´æ–°å•ä¸ªåº§ä½çš„ä¿¡æ¯">
+	<message name="MsgSeatUpdate" id="2009" comment="¸üÐÂµ¥¸ö×ùÎ»µÄÐÅÏ¢">
 		<property name="nUserId" type="int64" />
-		<property name="nSeatId" type="char" comment="åº§ä½å·"/>
+		<property name="nSeatId" type="char" comment="×ùÎ»ºÅ"/>
 		<property name="_dummy" type="char" array="3" />
-		<property name="stSeatInfo" type="NET_SEAT_INFO" comment="åº§ä½ä¿¡æ¯"/>
+		<property name="stSeatInfo" type="NET_SEAT_INFO" comment="×ùÎ»ÐÅÏ¢"/>
 	</message>
 
-	<message name="MsgSendGiftEnd" id="2114" comment="å®¢æˆ·ç«¯èµ é€åŠ¨ç”»ç»“æŸåŽé€šçŸ¥æœåŠ¡å™¨">
-		<property name="nUserId" type="int64" comment="èµ é€æ–¹çš„UserId"/>
-		<property name="nTakerId" type="int64" comment="æŽ¥å—æ–¹çš„UserId"/>
-		<property name="nItemType" type="int" comment="æ‰€èµ é€çš„ç‰©å“"/>
+	<message name="MsgSendGiftEnd" id="2114" comment="¿Í»§¶ËÔùËÍ¶¯»­½áÊøºóÍ¨Öª·þÎñÆ÷">
+		<property name="nUserId" type="int64" comment="ÔùËÍ·½µÄUserId"/>
+		<property name="nTakerId" type="int64" comment="½ÓÊÜ·½µÄUserId"/>
+		<property name="nItemType" type="int" comment="ËùÔùËÍµÄÎïÆ·"/>
 	</message>
 
-	<message name="MsgSendRequest" id="2144" comment="å‘çŽ©å®¶å‘é€è¯·æ±‚">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nFriendUserId" type="int64" comment="å¥½å‹çš„ID"/>
-		<property name="nRType" type="uint" comment="è¯·æ±‚çš„ç±»åž‹ "/>
+	<message name="MsgSendRequest" id="2144" comment="ÏòÍæ¼Ò·¢ËÍÇëÇó">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nFriendUserId" type="int64" comment="ºÃÓÑµÄID"/>
+		<property name="nRType" type="uint" comment="ÇëÇóµÄÀàÐÍ "/>
 	</message>
 
-	<message name="MsgSendRequestReturn" id="2145" comment="çŽ©å®¶å‘é€è¯·æ±‚è¿”å›žçš„ç»“æžœ">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nFriendUserId" type="int64" comment="å¥½å‹çš„çŽ©å®¶ID"/>
-		<property name="nRequestId" type="int64" comment="æ•°æ®åº“è¿”å›žçš„è¯¥requestçš„å”¯ä¸€ID"/>
-		<property name="unRequestType" type="uint" comment="è¯·æ±‚çš„ç±»åž‹"/>
-		<property name="nPlatformId" type="int" comment="çŽ©å®¶ç™»é™†çš„å¹³å°id, 1è¡¨ç¤ºfacebook, 2è¡¨ç¤ºgoogle, 3è¡¨ç¤ºigg, 4è¡¨ç¤ºmsn, 5è¡¨ç¤ºtwitter, 6è¡¨ç¤ºyahoo"/>
-		<property name="szNickName" type="char" array="32" comment="çŽ©å®¶æ˜µç§°" />
-		<property name="szPlatformAccount" type="char" array="255" comment="çŽ©å®¶ç™»é™†çš„å¹³å°è´¦å·" />
+	<message name="MsgSendRequestReturn" id="2145" comment="Íæ¼Ò·¢ËÍÇëÇó·µ»ØµÄ½á¹û">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nFriendUserId" type="int64" comment="ºÃÓÑµÄÍæ¼ÒID"/>
+		<property name="nRequestId" type="int64" comment="Êý¾Ý¿â·µ»ØµÄ¸ÃrequestµÄÎ¨Ò»ID"/>
+		<property name="unRequestType" type="uint" comment="ÇëÇóµÄÀàÐÍ"/>
+		<property name="nPlatformId" type="int" comment="Íæ¼ÒµÇÂ½µÄÆ½Ì¨id, 1±íÊ¾facebook, 2±íÊ¾google, 3±íÊ¾igg, 4±íÊ¾msn, 5±íÊ¾twitter, 6±íÊ¾yahoo"/>
+		<property name="szNickName" type="char" array="32" comment="Íæ¼ÒêÇ³Æ" />
+		<property name="szPlatformAccount" type="char" array="255" comment="Íæ¼ÒµÇÂ½µÄÆ½Ì¨ÕËºÅ" />
 	</message>
 
-	<message name="MsgSendRoleRequestList" id="2143" comment="å‘çŽ©å®¶å‘é€requestsåˆ—è¡¨">
-		<property name="UserId" type="int64" comment="çŽ©å®¶çš„ID"/>
-		<property name="bTail" type="bool" comment="æ˜¯å¦ç»“å°¾"/>
-		<property name="_dummy" type="char" comment="å ä½ç¬¦"/>
-		<property name="stRequestList" type="NET_REQUEST_DATA" array="10" comment="çŽ©å®¶çš„REQUEST åˆ—è¡¨" />
+	<message name="MsgSendRoleRequestList" id="2143" comment="ÏòÍæ¼Ò·¢ËÍrequestsÁÐ±í">
+		<property name="UserId" type="int64" comment="Íæ¼ÒµÄID"/>
+		<property name="bTail" type="bool" comment="ÊÇ·ñ½áÎ²"/>
+		<property name="_dummy" type="char" comment="Õ¼Î»·û"/>
+		<property name="stRequestList" type="NET_REQUEST_DATA" array="10" comment="Íæ¼ÒµÄREQUEST ÁÐ±í" />
 	</message>
 
-	<message name="MsgServerVersion" id="2086" comment="æœåŠ¡å™¨ç‰ˆæœ¬ä¿¡æ¯">
+	<message name="MsgServerVersion" id="2086" comment="·þÎñÆ÷°æ±¾ÐÅÏ¢">
 		<property name="nVersionId" type="uint" />
 		<property name="nYear" type="ushort" />
 		<property name="nMonth" type="uchar" />
@@ -516,31 +515,31 @@
 		<property name="_dummy" type="uchar" />
 	</message>
 
-	<message name="MsgUpdateBonusPool" id="2013" comment="å¥–æ± æ›´æ–°åŒ…">
+	<message name="MsgUpdateBonusPool" id="2013" comment="½±³Ø¸üÐÂ°ü">
 		<property name="nUserId" type="int64" />
-		<property name="nPool" type="int64" array="8" comment="æœ€å¤š8ä¸ªå¥–æ± , ä¸»å¥–æ± ç¼–å·ä¸º 0" />
+		<property name="nPool" type="int64" array="8" comment="×î¶à8¸ö½±³Ø, Ö÷½±³Ø±àºÅÎª 0" />
 	</message>
 
-	<message name="MsgUpdateVolidatePlayerInfo" id="2068" comment="æ›´æ–°å¸¸å˜çš„çŽ©å®¶ä¿¡æ¯">
-		<property name="nUserId" type="int64" comment="çŽ©å®¶ID"/>
-		<property name="nLevel" type="uchar" comment="ç­‰çº§"/>
+	<message name="MsgUpdateVolidatePlayerInfo" id="2068" comment="¸üÐÂ³£±äµÄÍæ¼ÒÐÅÏ¢">
+		<property name="nUserId" type="int64" comment="Íæ¼ÒID"/>
+		<property name="nLevel" type="uchar" comment="µÈ¼¶"/>
 		<property name="_dummy" type="char" array="3" />
-		<property name="nCoins" type="int64" comment="æ€»èµ„äº§"/>
-		<property name="nWinThisWeek" type="int64" comment="æœ¬å‘¨èµ¢é¢"/>
-		<property name="nCash" type="int" comment="å……å€¼"/>
-		<property name="nExp" type="uint" comment="ç»éªŒå€¼"/>
-		<property name="nTrinket" type="int" comment="é¥°å“"/>
+		<property name="nCoins" type="int64" comment="×Ü×Ê²ú"/>
+		<property name="nWinThisWeek" type="int64" comment="±¾ÖÜÓ®¶î"/>
+		<property name="nCash" type="int" comment="³äÖµ"/>
+		<property name="nExp" type="uint" comment="¾­ÑéÖµ"/>
+		<property name="nTrinket" type="int" comment="ÊÎÆ·"/>
 	</message>
 
-	<message name="MsgUserLoginOtherPlace" id="2081" comment="è´¦å·åœ¨å…¶å®ƒåœ°æ–¹ç™»å½•ï¼Œè¢«è¿‘ä¸‹çº¿">
+	<message name="MsgUserLoginOtherPlace" id="2081" comment="ÕËºÅÔÚÆäËüµØ·½µÇÂ¼£¬±»½üÏÂÏß">
 	</message>
 
-	<message name="MsgUserStatus" id="2058" comment="å‘Šè¯‰çŽ©å®¶å½“å‰çš„ä½ç½®ï¼Œå¯èƒ½æœ‰ç›¸åº”çš„åŽŸå› ">
+	<message name="MsgUserStatus" id="2058" comment="¸æËßÍæ¼Òµ±Ç°µÄÎ»ÖÃ£¬¿ÉÄÜÓÐÏàÓ¦µÄÔ­Òò">
 		<property name="nUserId" type="int64" />
-		<property name="nStatus" type="char" comment="ä½ç½®ä¿¡æ¯, 0: å¤§åŽ…, 1: æ™®é€šæˆ¿é—´, 2: SitNGoæˆ¿é—´, 3: MTTæˆ¿é—´, 4: å‘¨é”¦æ ‡èµ›æˆ¿é—´"/>
-		<property name="nReason" type="char" comment="ç›¸å…³æç¤º, 0: æ— æç¤º, 1: æˆ¿é—´é”™è¯¯, å·²ç¦»å¼€æˆ¿é—´, 2: MTTæ¯”èµ›ç»“æŸ/å‡ºå±€, 3: æˆ¿é—´äººæ•°å·²æ»¡, 4: æŸ¥æ— æ­¤æˆ¿é—´, æ— æ³•è¿›å…¥, 5: MTTäººæ•°å·²æ»¡, 6: å‘¨é”¦æ ‡èµ›äººæ•°å·²æ»¡ 7: è‡ªåŠ¨é€‰æˆ¿å¤±è´¥, 8: å‚æ•°é”™è¯¯, 9: èµ„é‡‘ä¸è¶³, 10: RoomServerå…³é—­, 11: å¿…é¡»åœ¨å¤§åŽ…æ‰å¯åŠ å…¥å‘¨é”¦æ ‡èµ›"/>
+		<property name="nStatus" type="char" comment="Î»ÖÃÐÅÏ¢, 0: ´óÌü, 1: ÆÕÍ¨·¿¼ä, 2: SitNGo·¿¼ä, 3: MTT·¿¼ä, 4: ÖÜ½õ±êÈü·¿¼ä"/>
+		<property name="nReason" type="char" comment="Ïà¹ØÌáÊ¾, 0: ÎÞÌáÊ¾, 1: ·¿¼ä´íÎó, ÒÑÀë¿ª·¿¼ä, 2: MTT±ÈÈü½áÊø/³ö¾Ö, 3: ·¿¼äÈËÊýÒÑÂú, 4: ²éÎÞ´Ë·¿¼ä, ÎÞ·¨½øÈë, 5: MTTÈËÊýÒÑÂú, 6: ÖÜ½õ±êÈüÈËÊýÒÑÂú 7: ×Ô¶¯Ñ¡·¿Ê§°Ü, 8: ²ÎÊý´íÎó, 9: ×Ê½ð²»×ã, 10: RoomServer¹Ø±Õ, 11: ±ØÐëÔÚ´óÌü²Å¿É¼ÓÈëÖÜ½õ±êÈü"/>
 		<property name="_dummy" type="char" array="2" />
-		<property name="nRoomId" type="int" comment="æˆ¿é—´ID"/>
+		<property name="nRoomId" type="int" comment="·¿¼äID"/>
 	</message>
 
 </PokerMsgs>

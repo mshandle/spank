@@ -2,7 +2,7 @@
  * \file MsgNotifyRoomMessage.h
  * \date unknown
  * 
- * 
+ * 通知房间内的聊天信息
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGNOTIFYROOMMESSAGE_H__
@@ -30,12 +30,12 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 nUserId;
-	int64 nSenderUserId;
-	short nMsgLength;
+	int64 nUserId;	// 玩家ID
+	int64 nSenderUserId;	// 发起聊天消息的玩家ID
+	short nMsgLength;	// 聊天信息长度.
 	char _dummy[2];
-	int64 nDest;
-	char nMessage;
+	int64 nDest;	// 目标玩家, 须是同房间内的玩家。-1: 房间内群发
+	char nMessage;	// 聊天信息内容
 
 };
 

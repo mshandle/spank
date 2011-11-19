@@ -2,7 +2,7 @@
  * \file MsgRespRoomListEnd.h
  * \date unknown
  * 
- * 
+ * 客户端房间列表请求应答的结束标识包
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGRESPROOMLISTEND_H__

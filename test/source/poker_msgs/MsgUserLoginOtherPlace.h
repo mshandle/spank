@@ -2,7 +2,7 @@
  * \file MsgUserLoginOtherPlace.h
  * \date unknown
  * 
- * 
+ * 账号在其它地方登录，被近下线
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGUSERLOGINOTHERPLACE_H__

@@ -2,7 +2,7 @@
  * \file MsgUpdateVolidatePlayerInfo.h
  * \date unknown
  * 
- * 
+ * 更新常变的玩家信息
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGUPDATEVOLIDATEPLAYERINFO_H__
@@ -30,14 +30,14 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 nUserId;
-	uchar nLevel;
+	int64 nUserId;	// 玩家ID
+	uchar nLevel;	// 等级
 	char _dummy[3];
-	int64 nCoins;
-	int64 nWinThisWeek;
-	int nCash;
-	uint nExp;
-	int nTrinket;
+	int64 nCoins;	// 总资产
+	int64 nWinThisWeek;	// 本周赢额
+	int nCash;	// 充值
+	uint nExp;	// 经验值
+	int nTrinket;	// 饰品
 
 };
 

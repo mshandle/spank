@@ -2,7 +2,7 @@
  * \file MsgNotifyMttRank.h
  * \date unknown
  * 
- * 
+ * 通知shootout等级
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGNOTIFYMTTRANK_H__
@@ -30,8 +30,8 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	char nRank[3];
-	int nBonus[3];
+	char nRank[3];	// Rank 为 -1时, 标识当前等级不可用~
+	int nBonus[3];	// Bonus 为 -1时, 标识当前不可用~
 
 };
 

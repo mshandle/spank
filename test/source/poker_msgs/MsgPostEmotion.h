@@ -2,7 +2,7 @@
  * \file MsgPostEmotion.h
  * \date unknown
  * 
- * 
+ * 请求发送表情
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGPOSTEMOTION_H__
@@ -30,9 +30,9 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 nUserId;
-	short nEmotionId;
-	char _dummy[2];
+	int64 nUserId;	// 玩家ID
+	short nEmotionId;	// 表情ID, 实际表情由客户端指定
+	char _dummy[2];	// 对齐位
 
 };
 

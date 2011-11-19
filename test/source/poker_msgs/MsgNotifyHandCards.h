@@ -2,7 +2,7 @@
  * \file MsgNotifyHandCards.h
  * \date unknown
  * 
- * 
+ * 手牌通知包
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGNOTIFYHANDCARDS_H__
@@ -31,9 +31,9 @@ public:
 
 public:
 	int64 nUserId;
-	char nSeatId;
-	uchar nCards[2];
-	char _dummy;
+	char nSeatId;	// 座位号
+	uchar nCards[2];	// 两张手牌, 范围为0~51, 表示52张牌中的一张
+	char _dummy;	// 补齐位
 
 };
 

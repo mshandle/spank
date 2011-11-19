@@ -2,7 +2,7 @@
  * \file MsgNotifyPlayerLevelUp.h
  * \date unknown
  * 
- * 
+ * 通知玩家升级
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGNOTIFYPLAYERLEVELUP_H__
@@ -33,7 +33,7 @@ public:
 	int64 nUserId;
 	uchar nLevel;
 	uchar nExp;
-	char nSeatId;
+	char nSeatId;	// -1: 表示本人 0-8: 表示其他的座位
 	char _dummy;
 
 };

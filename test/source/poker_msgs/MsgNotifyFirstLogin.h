@@ -2,7 +2,7 @@
  * \file MsgNotifyFirstLogin.h
  * \date unknown
  * 
- * 
+ * 告知客户端, 此次为首次登录
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGNOTIFYFIRSTLOGIN_H__

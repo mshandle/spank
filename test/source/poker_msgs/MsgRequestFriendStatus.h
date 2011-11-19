@@ -2,7 +2,7 @@
  * \file MsgRequestFriendStatus.h
  * \date unknown
  * 
- * 
+ * 在线玩家请求好友/牌友状态
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGREQUESTFRIENDSTATUS_H__
@@ -30,7 +30,7 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 nUserId;
+	int64 nUserId;	// 玩家ID
 
 };
 

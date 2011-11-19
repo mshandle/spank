@@ -2,7 +2,7 @@
  * \file MsgRequestReceiveLoginGift.h
  * \date unknown
  * 
- * 
+ * 请求领取每日登录奖励
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGREQUESTRECEIVELOGINGIFT_H__
@@ -30,9 +30,9 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 nUserId;
-	char nChoice;
-	char _dummy[3];
+	int64 nUserId;	// 玩家ID
+	char nChoice;	// 玩家点击的, 范围为: 0~5
+	char _dummy[3];	// 补齐位
 
 };
 

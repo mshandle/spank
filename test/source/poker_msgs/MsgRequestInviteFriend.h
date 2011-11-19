@@ -2,7 +2,7 @@
  * \file MsgRequestInviteFriend.h
  * \date unknown
  * 
- * 
+ * 玩家邀请好友加入房间
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGREQUESTINVITEFRIEND_H__
@@ -30,9 +30,9 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 nUserId;
-	int64 nFriendUserId;
-	int nRoomId;
+	int64 nUserId;	// 玩家ID
+	int64 nFriendUserId;	// 被邀请的好友玩家ID
+	int nRoomId;	// 玩家当前的RoomId
 
 };
 

@@ -2,7 +2,7 @@
  * \file MsgRequestMakeFriend.h
  * \date unknown
  * 
- * 
+ * 玩家加好友请求包
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGREQUESTMAKEFRIEND_H__
@@ -30,10 +30,10 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 nUserId;
-	char nSeatId;
+	int64 nUserId;	// 本玩家ID
+	char nSeatId;	// 对方的座位ID
 	char _dummy[3];
-	int64 nFriendUserId;
+	int64 nFriendUserId;	// 对方的FacebookID
 
 };
 

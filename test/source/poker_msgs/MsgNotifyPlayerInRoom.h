@@ -2,7 +2,7 @@
  * \file MsgNotifyPlayerInRoom.h
  * \date unknown
  * 
- * 
+ * 通知玩家离开房间
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGNOTIFYPLAYERINROOM_H__
@@ -32,7 +32,7 @@ public:
 public:
 	int64 nUserId;
 	int64 nSourceUserId;
-	int nRoomId;
+	int nRoomId;	// 表示SourceUserId所在的房间ID -1: 表示离开房间
 
 };
 

@@ -2,7 +2,7 @@
  * \file MsgRequestDeleteFriend.h
  * \date unknown
  * 
- * 
+ * Íæ¼ÒÇëÇóÉ¾³ýºÃÓÑ
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGREQUESTDELETEFRIEND_H__

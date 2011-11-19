@@ -2,7 +2,7 @@
  * \file MsgSendGiftEnd.h
  * \date unknown
  * 
- * 
+ * 客户端赠送动画结束后通知服务器
  * \author Auto Generate by MsgGen
  */
 #ifndef __MSGSENDGIFTEND_H__
@@ -30,9 +30,9 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 nUserId;
-	int64 nTakerId;
-	int nItemType;
+	int64 nUserId;	// 赠送方的UserId
+	int64 nTakerId;	// 接受方的UserId
+	int nItemType;	// 所赠送的物品
 
 };
 
