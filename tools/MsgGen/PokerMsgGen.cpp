@@ -11,6 +11,7 @@
 
 PokerMsgGen::PokerMsgGen()
 {
+	m_TypeSizeMap.insert(std::make_pair("bool", 1));
 	m_TypeSizeMap.insert(std::make_pair("char", 1));
 	m_TypeSizeMap.insert(std::make_pair("uchar", 1));
 	m_TypeSizeMap.insert(std::make_pair("short", 2));
@@ -21,6 +22,13 @@ PokerMsgGen::PokerMsgGen()
 	m_TypeSizeMap.insert(std::make_pair("uint64", 8));
 	m_TypeSizeMap.insert(std::make_pair("float", 4));
 	m_TypeSizeMap.insert(std::make_pair("double", 8));
+
+	m_TypeSizeMap.insert(std::make_pair("NET_ITEM_INFO", 36));
+	m_TypeSizeMap.insert(std::make_pair("NET_USER_INFO", 40));
+	m_TypeSizeMap.insert(std::make_pair("NET_ROOM_INFO", 48));
+	m_TypeSizeMap.insert(std::make_pair("NET_FRIEND_STATUS", 64));
+	m_TypeSizeMap.insert(std::make_pair("NET_REQUEST_DATA", 32));
+	m_TypeSizeMap.insert(std::make_pair("NET_SEAT_INFO", 32));
 }
 
 PokerMsgGen::~PokerMsgGen()
@@ -60,7 +68,7 @@ int PokerMsgGen::GetTypeSize(const char* pszType)
 
 bool PokerMsgGen::ParseXmlMessage(MSG_INFO& infoOut, TiXmlElement* pElmMessage)
 {
-	infoOut.pszClassName = pElmMessage->Attribute("class_name");
+	infoOut.pszClassName = pElmMessage->Attribute("name");
 	if (!infoOut.pszClassName) return false;
 
 	infoOut.pszMsgId = pElmMessage->Attribute("id");
@@ -118,6 +126,7 @@ bool PokerMsgGen::GenerateH(const MSG_INFO& info, const char* pszDir)
 		"#define __%2_H__\n"
 		"\n"
 		"#include \"PokerMsgBase.h\"\n"
+		"#include \"NetDataType.h\"\n"
 		"\n"
 		"class %1 : public PokerMsgBase\n"
 		"{\n"

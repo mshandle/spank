@@ -9,6 +9,7 @@
 #define __MSGLOGINSERVERVALIDATE_H__
 
 #include "PokerMsgBase.h"
+#include "NetDataType.h"
 
 class MsgLoginServerValidate : public PokerMsgBase
 {
@@ -16,7 +17,7 @@ public:
 	enum CONST_DEFINE
 	{
 		MSG_TYPE = 1004,
-		MSG_SIZE = 52,
+		MSG_SIZE = 60,
 	};
 
 public:
@@ -29,10 +30,11 @@ public:
 	virtual bool Pack(StreamWriter* pWriter);
 
 public:
-	int64 userId;
-	char ip[16];
-	int port;
-	char checkoutText[24];
+	int64 nUserId;
+	char szIp[16];
+	int nPort;
+	char szCheckOutText[24];
+	int64 nIggId;
 
 };
 

@@ -1,13 +1,546 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <PokerMsgs>
-	<message class_name="MsgClientLoginToLFor91" id="2600">
-		<property name="uid" type="char" array="52" />
-		<property name="sessionId" type="char" array="128" />
+	<message name="MsgAcceptRequest" id="2146" comment="玩家点击赞助">
+		<property name="nAcceptUserId" type="int64" comment="点击accept赞助的玩家"/>
+		<property name="nRequestUserId" type="int64" comment="发送请求的玩家"/>
+		<property name="nRequestId" type="int64" comment="请求的ID"/>
+		<property name="nRequestType" type="uint" comment="请求赞助的类型"/>
 	</message>
-	<message class_name="MsgLoginServerValidate" id="1004">
-		<property name="userId" type="int64" comment="facebook 用户 id" />
-		<property name="ip" type="char" array="16" comment="game server 的 ip 地址" />
-		<property name="port" type="int" comment="game server 端口" />
-		<property name="checkoutText" type="char" array="24" comment="(二进制串,非字符串) login server 产生的验证串" />
+
+	<message name="MsgAccountForceOut" id="2121" comment="通知客户端帐号被封存">
 	</message>
+
+	<message name="MsgAddRequest" id="2148" comment="    ">
+		<property name="nRequestId" type="int64" comment="REQUEST的ID"/>
+		<property name="nUserId" type="int64" comment="发送REQUEST的玩家ID"/>
+		<property name="nFriendId" type="int64" comment="接收REQUEST的好友ID"/>
+		<property name="nRequestType" type="uint" comment="REQUEST类型"/>
+		<property name="nPlatformId" type="int" comment="玩家登陆的平台id, 1表示facebook, 2表示google, 3表示igg, 4表示msn, 5表示twitter, 6表示yahoo"/>
+		<property name="szNickName" type="char" array="32" comment="玩家昵称" />
+		<property name="szPlatAccount" type="char" array="255" comment="玩家登陆的平台账号" />
+	</message>
+
+	<message name="MsgNotifyBankupt" id="2098" comment="通知玩家破产相关消息">
+		<property name="nProtectiveMoney" type="int64" comment="本次保护金, 小于等于0则代表不再有保护金, 客户端需要自己定义这种情况下的行为"/>
+		<property name="nTime" type="int" comment="第几次破产"/>
+	</message>
+
+	<message name="MsgClientLoginToL" id="1002" comment="登入LoginServer">
+		<property name="nSeqId" type="int" comment="序列号 目前无用 只是预留"/>
+		<property name="nUserId" type="int64" />
+		<property name="szSessionKey" type="char" array="128" />
+		<property name="szLoginSessionKey" type="char" array="128" />
+		<property name="szLoginPassWord" type="char" array="128" />
+		<property name="nGroupId" type="uint" comment="登录的服务器组ID(服务器的类型 如 英文版 土耳其版 类型为)"/>
+	</message>
+
+	<message name="MsgClientLoginToG" id="1003" comment="登入GameServer">
+		<property name="nSeqId" type="int" comment="序列号"/>
+		<property name="nUserId" type="int64" />
+		<property name="szCheckOutText" type="char" array="24" comment="校验码" />
+		<property name="szSessionKey" type="char" array="128" />
+		<property name="szSignInLocale" type="char" array="32" />
+	</message>
+
+	<message name="MsgGameServerLoginResp" id="1005" comment="登入GameServer消息返回">
+		<property name="nLoginResult" type="int" comment="0: 登陆成功, 1: GameServer未开启, 2: GameServer连接已满, 3: UserServer未开启, 4: DbServer未开启, 5: 数据读取不完整, 6: ID已在登录中, 7: 验证失败, 8: 验证超时, 9: 用户未安装游戏(fql无permission项)"/>
+		<property name="nUserId" type="int64" />
+		<property name="nIggId" type="int64" />
+	</message>
+
+	<message name="MsgInitPlayerInfo" id="2067" comment="登录时初始化的玩家信息">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nLevel" type="uchar" comment="等级"/>
+		<property name="nFlags" type="uchar" comment="标志位。0位: 是否粉丝, (1位: 是否加了书签, 2位: 是否允许发邮件, 3位: 是否允许发NewsFeed), 4位: 是否VIP, 5位: 是否GM 注, 目前1, 2, 3, 4位已经失效。"/>
+		<property name="nShootOutRank" type="uchar" comment="MTT目前等级"/>
+		<property name="nShootOutPlace" type="char" array="3" comment="MTT历史名次信息" />
+		<property name="nCoins" type="int64" comment="总资产"/>
+		<property name="nMostCoins" type="int64" comment="总资产的历史最高记录"/>
+		<property name="nWinThisWeek" type="int64" comment="本周赢额"/>
+		<property name="nCash" type="int" comment="充值"/>
+		<property name="nExp" type="uint" comment="经验值"/>
+		<property name="nChampionInBuddiesLastWeek" type="int64" comment="上周大赢家的玩家ID"/>
+		<property name="nMostWinInBuddiesLastWeek" type="int64" comment="上周大赢家的赢额"/>
+		<property name="nTrinket" type="int" />
+		<property name="nTutorialFlags" type="uint" comment="新手教程完成度标志位"/>
+	</message>
+
+	<message name="MsgLoginServerValidate" id="1004" comment="通知GameServer服务器地址">
+		<property name="nUserId" type="int64" />
+		<property name="szIp" type="char" array="16" />
+		<property name="nPort" type="int" />
+		<property name="szCheckOutText" type="char" array="24" comment="校验码" />
+		<property name="nIggId" type="int64" />
+	</message>
+
+	<message name="MsgNotice" id="2063" comment="通知消息包">
+		<property name="nUserId" type="int64" />
+		<property name="nType" type="int" comment="通知消息类型, 用于决定使用的通知模板。1: 每日登录获得 $Arg1 奖励筹码; 2: 从周锦标赛获得 $Arg1 奖金。3: 从新手教程获得 $Arg1 筹码 和 $Arg2 经验值 4: 通过链接领取奖励 $Arg1 筹码数 $Arg2 链接类型(0为系统发布的链接 1为幸运筹码的链接 2为新年宝箱share的链接]"/>
+		<property name="nArg1" type="int64" comment="通知参数1"/>
+		<property name="nArg2" type="int64" comment="通知参数2"/>
+		<property name="nTimestamp" type="uint" comment="时间戳"/>
+	</message>
+
+	<message name="MsgNotifyAcceptFriend" id="2021" comment="提示桌面上某两座位的玩家已成为好友">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nSourceSeatId" type="char" comment="发起加好友请求的玩家座位ID"/>
+		<property name="nDestSeatId" type="char" comment="收到好友请求的玩家座位ID"/>
+		<property name="_dummy" type="char" array="2" />
+	</message>
+
+	<message name="MsgNotifyBet" id="2010" comment="通知下注">
+		<property name="nUserId" type="int64" />
+		<property name="nSeatId" type="char" comment="座位ID"/>
+		<property name="nTime" type="char" comment="剩余等待时间, 单位为秒"/>
+		<property name="nTotalTime" type="char" comment="总的等待时间, 用于播放倒计时动画"/>
+		<property name="_dummy" type="char" comment="补齐位."/>
+	</message>
+
+	<message name="MsgNotifyEmotion" id="2051" comment="服务器广播表情">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nSeat" type="char" comment="座位ID"/>
+		<property name="nEmot" type="short" comment="表情ID, 实际表情由客户端指定"/>
+		<property name="_dummy" type="char" comment="对齐位"/>
+	</message>
+
+	<message name="MsgNotifyFirstLogin" id="2090" comment="告知客户端, 此次为首次登录">
+	</message>
+
+	<message name="MsgNotifyGameRank" id="2074" comment="通知玩家在赛制房间内的比赛名次">
+		<property name="nUserId" type="int64" />
+		<property name="nRank" type="char" />
+		<property name="nBonusType" type="char" comment="奖金的类型: 1: 筹码 2: 金币"/>
+		<property name="nGameType" type="char" comment="比赛的类型: 1: SNG 2: MTT"/>
+		<property name="_dummy" type="char" />
+		<property name="nBonus" type="int64" />
+	</message>
+
+	<message name="MsgNotifyGameState" id="2012" comment="游戏开局通知包">
+		<property name="nUserId" type="int64" />
+		<property name="nBankerSeat" type="char" comment="庄家座位ID"/>
+		<property name="nSmallBlindSeat" type="char" comment="小盲注座位ID"/>
+		<property name="nBigBlindSeat" type="char" comment="大盲注座位ID"/>
+		<property name="nGameStatus" type="char" comment="游戏状态, 0: 未开局, 1: 已开局."/>
+		<property name="nRoomStatus" type="char" comment="房间状态: 0: stopping 1: running "/>
+		<property name="nHandCards" type="uchar" array="2" comment="玩家当前的手牌, 范围为0~51, 表示52张牌中的一张, 若无手牌, 则为255." />
+		<property name="_dummy" type="char" array="1" />
+	</message>
+
+	<message name="MsgNotifyGiveGift" id="2113" comment="赠送物品">
+		<property name="nUserId" type="int64" />
+		<property name="nItemType" type="int" />
+		<property name="nGiverId" type="int64" />
+		<property name="nTakerId" type="int64" />
+		<property name="nGiveSeatId" type="char" />
+		<property name="nTakerSeatId" type="char" />
+		<property name="_dummy" type="char" array="2" />
+	</message>
+
+	<message name="MsgNotifyHandCards" id="2014" comment="手牌通知包">
+		<property name="nUserId" type="int64" />
+		<property name="nSeatId" type="char" comment="座位号"/>
+		<property name="nCards" type="uchar" array="2" comment="两张手牌, 范围为0~51, 表示52张牌中的一张" />
+		<property name="_dummy" type="char" comment="补齐位"/>
+	</message>
+
+	<message name="MsgNotifyIsSendLuckyChips" id="2118" comment="通知client是否发布过幸运筹码">
+		<property name="nIsSendLuckyChips" type="int" />
+	</message>
+
+	<message name="MsgNotifyLoginGift" id="2064" comment="弹出登录奖励领取框">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nContinuousLogin" type="char" comment="连续登录天数(7天为上限)"/>
+		<property name="nLastContinuousLogin" type="char" comment="上次连续登录天数"/>
+		<property name="_dummy" type="char" array="2" />
+		<property name="_dummy1" type="int64" array="2" comment="防客户端崩溃的占位符, 在客户做完修改后应该删去。" />
+	</message>
+
+	<message name="MsgNotifyMakeFriend" id="2019" comment="提示桌面上某座位的玩家请求加某座位的玩家为好友">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nSourceSeatId" type="char" comment="发起加好友请求的玩家座位ID"/>
+		<property name="nDestSeatId" type="char" comment="收到好友请求的玩家座位ID"/>
+		<property name="_dummy" type="char" array="2" />
+	</message>
+
+	<message name="MsgNotifyMaxCounterRecord" id="2103" comment="通知客户端赢得筹码最新纪录">
+		<property name="nUserId" type="int64" />
+		<property name="nOldRecordUserId" type="int64" comment="旧纪录userId 如果为0表示这次纪录是第一次"/>
+		<property name="nOldRecordCounter" type="int64" comment="旧纪录筹码"/>
+		<property name="nNewRecordUserId" type="int64" comment="新纪录userId"/>
+		<property name="nNewRecordCounter" type="int64" comment="新纪录筹码"/>
+		<property name="nSmallBlind" type="int64" comment="0: 表示这次纪录是全服纪录 不为0: 表示该小盲注类型房间的纪录"/>
+		<property name="nCount" type="int" comment="第几次破记录 全服记录不统计该项"/>
+	</message>
+
+	<message name="MsgNotifyMttRank" id="2173" comment="通知shootout等级">
+		<property name="nRank" type="char" array="3" comment="Rank 为 -1时, 标识当前等级不可用~" />
+		<property name="nBonus" type="int" array="3" comment="Bonus 为 -1时, 标识当前不可用~" />
+	</message>
+
+	<message name="MsgNotifyPlayerInRoom" id="2095" comment="通知玩家离开房间">
+		<property name="nUserId" type="int64" />
+		<property name="nSourceUserId" type="int64" />
+		<property name="nRoomId" type="int" comment="表示SourceUserId所在的房间ID -1: 表示离开房间"/>
+	</message>
+
+	<message name="MsgNotifyPlayerLevelUp" id="2076" comment="通知玩家升级">
+		<property name="nUserId" type="int64" />
+		<property name="nLevel" type="uchar" />
+		<property name="nExp" type="uchar" />
+		<property name="nSeatId" type="char" comment="-1: 表示本人 0-8: 表示其他的座位"/>
+		<property name="_dummy" type="char" />
+	</message>
+
+	<message name="MsgNotifyPlayerTrinket" id="2112" comment="通知房间内其他玩家 某位玩家饰品发生变化">
+		<property name="nUserId" type="int64" />
+		<property name="nTrinket" type="int" />
+		<property name="nSourceUserId" type="int64" />
+		<property name="nSeatId" type="char" comment="-2: 表示在大厅发送该消息包 0-8: Room发送该消息包 -1: 表示未坐下"/>
+		<property name="_dummy" type="char" array="3" />
+	</message>
+
+	<message name="MsgNotifyPublicCards" id="2015" comment="公牌显示">
+		<property name="nUserId" type="int64" />
+		<property name="nCount" type="char" comment="牌数, 第一次发牌为3张, 第二次4张, 第三次5张"/>
+		<property name="nCards" type="char" array="5" comment="范围为0~51, 表示52张牌中的一张" />
+		<property name="_dummy" type="char" array="2" comment="补齐位" />
+	</message>
+
+	<message name="MsgNotifyRoomMessage" id="2028" comment="通知房间内的聊天信息">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nSenderUserId" type="int64" comment="发起聊天消息的玩家ID"/>
+		<property name="nMsgLength" type="short" comment="聊天信息长度."/>
+		<property name="_dummy" type="char" array="2" />
+		<property name="nDest" type="int64" comment="目标玩家, 须是同房间内的玩家。-1: 房间内群发"/>
+		<property name="nMessage" type="char" array="MAX_CHAT_MESSAGE_LENGTH" comment="聊天信息内容" />
+	</message>
+
+	<message name="MsgNotifyShootoutRank" id="2056" comment="通知玩家目前MTT等级">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nShootOutRank" type="char" comment="玩家目前达到ShootOut的等级"/>
+		<property name="_dummp" type="char" array="3" />
+	</message>
+
+	<message name="MsgNotifySmallBlind" id="2091" comment="告知客户端小盲注的值">
+		<property name="nUserId" type="int64" />
+		<property name="nSmallBlind" type="int64" />
+	</message>
+
+	<message name="MsgNotifyTournamentStatus" id="2102" comment="通知客户端房间状态">
+		<property name="nUserId" type="int64" />
+		<property name="nRoomStatus" type="uchar" comment="1.running  0.stopping"/>
+		<property name="_dummy" type="char" array="3" />
+	</message>
+
+	<message name="MsgNotifyUpdateItem" id="2099" comment="通知client道具列表中获得新道具或删除道具">
+		<property name="nUserId" type="int64" />
+		<property name="nType" type="char" comment="1: 添加 0: 删除 2: 更新"/>
+		<property name="_dummy" type="char" array="3" />
+		<property name="nItem" type="ItemInfo" />
+	</message>
+
+	<message name="MsgNotifyWin" id="2016" comment="公牌通知包">
+		<property name="nUserId" type="int64" />
+		<property name="nPoolId" type="uchar" comment="奖池Id, 如果为唯一未弃牌的人赢的情况, 此项为-1, 表示所有奖池一次性发放"/>
+		<property name="nSeatIds" type="short" comment="获奖的所有座位Id, 以位表示. 第0位为1时, 指第0个座位获得了这个奖池。可以指定多个."/>
+		<property name="_dummy" type="char" />
+		<property name="nBonus" type="int64" comment="奖金, 每个人从这个奖池所获得的奖金。"/>
+	</message>
+
+	<message name="MsgPing" id="1076" comment="Ping包">
+		<property name="nId" type="int" comment="id, 由客户端自己定义, 可填0, 将原样返回"/>
+		<property name="nTimestamp" type="int" comment="时间戳由客户端提供, 将原样返回"/>
+		<type id="_MSG_PING" />
+	</message>
+
+	<message name="MsgPong" id="1077" comment="Pong包">
+		<property name="nId" type="int" comment="id, 由客户端自己定义, 原样返回"/>
+		<property name="nTimestamp" type="int" comment="时间戳由客户端提供, 原样返回"/>
+	</message>
+
+	<message name="MsgPostEmotion" id="2050" comment="请求发送表情">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nEmotionId" type="short" comment="表情ID, 实际表情由客户端指定"/>
+		<property name="_dummy" type="char" array="2" comment="对齐位" />
+	</message>
+
+	<message name="MsgRequestBet" id="2011" comment="玩家下注包">
+		<property name="nUserId" type="int64" />
+		<property name="nSeatId" type="uchar" comment="座位ID"/>
+		<property name="_dummy" type="char" array="3" />
+		<property name="nBet" type="int64" comment="下注的筹码, -1为弃牌, 其它时候必须大于等于零"/>
+	</message>
+
+	<message name="MsgRequestAcceptFriend" id="2020" comment="玩家接受好友的请求包">
+		<property name="nUserId" type="int64" comment="本玩家ID"/>
+		<property name="nSourceSeatId" type="char" comment="接受此座位的玩家的好友请求"/>
+		<property name="_dummy" type="char" array="3" />
+	</message>
+
+	<message name="MsgRequestCreateLink" id="2119" comment="client请求发布幸运筹码">
+		<property name="nUserId" type="int64" />
+		<property name="nType" type="uint" comment="发送幸运筹码的类型 1 幸运筹码 2 新年宝箱"/>
+	</message>
+
+	<message name="MsgRequestFriendList" id="2022" comment="玩家请求在线好友/牌友列表">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+	</message>
+
+	<message name="MsgRequestFriendStatus" id="2024" comment="在线玩家请求好友/牌友状态">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+	</message>
+
+	<message name="MsgRequestDeleteFriend" id="2029" comment="玩家请求删除好友">
+		<property name="nUserId" type="int64" />
+		<property name="nFriendUserId" type="int64" />
+	</message>
+
+	<message name="MsgRequestInviteFriend" id="2030" comment="玩家邀请好友加入房间">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nFriendUserId" type="int64" comment="被邀请的好友玩家ID"/>
+		<property name="nRoomId" type="int" comment="玩家当前的RoomId"/>
+	</message>
+
+	<message name="MsgRequestBuyinInSeat" id="2034" comment="请求在座位上买筹码">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nBuyIn" type="int64" comment="买入的筹码数"/>
+	</message>
+
+	<message name="MsgRequestBuyItem" id="2075" comment="请求买入物品">
+		<property name="nUserId" type="int64" />
+		<property name="nItemType" type="int" comment="购买物品的类型"/>
+		<property name="nBuyMethod" type="char" comment="购买方式, 1: 正常chip价格, 2: 特殊chip价格, 3: VIPchip价格, 4: 正常gold价格, 5: 特殊gold价格, 6: VIPgold价格 "/>
+		<property name="nDestSeatId" type="char" comment="赠送的目标座位Id -2: 无赠送, -1: 送给全桌, 0-8: 目标座位Id"/>
+		<property name="_dummy" type="char" array="2" />
+		<property name="nCashCouponId" type="int64" comment="如果使用代金券的话发送代金券的Id 否则为-1"/>
+	</message>
+
+	<message name="MsgRequestJoinRoom" id="2005" comment="请求进入房间">
+		<property name="nUserId" type="int64" />
+		<property name="nRoomId" type="int" comment="-1: 表示离开房间 -10 快速进入 low -11 快速进入 mid -12 快速进入 high -20 进入MTT 等级1 -21 进入MTT等级2 -22 进入MTT等级3 -30 进入 周锦标赛 -510 快速进入5人房"/>
+	</message>
+
+	<message name="MsgRequestReceiveLoginGift" id="2107" comment="请求领取每日登录奖励">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nChoice" type="char" comment="玩家点击的, 范围为: 0~5"/>
+		<property name="_dummy" type="char" array="3" comment="补齐位" />
+	</message>
+
+	<message name="MsgRequestMakeFriend" id="2018" comment="玩家加好友请求包">
+		<property name="nUserId" type="int64" comment="本玩家ID"/>
+		<property name="nSeatId" type="char" comment="对方的座位ID"/>
+		<property name="_dummy" type="char" array="3" />
+		<property name="nFriendUserId" type="int64" comment="对方的FacebookID"/>
+	</message>
+
+	<message name="MsgRequestRoomList" id="2002" comment="客户端请求房间列表">
+		<property name="nUserId" type="int64" />
+		<property name="nRoomType" type="int" comment="0: 普通房, 6: 快速房, 10: Sit & Go房间, 11: 快速Sit & Go房间, "/>
+	</message>
+
+	<message name="MsgRequestRoomMembers" id="2032" comment="请求房间内成员信息">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nRoomId" type="int" comment="房间ID"/>
+		<property name="nMemberType" type="char" comment="成员类型, 0: 所有成员, 1: 在座成员, 2: 旁观成员"/>
+		<property name="_dummy" type="char" array="3" comment="请求房间内成员信息。" />
+	</message>
+
+	<message name="MsgRequestRoomMessage" id="2027" comment="玩家房间内聊天请示">
+		<property name="nUserId" type="int64" comment="本玩家ID"/>
+		<property name="nMsgLength" type="short" comment="聊天信息长度."/>
+		<property name="_dummy" type="char" array="2" />
+		<property name="nDest" type="int64" comment="目标玩家, 须是同房间内的玩家。-1: 房间内群发"/>
+		<property name="szMessage" type="char" array="128" comment="聊天信息内容" />
+	</message>
+
+	<message name="MsgRequestSitDown" id="2007" comment="请求坐下">
+		<property name="nUserId" type="int64" />
+		<property name="nSeatId" type="char" comment="座位ID -1: 表示离开坐位"/>
+		<property name="_dummy" type="char" array="3" comment="补齐位" />
+		<property name="nBuyIn" type="int64" comment="买入筹码, 要坐下必须买入筹码"/>
+	</message>
+
+	<message name="MsgRequestUseItem" id="2104" comment="客户端请求使用道具">
+		<property name="nUserId" type="int64" />
+		<property name="nItemId" type="int64" comment="要使用的物品Id -1: 表示取消饰品"/>
+	</message>
+
+	<message name="MsgRespAcceptFreeChips" id="2049" comment="接受好友的免费筹码的回复">
+		<property name="nResult" type="char" comment="操作结果。0: 成功, 1: 免费筹码不存在, 客户端可理解为此ID已经过期, 2: 已达到本日接收上限, 请明天再试"/>
+		<property name="_dummy" type="char" comment="补齐"/>
+		<property name="nUserId" type="int64" comment="玩家的ID"/>
+		<property name="nRequsetId" type="int64" comment="请求的ID"/>
+		<property name="nGeneratedChips" type="int64" comment="生成的筹码数"/>
+	</message>
+
+	<message name="MsgRespBuyinInSeat" id="2035" comment="在座位上买筹码的回复">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nStatus" type="char" comment="执行的状态, 0: 成功, 1: 资金不足, 2: 超过最大买入值, 3: 小于最小买入"/>
+		<property name="_dummy" type="char" array="3" comment="补齐位." />
+	</message>
+
+	<message name="MsgRespBuyItem" id="2082" comment="答复购买道具的请求">
+		<property name="nUserId" type="int64" comment="购买者Id"/>
+		<property name="nItemType" type="int" comment="购买到的物品类型 -1: 表示购买失败"/>
+		<property name="nCashCouponId" type="int64" comment="正在使用的代金券Id -1: 表示空"/>
+		<property name="nCashCouponBalance" type="int" comment="正在使用的代金券余额 -1: 表示空"/>
+	</message>
+
+	<message name="MsgRespFriendInfo" id="2023" comment="在线好友/牌友信息，每次一个，可发多个">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nFriendUserId" type="int64" comment="好友ID"/>
+		<property name="nInFacebook" type="char" comment="是否 Facebook 好友"/>
+		<property name="nLevel" type="uchar" comment="等级"/>
+		<property name="_dummy" type="char" array="2" comment="补齐位" />
+		<property name="nCoins" type="int64" comment="总资产"/>
+		<property name="nMostCoins" type="int64" comment="总资产的历史最高记录"/>
+		<property name="nCash" type="int" comment="充值"/>
+		<property name="nLogoutTime" type="uint" />
+		<property name="nWinThisWeek" type="int64" comment="本周赢额"/>
+	</message>
+
+	<message name="MsgRespFriendStatus" id="2025" comment="好友/牌友状态回复">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nCount" type="int" comment="好友玩家数量"/>
+		<property name="stFriends" type="NET_FRIEND_STATUS" array="20" />
+	</message>
+
+	<message name="MsgRespFriendStatusEnd" id="2026" comment="好友/牌友状态回复的结束包">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+	</message>
+
+	<message name="MsgRespReceiveLoginGift" id="2108" comment="领取每日登录奖励的结果">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nResult" type="char" comment="0: 表示成功领取, 1: 已领取过, -1: 内部错误"/>
+		<property name="nChoice" type="char" comment="玩家点击的项, 范围为: 0~5"/>
+		<property name="_dummy" type="char" array="2" />
+		<property name="nPots" type="int64" array="6" comment="六个可选项" />
+		<property name="nBonus" type="int64" comment="实际获得的奖金"/>
+	</message>
+
+	<message name="MsgRespRoomList" id="2003" comment="客户端房间列表请求的应答">
+		<property name="nRoomNum" type="short" />
+		<property name="_dummy" type="char" array="2" comment="补齐位" />
+		<property name="stRooms" type="NET_ROOM_INFO" array="26" />
+	</message>
+
+	<message name="MsgRespRoomListEnd" id="2004" comment="客户端房间列表请求应答的结束标识包">
+	</message>
+
+	<message name="MsgRespRoomMembers" id="2033" comment="房间内成员信息的回复">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nRoomId" type="int" comment="房间ID"/>
+		<property name="nMemberType" type="char" comment="成员类型, 0: 所有成员, 1: 在座成员, 2: 旁观成员"/>
+		<property name="nMemberNum" type="char" comment="此成员列表总人数"/>
+		<property name="_dummy" type="char" array="2" />
+		<property name="stMembers" type="NET_USER_INFO" array="30" comment="成员列表" />
+	</message>
+
+	<message name="MsgRespSendLuckyChips" id="2120" comment="回复幸运筹码发布结果">
+		<property name="nLinkId" type="char" array="36" />
+		<property name="nType" type="uint" comment="返回的类型"/>
+	</message>
+
+	<message name="MsgRespSitDown" id="2008" comment="坐下请求的回复">
+		<property name="nUserId" type="int64" />
+		<property name="nRoomId" type="int" comment="房间ID"/>
+		<property name="nSeatId" type="char" comment="座位ID -1: 表示没有坐下"/>
+		<property name="_dummy" type="char" array="3" />
+		<property name="nCounter" type="int64" comment="持有筹码"/>
+	</message>
+
+	<message name="MsgRespUseItem" id="2105" comment="使用道具的回复">
+		<property name="nUserId" type="int64" />
+		<property name="nItemId" type="int64" comment="使用的物品ID"/>
+		<property name="nIsSuccess" type="char" comment="1: 使用成功 0: 使用失败"/>
+		<property name="_dummy" type="char" array="3" />
+	</message>
+
+	<message name="MsgRoomInfo" id="2006" comment="进入房间后的回复">
+		<property name="nUserId" type="int64" comment="目标用户的Id"/>
+		<property name="stRoomInfo" type="NET_ROOM_INFO" comment="房间信息"/>
+		<property name="stSeats" type="NET_SEAT_INFO" array="9" comment="座位信息 0 为牌官左手边第一个" />
+		<property name="nBanker" type="char" comment="庄家座位, 若游戏未开始, 则为-1."/>
+		<property name="nSmallBlind" type="char" comment="小盲注座位, 若游戏未开始, 则为-1."/>
+		<property name="nBigBlind" type="char" comment="大盲注座位, 若游戏未开始, 则为-1."/>
+		<property name="nPublicCards" type="char" array="5" comment="五张公牌, 没有的位置为-1." />
+		<property name="nPools" type="int64" array="8" comment="8个奖池, 没有的地方为0." />
+		<property name="nHandCards" type="uchar" array="2" comment="玩家当前的手牌, 若无手牌, 则为255。" />
+		<property name="_dummy" type="char" array="2" />
+	</message>
+
+	<message name="MsgSeatUpdate" id="2009" comment="更新单个座位的信息">
+		<property name="nUserId" type="int64" />
+		<property name="nSeatId" type="char" comment="座位号"/>
+		<property name="_dummy" type="char" array="3" />
+		<property name="stSeatInfo" type="NET_SEAT_INFO" comment="座位信息"/>
+	</message>
+
+	<message name="MsgSendGiftEnd" id="2114" comment="客户端赠送动画结束后通知服务器">
+		<property name="nUserId" type="int64" comment="赠送方的UserId"/>
+		<property name="nTakerId" type="int64" comment="接受方的UserId"/>
+		<property name="nItemType" type="int" comment="所赠送的物品"/>
+	</message>
+
+	<message name="MsgSendRequest" id="2144" comment="向玩家发送请求">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nFriendUserId" type="int64" comment="好友的ID"/>
+		<property name="nRType" type="uint" comment="请求的类型 "/>
+	</message>
+
+	<message name="MsgSendRequestReturn" id="2145" comment="玩家发送请求返回的结果">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nFriendUserId" type="int64" comment="好友的玩家ID"/>
+		<property name="nRequestId" type="int64" comment="数据库返回的该request的唯一ID"/>
+		<property name="unRequestType" type="uint" comment="请求的类型"/>
+		<property name="nPlatformId" type="int" comment="玩家登陆的平台id, 1表示facebook, 2表示google, 3表示igg, 4表示msn, 5表示twitter, 6表示yahoo"/>
+		<property name="szNickName" type="char" array="32" comment="玩家昵称" />
+		<property name="szPlatformAccount" type="char" array="255" comment="玩家登陆的平台账号" />
+	</message>
+
+	<message name="MsgSendRoleRequestList" id="2143" comment="向玩家发送requests列表">
+		<property name="UserId" type="int64" comment="玩家的ID"/>
+		<property name="bTail" type="bool" comment="是否结尾"/>
+		<property name="_dummy" type="char" comment="占位符"/>
+		<property name="stRequestList" type="NET_REQUEST_DATA" array="10" comment="玩家的REQUEST 列表" />
+	</message>
+
+	<message name="MsgServerVersion" id="2086" comment="服务器版本信息">
+		<property name="nVersionId" type="uint" />
+		<property name="nYear" type="ushort" />
+		<property name="nMonth" type="uchar" />
+		<property name="nDay" type="uchar" />
+		<property name="nHour" type="uchar" />
+		<property name="nMinute" type="uchar" />
+		<property name="nSecond" type="uchar" />
+		<property name="_dummy" type="uchar" />
+	</message>
+
+	<message name="MsgUpdateBonusPool" id="2013" comment="奖池更新包">
+		<property name="nUserId" type="int64" />
+		<property name="nPool" type="int64" array="8" comment="最多8个奖池, 主奖池编号为 0" />
+	</message>
+
+	<message name="MsgUpdateVolidatePlayerInfo" id="2068" comment="更新常变的玩家信息">
+		<property name="nUserId" type="int64" comment="玩家ID"/>
+		<property name="nLevel" type="uchar" comment="等级"/>
+		<property name="_dummy" type="char" array="3" />
+		<property name="nCoins" type="int64" comment="总资产"/>
+		<property name="nWinThisWeek" type="int64" comment="本周赢额"/>
+		<property name="nCash" type="int" comment="充值"/>
+		<property name="nExp" type="uint" comment="经验值"/>
+		<property name="nTrinket" type="int" comment="饰品"/>
+	</message>
+
+	<message name="MsgUserLoginOtherPlace" id="2081" comment="账号在其它地方登录，被近下线">
+	</message>
+
+	<message name="MsgUserStatus" id="2058" comment="告诉玩家当前的位置，可能有相应的原因">
+		<property name="nUserId" type="int64" />
+		<property name="nStatus" type="char" comment="位置信息, 0: 大厅, 1: 普通房间, 2: SitNGo房间, 3: MTT房间, 4: 周锦标赛房间"/>
+		<property name="nReason" type="char" comment="相关提示, 0: 无提示, 1: 房间错误, 已离开房间, 2: MTT比赛结束/出局, 3: 房间人数已满, 4: 查无此房间, 无法进入, 5: MTT人数已满, 6: 周锦标赛人数已满 7: 自动选房失败, 8: 参数错误, 9: 资金不足, 10: RoomServer关闭, 11: 必须在大厅才可加入周锦标赛"/>
+		<property name="_dummy" type="char" array="2" />
+		<property name="nRoomId" type="int" comment="房间ID"/>
+	</message>
+
 </PokerMsgs>

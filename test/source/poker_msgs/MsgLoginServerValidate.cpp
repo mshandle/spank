@@ -20,18 +20,20 @@ MsgLoginServerValidate::~MsgLoginServerValidate()
 
 bool MsgLoginServerValidate::Unpack(StreamReader* pReader)
 {
-	if (!pReader->Read(&userId, sizeof(userId))) return false;
-	if (!pReader->Read(&ip, sizeof(ip))) return false;
-	if (!pReader->Read(&port, sizeof(port))) return false;
-	if (!pReader->Read(&checkoutText, sizeof(checkoutText))) return false;
+	if (!pReader->Read(&nUserId, sizeof(nUserId))) return false;
+	if (!pReader->Read(&szIp, sizeof(szIp))) return false;
+	if (!pReader->Read(&nPort, sizeof(nPort))) return false;
+	if (!pReader->Read(&szCheckOutText, sizeof(szCheckOutText))) return false;
+	if (!pReader->Read(&nIggId, sizeof(nIggId))) return false;
 	return true;
 }
 
 bool MsgLoginServerValidate::Pack(StreamWriter* pWriter)
 {
-	if (!pWriter->Write(&userId, sizeof(userId))) return false;
-	if (!pWriter->Write(&ip, sizeof(ip))) return false;
-	if (!pWriter->Write(&port, sizeof(port))) return false;
-	if (!pWriter->Write(&checkoutText, sizeof(checkoutText))) return false;
+	if (!pWriter->Write(&nUserId, sizeof(nUserId))) return false;
+	if (!pWriter->Write(&szIp, sizeof(szIp))) return false;
+	if (!pWriter->Write(&nPort, sizeof(nPort))) return false;
+	if (!pWriter->Write(&szCheckOutText, sizeof(szCheckOutText))) return false;
+	if (!pWriter->Write(&nIggId, sizeof(nIggId))) return false;
 	return true;
 }

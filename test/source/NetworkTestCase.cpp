@@ -10,8 +10,6 @@
 #include <ui/UIButton.h>
 #include <ui/uimsg/UIMsgID.h>
 #include <net/INetMgr.h>
-#include "poker_msgs/MsgClientLoginToLFor91.h"
-#include "poker_msgs/MsgLoginServerValidate.h"
 
 NetworkTestCase::NetworkTestCase()
 :TestCase("Network")
@@ -27,7 +25,7 @@ NetworkTestCase::~NetworkTestCase()
 bool NetworkTestCase::Initialize(UIScreen* pUIScreen)
 {
 	m_Handler.Reset();
-	m_Handler.RegisterMessage(MsgLoginServerValidate::MSG_TYPE, this, (NET_MSG_CALLBACK)&NetworkTestCase::OnMsgLoginServerValidate);
+// 	m_Handler.RegisterMessage(MsgLoginServerValidate::MSG_TYPE, this, (NET_MSG_CALLBACK)&NetworkTestCase::OnMsgLoginServerValidate);
 
 	INetMgr::GetInstance().SetNetMsgHandler(&m_Handler);
 
@@ -62,16 +60,17 @@ void NetworkTestCase::Render()
 
 bool NetworkTestCase::OnBtnConnectClicked(IMsgBase* pMsg)
 {
-	INetMgr::GetInstance().ConnectToServer("120.33.34.144", 5999);
+// 	INetMgr::GetInstance().ConnectToServer("120.33.34.144", 5999);
 	return true;
 }
 
 bool NetworkTestCase::OnBtnSendClicked(IMsgBase* pMsg)
 {
-	MsgClientLoginToLFor91 msg;
-	StringUtil::CopyString(msg.uid, 52, "215501039");
-	StringUtil::CopyString(msg.sessionId, 128, "2ddd4de7e9f04b6a8084050dcd544091");
-	return INetMgr::GetInstance().SendNetMessage(&msg);
+// 	MsgClientLoginToLFor91 msg;
+// 	StringUtil::CopyString(msg.uid, 52, "215501039");
+// 	StringUtil::CopyString(msg.sessionId, 128, "2ddd4de7e9f04b6a8084050dcd544091");
+// 	return INetMgr::GetInstance().SendNetMessage(&msg);
+	return true;
 }
 
 bool NetworkTestCase::OnBtnDisconnectClicked(IMsgBase* pMsg)
@@ -82,8 +81,8 @@ bool NetworkTestCase::OnBtnDisconnectClicked(IMsgBase* pMsg)
 
 bool NetworkTestCase::OnMsgLoginServerValidate(short nType, StreamReader* pReader)
 {
-	MsgLoginServerValidate msg;
-	if (!msg.FromStream(pReader)) return false;
+// 	MsgLoginServerValidate msg;
+// 	if (!msg.FromStream(pReader)) return false;
 
 	return true;
 }
