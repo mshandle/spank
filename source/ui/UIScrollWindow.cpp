@@ -18,7 +18,7 @@ UIScrollWindow::UIScrollWindow(UIWindow* pParent, const Vector2& pos /*= IMath::
 	m_vTouchPos = IMath::VEC2_ZERO;
 	m_vVirtualRect = UIRect::UIRECT_ZERO;
 	m_pLastTouchedWindow = NULL;
-	UpdateVirtualPosAndSize();
+	m_nScrollWindowFlag = SWS_DEFAULT;
 }
 
 UIScrollWindow::~UIScrollWindow()
@@ -33,52 +33,101 @@ void UIScrollWindow::Update(float dt)
 
 void UIScrollWindow::Render(const RenderParam& param)
 {
-// 	RenderBorder(param);
+//  	RenderBorder(param);
 	RenderChildrenWindow(param);
-}
-
-void UIScrollWindow::SetSize(float width, float height)
-{
-	UIWindow::SetSize(width, height);
-	UpdateVirtualPosAndSize();
 }
 
 Vector2 UIScrollWindow::GetBestSize()
 {
-	return m_vVirtualRect.size;
+	return GetSize();
 }
 
 bool UIScrollWindow::ProcessTouchEvent(const Vector2& pos, UI_TOUCH_EVENT_TYPE eType)
 {
-	bool bProcessed = false;
+	Vector2 localPos = pos - m_vScrollOffset;
+	UIWindow* pWindow = FindChildUnderPoint(localPos);
 
+	bool bProcessed = false;
 	switch (eType)
 	{
 	case UTET_BEGIN:
 		{
-			SetWindowState(WS_PRESSED, true);
-			bProcessed = OnTouchBegin(pos);
 			// save the touch position
 			m_vTouchPos = pos;
 			m_vScrollOffsetBackup = m_vScrollOffset;
-			IUISystem::GetInstance().CaptureMouse(this);
+			SetScrollWindowState(SWS_MOUSE_MOVED, false);
+
+			if (pWindow)
+			{
+				if (m_pLastTouchedWindow && m_pLastTouchedWindow != pWindow) m_pLastTouchedWindow->OnTouchLost();
+				m_pLastTouchedWindow = pWindow;
+
+				Vector2 childPos = localPos - pWindow->GetPosition();
+				return pWindow->ProcessTouchEvent(childPos, eType);
+			}
+
+			if (m_pLastTouchedWindow)
+			{
+				m_pLastTouchedWindow->OnTouchLost();
+				m_pLastTouchedWindow = NULL;
+			}
+
+			SetWindowState(WS_PRESSED, true);
+			bProcessed = OnTouchBegin(pos);
 		}
 		break;
 	case UTET_MOVE:
 		{
+			SetScrollWindowState(SWS_MOUSE_MOVED, true);
+			if (m_pLastTouchedWindow)
+			{
+				m_pLastTouchedWindow->OnTouchLost();
+				m_pLastTouchedWindow = NULL;
+			}
+
+			// calculate the offset
+
+			if (CheckScrollWindowState(SWS_VSCROLL))
+			{
+				m_vScrollOffset.y = m_vScrollOffsetBackup.y + pos.y - m_vTouchPos.y;
+			}
+
+			if (CheckScrollWindowState(SWS_HSCROLL))
+			{
+				m_vScrollOffset.x = m_vScrollOffsetBackup.x + pos.x - m_vTouchPos.x;
+			}
+
 			SetWindowState(WS_PRESSED, true);
 			bProcessed = OnTouchMove(pos);
-			// calculate the offset
-			m_vScrollOffset = m_vScrollOffsetBackup + pos - m_vTouchPos;
 		}
 		break;
 	case UTET_END:
 		{
-			SetWindowState(WS_PRESSED, false);
-			if (OnTouchEnd(pos)) bProcessed = true;
-			if (OnClicked(pos)) bProcessed = true;
-			m_vScrollOffsetBackup = IMath::VEC2_ZERO;
-			IUISystem::GetInstance().ReleaseMouse();
+			if (CheckScrollWindowState(SWS_MOUSE_MOVED))
+			{
+				SetScrollWindowState(SWS_MOUSE_MOVED, false);
+				SetWindowState(WS_PRESSED, false);
+				if (OnTouchEnd(pos)) bProcessed = true;
+				if (OnClicked(pos)) bProcessed = true;
+				m_vScrollOffsetBackup = IMath::VEC2_ZERO;
+			}
+			else
+			{
+				if (pWindow)
+				{
+					if (m_pLastTouchedWindow && m_pLastTouchedWindow != pWindow) m_pLastTouchedWindow->OnTouchLost();
+					m_pLastTouchedWindow = pWindow;
+
+					Vector2 childPos = localPos - pWindow->GetPosition();
+					return pWindow->ProcessTouchEvent(childPos, eType);
+				}
+
+				if (m_pLastTouchedWindow)
+				{
+					m_pLastTouchedWindow->OnTouchLost();
+					m_pLastTouchedWindow = NULL;
+				}
+			}
 		}
 		break;
 	}
@@ -86,22 +135,27 @@ bool UIScrollWindow::ProcessTouchEvent(const Vector2& pos, UI_TOUCH_EVENT_TYPE e
 	return bProcessed;
 }
 
-void UIScrollWindow::AddChild(UIWindow* pWindow)
+void UIScrollWindow::SetScrollWindowState(uint nMask, bool bSet)
 {
-	UIWindow::AddChild(pWindow);
-	UpdateVirtualPosAndSize();
+	if (bSet)
+	{
+		m_nScrollWindowFlag |= nMask;
+	}
+	else
+	{
+		m_nScrollWindowFlag &= (~nMask);
+	}
 }
 
-void UIScrollWindow::RemoveChild(UIWindow* pWindow)
+bool UIScrollWindow::CheckScrollWindowState(uint nMask) const
 {
-	UIWindow::RemoveChild(pWindow);
-	UpdateVirtualPosAndSize();
+	return (m_nScrollWindowFlag & nMask) == nMask;
 }
 
-void UIScrollWindow::UpdateVirtualPosAndSize()
+void UIScrollWindow::UpdateVirtualRect()
 {
-	Vector2 vLeftTop = IMath::VEC2_ZERO;
-	Vector2 vRightBottom = IMath::VEC2_ZERO;
+	Vector2 vLeftTop = IMath::VEC2_MAX;
+	Vector2 vRightBottom = IMath::VEC2_MIN;
 
 	TV_WINDOW& vChildren = UIWindow::GetChildrenList();
 	for (TV_WINDOW::iterator it = vChildren.begin(); it != vChildren.end(); ++it)
@@ -110,18 +164,11 @@ void UIScrollWindow::UpdateVirtualPosAndSize()
 		const Vector2& leftTop = pWindow->GetPosition();
 		Vector2 rightBottom = leftTop + pWindow->GetSize();
 
-		if (leftTop.x < vLeftTop.x) vLeftTop.x = leftTop.x;
-		if (leftTop.y < vLeftTop.y) vLeftTop.y = leftTop.y;
-		if (rightBottom.x > vRightBottom.x) vRightBottom.x = rightBottom.x;
-		if (rightBottom.y > vRightBottom.y) vRightBottom.y = rightBottom.y;
+		if (vLeftTop.x > leftTop.x) vLeftTop.x = leftTop.x;
+		if (vLeftTop.y > leftTop.y) vLeftTop.y = leftTop.y;
+		if (vRightBottom.x < rightBottom.x) vRightBottom.x = rightBottom.x;
+		if (vRightBottom.y < rightBottom.y) vRightBottom.y = rightBottom.y;
 	}
-
-	const Vector2& vSize = GetSize();
-
-	if (vLeftTop.x > 0) vLeftTop.x = 0;
-	if (vLeftTop.y > 0) vLeftTop.y = 0;
-	if (vRightBottom.x < vSize.x) vRightBottom.x = vSize.x;
-	if (vRightBottom.y < vSize.y) vRightBottom.y = vSize.y;
 
 	m_vVirtualRect.pos = vLeftTop;
 	m_vVirtualRect.size = vRightBottom - vLeftTop;

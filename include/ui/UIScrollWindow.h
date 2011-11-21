@@ -13,6 +13,15 @@
 class UIScrollWindow : public UIWindow
 {
 public:
+	enum SCROLL_WINDOW_STATE
+	{
+		SWS_VSCROLL = 0x00000001,
+		SWS_HSCROLL = 0x00000002,
+		SWS_MOUSE_MOVED = 0x00000004,
+		SWS_DEFAULT = SWS_VSCROLL,
+	};
+
+public:
 	DECLARE_RTTI(UIScrollWindow, UIWindow);
 
 	UIScrollWindow(UIWindow* pParent, const Vector2& pos = IMath::VEC2_ZERO);
@@ -21,16 +30,16 @@ public:
 	virtual void Update(float dt);
 	virtual void Render(const RenderParam& param);
 
-	virtual void SetSize(float width, float height);
 	virtual Vector2 GetBestSize();
 
 	virtual bool ProcessTouchEvent(const Vector2& pos, UI_TOUCH_EVENT_TYPE eType);
 
-protected:
-	virtual void AddChild(UIWindow* pWindow);
-	virtual void RemoveChild(UIWindow* pWindow);
-	void UpdateVirtualPosAndSize();
+	void SetScrollWindowState(uint nMask, bool bSet);
+	bool CheckScrollWindowState(uint nMask) const;
 
+	void UpdateVirtualRect();
+
+protected:
 	virtual void RenderChildrenWindow(const RenderParam& param);
 	virtual void RenderBorder(const RenderParam& param);
 
@@ -39,8 +48,9 @@ private:
 	Vector2 m_vScrollOffsetBackup;
 	Vector2 m_vTouchPos;
 	UIRect m_vVirtualRect;
-
+	
 	UIWindow* m_pLastTouchedWindow;
+	uint m_nScrollWindowFlag;
 
 };
 #endif // __UISCROLLWINDOW_H__

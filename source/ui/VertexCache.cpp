@@ -28,6 +28,7 @@ VertexCache::VertexCache(uint nVertsCacheSize, uint nIndisCacheSize)
 
 	m_pTexture = NULL;
 	m_pShader = NULL;
+	m_nLayer = 0;
 
 	m_bOK = CreateCache(nVertsCacheSize, nIndisCacheSize);
 }
@@ -69,6 +70,16 @@ void VertexCache::SetShader(IShader* pShader)
 IShader* VertexCache::GetShader() const
 {
 	return m_pShader;
+}
+
+void VertexCache::SetLayer(int nLayer)
+{
+	m_nLayer = nLayer;
+}
+
+int VertexCache::GetLayer() const
+{
+	return m_nLayer;
 }
 
 bool VertexCache::AddVerts(const void* pVerts, uint nVerts, const ushort* pIndis, uint nIndis)

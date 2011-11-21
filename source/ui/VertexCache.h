@@ -26,6 +26,9 @@ public:
 	void SetShader(IShader* pShader);
 	IShader* GetShader() const;
 
+	void SetLayer(int nLayer);
+	int GetLayer() const;
+
 	bool AddVerts(const void* pVerts, uint nVerts, const ushort* pIndis, uint nIndis);
 	void Flush();
 
@@ -56,6 +59,7 @@ private:
 
 	ITexture* m_pTexture;
 	IShader* m_pShader;
+	int m_nLayer;
 
 };
 #endif // __VERTEXCACHE_H__

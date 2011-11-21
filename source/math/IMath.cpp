@@ -23,6 +23,14 @@ const Vector2 IMath::VEC2_ONE(1.0f, 1.0f);
 const Vector3 IMath::VEC3_ONE(1.0f, 1.0f, 1.0f);
 const Vector4 IMath::VEC4_ONE(1.0f, 1.0f, 1.0f, 1.0f);
 
+const Vector2 IMath::VEC2_MIN(-IMath::FLOAT_MAX, -IMath::FLOAT_MAX);
+const Vector3 IMath::VEC3_MIN(-IMath::FLOAT_MAX, -IMath::FLOAT_MAX, -IMath::FLOAT_MAX);
+const Vector4 IMath::VEC4_MIN(-IMath::FLOAT_MAX, -IMath::FLOAT_MAX, -IMath::FLOAT_MAX, -IMath::FLOAT_MAX);
+
+const Vector2 IMath::VEC2_MAX(IMath::FLOAT_MAX, IMath::FLOAT_MAX);
+const Vector3 IMath::VEC3_MAX(IMath::FLOAT_MAX, IMath::FLOAT_MAX, IMath::FLOAT_MAX);
+const Vector4 IMath::VEC4_MAX(IMath::FLOAT_MAX, IMath::FLOAT_MAX, IMath::FLOAT_MAX, IMath::FLOAT_MAX);
+
 const Vector3 IMath::VEC3_AXISX(1.0f, 0.0f, 0.0f);
 const Vector3 IMath::VEC3_AXISY(0.0f, 1.0f, 0.0f);
 const Vector3 IMath::VEC3_AXISZ(0.0f, 0.0f, 1.0f);

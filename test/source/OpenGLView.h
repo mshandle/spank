@@ -11,6 +11,7 @@
 #include <IViewOpenGL.h>
 #include "TestCase.h"
 #include <ui/UIString.h>
+#include <ui/UIListView.h>
 #include <vector>
 
 class OpenGLView : public IViewOpenGL
@@ -46,10 +47,10 @@ private:
 	TV_TEST_CASE m_vTestCase;
 	TestCase* m_pCurrTestCase;
 	UIScreen* m_pMainScreen;
+	UIListView* m_pListView;
 	UIString* m_pFPS;
 	int m_nFPS;
 	float m_fFPSTime;
-	Vector2 m_vTextViewPos;
 	int m_nIndex;
 
 };

@@ -1,5 +1,4 @@
 LIBGAME_SOURCE_FILES := \
-		$(LIBGAME_SOURCE)/poker_msgs/MsgClientLoginToLFor91.cpp \
 		$(LIBGAME_SOURCE)/poker_msgs/MsgLoginServerValidate.cpp \
 		$(LIBGAME_SOURCE)/poker_msgs/PokerMsgBase.cpp \
 		$(LIBGAME_SOURCE)/ActionTestCase.cpp \

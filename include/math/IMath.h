@@ -74,6 +74,14 @@ public:
 	static const Vector3 VEC3_ONE;
 	static const Vector4 VEC4_ONE;
 
+	static const Vector2 VEC2_MIN;
+	static const Vector3 VEC3_MIN;
+	static const Vector4 VEC4_MIN;
+
+	static const Vector2 VEC2_MAX;
+	static const Vector3 VEC3_MAX;
+	static const Vector4 VEC4_MAX;
+
 	static const Vector3 VEC3_AXISX;
 	static const Vector3 VEC3_AXISY;
 	static const Vector3 VEC3_AXISZ;

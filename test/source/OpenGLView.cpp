@@ -38,10 +38,10 @@ OpenGLView::OpenGLView()
 {
 	m_pCurrTestCase = NULL;
 	m_pMainScreen = NULL;
+	m_pListView = NULL;
 	m_pFPS = NULL;
 	m_nFPS = 0;
 	m_fFPSTime = 0.0f;
-	m_vTextViewPos = IMath::VEC2_ZERO;
 	m_nIndex = 0;
 }
 
@@ -55,11 +55,13 @@ bool OpenGLView::Initialize()
 	MsgMgr::GetInstance().SubscribeMessage(MI_TOUCH, this, (MSG_CALLBACK)&OpenGLView::OnMsgTouch);
 
 	m_pCurrTestCase = NULL;
-	m_vTextViewPos = IMath::VEC2_ZERO;
 
 	IResourceMgr::GetInstance().AddImagePieceList("test_case.xml");
 	IResourceMgr::GetInstance().AddImagePieceList("Porker.xml");
 	m_pMainScreen = IUISystem::GetInstance().GetCurrentScreen();
+	m_pListView = new UIListView(m_pMainScreen);
+	m_pListView->SetSize(m_pMainScreen->GetSize());
+
 	m_pFPS = new UIString("FPS: %d");
 	m_nFPS = 0;
 	m_fFPSTime = 0.0f;
@@ -76,6 +78,7 @@ bool OpenGLView::Initialize()
 	AddTestCase(new PorkerTestCase(), m_pMainScreen);
 	AddTestCase(new NetworkTestCase(), m_pMainScreen);
 
+	m_pListView->ArrangeItems();
 	return true;
 }
 
@@ -95,6 +98,7 @@ void OpenGLView::Terminate()
 	}
 	m_vTestCase.clear();
 
+	m_pListView = NULL;
 	MsgMgr::GetInstance().UnsubscribeMessage(MI_TOUCH, this);
 }
 
@@ -175,17 +179,13 @@ bool OpenGLView::AddTestCase(TestCase* pTestCase, UIScreen* pScreen)
 
 	int nIndex = (int)m_vTestCase.size();
 
-	UITextView* pTextView = new UITextView(pScreen, IMath::VEC2_ZERO, pTestCase->GetName());
-
-	Vector2 pos((ScreenUtil::GetInstance().GetScreenWidth() - pTextView->GetSize().x) / 2.0f, m_vTextViewPos.y);
+	UITextView* pTextView = new UITextView(m_pListView, IMath::VEC2_ZERO, pTestCase->GetName());
 	pTextView->SetID(nIndex);
-	pTextView->SetPosition(pos);
 	pTextView->ConnectEvent(UMI_CLICKED, this, (MSG_CALLBACK)&OpenGLView::OnBtnTestCaseClicked);
 
 	m_vTestCase.push_back(pTestCase);
 	pTestCase->ConnectEvent(MI_USER_RETURN, this, (MSG_CALLBACK)&OpenGLView::OnBtnReturnClicked);
 
-	m_vTextViewPos.y += pTextView->GetSize().y;
 	return true;
 }
 

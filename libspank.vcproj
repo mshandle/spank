@@ -601,6 +601,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\ui\UIListView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\include\ui\UIListView.h"
+				>
+			</File>
+			<File
 				RelativePath=".\source\ui\UIRadioButton.cpp"
 				>
 			</File>

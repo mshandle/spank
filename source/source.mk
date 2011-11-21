@@ -63,6 +63,7 @@ LIBSPANK_SOURCE_FILES := \
 		$(LIBSPANK_SOURCE)/ui/RendererUI_Impl.cpp \
 		$(LIBSPANK_SOURCE)/ui/RenderParam.cpp \
 		$(LIBSPANK_SOURCE)/ui/UIButton.cpp \
+		$(LIBSPANK_SOURCE)/ui/UIListView.cpp \
 		$(LIBSPANK_SOURCE)/ui/UICheckButton.cpp \
 		$(LIBSPANK_SOURCE)/ui/UIRadioButton.cpp \
 		$(LIBSPANK_SOURCE)/ui/UIRect.cpp \

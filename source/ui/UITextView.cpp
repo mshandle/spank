@@ -38,7 +38,8 @@ void UITextView::Render(const RenderParam& param)
 {
 	RenderBorder(param);
  	Vector2 posAbs = param.m_renderOffset + GetPosition();
-	m_pString->Render(posAbs, posAbs, GetSize());
+	Vector2 offset = (GetSize() - m_pString->GetSize()) * 0.5f;
+	m_pString->Render(posAbs+offset, posAbs, GetSize());
 }
 
 Vector2 UITextView::GetBestSize()

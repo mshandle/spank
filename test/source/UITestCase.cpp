@@ -38,7 +38,7 @@ bool UITestCase::Initialize(UIScreen* pUIScreen)
 //								   "can be read by a game for easy\n"
 //								   "rendering of fonts.";
 
- 	UIWindow* pWindow = new UIScrollWindow(pUIScreen, Vector2(100.0f, 20.0f));
+ 	UIScrollWindow* pWindow = new UIScrollWindow(pUIScreen, Vector2(100.0f, 20.0f));
  	pWindow->SetSize(400.0f, 400.0f);
 
 	int nID = 1;
@@ -91,6 +91,7 @@ bool UITestCase::Initialize(UIScreen* pUIScreen)
 		pSlider->ConnectEvent(UMI_SLIDER, this, (MSG_CALLBACK)&UITestCase::OnSlider);
 	}
 
+	pWindow->UpdateVirtualRect();
 	return true;
 }
 
