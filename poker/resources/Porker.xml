@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<ImagePiece>
+    <ImageList>
+        <Image id="1" file="background_1024_v2.png" sample="linear" />
+        <Image id="2" file="newcomponent.png" sample="linear"  />
+    </ImageList>
+    <PieceList>
+        <Piece id="backgorund" image="1" x="0" y="0" width="1024" height="768" />
+        <Piece id="BackCard" image="1" x="0" y="769" width="61" height="79" />
+        <Piece id="Card" image="1" x="62" y="769" width="61" height="79" />
+        <Piece id="NumZero" image="2" x="0" y="0" width="20" height="25" />
+        <Piece id="NumOne" image="2" x="20" y="0" width="20" height="25" />
+        <Piece id="NumTwo" image="2" x="40" y="0" width="20" height="25" />
+        <Piece id="NumThree" image="2" x="60" y="0" width="20" height="25" />
+        <Piece id="NumFour" image="2" x="80" y="0" width="20" height="25" />
+        <Piece id="NumFive" image="2" x="100" y="0" width="20" height="25" />
+        <Piece id="NumSix" image="2" x="120" y="0" width="20" height="25" />
+        <Piece id="NumSeven" image="2" x="140" y="0" width="20" height="25" />
+        <Piece id="NumEight" image="2" x="160" y="0" width="20" height="25" />
+        <Piece id="NumNine" image="2" x="180" y="0" width="20" height="25" />
+        <Piece id="ChipWhite" image="2" x="200" y="0" width="26" height="20" />
+        <Piece id="ChipRed" image="2" x="226" y="0" width="26" height="20" />
+        <Piece id="ChipBule" image="2" x="252" y="0" width="26" height="20" />
+        <Piece id="ChipGreen" image="2" x="278" y="0" width="26" height="20" />
+        <Piece id="ChipBlack" image="2" x="304" y="0" width="26" height="20" />
+        <Piece id="ChipBrown" image="2" x="330" y="0" width="26" height="20" />
+        <Piece id="ChipYellow" image="2" x="356" y="0" width="26" height="20" />
+        <Piece id="Winner_Big" image="2" x="382" y="0" width="91" height="19" />
+        <Piece id="StateBar" image="2" x="0" y="43" width="120" height="18" />
+				<Piece id="EXP+" image="2" x="120" y="43" width="18" height="18" /> 
+				<Piece id="EXPX" image="2" x="138" y="43" width="18" height="24" />
+				<Piece id="StateBarSmall" image="2" x="175" y="43" width="51" height="12" />
+				<Piece id="MarkD" image="2" x="226" y="43" width="26" height="26" />
+				<Piece id="StateBarGreen" image="2" x="252" y="43" width="51" height="12"/>
+				<Piece id="Arrow" image="2" x="303" y="43" width="46" height="48" />
+				<Piece id="EXPP" image="2" x="156" y="43" width="18" height="24" />
+				<Piece id="Arrow" image="2" x="303" y="43" width="46" height="48" />
+				<Piece id="Light" image="2" x="0" y="92" width="445" height="161" />
+				<Piece id="CirRedLeft" image="2" x="0" y="253" width="74" height="148" />
+				<Piece id="CirYellowLeft" image="2" x="296" y="253" width="74" height="148" />
+				<Piece id="CirYellowRight" image="2" x="370" y="253" width="74" height="148" />
+				<Piece id="CirGreenRight" image="2" x="222" y="253" width="74" height="148" />
+				<Piece id="CirGreenLeft" image="2" x="148" y="253" width="74" height="148" />
+				<Piece id="Sit" image="2" x="0" y="402" width="95" height="95" />
+				<Piece id="PhotoFrame" image="2" x="100" y="401" width="95" height="133" />
+				<Piece id="PokerBack" image="2" x="195" y="401" width="58" height="60" />
+				<Piece id="PhotoBox" image="2" x="253" y="401" width="98" height="47" />
+				<Piece id="Normal" image="2" x="256" y="454" width="47" height="12" />
+				<Piece id="Cup" image="2" x="0" y="500" width="39" height="39" />
+				<Piece id="NewBuddy" image="2" x="0" y="540" width="241" height="48" />
+				<Piece id="Envelope" image="2" x="0" y="588" width="57" height="48" />
+				<Piece id="CirBlackRight" image="2" x="0" y="675" width="90" height="180" />
+				<Piece id="CirBlackLeft" image="2" x="90" y="675" width="90" height="180" />
+				
+				
+    </PieceList>
+</ImagePiece>

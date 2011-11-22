@@ -49,7 +49,21 @@ int OSUISystem_Win32_Impl::CreateButton(ISurfaceView* pSurfaceView, int x, int y
 	return nId;
 }
 
-void OSUISystem_Win32_Impl::DestroyButton(ISurfaceView* pSurfaceView, int nId)
+int OSUISystem_Win32_Impl::CreateEditText(ISurfaceView* pSurfaceView, int x, int y, int width, int height)
+{
+	if (!pSurfaceView->GetRtti()->IsDerived(SurfaceView_Win32_Gdi_Impl::__RttiData())) return 0;
+
+	SurfaceView_Win32_Gdi_Impl* pGdiView = (SurfaceView_Win32_Gdi_Impl*)pSurfaceView;
+	HWND hParent = pGdiView->GetWindow();
+
+	int nId = GenNextId();
+	HWND hWnd = CreateWindow("EDIT", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER, x, y, width, height, hParent, (HMENU)nId, NULL, NULL);
+
+	m_ControlMap.insert(std::make_pair(nId, hWnd));
+	return nId;
+}
+
+void OSUISystem_Win32_Impl::DestroyControl(ISurfaceView* pSurfaceView, int nId)
 {
 	TM_CONTROL_ID::iterator itfound = m_ControlMap.find(nId);
 	if (itfound == m_ControlMap.end()) return;

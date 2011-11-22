@@ -19,7 +19,9 @@ public:
 	static IOSUISystem& GetInstance();
 
 	virtual int CreateButton(ISurfaceView* pSurfaceView, int x, int y, int width, int height, const char* pszText) = 0;
-	virtual void DestroyButton(ISurfaceView* pSurfaceView, int nId) = 0;
+	virtual int CreateEditText(ISurfaceView* pSurfaceView, int x, int y, int width, int height) = 0;
+
+	virtual void DestroyControl(ISurfaceView* pSurfaceView, int nId) = 0;
 
 };
 #endif // __IOSUISYSTEM_H__

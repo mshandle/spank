@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<ImagePiece>
+    <ImageList>
+        <Image id="1" file="ui.png" sample="nearest" />
+    </ImageList>
+    <PieceList>
+        <Piece id="ui_button_default" image="1" x="1" y="1" width="93" height="34" />
+        <Piece id="ui_button_disabled" image="1" x="95" y="1" width="93" height="34" />
+        <Piece id="ui_button_pressed" image="1" x="95" y="1" width="93" height="34" />
+        <Piece id="ui_checkbutton_check" image="1" x="95" y="1" width="93" height="34" />
+        <Piece id="ui_checkbutton_check_disabled" image="1" x="95" y="1" width="93" height="34" />
+        <Piece id="ui_checkbutton_check_pressed" image="1" x="95" y="1" width="93" height="34" />
+        <Piece id="ui_checkbutton_uncheck" image="1" x="1" y="1" width="93" height="34" />
+        <Piece id="ui_checkbutton_uncheck_disabled" image="1" x="95" y="1" width="93" height="34" />
+        <Piece id="ui_checkbutton_uncheck_pressed" image="1" x="95" y="1" width="93" height="34" />
+        <Piece id="ui_frame_bottom_center" image="1" x="191" y="33" width="2" height="2" />
+        <Piece id="ui_frame_bottom_left" image="1" x="189" y="33" width="2" height="2" />
+        <Piece id="ui_frame_bottom_right" image="1" x="193" y="33" width="2" height="2" />
+        <Piece id="ui_frame_middle_center" image="1" x="191" y="31" width="2" height="2" />
+        <Piece id="ui_frame_middle_left" image="1" x="189" y="31" width="2" height="2" />
+        <Piece id="ui_frame_middle_right" image="1" x="193" y="31" width="2" height="2" />
+        <Piece id="ui_frame_top_center" image="1" x="191" y="29" width="2" height="2" />
+        <Piece id="ui_frame_top_left" image="1" x="189" y="29" width="2" height="2" />
+        <Piece id="ui_frame_top_right" image="1" x="193" y="29" width="2" height="2" />
+        <Piece id="ui_radiobutton_check" image="1" x="95" y="1" width="93" height="34" />
+        <Piece id="ui_radiobutton_check_disabled" image="1" x="95" y="1" width="93" height="34" />
+        <Piece id="ui_radiobutton_check_pressed" image="1" x="95" y="1" width="93" height="34" />
+        <Piece id="ui_radiobutton_uncheck" image="1" x="1" y="1" width="93" height="34" />
+        <Piece id="ui_radiobutton_uncheck_disabled" image="1" x="95" y="1" width="93" height="34" />
+        <Piece id="ui_radiobutton_uncheck_pressed" image="1" x="95" y="1" width="93" height="34" />
+        <Piece id="ui_slider_bg" image="1" x="1" y="46" width="266" height="9" />
+        <Piece id="ui_slider_fg" image="1" x="1" y="36" width="266" height="9" />
+        <Piece id="ui_slider_thumb" image="1" x="189" y="1" width="26" height="27" />
+    </PieceList>
+</ImagePiece>

@@ -2,14 +2,14 @@ package com.zjhlogo.spank.msg;
 
 import android.app.Activity;
 
-public class MsgDestroyButton extends MsgBase
+public class MsgDestroyControl extends MsgBase
 {
 	private Activity mActivity = null;
 	private int mButtonId = 0;
 	
-	public MsgDestroyButton(Activity activity, int btnId)
+	public MsgDestroyControl(Activity activity, int btnId)
 	{
-		super(MSG_ID.MI_DESTROY_BUTTON);
+		super(MSG_ID.MI_DESTROY_CONTROL);
 		mActivity = activity;
 		mButtonId = btnId;
 	}

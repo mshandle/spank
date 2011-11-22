@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sprite shader="trans_shader.xml" num_frames="8">
+	<frame id="test_sprite_frame1" time="70" />
+	<frame id="test_sprite_frame2" time="70" />
+	<frame id="test_sprite_frame3" time="70" />
+	<frame id="test_sprite_frame4" time="70" />
+	<frame id="test_sprite_frame5" time="70" />
+	<frame id="test_sprite_frame6" time="70" />
+	<frame id="test_sprite_frame7" time="70" />
+	<frame id="test_sprite_frame8" time="70" />
+</sprite>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<FrameList>
+	<Frame id="ui_frame_default">
+		<PieceTopLeft id="ui_frame_top_left" />
+		<PieceTopCenter id="ui_frame_top_center" />
+		<PieceTopRight id="ui_frame_top_right" />
+		<PieceMiddleLeft id="ui_frame_middle_left" />
+		<PieceMiddleCenter id="ui_frame_middle_center" />
+		<PieceMiddleRight id="ui_frame_middle_right" />
+		<PieceBottomLeft id="ui_frame_bottom_left" />
+		<PieceBottomCenter id="ui_frame_bottom_center" />
+		<PieceBottomRight id="ui_frame_bottom_right" />
+	</Frame>
+</FrameList>

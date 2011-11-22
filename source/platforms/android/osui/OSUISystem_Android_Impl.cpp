@@ -46,10 +46,18 @@ int OSUISystem_Android_Impl::CreateButton(ISurfaceView* pSurfaceView, int x, int
 	return g_pEnv->CallStaticIntMethod(g_Class, mid, nViewId, x, y, width, height, g_pEnv->NewStringUTF(pszText));
 }
 
-void OSUISystem_Android_Impl::DestroyButton(ISurfaceView* pSurfaceView, int nId)
+int OSUISystem_Android_Impl::CreateEditText(ISurfaceView* pSurfaceView, int x, int y, int width, int height)
 {
 	int nViewId = pSurfaceView->GetViewId();
 
-	jmethodID mid = g_pEnv->GetStaticMethodID(g_Class, "destroyButton", "(II)V");
+	jmethodID mid = g_pEnv->GetStaticMethodID(g_Class, "createEditText", "(IIIII)I");
+	return g_pEnv->CallStaticIntMethod(g_Class, mid, nViewId, x, y, width, height);
+}
+
+void OSUISystem_Android_Impl::DestroyControl(ISurfaceView* pSurfaceView, int nId)
+{
+	int nViewId = pSurfaceView->GetViewId();
+
+	jmethodID mid = g_pEnv->GetStaticMethodID(g_Class, "destroyControl", "(II)V");
 	g_pEnv->CallStaticVoidMethod(g_Class, mid, nViewId, nId);
 }

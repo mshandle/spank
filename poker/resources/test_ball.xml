@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sprite shader="trans_shader.xml" num_frames="1">
+	<frame id="test_ball" time="1000" />
+</sprite>

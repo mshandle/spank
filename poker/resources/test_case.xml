@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<ImagePiece>
+    <ImageList>
+        <Image id="1" file="test_case.png" sample="linear" />
+    </ImageList>
+    <PieceList>
+        <Piece id="test_ball" image="1" x="453" y="1" width="26" height="27" />
+        <Piece id="test_snow" image="1" x="480" y="1" width="31" height="32" />
+        <Piece id="test_sprite_frame1" image="1" x="1" y="1" width="129" height="110" />
+        <Piece id="test_sprite_frame2" image="1" x="130" y="1" width="129" height="110" />
+        <Piece id="test_sprite_frame3" image="1" x="259" y="1" width="129" height="110" />
+        <Piece id="test_sprite_frame4" image="1" x="1" y="111" width="129" height="110" />
+        <Piece id="test_sprite_frame5" image="1" x="130" y="111" width="129" height="110" />
+        <Piece id="test_sprite_frame6" image="1" x="259" y="111" width="129" height="110" />
+        <Piece id="test_sprite_frame7" image="1" x="1" y="221" width="129" height="110" />
+        <Piece id="test_sprite_frame8" image="1" x="130" y="221" width="129" height="110" />
+        <Piece id="test_black" image="1" x="316" y="194" width="5" height="3" />
+    </PieceList>
+</ImagePiece>

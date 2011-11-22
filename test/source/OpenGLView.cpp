@@ -18,6 +18,7 @@
 #include <ui/IUISystem.h>
 #include <ui/UITextView.h>
 #include <ui/IRendererUI.h>
+#include <osui/IOSUISystem.h>
 
 #include <IResourceMgr.h>
 #include <IRenderer2D.h>

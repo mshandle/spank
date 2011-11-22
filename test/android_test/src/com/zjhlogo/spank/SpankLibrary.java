@@ -9,13 +9,15 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import com.zjhlogo.spank.msg.MSG_ID;
 import com.zjhlogo.spank.msg.MsgBase;
 import com.zjhlogo.spank.msg.MsgCommand;
 import com.zjhlogo.spank.msg.MsgCreateButton;
-import com.zjhlogo.spank.msg.MsgDestroyButton;
+import com.zjhlogo.spank.msg.MsgCreateEditText;
+import com.zjhlogo.spank.msg.MsgDestroyControl;
 
 public class SpankLibrary
 {
@@ -132,18 +134,18 @@ public class SpankLibrary
 	}
 	
 	// game thread
-	public static void destroyButton(int viewId, int buttonId)
+	public static void destroyControl(int viewId, int buttonId)
 	{
 		BaseView view = mViewMap.get(viewId);
 		if (view == null) return;
 		
-		MsgDestroyButton msg = new MsgDestroyButton(mActivity, buttonId);
+		MsgDestroyControl msg = new MsgDestroyControl(mActivity, buttonId);
 		MessageRunnable runnable = new MessageRunnable(msg)
 		{
 			@Override
 			public void runOnUiThread()
 			{
-				MsgDestroyButton msg = (MsgDestroyButton)getMsg();
+				MsgDestroyControl msg = (MsgDestroyControl)getMsg();
 				Activity activity = msg.getActivity();
 				
 		 		FrameLayout parent = (FrameLayout)activity.findViewById(R.id.frameLayout1);
@@ -151,6 +153,65 @@ public class SpankLibrary
 
 				View button = parent.findViewById(msg.getButtonId());
 				parent.removeView(button);
+			}
+		};
+		runnable.syncRunOnUiThread(mActivity);
+	}
+	
+	// game thread
+	public static int createEditText(int viewId, int x, int y, int width, int height)
+	{
+		BaseView view = mViewMap.get(viewId);
+		if (view == null) return 0;
+		
+		MsgCreateEditText msg = new MsgCreateEditText(mActivity, x, y);
+		msg.setEditTextId(genNextControlId());
+		MessageRunnable runnable = new MessageRunnable(msg)
+		{
+			public void runOnUiThread()
+			{
+				MsgCreateEditText msg = (MsgCreateEditText)getMsg();
+				Activity activity = msg.getActivity();
+				
+		 		FrameLayout parent = (FrameLayout)activity.findViewById(R.id.frameLayout1);
+				if (parent == null) return;
+				
+				EditText editText = new EditText(activity);
+				editText.setId(msg.getEditTextId());
+				
+				FrameLayout.LayoutParams param = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+				param.gravity = Gravity.LEFT | Gravity.TOP;
+				param.setMargins(msg.getX(), msg.getY(), 0, 0);
+				parent.addView(editText, param);
+				
+				msg.setSuccess(true);
+			}
+		};
+		runnable.syncRunOnUiThread(mActivity);
+		if (msg.isSuccess()) return msg.getEditTextId();
+		return 0;
+	}
+	
+	// game thread
+	public static void destroyEditText(int viewId, int editTextId)
+	{
+		BaseView view = mViewMap.get(viewId);
+		if (view == null) return;
+		
+		MsgDestroyControl msg = new MsgDestroyControl(mActivity, editTextId);
+		MessageRunnable runnable = new MessageRunnable(msg)
+		{
+			@Override
+			public void runOnUiThread()
+			{
+				MsgDestroyControl msg = (MsgDestroyControl)getMsg();
+				Activity activity = msg.getActivity();
+				
+		 		FrameLayout parent = (FrameLayout)activity.findViewById(R.id.frameLayout1);
+				if (parent == null) return;
+
+				View editText = parent.findViewById(msg.getButtonId());
+				parent.removeView(editText);
 			}
 		};
 		runnable.syncRunOnUiThread(mActivity);

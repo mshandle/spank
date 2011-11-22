@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shader id="2" vertex_shader="line_shader.vs" fregment_shader="line_shader.fs">
+	<attributes>
+		<attribute size="3" name="a_position" />
+		<attribute size="3" name="a_color" />
+	</attributes>
+</shader>

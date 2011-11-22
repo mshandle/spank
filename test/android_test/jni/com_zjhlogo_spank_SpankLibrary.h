@@ -7,6 +7,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef com_zjhlogo_spank_SpankLibrary_GEN_VIEW_ID_BASE
+#define com_zjhlogo_spank_SpankLibrary_GEN_VIEW_ID_BASE 1000L
+#undef com_zjhlogo_spank_SpankLibrary_GEN_CONTROL_ID_BASE
+#define com_zjhlogo_spank_SpankLibrary_GEN_CONTROL_ID_BASE 10000L
 /*
  * Class:     com_zjhlogo_spank_SpankLibrary
  * Method:    initialize
