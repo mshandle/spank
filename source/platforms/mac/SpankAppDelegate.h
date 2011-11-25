@@ -31,6 +31,7 @@ enum CONST_DEFINE
 - (void)dettachView:(int)viewId;
 
 - (int)createButton:(int)viewId x:(int)x y:(int)y width:(int)width height:(int)height text:(const char*)text;
+- (int)createEditText:(int)viewId x:(int)x y:(int)y width:(int)width height:(int)height;
 - (void)destroyButton:(int)viewId buttonId:(int)buttonId;
 
 @end

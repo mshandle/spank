@@ -22,7 +22,9 @@ public:
 	virtual void Terminate();
 	
 	virtual int CreateButton(ISurfaceView* pSurfaceView, int x, int y, int width, int height, const char* pszText);
-	virtual void DestroyButton(ISurfaceView* pSurfaceView, int nId);
+	virtual int CreateEditText(ISurfaceView* pSurfaceView, int x, int y, int width, int height);
+	
+	virtual void DestroyControl(ISurfaceView* pSurfaceView, int nId);
 	
 };
 #endif // __OSUISYSTEM_MAC_IMPL_H__

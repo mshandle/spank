@@ -97,6 +97,21 @@ SpankAppDelegate* g_pInstance = NULL;
 	return myButton.tag;
 }
 
+- (int)createEditText:(int)viewId x:(int)x y:(int)y width:(int)width height:(int)height
+{
+	UIView* view = pViewArray[viewId];
+	if (view == nil) return 0;
+	
+	UITextField * textFieldRounded = [[UITextField alloc] initWithFrame:CGRectMake(x, y, width, height)];
+	textFieldRounded.tag = nextControlId++;
+	
+	//    // add targets and actions
+	//    [myButton addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    // add to a view
+    [view addSubview:textFieldRounded];
+	return textFieldRounded.tag;
+}
+
 - (void)destroyButton:(int)viewId buttonId:(int)buttonId
 {
 	UIView* view = pViewArray[viewId];

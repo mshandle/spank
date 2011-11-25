@@ -40,7 +40,13 @@ int OSUISystem_Mac_Impl::CreateButton(ISurfaceView* pSurfaceView, int x, int y, 
 	return [[SpankAppDelegate GetInstance] createButton:nViewId x:x y:y width:width height:height text:pszText];
 }
 
-void OSUISystem_Mac_Impl::DestroyButton(ISurfaceView* pSurfaceView, int nId)
+int OSUISystem_Mac_Impl::CreateEditText(ISurfaceView* pSurfaceView, int x, int y, int width, int height)
+{
+	int nViewId = pSurfaceView->GetViewId();
+	return [[SpankAppDelegate GetInstance] createEditText:nViewId x:x y:y width:width height:height];
+}
+
+void OSUISystem_Mac_Impl::DestroyControl(ISurfaceView* pSurfaceView, int nId)
 {
 	int nViewId = pSurfaceView->GetViewId();
 	[[SpankAppDelegate GetInstance] destroyButton:nViewId buttonId:nId];
