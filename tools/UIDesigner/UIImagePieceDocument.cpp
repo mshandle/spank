@@ -115,7 +115,7 @@ const wxString& UIImagePieceDocument::GetFileName() const
 	return m_strFile;
 }
 
- UIImagePieceDocument::TM_IMAGE_INFO& UIImagePieceDocument::GetImageMap()
+UIImagePieceDocument::TM_IMAGE_INFO& UIImagePieceDocument::GetImageMap()
 {
 	return m_ImageMap;
 }
@@ -129,12 +129,12 @@ const wxString& UIImagePieceDocument::FindImage(int nID) const
 	return (itfound->second).strFile;
 }
 
- UIImagePieceDocument::TM_PIECE_INFO& UIImagePieceDocument::GetPieceInfoMap() 
+UIImagePieceDocument::TM_PIECE_INFO& UIImagePieceDocument::GetPieceInfoMap() 
 {
 	return m_PieceInfoMap;
 }
 
- UIImagePieceDocument::PIECE_INFO* UIImagePieceDocument::FindPieceInfo(const wxString& strID) 
+UIImagePieceDocument::PIECE_INFO* UIImagePieceDocument::FindPieceInfo(const wxString& strID) 
 {
 	TM_PIECE_INFO::iterator itfound = m_PieceInfoMap.find(strID);
 	if (itfound == m_PieceInfoMap.end()) return NULL;

@@ -1,12 +1,12 @@
 /*!
- * \file UIImagePieceView.h
+ * \file UIImagePieceEditor.h
  * \date 01-09-2011 21:21:40
  * 
  * 
  * \author zjhlogo (zjhlogo@gmail.com)
  */
-#ifndef __UIIMAGEPIECEVIEW_H__
-#define __UIIMAGEPIECEVIEW_H__
+#ifndef __UIIMAGEPIECEEDITOR_H__
+#define __UIIMAGEPIECEEDITOR_H__
 
 #include <wx/scrolwin.h>
 #include <wx/bitmap.h>
@@ -15,9 +15,9 @@
 #include <vector>
 #include <map>
 
-class UIImagePieceView : public wxWindow
+class UIImagePieceEditor : public wxWindow
 {
-	DECLARE_DYNAMIC_CLASS(UIImagePieceView)
+	DECLARE_DYNAMIC_CLASS(UIImagePieceEditor)
 	DECLARE_EVENT_TABLE()
 
 public:
@@ -63,33 +63,28 @@ public:
 		NUM_CT,
 	};
 
-	typedef struct PIECEVIEW_INFO_tag
+	typedef struct PIECE_VIEW_INFO_tag
 	{
 		wxString strBgImage;
 		wxString strImage;
 		wxBitmap* pBitmap;
 		wxMemoryDC* pMemDc;
-		wxRect rect;
-		void Release()
-		{
-			delete pMemDc; pMemDc = NULL;
-			delete pBitmap; pBitmap = NULL;
-		}
-	} PIECEVIEW_INFO;
+		wxRect pieceRect;
+	} PIECE_VIEW_INFO;
 
-	typedef std::map<wxString, PIECEVIEW_INFO> TM_PIECE;
-	typedef std::map<wxString, wxBitmap*>TM_BITMAP_CACHE;
+	typedef std::map<wxString, PIECE_VIEW_INFO> TM_PIECE_VIEW_INFO;
+	typedef std::map<wxString, wxBitmap*> TM_BITMAP_CACHE;
 
 public:
-	UIImagePieceView();
-	UIImagePieceView(wxWindow *parent,
+	UIImagePieceEditor();
+	UIImagePieceEditor(wxWindow *parent,
 		wxWindowID winid,
 		const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,
 		long style = 0,
 		const wxString& name = wxPanelNameStr);
 
-	virtual ~UIImagePieceView();
+	virtual ~UIImagePieceEditor();
 
 	bool Create(wxWindow *parent,
 		wxWindowID winid,
@@ -99,16 +94,15 @@ public:
 		const wxString& name = wxPanelNameStr);
 
 	virtual wxSize DoGetBestSize() const;
-	void Update();
 	void SaveImage();
 	bool LoadImageFromFile(const wxString& strImage);
-	void AddImportPiece(const PIECEVIEW_INFO& pieceInfo);
 	void UpdateBitMapCache();
+
 	void SetSelectedPiece(const UIImagePieceDocument::PIECE_INFO* pPieceInfo);
-	void SetSelectedPiece(const wxString& StrImportView);
+	void SetSelectedPiece(const wxString& strPieceId);
+
 	const UIImagePieceDocument::PIECE_INFO* GetSelectedPiece() const;
 
-	TM_PIECE& GetPieceMap();
 	TM_BITMAP_CACHE& GetBitCacheMap();
 
 	bool ZoomIn();
@@ -117,7 +111,15 @@ public:
 	int GetZoom() const;
 
 	bool MoveRelative(int x, int y);
-	void ClearImportPiece();
+
+	const TM_PIECE_VIEW_INFO& GetImportedPieceMap();
+	bool AddImportedPiece(const PIECE_VIEW_INFO& pieceInfo);
+	const PIECE_VIEW_INFO* FindImportedPiece(const wxString& strPieceId);
+	void ClearImportedPiece();
+
+	bool AddBitmapCache(const wxString& strImageId, wxBitmap* pBitmap);
+	wxBitmap* FindBitmapCache(const wxString& strImageId);
+	void ClearBitmapCache();
 
 private:
 	void Init();
@@ -156,7 +158,6 @@ private:
 	wxBitmap m_bmpGrid;
 	wxBrush m_brushGrid;
 	
-	TM_PIECE m_vPiece;
 	int m_nZoom;
 
 	wxRect m_rectSelected;
@@ -173,10 +174,11 @@ private:
 
 	wxString m_strImage;
 	const UIImagePieceDocument::PIECE_INFO* m_pPieceInfo;
-	wxString m_StrImportView;
+	wxString m_strImportView;
 	SELECT_PIECE_TYPE m_eType;
 
-	TM_BITMAP_CACHE m_vBitmap;
+	TM_PIECE_VIEW_INFO m_vImportedPiece;
+	TM_BITMAP_CACHE m_vBitmapCache;
 
 };
-#endif // __UIIMAGEPIECEVIEW_H__
+#endif // __UIIMAGEPIECEEDITOR_H__

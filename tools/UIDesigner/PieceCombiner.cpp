@@ -7,26 +7,26 @@
  */
 
 #include "PieceCombiner.h"
-#include "UIImagePieceView.h"
+#include "UIImagePieceEditor.h"
 #include <algorithm>
 #include <stdlib.h>
 #include <stdio.h>
 #include <wx/wx.h>
 #include <wx/bitmap.h>
 
-bool PieceCombiner::Combine(const UIImagePieceView::TM_PIECE& vPieceMap, const UIImagePieceView::TM_BITMAP_CACHE& vImageMap)
+bool PieceCombiner::Combine(const UIImagePieceEditor::TM_PIECE_VIEW_INFO& vPieceMap, const UIImagePieceEditor::TM_BITMAP_CACHE& vImageMap)
 {
 	TM_SAVA_IMAGE saveImageMap;
-	for(UIImagePieceView::TM_BITMAP_CACHE::const_iterator it = vImageMap.begin(); it != vImageMap.end(); ++it)
+	for(UIImagePieceEditor::TM_BITMAP_CACHE::const_iterator it = vImageMap.begin(); it != vImageMap.end(); ++it)
 	{
 		const wxBitmap* pBitmap = (it->second);
 		wxImage* pImage = new wxImage(pBitmap->ConvertToImage());
 		saveImageMap.insert(std::make_pair(it->first, pImage));
 	}
 
-	for (UIImagePieceView::TM_PIECE::const_iterator it = vPieceMap.begin(); it != vPieceMap.end(); ++it)
+	for (UIImagePieceEditor::TM_PIECE_VIEW_INFO::const_iterator it = vPieceMap.begin(); it != vPieceMap.end(); ++it)
 	{
-		const UIImagePieceView::PIECEVIEW_INFO& pieceViewInfo = (it->second);
+		const UIImagePieceEditor::PIECE_VIEW_INFO& pieceViewInfo = (it->second);
 		wxString strImage = pieceViewInfo.strBgImage;
 
 		TM_SAVA_IMAGE::iterator itSaveImage = saveImageMap.find(strImage);
@@ -34,7 +34,7 @@ bool PieceCombiner::Combine(const UIImagePieceView::TM_PIECE& vPieceMap, const U
 		wxImage* pImage = (itSaveImage->second);
 
 		wxImage subImage = pieceViewInfo.pBitmap->ConvertToImage();
-		pImage->Paste(subImage, pieceViewInfo.rect.x, pieceViewInfo.rect.y);
+		pImage->Paste(subImage, pieceViewInfo.pieceRect.x, pieceViewInfo.pieceRect.y);
 	}
 
 	for(TM_SAVA_IMAGE::iterator it = saveImageMap.begin(); it != saveImageMap.end(); ++it)
@@ -46,13 +46,13 @@ bool PieceCombiner::Combine(const UIImagePieceView::TM_PIECE& vPieceMap, const U
 	return true;
 }
 
-bool PieceCombiner::SortPiece(UIImagePieceDocument::TM_PIECE_INFO& vPieceMap,  UIImagePieceView::TM_BITMAP_CACHE& vImageMap, const UIImagePieceDocument::TM_IMAGE_INFO& ImagfInfo)
+bool PieceCombiner::SortPiece(UIImagePieceDocument::TM_PIECE_INFO& vPieceMap,  UIImagePieceEditor::TM_BITMAP_CACHE& vImageMap, const UIImagePieceDocument::TM_IMAGE_INFO& ImagfInfo)
 {
 	//this a bin_packing problem (NP problem)
 	
 	typedef std::vector<PieceCombiner::PIECE_INFO*> TV_PIECE;
 	std::vector<PieceCombiner::IMAGE_INFO> vImageList;
-	for(UIImagePieceView::TM_BITMAP_CACHE::const_iterator ImageIt = vImageMap.begin(); ImageIt != vImageMap.end();)
+	for(UIImagePieceEditor::TM_BITMAP_CACHE::const_iterator ImageIt = vImageMap.begin(); ImageIt != vImageMap.end();)
 	{	
 		TV_PIECE vPieces;
 		wxImage* Image = CreatePngTexture(ImageIt->second->GetWidth(), ImageIt->second->GetHeight());

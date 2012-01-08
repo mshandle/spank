@@ -23,21 +23,21 @@ class DialogAddPiece : public wxDialog
 public:
 	enum CONTROL_ID
 	{
-		 ID_ADDIMAGEDIALOG =10000,
-		 ID_IMAGEINPUT,
-		 ID_IMAGEX,
-		 ID_IMAGEY,
-		 ID_IMAGEWIDTH,
-		 ID_IMAGEHEIGHT,
-		 ID_IMAGENAME,
+		ID_DIALOGADDPIECE = 10012,
+		ID_TEXTCTRL2 = 10013,
+		ID_TEXTCTRL3 = 10014,
+		ID_TEXTCTRL4 = 10015,
+		ID_TEXTCTRL5 = 10016,
+		ID_TEXTCTRL6 = 10017,
+		ID_TEXTCTRL7 = 10024
 	};
 
 public:
 	DialogAddPiece();
-	DialogAddPiece(wxWindow* parent, wxWindowID id = ID_ADDIMAGEDIALOG, const wxString& caption = wxT("Add Piece"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE);
+	DialogAddPiece(wxWindow* parent, wxWindowID id = ID_DIALOGADDPIECE, const wxString& caption = wxT("Add Piece"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE);
 	virtual ~DialogAddPiece();
 	
-	bool Create(wxWindow* parent, wxWindowID id = ID_ADDIMAGEDIALOG, const wxString& caption = wxT("Add Piece"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE);
+	bool Create(wxWindow* parent, wxWindowID id = ID_DIALOGADDPIECE, const wxString& caption = wxT("Add Piece"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE);
 	
 	void Init();
 	void CreateControls();
@@ -46,12 +46,12 @@ public:
 	UIImagePieceDocument::PIECE_INFO GetValue();
 
 private:
-	wxTextCtrl* m_pTextX;
-	wxTextCtrl* m_pTextCtrlY;
-	wxTextCtrl* m_pTextCtrlWidth;
-	wxTextCtrl* m_pTextCtrlHeight;
-	wxTextCtrl* m_pTextCtrlImageID;
-	wxTextCtrl* m_pTextCtrlStrID;
+	wxTextCtrl* m_pTxtImageId;
+	wxTextCtrl* m_pTxtPieceId;
+	wxTextCtrl* m_pTxtX;
+	wxTextCtrl* m_pTxtY;
+	wxTextCtrl* m_pTxtWidth;
+	wxTextCtrl* m_pTxtHeight;
 	UIImagePieceDocument::PIECE_INFO m_PieceInfo;
 
 };

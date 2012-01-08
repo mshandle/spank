@@ -23,18 +23,18 @@ class DialogAddImage : public wxDialog
 public:
 	enum CONTROL_ID
 	{
-		 ID_UIADDIMAGEINFOVIEW = 10000,
-		 ID_FILENAME,
-		 ID_TEXTCTRL ,
-		 ID_BUTTONBROW,
+		ID_DIALOGADDIMAGE = 10008,
+		ID_TEXTCTRL = 10009,
+		ID_BUTTON = 10010,
+		ID_TEXTCTRL1 = 10011
 	};
 
 public:
 	DialogAddImage();
-	DialogAddImage(wxWindow* parent, wxWindowID id = ID_UIADDIMAGEINFOVIEW, const wxString& caption = "Add Image", const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE);
+	DialogAddImage(wxWindow* parent, wxWindowID id = ID_DIALOGADDIMAGE, const wxString& caption = wxT("Add Image"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE);
 	virtual ~DialogAddImage();
 
-	bool Create(wxWindow* parent, wxWindowID id = ID_UIADDIMAGEINFOVIEW, const wxString& caption = "Add Image", const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE);
+	bool Create(wxWindow* parent, wxWindowID id = ID_DIALOGADDIMAGE, const wxString& caption = wxT("Add Image"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE);
 
 	void Init();
 	void CreateControls();

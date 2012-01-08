@@ -19,7 +19,7 @@ DialogAddPiece::DialogAddPiece()
 	 Init();
 }
 
-DialogAddPiece::DialogAddPiece(wxWindow* parent, wxWindowID id /* = ID_ADDIMAGEDIALOG */, const wxString& caption /* = wxT("Add Piece") */, const wxPoint& pos /* = wxDefaultPosition */, const wxSize& size /* = wxDefaultSize */, long style /* = wxDEFAULT_DIALOG_STYLE */)
+DialogAddPiece::DialogAddPiece(wxWindow* parent, wxWindowID id /* = ID_DIALOGADDPIECE */, const wxString& caption /* = wxT("Add Piece") */, const wxPoint& pos /* = wxDefaultPosition */, const wxSize& size /* = wxDefaultSize */, long style /* = wxDEFAULT_DIALOG_STYLE */)
 {
 	Init();
 	Create(parent, id, caption, pos, size, style);
@@ -30,7 +30,7 @@ DialogAddPiece::~DialogAddPiece()
 	//TODO:
 }
 
-bool DialogAddPiece::Create(wxWindow* parent, wxWindowID id /* = ID_ADDIMAGEDIALOG */, const wxString& caption /* = wxT("Add Piece") */, const wxPoint& pos /* = wxDefaultPosition */, const wxSize& size /* = wxDefaultSize */, long style /* = wxDEFAULT_DIALOG_STYLE */)
+bool DialogAddPiece::Create(wxWindow* parent, wxWindowID id /* = ID_DIALOGADDPIECE */, const wxString& caption /* = wxT("Add Piece") */, const wxPoint& pos /* = wxDefaultPosition */, const wxSize& size /* = wxDefaultSize */, long style /* = wxDEFAULT_DIALOG_STYLE */)
 {
 	SetExtraStyle(wxWS_EX_BLOCK_EVENTS);
 	wxDialog::Create(parent, id, caption, pos, size, style);
@@ -45,79 +45,78 @@ bool DialogAddPiece::Create(wxWindow* parent, wxWindowID id /* = ID_ADDIMAGEDIAL
 
 void DialogAddPiece::Init()
 {
-	//TODO:	
+	m_pTxtImageId = NULL;
+	m_pTxtPieceId = NULL;
+	m_pTxtX = NULL;
+	m_pTxtY = NULL;
+	m_pTxtWidth = NULL;
+	m_pTxtHeight = NULL;
 }
 
 void DialogAddPiece::CreateControls()
 {
 	DialogAddPiece* itemDialog1 = this;
+
 	wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
 	itemDialog1->SetSizer(itemBoxSizer2);
 
-	wxBoxSizer* itemBoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
-	itemBoxSizer2->Add(itemBoxSizer3, 0, wxALIGN_RIGHT|wxALL, 5);
-	wxTextValidator validator(wxFILTER_NUMERIC); 
-	wxStaticText* itemStaticText4 = new wxStaticText(itemDialog1, wxID_STATIC, _("ImageID"), wxDefaultPosition, wxDefaultSize, 0);
-	itemBoxSizer3->Add(itemStaticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	wxFlexGridSizer* itemFlexGridSizer3 = new wxFlexGridSizer(6, 2, 0, 0);
+	itemBoxSizer2->Add(itemFlexGridSizer3, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
-	m_pTextCtrlImageID = new wxTextCtrl(itemDialog1, ID_IMAGEINPUT, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 ,validator);
-	itemBoxSizer3->Add(m_pTextCtrlImageID, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	wxStaticText* itemStaticText4 = new wxStaticText(itemDialog1, wxID_STATIC, _("Image Id:"), wxDefaultPosition, wxDefaultSize, 0);
+	itemFlexGridSizer3->Add(itemStaticText4, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	wxBoxSizer* itemBoxSizer6 = new wxBoxSizer(wxHORIZONTAL);
-	itemBoxSizer2->Add(itemBoxSizer6, 0, wxALIGN_RIGHT|wxALL, 5);
+	wxTextCtrl* itemTextCtrl5 = new wxTextCtrl(itemDialog1, ID_TEXTCTRL2, wxEmptyString, wxDefaultPosition, wxSize(200, -1), 0);
+	m_pTxtImageId = itemTextCtrl5;
+	itemFlexGridSizer3->Add(itemTextCtrl5, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	wxStaticText* itemStaticText7 = new wxStaticText(itemDialog1, wxID_STATIC, _("PieceName"), wxDefaultPosition, wxDefaultSize, 0);
-	itemBoxSizer6->Add(itemStaticText7, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	wxStaticText* itemStaticText6 = new wxStaticText(itemDialog1, wxID_STATIC, _("Piece Id:"), wxDefaultPosition, wxDefaultSize, 0);
+	itemFlexGridSizer3->Add(itemStaticText6, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	m_pTextCtrlStrID = new wxTextCtrl(itemDialog1, ID_IMAGENAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0);
-	itemBoxSizer6->Add(m_pTextCtrlStrID, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	wxTextCtrl* itemTextCtrl7 = new wxTextCtrl(itemDialog1, ID_TEXTCTRL3, wxEmptyString, wxDefaultPosition, wxSize(200, -1), 0);
+	m_pTxtPieceId = itemTextCtrl7;
+	itemFlexGridSizer3->Add(itemTextCtrl7, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	wxBoxSizer* itemBoxSizer9 = new wxBoxSizer(wxHORIZONTAL);
-	itemBoxSizer2->Add(itemBoxSizer9, 0, wxALIGN_RIGHT|wxALL, 5);
+	wxStaticText* itemStaticText8 = new wxStaticText(itemDialog1, wxID_STATIC, _("X:"), wxDefaultPosition, wxDefaultSize, 0);
+	itemFlexGridSizer3->Add(itemStaticText8, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	wxStaticText* itemStaticText10 = new wxStaticText(itemDialog1, wxID_STATIC, _("X"), wxDefaultPosition, wxDefaultSize, 0);
-	itemBoxSizer9->Add(itemStaticText10, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	wxTextCtrl* itemTextCtrl9 = new wxTextCtrl(itemDialog1, ID_TEXTCTRL4, wxEmptyString, wxDefaultPosition, wxSize(200, -1), 0);
+	m_pTxtX = itemTextCtrl9;
+	itemFlexGridSizer3->Add(itemTextCtrl9, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	m_pTextX = new wxTextCtrl(itemDialog1, ID_IMAGEX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 ,validator);
-	itemBoxSizer9->Add(m_pTextX, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	wxStaticText* itemStaticText10 = new wxStaticText(itemDialog1, wxID_STATIC, _("Y:"), wxDefaultPosition, wxDefaultSize, 0);
+	itemFlexGridSizer3->Add(itemStaticText10, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	wxBoxSizer* itemBoxSizer12 = new wxBoxSizer(wxHORIZONTAL);
-	itemBoxSizer2->Add(itemBoxSizer12, 0, wxALIGN_RIGHT|wxALL, 5);
+	wxTextCtrl* itemTextCtrl11 = new wxTextCtrl(itemDialog1, ID_TEXTCTRL5, wxEmptyString, wxDefaultPosition, wxSize(200, -1), 0);
+	m_pTxtY = itemTextCtrl11;
+	itemFlexGridSizer3->Add(itemTextCtrl11, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	wxStaticText* itemStaticText13 = new wxStaticText(itemDialog1, wxID_STATIC, _("Y"), wxDefaultPosition, wxDefaultSize, 0);
-	itemBoxSizer12->Add(itemStaticText13, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	wxStaticText* itemStaticText12 = new wxStaticText(itemDialog1, wxID_STATIC, _("Width:"), wxDefaultPosition, wxDefaultSize, 0);
+	itemFlexGridSizer3->Add(itemStaticText12, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	m_pTextCtrlY = new wxTextCtrl(itemDialog1, ID_IMAGEY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, validator);
-	itemBoxSizer12->Add(m_pTextCtrlY, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	wxTextCtrl* itemTextCtrl13 = new wxTextCtrl(itemDialog1, ID_TEXTCTRL6, wxEmptyString, wxDefaultPosition, wxSize(200, -1), 0);
+	m_pTxtWidth = itemTextCtrl13;
+	itemFlexGridSizer3->Add(itemTextCtrl13, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	wxBoxSizer* itemBoxSizer15 = new wxBoxSizer(wxHORIZONTAL);
-	itemBoxSizer2->Add(itemBoxSizer15, 0, wxALIGN_RIGHT|wxALL, 5);
+	wxStaticText* itemStaticText14 = new wxStaticText(itemDialog1, wxID_STATIC, _("Height:"), wxDefaultPosition, wxDefaultSize, 0);
+	itemFlexGridSizer3->Add(itemStaticText14, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	wxStaticText* itemStaticText16 = new wxStaticText(itemDialog1, wxID_STATIC, _("Width"), wxDefaultPosition, wxDefaultSize, 0);
-	itemBoxSizer15->Add(itemStaticText16, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	wxTextCtrl* itemTextCtrl15 = new wxTextCtrl(itemDialog1, ID_TEXTCTRL7, wxEmptyString, wxDefaultPosition, wxSize(200, -1), 0);
+	m_pTxtHeight = itemTextCtrl15;
+	itemFlexGridSizer3->Add(itemTextCtrl15, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	m_pTextCtrlWidth = new wxTextCtrl(itemDialog1, ID_IMAGEWIDTH, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, validator);
-	itemBoxSizer15->Add(m_pTextCtrlWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemFlexGridSizer3->AddGrowableCol(1);
 
-	wxBoxSizer* itemBoxSizer18 = new wxBoxSizer(wxHORIZONTAL);
-	itemBoxSizer2->Add(itemBoxSizer18, 0, wxALIGN_RIGHT|wxALL, 5);
+	wxStdDialogButtonSizer* itemStdDialogButtonSizer16 = new wxStdDialogButtonSizer;
 
-	wxStaticText* itemStaticText19 = new wxStaticText(itemDialog1, wxID_STATIC, _("Height"), wxDefaultPosition, wxDefaultSize, 0);
-	itemBoxSizer18->Add(itemStaticText19, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	itemBoxSizer2->Add(itemStdDialogButtonSizer16, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+	wxButton* itemButton17 = new wxButton(itemDialog1, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0);
+	itemStdDialogButtonSizer16->AddButton(itemButton17);
 
-	m_pTextCtrlHeight = new wxTextCtrl(itemDialog1, ID_IMAGEHEIGHT, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, validator);
-	itemBoxSizer18->Add(m_pTextCtrlHeight, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	wxButton* itemButton18 = new wxButton(itemDialog1, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, 0);
+	itemStdDialogButtonSizer16->AddButton(itemButton18);
 
-	wxStdDialogButtonSizer* itemStdDialogButtonSizer21 = new wxStdDialogButtonSizer;
-
-	itemBoxSizer2->Add(itemStdDialogButtonSizer21, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
-	wxButton* itemButton22 = new wxButton(itemDialog1, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0);
-	itemStdDialogButtonSizer21->AddButton(itemButton22);
-
-	wxButton* itemButton23 = new wxButton(itemDialog1, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, 0);
-	itemStdDialogButtonSizer21->AddButton(itemButton23);
-
-	itemStdDialogButtonSizer21->Realize();
+	itemStdDialogButtonSizer16->Realize();
 }	
 
 void DialogAddPiece::OnClose(wxCommandEvent& event)
@@ -127,65 +126,65 @@ void DialogAddPiece::OnClose(wxCommandEvent& event)
 
 void DialogAddPiece::OnAdd(wxCommandEvent& event)
 {
-	wxString Strvalue = m_pTextX->GetValue();
-	if(Strvalue.empty()) 
+	wxString strValue = m_pTxtX->GetValue();
+	if(strValue.empty()) 
 	{
 		EndModal(wxCANCEL);
 		return;
 	}
-	m_PieceInfo.pieceRect.x = wxAtoi(Strvalue);
-	m_pTextX->Clear();
-	Strvalue.Clear();
+	m_PieceInfo.pieceRect.x = wxAtoi(strValue);
+	m_pTxtX->Clear();
+	strValue.Clear();
 
-	Strvalue = m_pTextCtrlY->GetValue();
-	if(Strvalue.empty())
+	strValue = m_pTxtY->GetValue();
+	if(strValue.empty())
 	{
 		EndModal(wxCANCEL);
 		return;
 	}
-	m_PieceInfo.pieceRect.y = wxAtoi(Strvalue);
-	m_pTextCtrlY->Clear();
-	Strvalue.Clear();
+	m_PieceInfo.pieceRect.y = wxAtoi(strValue);
+	m_pTxtY->Clear();
+	strValue.Clear();
 
-	Strvalue = m_pTextCtrlWidth->GetValue();
-	if(Strvalue.empty())
+	strValue = m_pTxtWidth->GetValue();
+	if(strValue.empty())
 	{
 		EndModal(wxCANCEL);
 		return;
 	}
-	m_PieceInfo.pieceRect.width = wxAtoi(Strvalue);
-	m_pTextCtrlWidth->Clear();
-	Strvalue.Clear();
+	m_PieceInfo.pieceRect.width = wxAtoi(strValue);
+	m_pTxtWidth->Clear();
+	strValue.Clear();
 	
-	Strvalue = m_pTextCtrlHeight->GetValue();
-	if(Strvalue.empty())
+	strValue = m_pTxtHeight->GetValue();
+	if(strValue.empty())
 	{
 		EndModal(wxCANCEL);
 		return;
 	}
-	m_PieceInfo.pieceRect.height = wxAtoi(Strvalue);
-	m_pTextCtrlHeight->Clear();
-	Strvalue.Clear();
+	m_PieceInfo.pieceRect.height = wxAtoi(strValue);
+	m_pTxtHeight->Clear();
+	strValue.Clear();
 
-	Strvalue = m_pTextCtrlImageID->GetValue();
-	if(Strvalue.empty())
+	strValue = m_pTxtImageId->GetValue();
+	if(strValue.empty())
 	{
 		EndModal(wxCANCEL);
 		return;
 	}
-	m_PieceInfo.nImageId = wxAtoi(Strvalue);
-	m_pTextCtrlImageID->Clear();
-	Strvalue.Clear();
+	m_PieceInfo.nImageId = wxAtoi(strValue);
+	m_pTxtImageId->Clear();
+	strValue.Clear();
 
-	Strvalue = m_pTextCtrlStrID->GetValue();
-	if(Strvalue.empty())
+	strValue = m_pTxtPieceId->GetValue();
+	if(strValue.empty())
 	{
 		EndModal(wxCANCEL);
 		return;
 	}
-	m_PieceInfo.strId = Strvalue;
-	m_pTextCtrlStrID->Clear();
-	Strvalue.Clear();
+	m_PieceInfo.strId = strValue;
+	m_pTxtPieceId->Clear();
+	strValue.Clear();
 
 	EndModal(wxID_OK);
 }

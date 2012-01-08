@@ -12,7 +12,7 @@
 #include <wx/file.h>
 #include <map>
 
-#include "UIImagePieceView.h"
+#include "UIImagePieceEditor.h"
 #include "UIImagePieceDocument.h"
 
 class PieceCombiner 
@@ -41,8 +41,8 @@ public:
 	typedef std::map<wxString, wxImage*> TM_SAVA_IMAGE;
 
 public:
-	static bool Combine(const UIImagePieceView::TM_PIECE& vPieceMap, const UIImagePieceView::TM_BITMAP_CACHE& vImageMap);
-	static bool SortPiece(UIImagePieceDocument::TM_PIECE_INFO& vPieceMap, UIImagePieceView::TM_BITMAP_CACHE& vImageMap, const UIImagePieceDocument::TM_IMAGE_INFO& ImagfInfo);
+	static bool Combine(const UIImagePieceEditor::TM_PIECE_VIEW_INFO& vPieceMap, const UIImagePieceEditor::TM_BITMAP_CACHE& vImageMap);
+	static bool SortPiece(UIImagePieceDocument::TM_PIECE_INFO& vPieceMap, UIImagePieceEditor::TM_BITMAP_CACHE& vImageMap, const UIImagePieceDocument::TM_IMAGE_INFO& ImagfInfo);
 
 	static int GetMaxHeight(int* flag, int nSize, int nStart, int nEnd);
 	static void SetMaxHeight(int*& flag, int nSize, int nStart, int nEnd, int value);

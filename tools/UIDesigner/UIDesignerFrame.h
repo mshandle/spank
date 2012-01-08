@@ -13,7 +13,7 @@
 #include <wx/treectrl.h>
 #include <wx/propgrid/property.h>
 
-#include "UIImagePieceView.h"
+#include "UIImagePieceEditor.h"
 #include "UIImagePieceDocument.h"
 #include "wxImagePieceEvent.h"
 
@@ -131,7 +131,7 @@ private:
 	
 	void OnProjectImportedSelChanged(wxTreeEvent& event);
 	void OnProjectImportedContextMenu(wxTreeEvent& event);
-	void UpdateImportPieceProterty(const UIImagePieceView::PIECEVIEW_INFO& PieceInfo);
+	void UpdateImportPieceProterty(const UIImagePieceEditor::PIECE_VIEW_INFO& PieceInfo);
 	void OnImportPropertyGridChange(wxPropertyGridEvent& event);
 
 	void OnAddImageInfo(wxCommandEvent& event);
@@ -152,7 +152,7 @@ private:
 	wxTreeCtrl* m_pProjectTextureList;
 	wxTreeCtrl* m_pProjectImported;
 
-	UIImagePieceView* m_pImagePieceView;
+	UIImagePieceEditor* m_pImagePieceView;
 	UIImagePieceDocument* m_pImagePieceDocument;
 
 	wxTextCtrl* m_pOutputView;
