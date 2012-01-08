@@ -17,6 +17,9 @@
 
 class UIImagePieceView : public wxWindow
 {
+	DECLARE_DYNAMIC_CLASS(UIImagePieceView)
+	DECLARE_EVENT_TABLE()
+
 public:
 	enum CONST_DEFINE
 	{
@@ -28,11 +31,13 @@ public:
 		RECT_SENSOR_SIZE = 4,
 		DEFAULT_VIRTUAL_SIZE = 100,
 	};
+
 	enum SELECT_PIECE_TYPE
 	{
 		NORMAL_PIECE_INFO = 0,
 		IMPORT_PIECE_INFO,
 	};
+
 	enum POINT_IN_CONNER
 	{
 		PIC_UNKNOWN = 0,
@@ -57,27 +62,24 @@ public:
 		CT_MOVE,
 		NUM_CT,
 	};
-	
-public:
-	DECLARE_DYNAMIC_CLASS(UIImagePieceView)
-	DECLARE_EVENT_TABLE()
-public:
+
 	typedef struct PIECEVIEW_INFO_tag
 	{
-		wxString StrBackGroundImage;
-		wxString StrImage;
-		wxBitmap* pBitMap;
-		wxMemoryDC* pMemDC;
+		wxString strBgImage;
+		wxString strImage;
+		wxBitmap* pBitmap;
+		wxMemoryDC* pMemDc;
 		wxRect rect;
 		void Release()
 		{
-			delete pMemDC; pMemDC = NULL;
-			delete pBitMap; pBitMap = NULL;
+			delete pMemDc; pMemDc = NULL;
+			delete pBitmap; pBitmap = NULL;
 		}
-	}PIECEVIEW_INFO;
-	typedef std::map<wxString,PIECEVIEW_INFO> TM_PIECE;
+	} PIECEVIEW_INFO;
 
+	typedef std::map<wxString, PIECEVIEW_INFO> TM_PIECE;
 	typedef std::map<wxString, wxBitmap*>TM_BITMAP_CACHE;
+
 public:
 	UIImagePieceView();
 	UIImagePieceView(wxWindow *parent,
@@ -100,12 +102,12 @@ public:
 	void Update();
 	void SaveImage();
 	bool LoadImageFromFile(const wxString& strImage);
-	void AddImportPiece(PIECEVIEW_INFO ImpotPiece);
+	void AddImportPiece(const PIECEVIEW_INFO& pieceInfo);
 	void UpdateBitMapCache();
 	void SetSelectedPiece(const UIImagePieceDocument::PIECE_INFO* pPieceInfo);
-	void SetSelectedPiece(const wxString  StrImportView);
+	void SetSelectedPiece(const wxString& StrImportView);
 	const UIImagePieceDocument::PIECE_INFO* GetSelectedPiece() const;
-	const wxString GetBackFileName() const;
+
 	TM_PIECE& GetPieceMap();
 	TM_BITMAP_CACHE& GetBitCacheMap();
 
@@ -116,6 +118,7 @@ public:
 
 	bool MoveRelative(int x, int y);
 	void ClearImportPiece();
+
 private:
 	void Init();
 	void Release();
@@ -133,8 +136,6 @@ private:
 	void OnScrollPageDown(wxScrollWinEvent& event);
 	void OnScrollThumbTrack(wxScrollWinEvent& event);
 	void OnScrollThumbRelease(wxScrollWinEvent& event);
-	
-	
 
 	void UpdateVirtualSize();
 	const wxSize& GetVirtualSize();

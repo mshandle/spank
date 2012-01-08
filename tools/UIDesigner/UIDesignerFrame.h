@@ -23,53 +23,55 @@ public:
 	enum CONTROL_ID
 	{
 		ID_UIDESIGNERFRAME = 10000,
-		ID_EDIT_UNDO = 10048,
-		ID_EDIT_REDO = 10049,
-		ID_EDIT_COPY = 10025,
-		ID_EDIT_CUT = 10026,
-		ID_EDIT_PAST = 10027,
-		ID_EDIT_DELETE = 10050,
-		ID_LAYOUT_ALIGN = 10051,
-		ID_LAYOUT_ALIGN_LEFT = 10028,
-		ID_LAYOUT_ALIGN_RIGHT = 10029,
-		ID_LAYOUT_ALIGN_TOP = 10030,
-		ID_LAYOUT_ALIGN_BOTTOM = 10031,
-		ID_LAYOUT_ALIGN_CENTER = 10032,
-		ID_LAYOUT_ALIGN_MIDDLE = 10033,
-		ID_LAYOUT_MOVE = 10052,
-		ID_LAYOUT_MOVE_LEFT = 10052,
-		ID_LAYOUT_MOVE_RIGHT = 10035,
-		ID_LAYOUT_MOVE_UP = 10036,
-		ID_LAYOUT_MOVE_DOWN = 10037,
-		ID_VIEW_GRID = 10038,
-		ID_TOOL_PREFERENCES = 10042,
-		ID_HELP_SUPPORT = 10043,
-		ID_HELP_ABOUT = 10044,
-		ID_TOOLBAR = 10018,
-		IDC_PROJECT = 10003,
-		IDC_PROPERTYPIECE = 10002,
-		
-		IDC_INPUT_VIEW = 10004,
-		IDC_OUTPUT_VIEW = 10001,
-		ID_ADDIMAGE = 10060,
-		ID_ADDPIECE = 10061,
-		ID_NEWIMAGEPIECE = 10062,
-		ID_NEWDILOG = 10063,
-		ID_ADDPIECEMENU = 10064,
-		ID_ADDIMAGEMENU = 10065,
-		ID_DELETE_IMAGE = 10066,
-		ID_DELETE_PIECE = 10067,
-		ID_CUT_PIECE = 10075,
-		ID_TIPS_DIALOG = 10068,
-		IDC_PROJECTIMAGE = 10069,
-		IDC_PROPERTYIMAGE = 10070,
-		IDC_UIIMAGE_VIEW = 10071,
-		IDC_IMPORT_PIECE = 10072,
-		IDC_IMAPORT_PIECE_VIEW = 10073,
-		IDC_IMPORT_PROPERTY = 10074,
-		IDC_DELETE_IMPORTPIECE = 10100,
-		IDC_LOAD_IMPORTPIECE = 10101,
-		IDC_SORT_PIECE = 10102,
+		ID_EDIT_UNDO,
+		ID_EDIT_REDO,
+		ID_EDIT_COPY,
+		ID_EDIT_CUT,
+		ID_EDIT_PAST,
+		ID_EDIT_DELETE,
+		ID_LAYOUT_ALIGN,
+		ID_LAYOUT_ALIGN_LEFT,
+		ID_LAYOUT_ALIGN_RIGHT,
+		ID_LAYOUT_ALIGN_TOP,
+		ID_LAYOUT_ALIGN_BOTTOM,
+		ID_LAYOUT_ALIGN_CENTER,
+		ID_LAYOUT_ALIGN_MIDDLE,
+		ID_LAYOUT_MOVE,
+		ID_LAYOUT_MOVE_LEFT,
+		ID_LAYOUT_MOVE_RIGHT,
+		ID_LAYOUT_MOVE_UP,
+		ID_LAYOUT_MOVE_DOWN,
+		ID_VIEW_GRID,
+		ID_TOOL_PREFERENCES,
+		ID_HELP_SUPPORT,
+		ID_HELP_ABOUT,
+		ID_TOOLBAR,
+		ID_ADDIMAGE,
+		ID_ADDPIECE,
+		ID_NEWIMAGEPIECE,
+		ID_NEWDILOG,
+		ID_ADDPIECEMENU,
+		ID_ADDIMAGEMENU,
+		ID_DELETE_IMAGE,
+		ID_DELETE_PIECE,
+		ID_CUT_PIECE,
+		ID_TIPS_DIALOG,
+
+		IDC_PROJECT_NOTEBOOK,
+		IDC_PROJECT_IMAGE_PIECE,
+		IDC_PROJECT_TEXTURE_LIST,
+		IDC_PROJECT_IMAPORTED,
+
+		IDC_PROPERTYPIECE,
+		IDC_INPUT_VIEW,
+		IDC_OUTPUT_VIEW,
+		IDC_PROPERTYIMAGE,
+		IDC_UIIMAGE_VIEW,
+		IDC_IMPORT_PIECE,
+		IDC_IMPORT_PROPERTY,
+		IDC_DELETE_IMPORTPIECE,
+		IDC_LOAD_IMPORTPIECE,
+		IDC_SORT_PIECE,
 	};
 
 public:
@@ -114,11 +116,11 @@ private:
 	void OnViewZoomIn(wxCommandEvent& event);
 	void OnViewZoomOut(wxCommandEvent& event);
 
-	void OnProjectPieceItemSelChanged(wxTreeEvent& event);
-	void OnProjectPieceRightClick(wxTreeEvent& event);
+	void OnProjectImagePieceSelChanged(wxTreeEvent& event);
+	void OnProjectImagePieceContextMenu(wxTreeEvent& event);
 	
-	void OnProjectImageItemSelChanged(wxTreeEvent& event);
-	void OnProjectImageViewRightClick(wxTreeEvent& event);
+	void OnProjectTextureListSelChanged(wxTreeEvent& event);
+	void OnProjectTextureListContextMenu(wxTreeEvent& event);
 	void OnImagePieceChanged(wxImagePieceEvent& event);
 
 	void OnPiecePropertyGridChange(wxPropertyGridEvent &event);
@@ -127,8 +129,8 @@ private:
 	void OnImagePropertyGridChange(wxPropertyGridEvent& event);
 	void UpdateImageProterty(const UIImagePieceDocument::IMAGE_INFO& ImageInfo);
 	
-	void OnProjectImportItemSleChanged(wxTreeEvent& event);
-	void OnProjectImportRightClick(wxTreeEvent& event);
+	void OnProjectImportedSelChanged(wxTreeEvent& event);
+	void OnProjectImportedContextMenu(wxTreeEvent& event);
 	void UpdateImportPieceProterty(const UIImagePieceView::PIECEVIEW_INFO& PieceInfo);
 	void OnImportPropertyGridChange(wxPropertyGridEvent& event);
 
@@ -140,11 +142,16 @@ private:
 	void OnCutPiece(wxCommandEvent& event);
 	void OnDelteImportPiece(wxCommandEvent& event);
 	void OnLoadImportPiece(wxCommandEvent& event);
+
 private:
 	wxAuiManager m_auiManager;
-	wxTreeCtrl* m_pProjectViewPiece;
-	wxTreeCtrl* m_pProjectViewImage;
-	wxTreeCtrl* m_pImportPieceView;
+
+	// project relate
+	wxNotebook* m_pProjectNotebook;
+	wxTreeCtrl* m_pProjectImagePiece;
+	wxTreeCtrl* m_pProjectTextureList;
+	wxTreeCtrl* m_pProjectImported;
+
 	UIImagePieceView* m_pImagePieceView;
 	UIImagePieceDocument* m_pImagePieceDocument;
 

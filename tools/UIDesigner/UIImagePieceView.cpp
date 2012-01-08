@@ -8,7 +8,7 @@
 #include "UIImagePieceView.h"
 #include <wx/dcclient.h>
 #include "wxImagePieceEvent.h"
-#include "CombinaPiece.h"
+#include "PieceCombiner.h"
 
 BEGIN_EVENT_TABLE(UIImagePieceView, wxWindow)
 	EVT_PAINT(UIImagePieceView::OnPaint)
@@ -111,13 +111,14 @@ void UIImagePieceView::Update()
 
 void UIImagePieceView::SaveImage()
 {
-	CombinaPiece::Combina(m_vPiece, m_vBitmap);
+	PieceCombiner::Combine(m_vPiece, m_vBitmap);
 }
+
 bool UIImagePieceView::LoadImageFromFile(const wxString& strImage)
 {
 	m_strImage = strImage;
 	TM_BITMAP_CACHE::iterator it = m_vBitmap.find(strImage);
-	if( it == m_vBitmap.end())
+	if (it == m_vBitmap.end())
 	{
 		m_pbmpImage = new wxBitmap();
 		if (!m_pbmpImage->LoadFile(m_strImage, wxBITMAP_TYPE_PNG)) return false;
@@ -134,27 +135,23 @@ bool UIImagePieceView::LoadImageFromFile(const wxString& strImage)
 	return true;
 }
 
-const wxString UIImagePieceView::GetBackFileName() const
-{
-	return m_strImage;
-}
 void UIImagePieceView::SetSelectedPiece(const UIImagePieceDocument::PIECE_INFO* pPieceInfo)
 {
 	m_eType = NORMAL_PIECE_INFO;
 	m_pPieceInfo = pPieceInfo;
 
-	m_rectSelected = m_pPieceInfo->rect;
+	m_rectSelected = m_pPieceInfo->pieceRect;
 	Refresh(false);
 }
 
-void UIImagePieceView::SetSelectedPiece(const wxString StrImportView)
+void UIImagePieceView::SetSelectedPiece(const wxString& strImportView)
 {
 	m_eType = IMPORT_PIECE_INFO;
-	TM_PIECE::iterator pieceInof  = m_vPiece.find(StrImportView);
-	if(pieceInof != m_vPiece.end())
+	TM_PIECE::iterator itPieceInfo  = m_vPiece.find(strImportView);
+	if(itPieceInfo != m_vPiece.end())
 	{
-		m_StrImportView = StrImportView;
-		m_rectSelected = (*pieceInof).second.rect;
+		m_StrImportView = strImportView;
+		m_rectSelected = (*itPieceInfo).second.rect;
 		Refresh(false);
 	}
 
@@ -200,7 +197,7 @@ bool UIImagePieceView::MoveRelative(int x, int y)
 		m_rectSelected.x += x;
 		m_rectSelected.y += y;
 	}
-	else if( m_eType == IMPORT_PIECE_INFO )
+	else if(m_eType == IMPORT_PIECE_INFO )
 	{
 		m_rectSelected.x += x;
 		m_rectSelected.y += y;
@@ -211,9 +208,9 @@ bool UIImagePieceView::MoveRelative(int x, int y)
 	return true;
 }
 
-void UIImagePieceView::AddImportPiece(PIECEVIEW_INFO ImpotPiece)
+void UIImagePieceView::AddImportPiece(const PIECEVIEW_INFO& pieceInfo)
 {
-	m_vPiece.insert(std::make_pair(ImpotPiece.StrImage, ImpotPiece));
+	m_vPiece.insert(std::make_pair(pieceInfo.strImage, pieceInfo));
 }
 
 void UIImagePieceView::UpdateBitMapCache()
@@ -230,6 +227,7 @@ UIImagePieceView::TM_BITMAP_CACHE& UIImagePieceView::GetBitCacheMap()
 {
 	return m_vBitmap;
 }
+
 void UIImagePieceView::OnPaint(wxPaintEvent& event)
 {
 	wxPaintDC dc(this);
@@ -424,7 +422,7 @@ void UIImagePieceView::OnMouseLButtonDown(wxMouseEvent& event)
 		m_rectSelectedBackup = m_rectSelected;
 		
 	}
-	else if( m_eType == IMPORT_PIECE_INFO && !m_StrImportView.IsEmpty())
+	else if(m_eType == IMPORT_PIECE_INFO && !m_StrImportView.IsEmpty())
 	{
 		m_ptMouseDown = event.GetPosition() + m_ptOrigin;
 
@@ -470,7 +468,7 @@ void UIImagePieceView::OnMouseLButtonUp(wxMouseEvent& event)
 		evtPiece.SetEventObject(this);
 
 		UIImagePieceDocument::PIECE_INFO pieceInfo = (*m_pPieceInfo);
-		pieceInfo.rect = m_rectSelected;
+		pieceInfo.pieceRect = m_rectSelected;
 		evtPiece.SetPieceInfo(pieceInfo);
 		GetEventHandler()->ProcessEvent(evtPiece);
  	}
@@ -643,10 +641,10 @@ void UIImagePieceView::DrawPieces(wxDC& dc)
 {
 	for(TM_PIECE::iterator it = m_vPiece.begin(); it !=  m_vPiece.end(); ++it)
 	{
-		if(m_strImage == (*it).second.StrBackGroundImage)
+		if(m_strImage == (*it).second.strBgImage)
 		{
-			wxSize Size =  (*it).second.pMemDC->GetSize();
-			wxDC* pSource = (*it).second.pMemDC;
+			wxSize Size =  (*it).second.pMemDc->GetSize();
+			wxDC* pSource = (*it).second.pMemDc;
 			int x = (*it).second.rect.x * m_nZoom;
 			int y = (*it).second.rect.y * m_nZoom;
 			x -= m_ptOrigin.x;

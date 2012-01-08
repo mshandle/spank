@@ -91,7 +91,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="echo copy &quot;$(TargetPath)&quot; &quot;$(ProjectDir)..\..\bin\&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(ProjectDir)..\..\bin\&quot;"
+				CommandLine="echo copy &quot;$(TargetPath)&quot; &quot;$(ProjectDir)..\..\bin\&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(ProjectDir)..\..\bin\&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -170,7 +170,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="echo copy &quot;$(TargetPath)&quot; &quot;$(ProjectDir)..\..\bin\&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(ProjectDir)..\..\bin\&quot;"
+				CommandLine="echo copy &quot;$(TargetPath)&quot; &quot;$(ProjectDir)..\..\bin\&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(ProjectDir)..\..\bin\&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -178,27 +178,43 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\CombinaPiece.cpp"
+			RelativePath=".\DialogAddImage.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\CombinaPiece.h"
+			RelativePath=".\DialogAddImage.h"
 			>
 		</File>
 		<File
-			RelativePath=".\UIAddImageInfoView.cpp"
+			RelativePath=".\DialogAddPiece.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\UIAddImageInfoView.h"
+			RelativePath=".\DialogAddPiece.h"
 			>
 		</File>
 		<File
-			RelativePath=".\UIAddPieceInfoView.cpp"
+			RelativePath=".\DialogImportPiece.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\UIAddPieceInfoView.h"
+			RelativePath=".\DialogImportPiece.h"
+			>
+		</File>
+		<File
+			RelativePath=".\DialogNewPiece.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\DialogNewPiece.h"
+			>
+		</File>
+		<File
+			RelativePath=".\PieceCombiner.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\PieceCombiner.h"
 			>
 		</File>
 		<File
@@ -239,22 +255,6 @@
 		</File>
 		<File
 			RelativePath=".\UIImagePieceView.h"
-			>
-		</File>
-		<File
-			RelativePath=".\UIImportPieceView.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\UIImportPieceView.h"
-			>
-		</File>
-		<File
-			RelativePath=".\UINewImagePieceView.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\UINewImagePieceView.h"
 			>
 		</File>
 		<File

@@ -17,19 +17,17 @@ class UIImagePieceDocument : public UIDocumentBase
 public:
 	typedef struct IMAGE_INFO_tag
 	{
-		int nID;
+		int nId;
 		wxString strFile;
 	} IMAGE_INFO;
-	
 	typedef std::map<int, IMAGE_INFO> TM_IMAGE_INFO;
 
 	typedef struct PIECE_INFO_tag
 	{
-		wxString strID;
-		int nImageID;
-		wxRect rect;
+		wxString strId;
+		int nImageId;
+		wxRect pieceRect;
 	} PIECE_INFO;
-
 	typedef std::map<wxString, PIECE_INFO> TM_PIECE_INFO;
 
 public:
@@ -38,7 +36,7 @@ public:
 
 	virtual bool OpenFile(const wxString& strFile);
 	virtual bool SaveFile(const wxString& strFile);
-	virtual bool NewFile (const wxString& strFile);
+	virtual bool NewFile(const wxString& strFile);
 	virtual const wxString& GetFileName() const;
 
 	TM_IMAGE_INFO& GetImageMap();
@@ -51,6 +49,7 @@ public:
 	
 	void UpdateImagePiece(const PIECE_INFO& pieceInfo);
 	void Clear();
+
 private:
 	TM_IMAGE_INFO m_ImageMap;
 	TM_PIECE_INFO m_PieceInfoMap;

@@ -19,7 +19,7 @@ public:
 public:
 	wxImagePieceEvent(wxEventType commandType = wxEVT_NULL, int winid = 0);
 	wxImagePieceEvent(const wxImagePieceEvent& event);
-	~wxImagePieceEvent();
+	virtual ~wxImagePieceEvent();
 
 	virtual wxEvent* Clone() const;
 

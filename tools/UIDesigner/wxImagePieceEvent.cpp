@@ -13,9 +13,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxImagePieceEvent, wxNotifyEvent)
 wxImagePieceEvent::wxImagePieceEvent(wxEventType commandType /*= wxEVT_NULL*/, int winid /*= 0*/)
 :wxNotifyEvent(commandType, winid)
 {
-	m_PieceInfo.strID.clear();
-	m_PieceInfo.nImageID = 0;
-	m_PieceInfo.rect = wxRect(0, 0, 0, 0);
+	m_PieceInfo.strId.clear();
+	m_PieceInfo.nImageId = 0;
+	m_PieceInfo.pieceRect = wxRect(0, 0, 0, 0);
 }
 
 wxImagePieceEvent::wxImagePieceEvent(const wxImagePieceEvent& event)

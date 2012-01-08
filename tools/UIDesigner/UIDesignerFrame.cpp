@@ -10,12 +10,11 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
 #include <wx/filedlg.h>
-#include "UIAddPieceInfoView.h"
-#include "UIAddImageInfoView.h"
-#include "UINewImagePieceView.h"
-#include "UITipsDialogView.h"
-#include "UIImportPieceView.h"
-#include "CombinaPiece.h"
+#include "DialogNewPiece.h"
+#include "DialogAddPiece.h"
+#include "DialogImportPiece.h"
+#include "DialogAddImage.h"
+#include "PieceCombiner.h"
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
@@ -40,15 +39,19 @@ BEGIN_EVENT_TABLE(UIDesignerFrame, wxFrame)
 	EVT_MENU(ID_DELETE_IMAGE, UIDesignerFrame::OnDeleteImageInfo)
 	EVT_MENU(ID_CUT_PIECE, UIDesignerFrame::OnCutPiece)
 	EVT_MENU(IDC_IMPORT_PIECE, UIDesignerFrame::OnImport)
+
 	EVT_PG_CHANGED(IDC_PROPERTYPIECE, UIDesignerFrame::OnPiecePropertyGridChange)
 	EVT_PG_CHANGED(IDC_IMPORT_PROPERTY, UIDesignerFrame::OnImportPropertyGridChange)
-	EVT_TREE_SEL_CHANGED(IDC_PROJECT, UIDesignerFrame::OnProjectPieceItemSelChanged)
-	EVT_TREE_ITEM_MENU(IDC_PROJECT, UIDesignerFrame::OnProjectPieceRightClick)
-	EVT_TREE_SEL_CHANGED(IDC_PROJECTIMAGE, UIDesignerFrame::OnProjectImageItemSelChanged)
-	EVT_TREE_ITEM_MENU(IDC_PROJECTIMAGE, UIDesignerFrame::OnProjectImageViewRightClick)
 
-	EVT_TREE_SEL_CHANGED(IDC_IMAPORT_PIECE_VIEW, UIDesignerFrame::OnProjectImportItemSleChanged)
-	EVT_TREE_ITEM_MENU(IDC_IMAPORT_PIECE_VIEW, UIDesignerFrame::OnProjectImportRightClick)
+	EVT_TREE_SEL_CHANGED(IDC_PROJECT_IMAGE_PIECE, UIDesignerFrame::OnProjectImagePieceSelChanged)
+	EVT_TREE_ITEM_MENU(IDC_PROJECT_IMAGE_PIECE, UIDesignerFrame::OnProjectImagePieceContextMenu)
+
+	EVT_TREE_SEL_CHANGED(IDC_PROJECT_TEXTURE_LIST, UIDesignerFrame::OnProjectTextureListSelChanged)
+	EVT_TREE_ITEM_MENU(IDC_PROJECT_TEXTURE_LIST, UIDesignerFrame::OnProjectTextureListContextMenu)
+
+	EVT_TREE_SEL_CHANGED(IDC_PROJECT_IMAPORTED, UIDesignerFrame::OnProjectImportedSelChanged)
+	EVT_TREE_ITEM_MENU(IDC_PROJECT_IMAPORTED, UIDesignerFrame::OnProjectImportedContextMenu)
+
 	EVT_IMAGE_PIECE_CHANGED(IDC_INPUT_VIEW, UIDesignerFrame::OnImagePieceChanged)
 	EVT_MENU(IDC_DELETE_IMPORTPIECE, UIDesignerFrame::OnDelteImportPiece)
 	EVT_MENU(IDC_LOAD_IMPORTPIECE, UIDesignerFrame::OnLoadImportPiece)
@@ -71,7 +74,11 @@ UIDesignerFrame::~UIDesignerFrame()
 
 void UIDesignerFrame::Init()
 {
-	m_pProjectViewPiece = NULL;
+	m_pProjectNotebook = NULL;
+	m_pProjectImagePiece = NULL;
+	m_pProjectTextureList = NULL;
+	m_pProjectImported = NULL;
+
 	m_pImagePieceView = NULL;
 	m_pImagePieceDocument = NULL;
 }
@@ -122,7 +129,7 @@ void UIDesignerFrame::CreateMenu()
 	}
 
 	pMenuItemFile->AppendSeparator();
-	pMenuItemFile->Append(IDC_IMPORT_PIECE, wxT("&Impot\tCtrl+A"), wxEmptyString, wxITEM_NORMAL);
+	pMenuItemFile->Append(IDC_IMPORT_PIECE, wxT("&Import..."), wxEmptyString, wxITEM_NORMAL);
 
 	pMenuItemFile->Append(wxID_SAVEAS, wxT("Save &As...\tCtrl+Shift+S"), wxEmptyString, wxITEM_NORMAL);
 	pMenuItemFile->AppendSeparator();
@@ -328,18 +335,29 @@ void UIDesignerFrame::CreateToolbar()
 
 void UIDesignerFrame::CreateProjectView()
 {
-	//m_pProjectView = new wxTreeCtrl(this, IDC_PROJECT, wxDefaultPosition, wxDefaultSize, wxTR_SINGLE|wxNO_BORDER);
-	m_pProjectViewPiece = new wxTreeCtrl( this, IDC_PROJECT, wxDefaultPosition, wxSize(200, 100), wxTR_SINGLE );
-	m_auiManager.AddPane(m_pProjectViewPiece, wxAuiPaneInfo()
-		.Name(_T("PieceView")).CaptionVisible(true).CloseButton(false).DestroyOnClose(false).Resizable(true).Floatable(false));
-	/*m_auiManager.LoadPaneInfo(_T("PieceView"), wxAuiPaneInfo().Name(_T("PieceView")).CaptionVisible(true).CloseButton(false).DestroyOnClose(false).Resizable(true).Floatable(false).Hide());*/
-	m_pProjectViewImage = new wxTreeCtrl( this, IDC_PROJECTIMAGE, wxDefaultPosition, wxSize(200, 100), wxTR_SINGLE );
-	m_auiManager.AddPane(m_pProjectViewImage, wxAuiPaneInfo()
-		.Name(_T("ImageView")).CaptionVisible(true).CloseButton(false).DestroyOnClose(false).Resizable(true).Floatable(false));
+	m_pProjectNotebook = new wxNotebook(this, IDC_PROJECT_NOTEBOOK, wxDefaultPosition, wxSize(400, 500), wxNO_BORDER);
+	m_auiManager.AddPane(m_pProjectNotebook, wxAuiPaneInfo()
+		.Name(wxT("Project"))
+		.Caption(wxT("Project"))
+		.Left()
+		.Layer(1)
+		.BestSize(wxSize(400, 500))
+		.CaptionVisible(true)
+		.CloseButton(false)
+		.DestroyOnClose(false)
+		.Resizable(true)
+		.Floatable(false)
+		.FloatingSize(wxSize(400, 500))
+		.Movable(false));
 
-	m_pImportPieceView = new wxTreeCtrl(this,IDC_IMAPORT_PIECE_VIEW, wxDefaultPosition, wxSize(300, 300),wxTR_SINGLE);
-	m_auiManager.AddPane(m_pImportPieceView, wxAuiPaneInfo()
-		.Name(_T("ImportPiece")).CaptionVisible(true).CloseButton(false).DestroyOnClose(false).Resizable(true).Floatable(false));
+	m_pProjectImagePiece = new wxTreeCtrl(m_pProjectNotebook, IDC_PROJECT_IMAGE_PIECE, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	m_pProjectNotebook->AddPage(m_pProjectImagePiece, "Image Piece");
+
+	m_pProjectTextureList = new wxTreeCtrl(m_pProjectNotebook, IDC_PROJECT_IMAGE_PIECE, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	m_pProjectNotebook->AddPage(m_pProjectTextureList, "Texture List");
+
+	m_pProjectImported = new wxTreeCtrl(m_pProjectNotebook, IDC_PROJECT_IMAPORTED, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	m_pProjectNotebook->AddPage(m_pProjectImported, "Imported");
 }
 
 void UIDesignerFrame::CreatePropertyView()
@@ -355,7 +373,6 @@ void UIDesignerFrame::CreatePropertyView()
 	m_pPieceProperty->Append(m_pProtertyWidth);
 	m_pProtertyHight = new wxIntProperty("Hight ", wxPG_LABEL);
 	m_pPieceProperty->Append(m_pProtertyHight);
-	
 
 	m_pImageProperty = new wxPropertyGrid(this, IDC_PROPERTYIMAGE, wxDefaultPosition, wxSize(300, 300), wxPG_SPLITTER_AUTO_CENTER|wxNO_BORDER);
 	m_pImageFileNameProterty = new wxStringProperty("ImageFileName", wxPG_LABEL);
@@ -384,7 +401,8 @@ void UIDesignerFrame::CreatePropertyView()
 		.Resizable(true)
 		.Floatable(false)
 		.FloatingSize(wxSize(300, 500))
-		.Movable(false).Hide());
+		.Movable(false)
+		.Hide());
 
 	m_auiManager.AddPane(m_pImageProperty, wxAuiPaneInfo()
 		.Name(wxT("ImageProerty"))
@@ -451,77 +469,76 @@ void UIDesignerFrame::CreateOutputView()
 
 void UIDesignerFrame::UpdateProjectView()
 {
-	m_pProjectViewPiece->DeleteAllItems();
-	wxTreeItemId rootItem = m_pProjectViewPiece->AddRoot(wxT("ImagePiece"));
+	m_pProjectImagePiece->DeleteAllItems();
+	wxTreeItemId rootItem = m_pProjectImagePiece->AddRoot(wxT("ImagePiece"));
 
 	const UIImagePieceDocument::TM_PIECE_INFO& pieceInfoMap = m_pImagePieceDocument->GetPieceInfoMap();
 	for (UIImagePieceDocument::TM_PIECE_INFO::const_iterator it = pieceInfoMap.begin(); it != pieceInfoMap.end(); ++it)
 	{
 		const UIImagePieceDocument::PIECE_INFO& pieceInfo = it->second;
-		m_pProjectViewPiece->AppendItem(rootItem, pieceInfo.strID);
+		m_pProjectImagePiece->AppendItem(rootItem, pieceInfo.strId);
 	}
-	m_pProjectViewPiece->ExpandAll();
+	m_pProjectImagePiece->ExpandAll();
 
 	wxTreeItemIdValue value;
 	if(pieceInfoMap.empty()) return;
-	m_pProjectViewPiece->SelectItem(m_pProjectViewPiece->GetFirstChild(rootItem, value));
+	m_pProjectImagePiece->SelectItem(m_pProjectImagePiece->GetFirstChild(rootItem, value));
 }
 
 void UIDesignerFrame::UpDateProjectImageView()
 {
-	m_pProjectViewImage->DeleteAllItems();
-	wxTreeItemId rootItem = m_pProjectViewImage->AddRoot(wxT("ImageInfo"));
+	m_pProjectTextureList->DeleteAllItems();
+	wxTreeItemId rootItem = m_pProjectTextureList->AddRoot(wxT("ImageInfo"));
 
 	const UIImagePieceDocument::TM_IMAGE_INFO& ImageMap = m_pImagePieceDocument->GetImageMap();
 	for (UIImagePieceDocument::TM_IMAGE_INFO::const_iterator it = ImageMap.begin(); it != ImageMap.end(); ++it)
 	{
 		const UIImagePieceDocument::IMAGE_INFO& pieceInfo = it->second;
-		m_pProjectViewImage->AppendItem(rootItem, pieceInfo.strFile);
+		m_pProjectTextureList->AppendItem(rootItem, pieceInfo.strFile);
 	}
-	m_pProjectViewImage->ExpandAll();
+	m_pProjectTextureList->ExpandAll();
 
 	wxTreeItemIdValue value;
 	if(ImageMap.empty()) return;
-	m_pProjectViewImage->SelectItem(m_pProjectViewImage->GetFirstChild(rootItem, value));
+	m_pProjectTextureList->SelectItem(m_pProjectTextureList->GetFirstChild(rootItem, value));
 
 }
 
 void UIDesignerFrame::UpDataProjectImportView()
 {
-	m_pImportPieceView->DeleteAllItems();
-	wxTreeItemId rootItem = m_pImportPieceView->AddRoot(wxT("ImportPiece"));
+	m_pProjectImported->DeleteAllItems();
+	wxTreeItemId rootItem = m_pProjectImported->AddRoot(wxT("ImportPiece"));
 
 	UIImagePieceView::TM_PIECE& ImageMap = m_pImagePieceView->GetPieceMap();
 	for (UIImagePieceView::TM_PIECE::iterator it = ImageMap.begin(); it != ImageMap.end(); ++it)
 	{
 		UIImagePieceView::PIECEVIEW_INFO& pieceInfo = it->second;
-		m_pImportPieceView->AppendItem(rootItem, pieceInfo.StrImage);
+		m_pProjectImported->AppendItem(rootItem, pieceInfo.strImage);
 	}
-	m_pImportPieceView->ExpandAll();
+	m_pProjectImported->ExpandAll();
 
 	wxTreeItemIdValue value;
 	if(ImageMap.empty()) return;
-	m_pImportPieceView->SelectItem(m_pProjectViewImage->GetFirstChild(rootItem, value));
+	m_pProjectImported->SelectItem(m_pProjectTextureList->GetFirstChild(rootItem, value));
 }
+
 void UIDesignerFrame::UpdateImagePieceView(const UIImagePieceDocument::PIECE_INFO* pPieceInfo)
 {
 	if (pPieceInfo)
 	{
-		const wxString& strImage = m_pImagePieceDocument->FindImage(pPieceInfo->nImageID);
+		const wxString& strImage = m_pImagePieceDocument->FindImage(pPieceInfo->nImageId);
 		m_pImagePieceView->LoadImageFromFile(strImage);
 	}
 	m_pImagePieceView->SetSelectedPiece(pPieceInfo);
 }
 
-
 void UIDesignerFrame::OnFileNew(wxCommandEvent& event)
 {
-	// TODO: 
-	UINewImagePieceView NewImagePiece(this,ID_NEWIMAGEPIECE);
-	if(NewImagePiece.ShowModal() == wxID_OK)
+	DialogNewPiece dialogNewPiece(this,ID_NEWIMAGEPIECE);
+	if(dialogNewPiece.ShowModal() == wxID_OK)
 	{
-		m_pImagePieceDocument->NewFile(NewImagePiece.GetValue());
-		m_pOutputView->AppendText("Add The New Xml File :" + NewImagePiece.GetValue() + "\n");
+		m_pImagePieceDocument->NewFile(dialogNewPiece.GetValue());
+		m_pOutputView->AppendText("Add The New Xml File :" + dialogNewPiece.GetValue() + "\n");
 		UpdateProjectView();
 		UpDateProjectImageView();
 	}
@@ -551,13 +568,12 @@ void UIDesignerFrame::OnFileSave(wxCommandEvent& event)
 void UIDesignerFrame::OnFileClose(wxCommandEvent& event)
 {
 	wxMessageDialog Dialog(NULL,"Don't you want to close the file",wxEmptyString, wxNO_DEFAULT|wxYES_NO);
-	if(Dialog.ShowModal() != wxID_YES)
-		return;
+	if(Dialog.ShowModal() != wxID_YES) return;
+
 	if(m_pImagePieceDocument->GetImageMap().size() != 0)
 	{
 		wxMessageDialog MessageDialog(NULL,"Don't you want to save the file",wxEmptyString, wxNO_DEFAULT|wxYES_NO);
-		if(MessageDialog.ShowModal() == wxID_YES)
-				m_pImagePieceDocument->SaveFile(m_pImagePieceDocument->GetFileName());		
+		if(MessageDialog.ShowModal() == wxID_YES) m_pImagePieceDocument->SaveFile(m_pImagePieceDocument->GetFileName());		
 		m_pImagePieceDocument->Clear();
 		m_pImagePieceView->ClearImportPiece();
 		UpdateProjectView();
@@ -575,36 +591,37 @@ void UIDesignerFrame::OnImport(wxCommandEvent& event)
 {
 	if(m_pImagePieceDocument->GetImageMap().size() == 0) return;
 
-	UIAddImageInfoView uiAddImage(this, ID_ADDPIECE);
+	DialogAddImage uiAddImage(this, ID_ADDPIECE);
 	if(uiAddImage.ShowModal() == wxID_OK)
 	{
-		UIImagePieceDocument::IMAGE_INFO ImageInfo = uiAddImage.GetValue();
-		wxString strFileName = ImageInfo.strFile;
-		int nImageID = ImageInfo.nID;
+		const UIImagePieceDocument::IMAGE_INFO& ImageInfo = uiAddImage.GetValue();
+		const wxString& strFileName = ImageInfo.strFile;
+		int nImageID = ImageInfo.nId;
 		wxBitmap* pBitMap = new wxBitmap();
 		if(!pBitMap->LoadFile(strFileName, wxBITMAP_TYPE_PNG))
 		{
 			SAFE_DELETE(pBitMap);
 			return;
 		}
-		UIImagePieceView::PIECEVIEW_INFO PieceInof;
+		UIImagePieceView::PIECEVIEW_INFO pieceInfo;
 		UIImagePieceDocument::TM_IMAGE_INFO::iterator it  = m_pImagePieceDocument->GetImageMap().find(nImageID);
-		PieceInof.StrBackGroundImage = it->second.strFile;
-		PieceInof.pBitMap = pBitMap;
-		PieceInof.StrImage = strFileName;
+		pieceInfo.strBgImage = it->second.strFile;
+		pieceInfo.pBitmap = pBitMap;
+		pieceInfo.strImage = strFileName;
 		wxMemoryDC* MenDc = new wxMemoryDC();
 		MenDc->SelectObject(*pBitMap);
-		PieceInof.pMemDC = MenDc;
+		pieceInfo.pMemDc = MenDc;
 		wxRect rect;
 		rect.x = 0;
 		rect.y = 0;
 		rect.width = pBitMap->GetWidth();
 		rect.height = pBitMap->GetHeight();
-		PieceInof.rect = rect;
-		m_pImagePieceView->AddImportPiece(PieceInof);
+		pieceInfo.rect = rect;
+		m_pImagePieceView->AddImportPiece(pieceInfo);
 		UpDataProjectImportView();
 	}
 }
+
 void UIDesignerFrame::OnLayoutMoveLeft(wxCommandEvent& event)
 {
 	m_pImagePieceView->MoveRelative(-1, 0);
@@ -641,10 +658,10 @@ void UIDesignerFrame::OnViewZoomOut(wxCommandEvent& event)
 
 }
 
-void UIDesignerFrame::OnProjectPieceItemSelChanged(wxTreeEvent& event)
+void UIDesignerFrame::OnProjectImagePieceSelChanged(wxTreeEvent& event)
 {
 	m_CurPieceTreeItemId = event.GetItem();
-	wxString strItemID = m_pProjectViewPiece->GetItemText(m_CurPieceTreeItemId);
+	wxString strItemID = m_pProjectImagePiece->GetItemText(m_CurPieceTreeItemId);
 
 	UIImagePieceDocument::PIECE_INFO* pPieceInfo = m_pImagePieceDocument->FindPieceInfo(strItemID);
 	if (!pPieceInfo) return;
@@ -656,30 +673,32 @@ void UIDesignerFrame::OnProjectPieceItemSelChanged(wxTreeEvent& event)
 	m_auiManager.GetPane(m_pImportPieceProperty).Hide();
 	m_auiManager.Update();
 }
-void UIDesignerFrame::OnPiecePropertyGridChange(wxPropertyGridEvent &event)
+
+void UIDesignerFrame::OnPiecePropertyGridChange(wxPropertyGridEvent& event)
 {
 	if(!m_CurPieceTreeItemId) return;
-	wxString strItemID = m_pProjectViewPiece->GetItemText(m_CurPieceTreeItemId);
+	wxString strItemID = m_pProjectImagePiece->GetItemText(m_CurPieceTreeItemId);
 	UIImagePieceDocument::PIECE_INFO* pPieceInfo = m_pImagePieceDocument->FindPieceInfo(strItemID);
+
 	if (!pPieceInfo) return;
-	pPieceInfo->strID = m_pProtertyStrID->GetValue().GetString();
-	pPieceInfo->rect.x = m_pProtertyX->GetValue().GetInteger();
-	pPieceInfo->rect.y = m_pProtertyY->GetValue().GetInteger();
-	pPieceInfo->rect.width = m_pProtertyWidth->GetValue().GetInteger();
-	pPieceInfo->rect.height = m_pProtertyHight->GetValue().GetInteger();
+	pPieceInfo->strId = m_pProtertyStrID->GetValue().GetString();
+	pPieceInfo->pieceRect.x = m_pProtertyX->GetValue().GetInteger();
+	pPieceInfo->pieceRect.y = m_pProtertyY->GetValue().GetInteger();
+	pPieceInfo->pieceRect.width = m_pProtertyWidth->GetValue().GetInteger();
+	pPieceInfo->pieceRect.height = m_pProtertyHight->GetValue().GetInteger();
 	UpdateImagePieceView(pPieceInfo);
 }
 
 void UIDesignerFrame::UpDatePieceProterty(const UIImagePieceDocument::PIECE_INFO& PieceInfo)
 {
-	m_pProtertyStrID->SetValue(PieceInfo.strID);
-	m_pProtertyX->SetValue(PieceInfo.rect.x);
-	m_pProtertyY->SetValue(PieceInfo.rect.y);
-	m_pProtertyWidth->SetValue(PieceInfo.rect.width);
-	m_pProtertyHight->SetValue(PieceInfo.rect.height);
+	m_pProtertyStrID->SetValue(PieceInfo.strId);
+	m_pProtertyX->SetValue(PieceInfo.pieceRect.x);
+	m_pProtertyY->SetValue(PieceInfo.pieceRect.y);
+	m_pProtertyWidth->SetValue(PieceInfo.pieceRect.width);
+	m_pProtertyHight->SetValue(PieceInfo.pieceRect.height);
 }
 
-void UIDesignerFrame::OnProjectPieceRightClick(wxTreeEvent& event)
+void UIDesignerFrame::OnProjectImagePieceContextMenu(wxTreeEvent& event)
 {
 	 m_CurPieceTreeItemId = event.GetItem();
 	 wxPoint clientpt = event.GetPoint();
@@ -687,14 +706,14 @@ void UIDesignerFrame::OnProjectPieceRightClick(wxTreeEvent& event)
 	 menu.Append(ID_ADDPIECEMENU,wxT("&Add Piece"));
 	 menu.Append(ID_DELETE_PIECE, wxT("&Delete Piece"));
 	 menu.Append(ID_CUT_PIECE, wxT("&Cut Piece"));
-	 m_pProjectViewPiece->PopupMenu(&menu, clientpt);
+	 m_pProjectImagePiece->PopupMenu(&menu, clientpt);
 }
 
-void UIDesignerFrame::OnProjectImageItemSelChanged(wxTreeEvent& event)
+void UIDesignerFrame::OnProjectTextureListSelChanged(wxTreeEvent& event)
 {
 	//TODO: update the 
 	m_CurImageTreeItemId = event.GetItem();
-	wxString strItemID = m_pProjectViewPiece->GetItemText(m_CurImageTreeItemId);
+	wxString strItemID = m_pProjectImagePiece->GetItemText(m_CurImageTreeItemId);
 	int KeyValue = m_pImagePieceDocument->GetImageMapKeyValue(strItemID);
 	UIImagePieceDocument::TM_IMAGE_INFO::iterator it = m_pImagePieceDocument->GetImageMap().find(KeyValue);
 	if(it != m_pImagePieceDocument->GetImageMap().end())
@@ -708,23 +727,23 @@ void UIDesignerFrame::OnProjectImageItemSelChanged(wxTreeEvent& event)
 void UIDesignerFrame::UpdateImageProterty(const UIImagePieceDocument::IMAGE_INFO& ImageInfo)
 {
 	m_pImageFileNameProterty->SetValue(ImageInfo.strFile);
-	m_pImageIDProterty->SetValue(ImageInfo.nID);
+	m_pImageIDProterty->SetValue(ImageInfo.nId);
 }
 
 void UIDesignerFrame::OnImagePropertyGridChange(wxPropertyGridEvent& event)
 {
 	//TODO:
 }
-void UIDesignerFrame::OnProjectImageViewRightClick(wxTreeEvent& event)
+
+void UIDesignerFrame::OnProjectTextureListContextMenu(wxTreeEvent& event)
 {
 	m_CurImageTreeItemId = event.GetItem();
 	wxPoint clientpt = event.GetPoint();
 	wxMenu menu;
 	menu.Append(ID_ADDIMAGEMENU,wxT("&Add Image"));
 	menu.Append(ID_DELETE_IMAGE, wxT("&Delete Image"));
-	m_pProjectViewImage->PopupMenu(&menu, clientpt);
+	m_pProjectTextureList->PopupMenu(&menu, clientpt);
 }
-
 
 void UIDesignerFrame::OnImagePieceChanged(wxImagePieceEvent& event)
 {
@@ -739,13 +758,12 @@ void UIDesignerFrame::OnAddPieceInfo(wxCommandEvent& event)
 		m_pOutputView->AppendText("Error: Don't have any Image\n");
 		return;
 	}
-	AddImageDialog pAddImage(this, ID_ADDIMAGE, wxT("Add Image"));
+	DialogAddPiece pAddImage(this, ID_ADDIMAGE, wxT("Add Image"));
 
 	if(pAddImage.ShowModal() == wxID_OK)
 	{
 		UIImagePieceDocument::PIECE_INFO vlaue = pAddImage.GetValue();
-		if(m_pImagePieceDocument->FindImage(vlaue.nImageID) == wxEmptyString)
-			return;
+		if(m_pImagePieceDocument->FindImage(vlaue.nImageId) == wxEmptyString) return;
 		m_pImagePieceDocument->AddPieceInfo(vlaue);
 		UpdateProjectView();
 	}
@@ -756,38 +774,39 @@ void UIDesignerFrame::OnDeletePieceInfo(wxCommandEvent& event)
 {
 	wxMessageDialog Dialog(NULL, "Don't you want to delete it!", wxEmptyString, wxNO_DEFAULT| wxYES_NO);
 	if(Dialog.ShowModal() != wxID_YES) return;
-	wxString strItemID = m_pProjectViewPiece->GetItemText(m_CurPieceTreeItemId);
+	wxString strItemID = m_pProjectImagePiece->GetItemText(m_CurPieceTreeItemId);
 
 	if(!m_pImagePieceDocument->GetPieceInfoMap().erase(strItemID))
 		m_pOutputView->AppendText("Error: Failed delete" + strItemID + "\n");
 	UpdateProjectView();
 	event.Skip();
 }
+
 void UIDesignerFrame::OnCutPiece(wxCommandEvent& event)
 {
-	wxString strItemID = m_pProjectViewPiece->GetItemText(m_CurPieceTreeItemId);
+	wxString strItemID = m_pProjectImagePiece->GetItemText(m_CurPieceTreeItemId);
 	UIImagePieceDocument::TM_PIECE_INFO::iterator PieceIt =  m_pImagePieceDocument->GetPieceInfoMap().find(strItemID);
 	
 	if(PieceIt == m_pImagePieceDocument->GetPieceInfoMap().end()) return;
-	UIImagePieceDocument::TM_IMAGE_INFO::iterator ImageIt  = m_pImagePieceDocument->GetImageMap().find((*PieceIt).second.nImageID);
+	UIImagePieceDocument::TM_IMAGE_INFO::iterator ImageIt  = m_pImagePieceDocument->GetImageMap().find((*PieceIt).second.nImageId);
 	if(ImageIt == m_pImagePieceDocument->GetImageMap().end()) return;
 	wxString StrBackImageFileName = (*ImageIt).second.strFile;
 	
 	UIImagePieceView::TM_BITMAP_CACHE::iterator BitMapIt = m_pImagePieceView->GetBitCacheMap().find(StrBackImageFileName);
-	if( BitMapIt == m_pImagePieceView->GetBitCacheMap().end()) return;
+	if(BitMapIt == m_pImagePieceView->GetBitCacheMap().end()) return;
 
 	wxImage BackGroundImage(BitMapIt->second->ConvertToImage());
-	wxImage SubImage = BackGroundImage.GetSubImage(PieceIt->second.rect);
-	wxBitmap* pNewBitMap = new wxBitmap(SubImage,32 );
+	wxImage SubImage = BackGroundImage.GetSubImage(PieceIt->second.pieceRect);
+	wxBitmap* pNewBitMap = new wxBitmap(SubImage,32);
 	wxMemoryDC* pMenDc = new wxMemoryDC();
 	pMenDc->SelectObject(*pNewBitMap);
 	
 	UIImagePieceView::PIECEVIEW_INFO PieceInof;
-	PieceInof.pBitMap = pNewBitMap;
-	PieceInof.pMemDC = pMenDc;
-	PieceInof.rect = PieceIt->second.rect;
-	PieceInof.StrBackGroundImage = StrBackImageFileName;
-	PieceInof.StrImage = strItemID;
+	PieceInof.pBitmap = pNewBitMap;
+	PieceInof.pMemDc = pMenDc;
+	PieceInof.rect = PieceIt->second.pieceRect;
+	PieceInof.strBgImage = StrBackImageFileName;
+	PieceInof.strImage = strItemID;
 	m_pImagePieceView->AddImportPiece(PieceInof);
 	UpDataProjectImportView();
 	
@@ -814,14 +833,15 @@ void UIDesignerFrame::OnCutPiece(wxCommandEvent& event)
 	m_pImagePieceDocument->GetPieceInfoMap().erase(strItemID);
 	UpdateProjectView();
 }
+
 void UIDesignerFrame::OnAddImageInfo(wxCommandEvent& event)
 {
-	UIAddImageInfoView uiAddImage(this, ID_ADDPIECE);
+	DialogAddImage uiAddImage(this, ID_ADDPIECE);
 	int value = uiAddImage.ShowModal();
 	if(value == wxID_OK)
 	{
 		UIImagePieceDocument::IMAGE_INFO ImageInfo = uiAddImage.GetValue();
-		if(m_pImagePieceDocument->FindImage(ImageInfo.nID) != wxEmptyString)
+		if(m_pImagePieceDocument->FindImage(ImageInfo.nId) != wxEmptyString)
 		{
 			m_pOutputView->AppendText("Error:Have the same ID\n");
 			return;
@@ -836,7 +856,7 @@ void UIDesignerFrame::OnDeleteImageInfo(wxCommandEvent& event)
 {
 	wxMessageDialog Dialog(NULL, "Don't you want to delete it!", wxEmptyString, wxNO_DEFAULT| wxYES_NO);
 	if(Dialog.ShowModal() != wxID_YES) return;
-	wxString strItemID = m_pProjectViewPiece->GetItemText(m_CurImageTreeItemId);
+	wxString strItemID = m_pProjectImagePiece->GetItemText(m_CurImageTreeItemId);
 	int KeyValue = m_pImagePieceDocument->GetImageMapKeyValue(strItemID);
 	if(!m_pImagePieceDocument->GetImageMap().erase(KeyValue))
 		m_pOutputView->AppendText("Error: Failed delete" + strItemID + "\n");
@@ -844,14 +864,14 @@ void UIDesignerFrame::OnDeleteImageInfo(wxCommandEvent& event)
 	event.Skip();
 }
 
-void UIDesignerFrame::OnProjectImportItemSleChanged(wxTreeEvent& event)
+void UIDesignerFrame::OnProjectImportedSelChanged(wxTreeEvent& event)
 {
 	m_CurImportTreeItemId = event.GetItem();
-	wxString strItemID = m_pImportPieceView->GetItemText(m_CurImportTreeItemId);
+	wxString strItemID = m_pProjectImported->GetItemText(m_CurImportTreeItemId);
 	UIImagePieceView::TM_PIECE::iterator pieceInof = m_pImagePieceView->GetPieceMap().find(strItemID);
 	if(pieceInof == m_pImagePieceView->GetPieceMap().end()) return;
-	m_pImportPieceFileName->SetValue((*pieceInof).second.StrImage);
-	m_pImageID->SetValue(m_pImagePieceDocument->GetImageMapKeyValue((*pieceInof).second.StrBackGroundImage));
+	m_pImportPieceFileName->SetValue((*pieceInof).second.strImage);
+	m_pImageID->SetValue(m_pImagePieceDocument->GetImageMapKeyValue((*pieceInof).second.strBgImage));
 	m_pImportPieceX->SetValue((*pieceInof).second.rect.x);
 	m_pImportPieceY->SetValue((*pieceInof).second.rect.y);
 	m_pImagePieceView->Update();
@@ -863,19 +883,19 @@ void UIDesignerFrame::OnProjectImportItemSleChanged(wxTreeEvent& event)
 	m_auiManager.Update();
 }
 
-void UIDesignerFrame::OnProjectImportRightClick(wxTreeEvent& event)
+void UIDesignerFrame::OnProjectImportedContextMenu(wxTreeEvent& event)
 {
 	m_CurImportTreeItemId = event.GetItem();
 	wxPoint clientpt = event.GetPoint();
 	wxMenu menu;
 	menu.Append(IDC_DELETE_IMPORTPIECE, wxT("&Delete"));
 	menu.Append(IDC_LOAD_IMPORTPIECE, wxT("&Load"));
-	m_pImportPieceView->PopupMenu(&menu, clientpt);
+	m_pProjectImported->PopupMenu(&menu, clientpt);
 }
 
 void UIDesignerFrame::OnImportPropertyGridChange(wxPropertyGridEvent& event)
 {
-	wxString strItemID = m_pImportPieceView->GetItemText(m_CurImportTreeItemId);
+	wxString strItemID = m_pProjectImported->GetItemText(m_CurImportTreeItemId);
 	UIImagePieceView::TM_PIECE::iterator pieceInof = m_pImagePieceView->GetPieceMap().find(strItemID);
 	if(pieceInof == m_pImagePieceView->GetPieceMap().end()) return;
 
@@ -887,7 +907,7 @@ void UIDesignerFrame::OnImportPropertyGridChange(wxPropertyGridEvent& event)
 	if(it == m_pImagePieceDocument->GetImageMap().end()) return;
 	
 	
-	pieceInof->second.StrBackGroundImage = it->second.strFile;
+	pieceInof->second.strBgImage = it->second.strFile;
 	pieceInof->second.rect.x = nX;
 	pieceInof->second.rect.y = nY;
 	m_pImagePieceView->Update();
@@ -896,25 +916,24 @@ void UIDesignerFrame::OnImportPropertyGridChange(wxPropertyGridEvent& event)
 
 void UIDesignerFrame::OnDelteImportPiece(wxCommandEvent& event)
 {
-	wxMessageDialog Dialog(this, "Do you want to delete it!", wxEmptyString,  wxNO_DEFAULT| wxYES_NO);
-	if(Dialog.ShowModal() != wxID_YES)return;
-	wxString strItemID = m_pImportPieceView->GetItemText(m_CurImportTreeItemId);
-	if(!m_pImagePieceView->GetPieceMap().erase(strItemID))
-		m_pOutputView->AppendText("Failed delete " + strItemID);
+	wxMessageDialog dialog(this, "Do you want to delete it!", wxEmptyString,  wxNO_DEFAULT| wxYES_NO);
+	if(dialog.ShowModal() != wxID_YES) return;
+
+	wxString strItemID = m_pProjectImported->GetItemText(m_CurImportTreeItemId);
+	if(!m_pImagePieceView->GetPieceMap().erase(strItemID)) m_pOutputView->AppendText("Failed delete " + strItemID);
 	UpDataProjectImportView();
 	m_pImagePieceView->Update();
 }
 
 void UIDesignerFrame::OnLoadImportPiece(wxCommandEvent& event)
 {
-	wxString strItemID = m_pImportPieceView->GetItemText(m_CurImportTreeItemId);
+	wxString strItemID = m_pProjectImported->GetItemText(m_CurImportTreeItemId);
 	UIImagePieceView::TM_PIECE::iterator pieceInof = m_pImagePieceView->GetPieceMap().find(strItemID);
 	if(pieceInof == m_pImagePieceView->GetPieceMap().end()) return;
 	wxString StrFileName = pieceInof->first;
 	wxString Type = StrFileName.substr(StrFileName.size() - 4, 4);
-	if(Type != ".png")
-		StrFileName.Append(".png");
-	wxImage Image(pieceInof->second.pBitMap->ConvertToImage());
+	if(Type != ".png") StrFileName.Append(".png");
+	wxImage Image(pieceInof->second.pBitmap->ConvertToImage());
 	if(Image.SaveFile(StrFileName, wxBITMAP_TYPE_PNG))
 	{
 		wxMessageBox("Load " + StrFileName + " Success");
@@ -923,7 +942,7 @@ void UIDesignerFrame::OnLoadImportPiece(wxCommandEvent& event)
 
 void UIDesignerFrame::OnSortPiece(wxCommandEvent& event)
 {
-	CombinaPiece::SortPiece(m_pImagePieceDocument->GetPieceInfoMap(), m_pImagePieceView->GetBitCacheMap(), m_pImagePieceDocument->GetImageMap());
+	PieceCombiner::SortPiece(m_pImagePieceDocument->GetPieceInfoMap(), m_pImagePieceView->GetBitCacheMap(), m_pImagePieceDocument->GetImageMap());
 	UpdateProjectView();
 	m_pImagePieceView->UpdateBitMapCache();
 }
