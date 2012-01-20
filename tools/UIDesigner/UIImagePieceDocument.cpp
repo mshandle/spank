@@ -53,7 +53,7 @@ bool UIImagePieceDocument::OpenFile(const wxString& strFile)
 		PIECE_INFO pieceInfo;
 		pieceInfo.strId = pElmPiece->Attribute("id");
 
-		if (!pElmPiece->Attribute("image", &pieceInfo.nImageId)) return false;
+		if (!pElmPiece->Attribute("image_id", &pieceInfo.nImageId)) return false;
 
 		if (!pElmPiece->Attribute("x", &pieceInfo.pieceRect.x)) return false;
 		if (!pElmPiece->Attribute("y", &pieceInfo.pieceRect.y)) return false;
