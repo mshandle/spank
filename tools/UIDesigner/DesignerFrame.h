@@ -10,10 +10,8 @@
 
 #include <wx/frame.h>
 #include <wx/aui/aui.h>
+#include <wx/treectrl.h>
 #include <wx/propgrid/property.h>
-
-#include "ImagePieceEditor.h"
-#include "ImagePieceDocument.h"
 
 class DesignerFrame : public wxFrame
 {
@@ -36,7 +34,7 @@ public:
 
  		IDC_TOOLBAR,
 		IDC_NOTEBOOK,
-		IDC_IMAGE_PIECE_LIST,
+		IDC_PIECE_LIST,
 		IDC_IMAGE_LIST,
 
 		IDC_PROPERTY,
@@ -65,8 +63,6 @@ private:
 	void CreateEditorView();
 	void CreateOutputView();
 
-	void UpdateImagePieceEditor(const PieceInfo* pPieceInfo);
-	
 	void OnFileOpen(wxCommandEvent& event);
 	void OnFileSave(wxCommandEvent& event);
 	void OnFileClose(wxCommandEvent& event);
@@ -80,11 +76,9 @@ private:
 	void OnImageListSelected(wxTreeEvent& event);
 
 private:
-	static DesignerFrame* m_pInstance;
+	static DesignerFrame* m_pDesignerFrame;
 
 	wxAuiManager m_auiManager;
-
-	ImagePieceEditor* m_pImagePieceEditor;
 
 	wxTextCtrl* m_pOutputView;
 	wxPropertyGrid* m_pPropertyGrid;

@@ -72,6 +72,8 @@ public:
 
 	virtual wxSize DoGetBestSize() const;
 
+	static ImagePieceEditor& GetInstance();
+
 	void SetSelection(PieceInfo* pPieceInfo);
 	PieceInfo* GetSelection() const;
 
@@ -106,6 +108,7 @@ private:
 	void DrawSelection(wxDC& dc);
 
 private:
+	static ImagePieceEditor* m_pImagePieceEditor;
 	wxMemoryDC m_dcImage;
 	
 	wxBitmap m_bmpBackBuffer;

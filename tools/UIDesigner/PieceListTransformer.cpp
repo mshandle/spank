@@ -43,10 +43,6 @@ void PieceListTransformer::UpdateListView()
 		pPieceInfo->SetTreeItemId(itemId);
 	}
 	m_pListView->ExpandAll();
-
-	wxTreeItemIdValue value;
-	if(pieceInfoMap.empty()) return;
-	m_pListView->SelectItem(m_pListView->GetFirstChild(rootItem, value));
 }
 
 PieceInfo* PieceListTransformer::GetSelectedPieceInfo()
@@ -54,4 +50,12 @@ PieceInfo* PieceListTransformer::GetSelectedPieceInfo()
 	wxString strPieceId = m_pListView->GetItemText(m_pListView->GetSelection());
 	PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfo(strPieceId);
 	return pPieceInfo;
+}
+
+void PieceListTransformer::SetSelectedItem(PieceInfo* pPieceInfo)
+{
+	if (pPieceInfo)
+	{
+		m_pListView->SelectItem(pPieceInfo->GetTreeItemId(), true);
+	}
 }

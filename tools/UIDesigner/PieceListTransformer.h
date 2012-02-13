@@ -20,6 +20,7 @@ public:
 	void UpdateListView();
 
 	PieceInfo* GetSelectedPieceInfo();
+	void SetSelectedItem(PieceInfo* pPieceInfo);
 
 protected:
 	PieceListTransformer();

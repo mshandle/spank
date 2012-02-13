@@ -18,7 +18,9 @@ public:
 
 	bool Initialize(wxTreeCtrl* pTreeCtrl);
 	void UpdateListView();
+
 	ImageInfo* GetSelectedImageInfo();
+	void SetSelectedItem(ImageInfo* pImageInfo);
 
 protected:
 	ImageListTransformer();

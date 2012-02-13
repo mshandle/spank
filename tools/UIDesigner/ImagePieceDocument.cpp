@@ -23,6 +23,8 @@ bool ImagePieceDocument::OpenFile(const wxString& strFile)
 	TiXmlDocument doc;
 	if (!doc.LoadFile(strFile)) return false;
 
+	Clear();
+
 	TiXmlElement* pElmImagePiece = doc.RootElement();
 	if (!pElmImagePiece || strcmp(pElmImagePiece->Value(), "ImagePiece") != 0) return false;
 
@@ -30,7 +32,6 @@ bool ImagePieceDocument::OpenFile(const wxString& strFile)
 	if (!pElmImageList) return false;
 
 	// parse image list
-	m_ImageInfoMap.clear();
 	TiXmlElement* pElmImage = pElmImageList->FirstChildElement("Image");
 	while (pElmImage)
 	{
@@ -42,7 +43,6 @@ bool ImagePieceDocument::OpenFile(const wxString& strFile)
 
 	TiXmlElement* pElmPieceList = pElmImagePiece->FirstChildElement("PieceList");
 	// parse piece list
-	m_PieceInfoMap.clear();
 	TiXmlElement* pElmPiece = pElmPieceList->FirstChildElement("Piece");
 	while (pElmPiece)
 	{

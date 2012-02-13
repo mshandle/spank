@@ -11,8 +11,11 @@
 #include <wx/propgrid/advprops.h>
 #include <wx/treectrl.h>
 #include <wx/filedlg.h>
+
 #include "ImageListTransformer.h"
 #include "PieceListTransformer.h"
+#include "ImagePieceEditor.h"
+#include "ImagePieceDocument.h"
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
@@ -26,35 +29,35 @@ BEGIN_EVENT_TABLE(DesignerFrame, wxFrame)
 	EVT_MENU(wxID_ZOOM_IN, DesignerFrame::OnViewZoomIn)
 	EVT_MENU(wxID_ZOOM_OUT, DesignerFrame::OnViewZoomOut)
 
-	EVT_TREE_SEL_CHANGED(IDC_IMAGE_PIECE_LIST, DesignerFrame::OnImagePieceListSelected)
+	EVT_TREE_SEL_CHANGED(IDC_PIECE_LIST, DesignerFrame::OnImagePieceListSelected)
 	EVT_TREE_SEL_CHANGED(IDC_IMAGE_LIST, DesignerFrame::OnImageListSelected)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(DesignerFrame, wxFrame)
 
-DesignerFrame* DesignerFrame::m_pInstance = NULL;
+DesignerFrame* DesignerFrame::m_pDesignerFrame = NULL;
 
 DesignerFrame::DesignerFrame()
 :wxFrame(NULL, wxID_ANY, wxT("UI Designer"), wxDefaultPosition, wxSize(800, 600))
 {
-	m_pInstance = this;
+	m_pDesignerFrame = this;
 	CreateControls();
 }
 
 DesignerFrame::~DesignerFrame()
 {
 	m_auiManager.UnInit();
-	m_pInstance = NULL;
+	m_pDesignerFrame = NULL;
 }
 
 DesignerFrame& DesignerFrame::GetInstance()
 {
-	return *m_pInstance;
+	return *m_pDesignerFrame;
 }
 
 void DesignerFrame::Init()
 {
-	m_pImagePieceEditor = NULL;
+	// TODO: 
 }
 
 void DesignerFrame::CreateControls()
@@ -226,8 +229,8 @@ void DesignerFrame::CreateListView()
 		.FloatingSize(wxSize(400, 500))
 		.Movable(false));
 
-	wxTreeCtrl* pImagePieceListView = new wxTreeCtrl(pNotebookView, IDC_IMAGE_PIECE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
-	pNotebookView->AddPage(pImagePieceListView, "Image Piece List");
+	wxTreeCtrl* pImagePieceListView = new wxTreeCtrl(pNotebookView, IDC_PIECE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	pNotebookView->AddPage(pImagePieceListView, "Piece List");
 	PieceListTransformer::GetInstance().Initialize(pImagePieceListView);
 
 	wxTreeCtrl* pImageListView = new wxTreeCtrl(pNotebookView, IDC_IMAGE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
@@ -254,8 +257,8 @@ void DesignerFrame::CreatePropertyView()
 
 void DesignerFrame::CreateEditorView()
 {
-	m_pImagePieceEditor = new ImagePieceEditor(this, IDC_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
-	m_auiManager.AddPane(m_pImagePieceEditor, wxAuiPaneInfo()
+	ImagePieceEditor* pImagePieceEditor = new ImagePieceEditor(this, IDC_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
+	m_auiManager.AddPane(pImagePieceEditor, wxAuiPaneInfo()
 		.Name(wxT("Editor"))
 		.Caption(wxT("Editor"))
 		.Centre()
@@ -286,16 +289,6 @@ void DesignerFrame::CreateOutputView()
 		.Floatable(false)
 		.FloatingSize(wxSize(500, 200))
 		.Movable(false));
-}
-
-void DesignerFrame::UpdateImagePieceEditor(const PieceInfo* pPieceInfo)
-{
-// 	if (pPieceInfo)
-// 	{
-// 		const wxString& strImage = UIImagePieceDocument::GetInstance().FindImage(pPieceInfo->nImageId);
-// 		m_pImagePieceEditor->LoadImageFromFile(strImage);
-// 	}
-// 	m_pImagePieceEditor->SetSelectedPiece(pPieceInfo);
 }
 
 void DesignerFrame::OnFileOpen(wxCommandEvent& event)
@@ -341,17 +334,17 @@ void DesignerFrame::OnExit(wxCommandEvent& event)
 
 void DesignerFrame::OnViewZoom100(wxCommandEvent& event)
 {
-	m_pImagePieceEditor->Zoom(ImagePieceEditor::ZOOM_MIN);
+	ImagePieceEditor::GetInstance().Zoom(ImagePieceEditor::ZOOM_MIN);
 }
 
 void DesignerFrame::OnViewZoomIn(wxCommandEvent& event)
 {
-	m_pImagePieceEditor->ZoomIn();
+	ImagePieceEditor::GetInstance().ZoomIn();
 }
 
 void DesignerFrame::OnViewZoomOut(wxCommandEvent& event)
 {
-	m_pImagePieceEditor->ZoomOut();
+	ImagePieceEditor::GetInstance().ZoomOut();
 }
 
 void DesignerFrame::OnImagePieceListSelected(wxTreeEvent& event)
@@ -360,14 +353,15 @@ void DesignerFrame::OnImagePieceListSelected(wxTreeEvent& event)
 	if (pPieceInfo)
 	{
 		ImageInfo* pImageInfo = ImagePieceDocument::GetInstance().FindImageInfo(pPieceInfo->GetImageId());
-		m_pImagePieceEditor->SetImage(pImageInfo);
+		ImagePieceEditor::GetInstance().SetImage(pImageInfo);
+		ImageListTransformer::GetInstance().SetSelectedItem(pImageInfo);
 	}
-	m_pImagePieceEditor->SetSelection(pPieceInfo);
+	ImagePieceEditor::GetInstance().SetSelection(pPieceInfo);
 }
 
 void DesignerFrame::OnImageListSelected(wxTreeEvent& event)
 {
 	ImageInfo* pImageInfo = ImageListTransformer::GetInstance().GetSelectedImageInfo();
-	m_pImagePieceEditor->SetImage(pImageInfo);
-	m_pImagePieceEditor->SetSelection(NULL);
+	ImagePieceEditor::GetInstance().SetImage(pImageInfo);
+	ImagePieceEditor::GetInstance().SetSelection(NULL);
 }

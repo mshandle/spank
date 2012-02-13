@@ -7,6 +7,9 @@
  */
 #include "ImagePieceEditor.h"
 #include "ImagePieceDocument.h"
+#include "PieceListTransformer.h"
+#include "ImageListTransformer.h"
+
 #include <wx/dcclient.h>
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
@@ -26,6 +29,8 @@ END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(ImagePieceEditor, wxWindow)
 
+ImagePieceEditor* ImagePieceEditor::m_pImagePieceEditor = NULL;
+
 ImagePieceEditor::ImagePieceEditor()
 {
 	Init();
@@ -44,6 +49,8 @@ ImagePieceEditor::~ImagePieceEditor()
 
 void ImagePieceEditor::Init()
 {
+	m_pImagePieceEditor = this;
+
 	// load grid brush
 	m_bmpGrid.LoadFile(wxT("images/grid.png"), wxBITMAP_TYPE_PNG);
 	m_brushGrid.SetStyle(wxBRUSHSTYLE_STIPPLE);
@@ -61,7 +68,7 @@ void ImagePieceEditor::Init()
 
 void ImagePieceEditor::Release()
 {
-	// TODO: 
+	m_pImagePieceEditor = NULL;
 }
 
 bool ImagePieceEditor::Create(wxWindow *parent, wxWindowID winid, const wxPoint& pos /* = wxDefaultPosition */, const wxSize& size /* = wxDefaultSize */, long style /* = 0 */, const wxString& name /* = wxPanelNameStr */)
@@ -74,6 +81,11 @@ bool ImagePieceEditor::Create(wxWindow *parent, wxWindowID winid, const wxPoint&
 wxSize ImagePieceEditor::DoGetBestSize() const
 {
 	return m_sizeVirtual;
+}
+
+ImagePieceEditor& ImagePieceEditor::GetInstance()
+{
+	return *m_pImagePieceEditor;
 }
 
 void ImagePieceEditor::SetSelection(PieceInfo* pPieceInfo)
@@ -181,6 +193,7 @@ void ImagePieceEditor::OnMouseLButtonDown(wxMouseEvent& event)
 	wxPoint posMouse = (event.GetPosition() + m_ptOrigin) / m_nZoom;
 	PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfoUnderPoint(posMouse, m_pImageInfo);
 	SetSelection(pPieceInfo);
+	PieceListTransformer::GetInstance().SetSelectedItem(pPieceInfo);
 }
 
 void ImagePieceEditor::OnSize(wxSizeEvent& event)
