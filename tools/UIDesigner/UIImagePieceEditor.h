@@ -38,31 +38,6 @@ public:
 		IMPORT_PIECE_INFO,
 	};
 
-	enum POINT_IN_CONNER
-	{
-		PIC_UNKNOWN = 0,
-		PIC_TOP_LEFT,
-		PIC_TOP_CENTER,
-		PIC_TOP_RIGHT,
-		PIC_MIDDLE_LEFT,
-		PIC_MIDDLE_CENTER,
-		PIC_MIDDLE_RIGHT,
-		PIC_BOTTOM_LEFT,
-		PIC_BOTTOM_CENTER,
-		PIC_BOTTOM_RIGHT,
-	};
-
-	enum CURSOR_TYPE
-	{
-		CT_DEFAULT = 0,
-		CT_HORIZONTAL,
-		CT_VERTICAL,
-		CT_DIAGONAL,
-		CT_DIAGONAL_INV,
-		CT_MOVE,
-		NUM_CT,
-	};
-
 	typedef struct PIECE_VIEW_INFO_tag
 	{
 		wxString strBgImage;
@@ -94,32 +69,17 @@ public:
 		const wxString& name = wxPanelNameStr);
 
 	virtual wxSize DoGetBestSize() const;
-	void SaveImage();
-	bool LoadImageFromFile(const wxString& strImage);
-	void UpdateBitMapCache();
 
-	void SetSelectedPiece(const UIImagePieceDocument::PIECE_INFO* pPieceInfo);
-	void SetSelectedPiece(const wxString& strPieceId);
+	void SetSelection(PieceInfo* pPieceInfo);
+	PieceInfo* GetSelection() const;
 
-	const UIImagePieceDocument::PIECE_INFO* GetSelectedPiece() const;
-
-	TM_BITMAP_CACHE& GetBitCacheMap();
+	bool SetImage(ImageInfo* pImageInfo);
+	ImageInfo* GetImage() const;
 
 	bool ZoomIn();
 	bool ZoomOut();
 	bool Zoom(int zoom);
 	int GetZoom() const;
-
-	bool MoveRelative(int x, int y);
-
-	const TM_PIECE_VIEW_INFO& GetImportedPieceMap();
-	bool AddImportedPiece(const PIECE_VIEW_INFO& pieceInfo);
-	const PIECE_VIEW_INFO* FindImportedPiece(const wxString& strPieceId);
-	void ClearImportedPiece();
-
-	bool AddBitmapCache(const wxString& strImageId, wxBitmap* pBitmap);
-	wxBitmap* FindBitmapCache(const wxString& strImageId);
-	void ClearBitmapCache();
 
 private:
 	void Init();
@@ -127,9 +87,7 @@ private:
 
 	void OnPaint(wxPaintEvent& event);
 	void OnMouseWheel(wxMouseEvent& event);
-	void OnMouseMove(wxMouseEvent& event);
 	void OnMouseLButtonDown(wxMouseEvent& event);
-	void OnMouseLButtonUp(wxMouseEvent& event);
 	void OnSize(wxSizeEvent& event);
 
 	void OnScrollLineUp(wxScrollWinEvent& event);
@@ -143,13 +101,9 @@ private:
 	const wxSize& GetVirtualSize();
 	void UpdateScrollPosition(int x, int y);
 
-	void DrawPieces(wxDC& dc);
-	void DrawRect(wxDC& dc, const wxRect& rect);
-	POINT_IN_CONNER CheckPointInConner(const wxRect& rect, const wxPoint& pt);
-	void SetCursorByType(CURSOR_TYPE eType);
+	void DrawSelection(wxDC& dc);
 
 private:
-	wxBitmap* m_pbmpImage;
 	wxMemoryDC m_dcImage;
 	
 	wxBitmap m_bmpBackBuffer;
@@ -159,26 +113,11 @@ private:
 	wxBrush m_brushGrid;
 	
 	int m_nZoom;
-
-	wxRect m_rectSelected;
-	wxRect m_rectSelectedBackup;
-	
-	wxCursor* m_pCursors[NUM_CT];
-	CURSOR_TYPE m_eCurType;
-
-	POINT_IN_CONNER m_CurrDragMode;
-	wxPoint m_ptMouseDown;
-
 	wxSize m_sizeVirtual;
 	wxPoint m_ptOrigin;
 
-	wxString m_strImage;
-	const UIImagePieceDocument::PIECE_INFO* m_pPieceInfo;
-	wxString m_strImportView;
-	SELECT_PIECE_TYPE m_eType;
-
-	TM_PIECE_VIEW_INFO m_vImportedPiece;
-	TM_BITMAP_CACHE m_vBitmapCache;
+	PieceInfo* m_pPieceInfo;
+	ImageInfo* m_pImageInfo;
 
 };
 #endif // __UIIMAGEPIECEEDITOR_H__

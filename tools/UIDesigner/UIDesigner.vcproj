@@ -178,35 +178,19 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\DialogAddImage.cpp"
+			RelativePath=".\ImageInfo.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\DialogAddImage.h"
+			RelativePath=".\ImageInfo.h"
 			>
 		</File>
 		<File
-			RelativePath=".\DialogAddPiece.cpp"
+			RelativePath=".\PieceInfo.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\DialogAddPiece.h"
-			>
-		</File>
-		<File
-			RelativePath=".\DialogNewPiece.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\DialogNewPiece.h"
-			>
-		</File>
-		<File
-			RelativePath=".\PieceCombiner.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\PieceCombiner.h"
+			RelativePath=".\PieceInfo.h"
 			>
 		</File>
 		<File
@@ -247,14 +231,6 @@
 		</File>
 		<File
 			RelativePath=".\UIImagePieceEditor.h"
-			>
-		</File>
-		<File
-			RelativePath=".\wxImagePieceEvent.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\wxImagePieceEvent.h"
 			>
 		</File>
 	</Files>

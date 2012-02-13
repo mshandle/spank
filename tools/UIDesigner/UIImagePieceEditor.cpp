@@ -7,17 +7,13 @@
  */
 #include "UIImagePieceEditor.h"
 #include <wx/dcclient.h>
-#include "wxImagePieceEvent.h"
-#include "PieceCombiner.h"
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
 BEGIN_EVENT_TABLE(UIImagePieceEditor, wxWindow)
 	EVT_PAINT(UIImagePieceEditor::OnPaint)
 	EVT_MOUSEWHEEL(UIImagePieceEditor::OnMouseWheel)
-	EVT_MOTION(UIImagePieceEditor::OnMouseMove)
 	EVT_LEFT_DOWN(UIImagePieceEditor::OnMouseLButtonDown)
-	EVT_LEFT_UP(UIImagePieceEditor::OnMouseLButtonUp)
 	EVT_SIZE(UIImagePieceEditor::OnSize)
 	EVT_SCROLLWIN_LINEUP(UIImagePieceEditor::OnScrollLineUp)
 	EVT_SCROLLWIN_LINEDOWN(UIImagePieceEditor::OnScrollLineDown)
@@ -54,36 +50,17 @@ void UIImagePieceEditor::Init()
 	
 	m_nZoom = ZOOM_MIN;
 
-	// load cursor
-	m_eCurType = CT_DEFAULT;
-	m_pCursors[CT_DEFAULT] = new wxCursor(wxT("images/size3_r.cur"), wxBITMAP_TYPE_CUR);
-	m_pCursors[CT_HORIZONTAL] = new wxCursor(wxT("images/size3_r.cur"), wxBITMAP_TYPE_CUR);
-	m_pCursors[CT_VERTICAL] = new wxCursor(wxT("images/size4_r.cur"), wxBITMAP_TYPE_CUR);
-	m_pCursors[CT_DIAGONAL] = new wxCursor(wxT("images/size2_r.cur"), wxBITMAP_TYPE_CUR);
-	m_pCursors[CT_DIAGONAL_INV] = new wxCursor(wxT("images/size1_r.cur"), wxBITMAP_TYPE_CUR);
-	m_pCursors[CT_MOVE] = new wxCursor(wxT("images/move_r.cur"), wxBITMAP_TYPE_CUR);
-
-	m_CurrDragMode = PIC_UNKNOWN;
-
 	m_sizeVirtual.Set(DEFAULT_VIRTUAL_SIZE*m_nZoom, DEFAULT_VIRTUAL_SIZE*m_nZoom);
 	m_ptOrigin.x = 0;
 	m_ptOrigin.y = 0;
 
-	m_strImage = wxEmptyString;
 	m_pPieceInfo = NULL;
-	m_pbmpImage = &m_bmpGrid;
+	m_pImageInfo = NULL;
 }
 
 void UIImagePieceEditor::Release()
 {
-	for (int i = 0; i < NUM_CT; ++i)
-	{
-		delete m_pCursors[i];
-		m_pCursors[i] = NULL;
-	}
-
-	ClearBitmapCache();
-	ClearImportedPiece();
+	// TODO: 
 }
 
 bool UIImagePieceEditor::Create(wxWindow *parent, wxWindowID winid, const wxPoint& pos /* = wxDefaultPosition */, const wxSize& size /* = wxDefaultSize */, long style /* = 0 */, const wxString& name /* = wxPanelNameStr */)
@@ -98,52 +75,13 @@ wxSize UIImagePieceEditor::DoGetBestSize() const
 	return m_sizeVirtual;
 }
 
-void UIImagePieceEditor::SaveImage()
+void UIImagePieceEditor::SetSelection(PieceInfo* pPieceInfo)
 {
-	PieceCombiner::Combine(m_vImportedPiece, m_vBitmapCache);
-}
-
-bool UIImagePieceEditor::LoadImageFromFile(const wxString& strImage)
-{
-	m_strImage = strImage;
-
-	m_pbmpImage = FindBitmapCache(strImage);
-	if (!m_pbmpImage)
-	{
-		m_pbmpImage = new wxBitmap();
-		if (!m_pbmpImage->LoadFile(m_strImage, wxBITMAP_TYPE_PNG)) return false;
-		AddBitmapCache(strImage, m_pbmpImage);
-	}
-
-	m_dcImage.SelectObject(*m_pbmpImage);
-
-	UpdateVirtualSize();
-	UpdateScrollPosition(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
-	return true;
-}
-
-void UIImagePieceEditor::SetSelectedPiece(const UIImagePieceDocument::PIECE_INFO* pPieceInfo)
-{
-	m_eType = NORMAL_PIECE_INFO;
 	m_pPieceInfo = pPieceInfo;
-
-	m_rectSelected = m_pPieceInfo->pieceRect;
 	Refresh(false);
 }
 
-void UIImagePieceEditor::SetSelectedPiece(const wxString& strPieceId)
-{
-	m_eType = IMPORT_PIECE_INFO;
-	const PIECE_VIEW_INFO* pPieceInfo = FindImportedPiece(strPieceId);
-	if (pPieceInfo)
-	{
-		m_strImportView = strPieceId;
-		m_rectSelected = pPieceInfo->pieceRect;
-		Refresh(false);
-	}
-}
-
-const UIImagePieceDocument::PIECE_INFO* UIImagePieceEditor::GetSelectedPiece() const
+PieceInfo* UIImagePieceEditor::GetSelection() const
 {
 	return m_pPieceInfo;
 }
@@ -176,36 +114,6 @@ int UIImagePieceEditor::GetZoom() const
 	return m_nZoom;
 }
 
-bool UIImagePieceEditor::MoveRelative(int x, int y)
-{
-	if (m_eType == NORMAL_PIECE_INFO)
-	{
-		if (!m_pPieceInfo) return false;
-		m_rectSelected.x += x;
-		m_rectSelected.y += y;
-	}
-	else if (m_eType == IMPORT_PIECE_INFO)
-	{
-		m_rectSelected.x += x;
-		m_rectSelected.y += y;
-		TM_PIECE_VIEW_INFO::iterator it = m_vImportedPiece.find(m_strImportView);
-		(*it).second.pieceRect = m_rectSelected;
-	}
-	Refresh(false);
-	return true;
-}
-
-void UIImagePieceEditor::UpdateBitMapCache()
-{
-	TM_BITMAP_CACHE::iterator it = m_vBitmapCache.find(m_strImage);
-	m_dcImage.SelectObject(*(it->second));
-}
-
-UIImagePieceEditor::TM_BITMAP_CACHE& UIImagePieceEditor::GetBitCacheMap()
-{
-	return m_vBitmapCache;
-}
-
 void UIImagePieceEditor::OnPaint(wxPaintEvent& event)
 {
 	wxPaintDC dc(this);
@@ -213,21 +121,24 @@ void UIImagePieceEditor::OnPaint(wxPaintEvent& event)
 	// get client size
 	wxRect clientSize = GetClientSize();
 
-	// draw image
-	int nWidth = clientSize.GetWidth() > m_pbmpImage->GetWidth() ? clientSize.GetWidth() : m_pbmpImage->GetWidth();
-	int nHeight = clientSize.GetHeight() > m_pbmpImage->GetHeight() ? clientSize.GetHeight() : m_pbmpImage->GetHeight();
+	int nWidth = clientSize.GetWidth();
+	int nHeight = clientSize.GetHeight();
+
+	wxBitmap* pbmpImage = NULL;
+	if (m_pImageInfo) pbmpImage = m_pImageInfo->GetImage();
+	if (pbmpImage && nWidth < pbmpImage->GetWidth()) nWidth = pbmpImage->GetWidth();
+	if (pbmpImage && nHeight < pbmpImage->GetHeight()) nHeight = pbmpImage->GetHeight();
 
 	m_dcBackBuffer.SetBrush(m_brushGrid);
 	m_dcBackBuffer.SetPen(*wxTRANSPARENT_PEN);
 	m_dcBackBuffer.DrawRectangle(0, 0, nWidth*m_nZoom, nHeight*m_nZoom);
-	//Draw the import piece in the Image;
-	m_dcBackBuffer.StretchBlit(-m_ptOrigin, m_pbmpImage->GetSize()*m_nZoom, &m_dcImage, wxPoint(0, 0), m_pbmpImage->GetSize());
 
-	DrawPieces(m_dcImage);
-
-	if (m_pPieceInfo)
+	// draw image
+	if (pbmpImage)
 	{
-		DrawRect(m_dcBackBuffer, m_rectSelected);
+		//Draw the import piece in the Image;
+		m_dcBackBuffer.StretchBlit(-m_ptOrigin, pbmpImage->GetSize()*m_nZoom, &m_dcImage, wxPoint(0, 0), pbmpImage->GetSize());
+		DrawSelection(m_dcBackBuffer);
 	}
 	
 	// flush to dc
@@ -258,220 +169,9 @@ void UIImagePieceEditor::OnMouseWheel(wxMouseEvent& event)
 	event.Skip();
 }
 
-void UIImagePieceEditor::OnMouseMove(wxMouseEvent& event)
-{
- 	wxPoint ptMouseMove = event.GetPosition() + m_ptOrigin;
- 
- 	if (m_CurrDragMode == PIC_UNKNOWN && m_pPieceInfo != NULL)
- 	{
- 		wxRect zoomedRect(m_rectSelected.x*m_nZoom, m_rectSelected.y*m_nZoom, m_rectSelected.width*m_nZoom, m_rectSelected.height*m_nZoom);
- 
- 		POINT_IN_CONNER eType = CheckPointInConner(zoomedRect, ptMouseMove);
- 		switch (eType)
- 		{
- 		case PIC_TOP_LEFT:
- 		case PIC_BOTTOM_RIGHT:
- 			{
- 				SetCursorByType(CT_DIAGONAL);
- 			}
- 			break;
- 		case PIC_TOP_RIGHT:
- 		case PIC_BOTTOM_LEFT:
- 			{
- 				SetCursorByType(CT_DIAGONAL_INV);
- 			}
- 			break;
- 		case PIC_TOP_CENTER:
- 		case PIC_BOTTOM_CENTER:
- 			{
- 				SetCursorByType(CT_VERTICAL);
- 			}
- 			break;
- 		case PIC_MIDDLE_LEFT:
- 		case PIC_MIDDLE_RIGHT:
- 			{
- 				SetCursorByType(CT_HORIZONTAL);
- 			}
- 			break;
- 		case PIC_MIDDLE_CENTER:
- 			{
- 				SetCursorByType(CT_MOVE);
- 			}
- 			break;
- 		default:
- 			{
- 				SetCursorByType(CT_DEFAULT);
- 			}
- 			break;
- 		}
- 	}
- 	else if (m_CurrDragMode != PIC_UNKNOWN && m_eType == NORMAL_PIECE_INFO)
- 	{
-		
-		switch (m_CurrDragMode)
-		{
-		case PIC_TOP_LEFT:
-			{
-				m_rectSelected.x = (ptMouseMove.x - m_ptMouseDown.x)/m_nZoom + m_rectSelectedBackup.x;
-				m_rectSelected.y = (ptMouseMove.y - m_ptMouseDown.y)/m_nZoom + m_rectSelectedBackup.y;
-				m_rectSelected.width = -(ptMouseMove.x - m_ptMouseDown.x)/m_nZoom + m_rectSelectedBackup.width;
-				m_rectSelected.height = -(ptMouseMove.y - m_ptMouseDown.y)/m_nZoom + m_rectSelectedBackup.height;
-			}
-			break;
-		case PIC_BOTTOM_RIGHT:
-			{
-				m_rectSelected.width = (ptMouseMove.x - m_ptMouseDown.x)/m_nZoom + m_rectSelectedBackup.width;
-				m_rectSelected.height = (ptMouseMove.y - m_ptMouseDown.y)/m_nZoom + m_rectSelectedBackup.height;
-			}
-			break;
-		case PIC_TOP_RIGHT:
-			{
-				m_rectSelected.y = (ptMouseMove.y - m_ptMouseDown.y)/m_nZoom + m_rectSelectedBackup.y;
-				m_rectSelected.width = (ptMouseMove.x - m_ptMouseDown.x)/m_nZoom + m_rectSelectedBackup.width;
-				m_rectSelected.height = -(ptMouseMove.y - m_ptMouseDown.y)/m_nZoom + m_rectSelectedBackup.height;
-			}
-			break;
-		case PIC_BOTTOM_LEFT:
-			{
-				m_rectSelected.x = (ptMouseMove.x - m_ptMouseDown.x)/m_nZoom + m_rectSelectedBackup.x;
-				m_rectSelected.width = -(ptMouseMove.x - m_ptMouseDown.x)/m_nZoom + m_rectSelectedBackup.width;
-				m_rectSelected.height = (ptMouseMove.y - m_ptMouseDown.y)/m_nZoom + m_rectSelectedBackup.height;
-			}
-			break;
-		case PIC_TOP_CENTER:
-			{
-				m_rectSelected.y = (ptMouseMove.y - m_ptMouseDown.y)/m_nZoom + m_rectSelectedBackup.y;
-				m_rectSelected.height = -(ptMouseMove.y - m_ptMouseDown.y)/m_nZoom + m_rectSelectedBackup.height;
-			}
-			break;
-		case PIC_BOTTOM_CENTER:
-			{
-				m_rectSelected.height = (ptMouseMove.y - m_ptMouseDown.y)/m_nZoom + m_rectSelectedBackup.height;
-			}
-			break;
-		case PIC_MIDDLE_LEFT:
-			{
-				m_rectSelected.x = (ptMouseMove.x - m_ptMouseDown.x)/m_nZoom + m_rectSelectedBackup.x;
-				m_rectSelected.width = -(ptMouseMove.x - m_ptMouseDown.x)/m_nZoom + m_rectSelectedBackup.width;
-			}
-			break;
-		case PIC_MIDDLE_RIGHT:
-			{
-				m_rectSelected.width = (ptMouseMove.x - m_ptMouseDown.x)/m_nZoom + m_rectSelectedBackup.width;
-			}
-			break;
-		case PIC_MIDDLE_CENTER:
-			{
-				m_rectSelected.x = (ptMouseMove.x - m_ptMouseDown.x)/m_nZoom + m_rectSelectedBackup.x;
-				m_rectSelected.y = (ptMouseMove.y - m_ptMouseDown.y)/m_nZoom + m_rectSelectedBackup.y;
-			}
-			break;
-		}
- 		// apply drag rect
- 		Refresh(false);
- 	}
-	else if(m_CurrDragMode == PIC_MIDDLE_CENTER && m_eType == IMPORT_PIECE_INFO)
-	{
-		//TODO: Change the Import view the position
-		m_rectSelected.x = (ptMouseMove.x - m_ptMouseDown.x)/m_nZoom + m_rectSelectedBackup.x;
-		m_rectSelected.y = (ptMouseMove.y - m_ptMouseDown.y)/m_nZoom + m_rectSelectedBackup.y;
-		TM_PIECE_VIEW_INFO::iterator it = m_vImportedPiece.find(m_strImportView);
-		(*it).second.pieceRect = m_rectSelected;
-		Update();
-	}
-	event.Skip();
-}
-
 void UIImagePieceEditor::OnMouseLButtonDown(wxMouseEvent& event)
 {
-	if(m_eType == NORMAL_PIECE_INFO && m_pPieceInfo)
-	{
-		m_ptMouseDown = event.GetPosition() + m_ptOrigin;
-
-		wxRect zoomedRect = wxRect(m_rectSelected.x*m_nZoom, m_rectSelected.y*m_nZoom, m_rectSelected.width*m_nZoom, m_rectSelected.height*m_nZoom);
-
-		m_CurrDragMode = CheckPointInConner(zoomedRect, m_ptMouseDown);
-		if (m_CurrDragMode != PIC_UNKNOWN)
-		{
-			CaptureMouse();
-		}
-
-		m_rectSelectedBackup = m_rectSelected;
-		
-	}
-	else if(m_eType == IMPORT_PIECE_INFO && !m_strImportView.IsEmpty())
-	{
-		m_ptMouseDown = event.GetPosition() + m_ptOrigin;
-
-		wxRect zoomedRect = wxRect(m_rectSelected.x*m_nZoom, m_rectSelected.y*m_nZoom, m_rectSelected.width*m_nZoom, m_rectSelected.height*m_nZoom);
-
-		m_CurrDragMode = CheckPointInConner(zoomedRect, m_ptMouseDown);
-		if (m_CurrDragMode != PIC_UNKNOWN)
-		{
-			CaptureMouse();
-		}
-		
-		m_rectSelectedBackup = m_rectSelected;
-	}
-
-
-	event.Skip();
-}
-
-void UIImagePieceEditor::OnMouseLButtonUp(wxMouseEvent& event)
-{
- 	if (m_CurrDragMode != PIC_UNKNOWN && m_pPieceInfo != NULL && m_eType == NORMAL_PIECE_INFO)
- 	{
- 		// apply drag
- 		m_CurrDragMode = PIC_UNKNOWN;
-
-		ReleaseMouse();
-
-		if (m_rectSelected.width < 0)
-		{
-			m_rectSelected.width = -m_rectSelected.width;
-			m_rectSelected.x -= m_rectSelected.width;
-		}
-
-		if (m_rectSelected.height < 0)
-		{
-			m_rectSelected.height = -m_rectSelected.height;
-			m_rectSelected.y -= m_rectSelected.height;
-		}
-
-		Refresh(false);
-
-		wxImagePieceEvent evtPiece(wxEVT_COMMAND_IMAGE_PIECE_CHANGED, GetId());
-		evtPiece.SetEventObject(this);
-
-		UIImagePieceDocument::PIECE_INFO pieceInfo = (*m_pPieceInfo);
-		pieceInfo.pieceRect = m_rectSelected;
-		evtPiece.SetPieceInfo(pieceInfo);
-		GetEventHandler()->ProcessEvent(evtPiece);
- 	}
-	else if(m_eType == IMPORT_PIECE_INFO && !m_strImportView.IsEmpty() && m_CurrDragMode != PIC_UNKNOWN)
-	{
-		//TODO: Save the New Position;
-		m_CurrDragMode = PIC_UNKNOWN;
-		ReleaseMouse();
-		if (m_rectSelected.width < 0)
-		{
-			m_rectSelected.width = -m_rectSelected.width;
-			m_rectSelected.x -= m_rectSelected.width;
-		}
-
-		if (m_rectSelected.height < 0)
-		{
-			m_rectSelected.height = -m_rectSelected.height;
-			m_rectSelected.y -= m_rectSelected.height;
-		}
-
-		Refresh(false);
-		TM_PIECE_VIEW_INFO::iterator it = m_vImportedPiece.find(m_strImportView);
-		(*it).second.pieceRect = m_rectSelected;
-	}
-
-	event.Skip();
+	// TODO: 
 }
 
 void UIImagePieceEditor::OnSize(wxSizeEvent& event)
@@ -549,7 +249,12 @@ void UIImagePieceEditor::OnScrollThumbRelease(wxScrollWinEvent& event)
 
 void UIImagePieceEditor::UpdateVirtualSize()
 {
-	m_sizeVirtual = m_pbmpImage->GetSize();
+	if (!m_pImageInfo) return;
+
+	wxBitmap* pbmpImage = m_pImageInfo->GetImage();
+	if (!pbmpImage) return;
+
+	m_sizeVirtual = pbmpImage->GetSize();
 	m_sizeVirtual *= m_nZoom;
 
 	wxRect rect = GetClientRect();
@@ -596,141 +301,38 @@ void UIImagePieceEditor::UpdateScrollPosition(int x, int y)
 	Refresh(false);
 }
 
-void UIImagePieceEditor::DrawRect(wxDC& dc, const wxRect& rect)
+void UIImagePieceEditor::DrawSelection(wxDC& dc)
 {
- 	dc.SetPen(*wxBLUE_PEN);
+	if (!m_pPieceInfo) return;
+
+ 	dc.SetPen(*wxRED_PEN);
  	dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
+	const wxRect& rect = m_pPieceInfo->GetRect();
  	wxRect zoomedRect(rect.x*m_nZoom-m_ptOrigin.x, rect.y*m_nZoom-m_ptOrigin.y, rect.width*m_nZoom, rect.height*m_nZoom);
  	dc.DrawRectangle(zoomedRect);
- 
- 	dc.SetBrush(*wxBLUE_BRUSH);
- 	dc.DrawRectangle(zoomedRect.x-RECT_SPOT_SIZE, zoomedRect.y-RECT_SPOT_SIZE, RECT_SPOT_SIZE*2, RECT_SPOT_SIZE*2);
- 	dc.DrawRectangle(zoomedRect.x+zoomedRect.width/2-RECT_SPOT_SIZE, zoomedRect.y-RECT_SPOT_SIZE, RECT_SPOT_SIZE*2, RECT_SPOT_SIZE*2);
- 	dc.DrawRectangle(zoomedRect.x+zoomedRect.width-RECT_SPOT_SIZE, zoomedRect.y-RECT_SPOT_SIZE, RECT_SPOT_SIZE*2, RECT_SPOT_SIZE*2);
- 	dc.DrawRectangle(zoomedRect.x-RECT_SPOT_SIZE, zoomedRect.y+zoomedRect.height/2-RECT_SPOT_SIZE, RECT_SPOT_SIZE*2, RECT_SPOT_SIZE*2);
- 	dc.DrawRectangle(zoomedRect.x+zoomedRect.width-RECT_SPOT_SIZE, zoomedRect.y+zoomedRect.height/2-RECT_SPOT_SIZE, RECT_SPOT_SIZE*2, RECT_SPOT_SIZE*2);
- 	dc.DrawRectangle(zoomedRect.x-RECT_SPOT_SIZE, zoomedRect.y+zoomedRect.height-RECT_SPOT_SIZE, RECT_SPOT_SIZE*2, RECT_SPOT_SIZE*2);
- 	dc.DrawRectangle(zoomedRect.x+zoomedRect.width/2-RECT_SPOT_SIZE, zoomedRect.y+zoomedRect.height-RECT_SPOT_SIZE, RECT_SPOT_SIZE*2, RECT_SPOT_SIZE*2);
- 	dc.DrawRectangle(zoomedRect.x+zoomedRect.width-RECT_SPOT_SIZE, zoomedRect.y+zoomedRect.height-RECT_SPOT_SIZE, RECT_SPOT_SIZE*2, RECT_SPOT_SIZE*2);
 }
 
-void UIImagePieceEditor::DrawPieces(wxDC& dc)
+bool UIImagePieceEditor::SetImage(ImageInfo* pImageInfo)
 {
-	for(TM_PIECE_VIEW_INFO::iterator it = m_vImportedPiece.begin(); it !=  m_vImportedPiece.end(); ++it)
+	if (m_pImageInfo == pImageInfo) return false;
+	m_pImageInfo = pImageInfo;
+
+	if (m_pImageInfo && m_pImageInfo->GetImage() != NULL)
 	{
-		if(m_strImage == (*it).second.strBgImage)
-		{
-			wxSize Size =  (*it).second.pMemDc->GetSize();
-			wxDC* pSource = (*it).second.pMemDc;
-			int x = (*it).second.pieceRect.x * m_nZoom;
-			int y = (*it).second.pieceRect.y * m_nZoom;
-			x -= m_ptOrigin.x;
-			y -= m_ptOrigin.y;	
-			m_dcBackBuffer.StretchBlit(wxPoint(x, y), Size * m_nZoom, pSource, wxPoint(0,0), Size);
-		}
-	}
-}
-
-UIImagePieceEditor::POINT_IN_CONNER UIImagePieceEditor::CheckPointInConner(const wxRect& rect, const wxPoint& pt)
-{
-	wxRect rectTopLeft(rect.x-RECT_SENSOR_SIZE, rect.y-RECT_SENSOR_SIZE, RECT_SENSOR_SIZE*2, RECT_SENSOR_SIZE*2);
-	if (rectTopLeft.Contains(pt)) return PIC_TOP_LEFT;
-
-	wxRect rectTopCenter(rect.x+rect.width/2-RECT_SENSOR_SIZE, rect.y-RECT_SENSOR_SIZE, RECT_SENSOR_SIZE*2, RECT_SENSOR_SIZE*2);
-	if (rectTopCenter.Contains(pt)) return PIC_TOP_CENTER;
-
-	wxRect rectTopRight(rect.x+rect.width-RECT_SENSOR_SIZE, rect.y-RECT_SENSOR_SIZE, RECT_SENSOR_SIZE*2, RECT_SENSOR_SIZE*2);
-	if (rectTopRight.Contains(pt)) return PIC_TOP_RIGHT;
-
-	wxRect rectMiddleLeft(rect.x-RECT_SENSOR_SIZE, rect.y+rect.height/2-RECT_SENSOR_SIZE, RECT_SENSOR_SIZE*2, RECT_SENSOR_SIZE*2);
-	if (rectMiddleLeft.Contains(pt)) return PIC_MIDDLE_LEFT;
-
-	wxRect rectMiddleRight(rect.x+rect.width-RECT_SENSOR_SIZE, rect.y+rect.height/2-RECT_SENSOR_SIZE, RECT_SENSOR_SIZE*2, RECT_SENSOR_SIZE*2);
-	if (rectMiddleRight.Contains(pt)) return PIC_MIDDLE_RIGHT;
-
-	wxRect rectBottomLeft(rect.x-RECT_SENSOR_SIZE, rect.y+rect.height-RECT_SENSOR_SIZE, RECT_SENSOR_SIZE*2, RECT_SENSOR_SIZE*2);
-	if (rectBottomLeft.Contains(pt)) return PIC_BOTTOM_LEFT;
-
-	wxRect rectBottomCenter(rect.x+rect.width/2-RECT_SENSOR_SIZE, rect.y+rect.height-RECT_SENSOR_SIZE, RECT_SENSOR_SIZE*2, RECT_SENSOR_SIZE*2);
-	if (rectBottomCenter.Contains(pt)) return PIC_BOTTOM_CENTER;
-
-	wxRect rectBottomRight(rect.x+rect.width-RECT_SENSOR_SIZE, rect.y+rect.height-RECT_SENSOR_SIZE, RECT_SENSOR_SIZE*2, RECT_SENSOR_SIZE*2);
-	if (rectBottomRight.Contains(pt)) return PIC_BOTTOM_RIGHT;
-
-	if (rect.Contains(pt)) return PIC_MIDDLE_CENTER;
-
-	return PIC_UNKNOWN;
-}
-
-void UIImagePieceEditor::SetCursorByType(CURSOR_TYPE eType)
-{
-	if (m_eCurType == eType) return;
-	m_eCurType = eType;
-
-	if (m_eCurType == CT_DEFAULT)
-	{
-		SetCursor(wxNullCursor);
+		m_dcImage.SelectObject(*m_pImageInfo->GetImage());
 	}
 	else
 	{
-		SetCursor(*m_pCursors[eType]);
+		m_dcImage.SelectObject(wxNullBitmap);
 	}
-}
 
-const UIImagePieceEditor::TM_PIECE_VIEW_INFO& UIImagePieceEditor::GetImportedPieceMap()
-{
-	return m_vImportedPiece;
-}
-
-bool UIImagePieceEditor::AddImportedPiece(const PIECE_VIEW_INFO& pieceInfo)
-{
-	if (FindImportedPiece(pieceInfo.strImage)) return false;
-
-	m_vImportedPiece.insert(std::make_pair(pieceInfo.strImage, pieceInfo));
+	UpdateVirtualSize();
+	UpdateScrollPosition(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
 	return true;
 }
 
-const UIImagePieceEditor::PIECE_VIEW_INFO* UIImagePieceEditor::FindImportedPiece(const wxString& strPieceId)
+ImageInfo* UIImagePieceEditor::GetImage() const
 {
-	TM_PIECE_VIEW_INFO::iterator itfound = m_vImportedPiece.find(strPieceId);
-	if (itfound == m_vImportedPiece.end()) return NULL;
-	return &(itfound->second);
-}
-
-void UIImagePieceEditor::ClearImportedPiece()
-{
-	for(TM_PIECE_VIEW_INFO::iterator it = m_vImportedPiece.begin(); it != m_vImportedPiece.end(); ++it)
-	{
-		PIECE_VIEW_INFO& pieceInfo = (it->second);
-		SAFE_DELETE(pieceInfo.pMemDc);
-		SAFE_DELETE(pieceInfo.pBitmap);
-	}
-	m_vImportedPiece.clear();
-}
-
-bool UIImagePieceEditor::AddBitmapCache(const wxString& strImageId, wxBitmap* pBitmap)
-{
-	if (!pBitmap || strImageId.empty()) return false;
-	if (FindBitmapCache(strImageId)) return false;
-
-	m_vBitmapCache.insert(std::make_pair(strImageId, pBitmap));
-	return true;
-}
-
-wxBitmap* UIImagePieceEditor::FindBitmapCache(const wxString& strImageId)
-{
-	TM_BITMAP_CACHE::iterator itfound = m_vBitmapCache.find(strImageId);
-	if (itfound == m_vBitmapCache.end()) return NULL;
-	return (itfound->second);
-}
-
-void UIImagePieceEditor::ClearBitmapCache()
-{
-	for(TM_BITMAP_CACHE::iterator it = m_vBitmapCache.begin(); it != m_vBitmapCache.end(); ++it)
-	{
-		wxBitmap* pBitmap = (it->second);
-		SAFE_DELETE(pBitmap);
-	}
-	m_vBitmapCache.clear();
+	return m_pImageInfo;
 }

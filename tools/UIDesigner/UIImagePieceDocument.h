@@ -11,24 +11,14 @@
 #include "UIDocumentBase.h"
 #include <wx/gdicmn.h>
 #include <map>
+#include "ImageInfo.h"
+#include "PieceInfo.h"
 
 class UIImagePieceDocument : public UIDocumentBase
 {
 public:
-	typedef struct IMAGE_INFO_tag
-	{
-		int nId;
-		wxString strFile;
-	} IMAGE_INFO;
-	typedef std::map<int, IMAGE_INFO> TM_IMAGE_INFO;
-
-	typedef struct PIECE_INFO_tag
-	{
-		wxString strId;
-		int nImageId;
-		wxRect pieceRect;
-	} PIECE_INFO;
-	typedef std::map<wxString, PIECE_INFO> TM_PIECE_INFO;
+	typedef std::map<wxString, ImageInfo*> TM_IMAGE_INFO;
+	typedef std::map<wxString, PieceInfo*> TM_PIECE_INFO;
 
 public:
 	UIImagePieceDocument();
@@ -39,19 +29,16 @@ public:
 	virtual bool NewFile(const wxString& strFile);
 	virtual const wxString& GetFileName() const;
 
-	TM_IMAGE_INFO& GetImageMap();
-	const wxString& FindImage(int nID) const ;
-	void AddPieceInfo(const PIECE_INFO& PieceInfo);
-	void AddImageInfo(const IMAGE_INFO& ImageInfo);
-	TM_PIECE_INFO& GetPieceInfoMap();
-	int GetImageMapKeyValue(const wxString& strValue);
-	PIECE_INFO* FindPieceInfo(const wxString& strID) ;
-	
-	void UpdateImagePiece(const PIECE_INFO& pieceInfo);
+	ImageInfo* FindImageInfo(const wxString& strId);
+	PieceInfo* FindPieceInfo(const wxString& strId);
+
+	const TM_IMAGE_INFO& GetImageInfoMap() const;
+	const TM_PIECE_INFO& GetPieceInfoMap() const;
+
 	void Clear();
 
 private:
-	TM_IMAGE_INFO m_ImageMap;
+	TM_IMAGE_INFO m_ImageInfoMap;
 	TM_PIECE_INFO m_PieceInfoMap;
 	wxString m_strFile;
 
