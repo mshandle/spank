@@ -1,73 +1,77 @@
 /*!
- * \file UIDesignerFrame.cpp
- * \date 8-31-2011 13:20:00
+ * \file DesignerFrame.cpp
+ * \date 2-14-2012 1:22:04
  * 
  * 
  * \author zjhlogo (zjhlogo@gmail.com)
  */
-#include "UIDesignerFrame.h"
+#include "DesignerFrame.h"
 #include <wx/menu.h>
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
+#include <wx/treectrl.h>
 #include <wx/filedlg.h>
+#include "ImageListTransformer.h"
+#include "PieceListTransformer.h"
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
-BEGIN_EVENT_TABLE(UIDesignerFrame, wxFrame)
-	EVT_MENU(wxID_OPEN, UIDesignerFrame::OnFileOpen)
-	EVT_MENU(wxID_SAVE, UIDesignerFrame::OnFileSave)
-	EVT_MENU(wxID_CLOSE, UIDesignerFrame::OnFileClose)
-	EVT_MENU(wxID_EXIT, UIDesignerFrame::OnExit)
+BEGIN_EVENT_TABLE(DesignerFrame, wxFrame)
+	EVT_MENU(wxID_OPEN, DesignerFrame::OnFileOpen)
+	EVT_MENU(wxID_SAVE, DesignerFrame::OnFileSave)
+	EVT_MENU(wxID_CLOSE, DesignerFrame::OnFileClose)
+	EVT_MENU(wxID_EXIT, DesignerFrame::OnExit)
 
-	EVT_MENU(wxID_ZOOM_100, UIDesignerFrame::OnViewZoom100)
-	EVT_MENU(wxID_ZOOM_IN, UIDesignerFrame::OnViewZoomIn)
-	EVT_MENU(wxID_ZOOM_OUT, UIDesignerFrame::OnViewZoomOut)
+	EVT_MENU(wxID_ZOOM_100, DesignerFrame::OnViewZoom100)
+	EVT_MENU(wxID_ZOOM_IN, DesignerFrame::OnViewZoomIn)
+	EVT_MENU(wxID_ZOOM_OUT, DesignerFrame::OnViewZoomOut)
 
-	EVT_TREE_SEL_CHANGED(IDC_IMAGE_PIECE_LIST, UIDesignerFrame::OnImagePieceListSelected)
-	EVT_TREE_SEL_CHANGED(IDC_IMAGE_LIST, UIDesignerFrame::OnImageListSelected)
+	EVT_TREE_SEL_CHANGED(IDC_IMAGE_PIECE_LIST, DesignerFrame::OnImagePieceListSelected)
+	EVT_TREE_SEL_CHANGED(IDC_IMAGE_LIST, DesignerFrame::OnImageListSelected)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(UIDesignerFrame, wxFrame)
+IMPLEMENT_DYNAMIC_CLASS(DesignerFrame, wxFrame)
 
-UIDesignerFrame::UIDesignerFrame()
+DesignerFrame* DesignerFrame::m_pInstance = NULL;
+
+DesignerFrame::DesignerFrame()
 :wxFrame(NULL, wxID_ANY, wxT("UI Designer"), wxDefaultPosition, wxSize(800, 600))
 {
+	m_pInstance = this;
 	CreateControls();
 }
 
-UIDesignerFrame::~UIDesignerFrame()
+DesignerFrame::~DesignerFrame()
 {
 	m_auiManager.UnInit();
-	SAFE_DELETE(m_pImagePieceDocument);
+	m_pInstance = NULL;
 }
 
-void UIDesignerFrame::Init()
+DesignerFrame& DesignerFrame::GetInstance()
 {
-	m_pNotebookView = NULL;
-	m_pImagePieceListView = NULL;
-	m_pImageListView = NULL;
-
-	m_pImagePieceEditor = NULL;
-	m_pImagePieceDocument = NULL;
+	return *m_pInstance;
 }
 
-void UIDesignerFrame::CreateControls()
+void DesignerFrame::Init()
+{
+	m_pImagePieceEditor = NULL;
+}
+
+void DesignerFrame::CreateControls()
 {
 	m_auiManager.SetManagedWindow(this);
 
 	CreateMenu();
 	CreateToolbar();
-	CreateProjectView();
+	CreateListView();
 	CreatePropertyView();
 	CreateEditorView();
 	CreateOutputView();
 
-	m_pImagePieceDocument = new UIImagePieceDocument();
-
 	m_auiManager.Update();
 }
 
-void UIDesignerFrame::CreateMenu()
+void DesignerFrame::CreateMenu()
 {
 	wxMenuBar* pMenuBar = new wxMenuBar();
 
@@ -147,7 +151,7 @@ void UIDesignerFrame::CreateMenu()
 	SetMenuBar(pMenuBar);
 }
 
-void UIDesignerFrame::CreateToolbar()
+void DesignerFrame::CreateToolbar()
 {
 	wxAuiToolBar* pAuiToolBar = new wxAuiToolBar(this, IDC_TOOLBAR, wxDefaultPosition, wxDefaultSize, 0);
 
@@ -205,12 +209,12 @@ void UIDesignerFrame::CreateToolbar()
 		.PaneBorder(false));
 }
 
-void UIDesignerFrame::CreateProjectView()
+void DesignerFrame::CreateListView()
 {
-	m_pNotebookView = new wxNotebook(this, IDC_NOTEBOOK, wxDefaultPosition, wxSize(400, 500), wxNO_BORDER);
-	m_auiManager.AddPane(m_pNotebookView, wxAuiPaneInfo()
-		.Name(wxT("Project"))
-		.Caption(wxT("Project"))
+	wxNotebook* pNotebookView = new wxNotebook(this, IDC_NOTEBOOK, wxDefaultPosition, wxSize(400, 500), wxNO_BORDER);
+	m_auiManager.AddPane(pNotebookView, wxAuiPaneInfo()
+		.Name(wxT("List"))
+		.Caption(wxT("List"))
 		.Left()
 		.Layer(1)
 		.BestSize(wxSize(400, 500))
@@ -222,14 +226,16 @@ void UIDesignerFrame::CreateProjectView()
 		.FloatingSize(wxSize(400, 500))
 		.Movable(false));
 
-	m_pImagePieceListView = new wxTreeCtrl(m_pNotebookView, IDC_IMAGE_PIECE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
-	m_pNotebookView->AddPage(m_pImagePieceListView, "Image Piece List");
+	wxTreeCtrl* pImagePieceListView = new wxTreeCtrl(pNotebookView, IDC_IMAGE_PIECE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	pNotebookView->AddPage(pImagePieceListView, "Image Piece List");
+	PieceListTransformer::GetInstance().Initialize(pImagePieceListView);
 
-	m_pImageListView = new wxTreeCtrl(m_pNotebookView, IDC_IMAGE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
-	m_pNotebookView->AddPage(m_pImageListView, "Image List");
+	wxTreeCtrl* pImageListView = new wxTreeCtrl(pNotebookView, IDC_IMAGE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	pNotebookView->AddPage(pImageListView, "Image List");
+	ImageListTransformer::GetInstance().Initialize(pImageListView);
 }
 
-void UIDesignerFrame::CreatePropertyView()
+void DesignerFrame::CreatePropertyView()
 {
 	m_pPropertyGrid = new wxPropertyGrid(this, IDC_PROPERTY, wxDefaultPosition, wxSize(300, 100), wxPG_SPLITTER_AUTO_CENTER|wxNO_BORDER);
 	m_auiManager.AddPane(m_pPropertyGrid, wxAuiPaneInfo()
@@ -246,9 +252,9 @@ void UIDesignerFrame::CreatePropertyView()
 		.Movable(false));
 }
 
-void UIDesignerFrame::CreateEditorView()
+void DesignerFrame::CreateEditorView()
 {
-	m_pImagePieceEditor = new UIImagePieceEditor(this, IDC_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
+	m_pImagePieceEditor = new ImagePieceEditor(this, IDC_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
 	m_auiManager.AddPane(m_pImagePieceEditor, wxAuiPaneInfo()
 		.Name(wxT("Editor"))
 		.Caption(wxT("Editor"))
@@ -262,7 +268,7 @@ void UIDesignerFrame::CreateEditorView()
 	
 }
 
-void UIDesignerFrame::CreateOutputView()
+void DesignerFrame::CreateOutputView()
 {
 	m_pOutputView = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_MULTILINE|wxNO_BORDER);
 	m_pOutputView->AppendText(wxT("This is output view\n"));
@@ -282,125 +288,86 @@ void UIDesignerFrame::CreateOutputView()
 		.Movable(false));
 }
 
-void UIDesignerFrame::UpdateImagePieceView()
-{
-	m_pImagePieceListView->DeleteAllItems();
-	wxTreeItemId rootItem = m_pImagePieceListView->AddRoot(wxT("ImagePiece"));
-
-	const UIImagePieceDocument::TM_PIECE_INFO& pieceInfoMap = m_pImagePieceDocument->GetPieceInfoMap();
-	for (UIImagePieceDocument::TM_PIECE_INFO::const_iterator it = pieceInfoMap.begin(); it != pieceInfoMap.end(); ++it)
-	{
-		const PieceInfo* pPieceInfo = it->second;
-		m_pImagePieceListView->AppendItem(rootItem, pPieceInfo->GetId());
-	}
-	m_pImagePieceListView->ExpandAll();
-
-	wxTreeItemIdValue value;
-	if(pieceInfoMap.empty()) return;
-	m_pImagePieceListView->SelectItem(m_pImagePieceListView->GetFirstChild(rootItem, value));
-}
-
-void UIDesignerFrame::UpdateImageListView()
-{
-	m_pImageListView->DeleteAllItems();
-	wxTreeItemId rootItem = m_pImageListView->AddRoot(wxT("ImageInfo"));
-
-	const UIImagePieceDocument::TM_IMAGE_INFO& ImageInfoMap = m_pImagePieceDocument->GetImageInfoMap();
-	for (UIImagePieceDocument::TM_IMAGE_INFO::const_iterator it = ImageInfoMap.begin(); it != ImageInfoMap.end(); ++it)
-	{
-		const ImageInfo* pImageInfo = it->second;
-		m_pImageListView->AppendItem(rootItem, pImageInfo->GetId());
-	}
-	m_pImageListView->ExpandAll();
-
-	wxTreeItemIdValue value;
-	if(ImageInfoMap.empty()) return;
-	m_pImageListView->SelectItem(m_pImageListView->GetFirstChild(rootItem, value));
-
-}
-
-void UIDesignerFrame::UpdateImagePieceEditor(const PieceInfo* pPieceInfo)
+void DesignerFrame::UpdateImagePieceEditor(const PieceInfo* pPieceInfo)
 {
 // 	if (pPieceInfo)
 // 	{
-// 		const wxString& strImage = m_pImagePieceDocument->FindImage(pPieceInfo->nImageId);
+// 		const wxString& strImage = UIImagePieceDocument::GetInstance().FindImage(pPieceInfo->nImageId);
 // 		m_pImagePieceEditor->LoadImageFromFile(strImage);
 // 	}
 // 	m_pImagePieceEditor->SetSelectedPiece(pPieceInfo);
 }
 
-void UIDesignerFrame::OnFileOpen(wxCommandEvent& event)
+void DesignerFrame::OnFileOpen(wxCommandEvent& event)
 {
 	wxFileDialog dialog(this, wxT("Choose a file"), wxEmptyString, wxEmptyString, wxT("XML files (*.xml)|*.xml"), wxFD_DEFAULT_STYLE);
 	if (dialog .ShowModal() == wxID_OK)
 	{
 		wxString strPath = dialog.GetPath();
-		m_pImagePieceDocument->OpenFile(strPath);
-		UpdateImagePieceView();
-		UpdateImageListView();
+		ImagePieceDocument::GetInstance().OpenFile(strPath);
+		PieceListTransformer::GetInstance().UpdateListView();
+		ImageListTransformer::GetInstance().UpdateListView();
 	}
 }
 
-void UIDesignerFrame::OnFileSave(wxCommandEvent& event)
+void DesignerFrame::OnFileSave(wxCommandEvent& event)
 {
-	if (m_pImagePieceDocument && !m_pImagePieceDocument->GetFileName().IsEmpty())
+	if (!ImagePieceDocument::GetInstance().GetFileName().IsEmpty())
 	{
-		m_pImagePieceDocument->SaveFile(m_pImagePieceDocument->GetFileName());
+		ImagePieceDocument::GetInstance().SaveFile(ImagePieceDocument::GetInstance().GetFileName());
 	}
 }
 
-void UIDesignerFrame::OnFileClose(wxCommandEvent& event)
+void DesignerFrame::OnFileClose(wxCommandEvent& event)
 {
 	wxMessageDialog Dialog(NULL,"Don't you want to close the file",wxEmptyString, wxNO_DEFAULT|wxYES_NO);
 	if (Dialog.ShowModal() != wxID_YES) return;
 
-	const UIImagePieceDocument::TM_IMAGE_INFO& ImageInfoMap = m_pImagePieceDocument->GetImageInfoMap();
+	const ImagePieceDocument::TM_IMAGE_INFO& ImageInfoMap = ImagePieceDocument::GetInstance().GetImageInfoMap();
 	if (ImageInfoMap.size() > 0)
 	{
 		wxMessageDialog MessageDialog(NULL, "Do you want to save the file", wxEmptyString, wxNO_DEFAULT|wxYES_NO);
-		if (MessageDialog.ShowModal() == wxID_YES) m_pImagePieceDocument->SaveFile(m_pImagePieceDocument->GetFileName());		
-		m_pImagePieceDocument->Clear();
-		UpdateImagePieceView();
-		UpdateImageListView();
+		if (MessageDialog.ShowModal() == wxID_YES) ImagePieceDocument::GetInstance().SaveFile(ImagePieceDocument::GetInstance().GetFileName());		
+		ImagePieceDocument::GetInstance().Clear();
+		PieceListTransformer::GetInstance().UpdateListView();
+		ImageListTransformer::GetInstance().UpdateListView();
 	}
 }
 
-void UIDesignerFrame::OnExit(wxCommandEvent& event)
+void DesignerFrame::OnExit(wxCommandEvent& event)
 {
 	Destroy();
 }
 
-void UIDesignerFrame::OnViewZoom100(wxCommandEvent& event)
+void DesignerFrame::OnViewZoom100(wxCommandEvent& event)
 {
-	m_pImagePieceEditor->Zoom(UIImagePieceEditor::ZOOM_MIN);
+	m_pImagePieceEditor->Zoom(ImagePieceEditor::ZOOM_MIN);
 }
 
-void UIDesignerFrame::OnViewZoomIn(wxCommandEvent& event)
+void DesignerFrame::OnViewZoomIn(wxCommandEvent& event)
 {
 	m_pImagePieceEditor->ZoomIn();
 }
 
-void UIDesignerFrame::OnViewZoomOut(wxCommandEvent& event)
+void DesignerFrame::OnViewZoomOut(wxCommandEvent& event)
 {
 	m_pImagePieceEditor->ZoomOut();
 }
 
-void UIDesignerFrame::OnImagePieceListSelected(wxTreeEvent& event)
+void DesignerFrame::OnImagePieceListSelected(wxTreeEvent& event)
 {
-	wxString strPieceId = m_pImagePieceListView->GetItemText(m_pImagePieceListView->GetSelection());
-	PieceInfo* pPieceInfo = m_pImagePieceDocument->FindPieceInfo(strPieceId);
+	PieceInfo* pPieceInfo = PieceListTransformer::GetInstance().GetSelectedPieceInfo();
 	if (pPieceInfo)
 	{
-		ImageInfo* pImageInfo = m_pImagePieceDocument->FindImageInfo(pPieceInfo->GetImageId());
+		ImageInfo* pImageInfo = ImagePieceDocument::GetInstance().FindImageInfo(pPieceInfo->GetImageId());
 		m_pImagePieceEditor->SetImage(pImageInfo);
 	}
 	m_pImagePieceEditor->SetSelection(pPieceInfo);
 }
 
-void UIDesignerFrame::OnImageListSelected(wxTreeEvent& event)
+void DesignerFrame::OnImageListSelected(wxTreeEvent& event)
 {
-	wxString strImageId = m_pImageListView->GetItemText(m_pImageListView->GetSelection());
-	ImageInfo* pImageInfo = m_pImagePieceDocument->FindImageInfo(strImageId);
+	ImageInfo* pImageInfo = ImageListTransformer::GetInstance().GetSelectedImageInfo();
 	m_pImagePieceEditor->SetImage(pImageInfo);
 	m_pImagePieceEditor->SetSelection(NULL);
 }

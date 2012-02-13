@@ -67,3 +67,13 @@ bool ImageInfo::LoadImageFromFile()
 
 	return true;
 }
+
+void ImageInfo::SetTreeItemId(wxTreeItemId itemId)
+{
+	m_TreeItemId = itemId;
+}
+
+wxTreeItemId ImageInfo::GetTreeItemId()
+{
+	return m_TreeItemId;
+}

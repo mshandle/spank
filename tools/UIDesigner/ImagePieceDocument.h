@@ -1,41 +1,46 @@
 /*!
- * \file UIImagePieceDocument.h
- * \date 11-09-2011 08:21:50
+ * \file ImagePieceDocument.h
+ * \date 2-14-2012 1:23:48
  * 
  * 
  * \author zjhlogo (zjhlogo@gmail.com)
  */
-#ifndef __UIIMAGEPIECEDOCUMENT_H__
-#define __UIIMAGEPIECEDOCUMENT_H__
+#ifndef __IMAGEPIECEDOCUMENT_H__
+#define __IMAGEPIECEDOCUMENT_H__
 
-#include "UIDocumentBase.h"
+#include "DocumentBase.h"
 #include <wx/gdicmn.h>
 #include <map>
 #include "ImageInfo.h"
 #include "PieceInfo.h"
 
-class UIImagePieceDocument : public UIDocumentBase
+class ImagePieceDocument : public DocumentBase
 {
 public:
 	typedef std::map<wxString, ImageInfo*> TM_IMAGE_INFO;
 	typedef std::map<wxString, PieceInfo*> TM_PIECE_INFO;
 
 public:
-	UIImagePieceDocument();
-	virtual ~UIImagePieceDocument();
+	virtual ~ImagePieceDocument();
 
 	virtual bool OpenFile(const wxString& strFile);
 	virtual bool SaveFile(const wxString& strFile);
 	virtual bool NewFile(const wxString& strFile);
 	virtual const wxString& GetFileName() const;
 
+	static ImagePieceDocument& GetInstance();
+
 	ImageInfo* FindImageInfo(const wxString& strId);
 	PieceInfo* FindPieceInfo(const wxString& strId);
+	PieceInfo* FindPieceInfoUnderPoint(const wxPoint& pos, const ImageInfo* pImageInfo);
 
-	const TM_IMAGE_INFO& GetImageInfoMap() const;
-	const TM_PIECE_INFO& GetPieceInfoMap() const;
+	TM_IMAGE_INFO& GetImageInfoMap();
+	TM_PIECE_INFO& GetPieceInfoMap();
 
 	void Clear();
+
+protected:
+	ImagePieceDocument();
 
 private:
 	TM_IMAGE_INFO m_ImageInfoMap;
@@ -43,4 +48,4 @@ private:
 	wxString m_strFile;
 
 };
-#endif // __UIIMAGEPIECEDOCUMENT_H__
+#endif // __IMAGEPIECEDOCUMENT_H__

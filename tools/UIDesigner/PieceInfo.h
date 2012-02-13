@@ -9,6 +9,7 @@
 #define __PIECEINFO_H__
 
 #include <wx/wx.h>
+#include <wx/treectrl.h>
 #include <tinyxml-2.6.2/tinyxml.h>
 
 class PieceInfo
@@ -28,10 +29,14 @@ public:
 	void SetRect(const wxRect& rect);
 	const wxRect& GetRect() const;
 
+	void SetTreeItemId(wxTreeItemId itemId);
+	wxTreeItemId GetTreeItemId();
+
 private:
 	wxString m_strId;
 	wxString m_strImageId;
 	wxRect m_Rect;
+	wxTreeItemId m_TreeItemId;
 
 };
 #endif // __PIECEINFO_H__

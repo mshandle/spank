@@ -1,23 +1,24 @@
 /*!
- * \file UIDocumentBase.h
- * \date 11-09-2011 08:17:09
+ * \file DocumentBase.h
+ * \date 2-14-2012 1:22:51
  * 
  * 
  * \author zjhlogo (zjhlogo@gmail.com)
  */
-#ifndef __UIDOCUMENTBASE_H__
-#define __UIDOCUMENTBASE_H__
+#ifndef __DOCUMENTBASE_H__
+#define __DOCUMENTBASE_H__
+
 #include <wx/string.h>
 
-class UIDocumentBase
+class DocumentBase
 {
 public:
-	UIDocumentBase();
-	virtual ~UIDocumentBase();
+	DocumentBase();
+	virtual ~DocumentBase();
 
 	virtual bool OpenFile(const wxString& strFile) = 0;
 	virtual bool SaveFile(const wxString& strFile) = 0;
 	virtual const wxString& GetFileName() const = 0;
 
 };
-#endif // __UIDOCUMENTBASE_H__
+#endif // __DOCUMENTBASE_H__

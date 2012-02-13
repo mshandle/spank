@@ -9,6 +9,7 @@
 #define __IMAGEINFO_H__
 
 #include <wx/wx.h>
+#include <wx/treectrl.h>
 #include <tinyxml-2.6.2/tinyxml.h>
 
 class ImageInfo
@@ -24,6 +25,9 @@ public:
 
 	wxBitmap* GetImage();
 
+	void SetTreeItemId(wxTreeItemId itemId);
+	wxTreeItemId GetTreeItemId();
+
 private:
 	bool LoadImageFromFile();
 
@@ -32,6 +36,7 @@ private:
 	wxString m_strPath;
 	wxBitmap* m_pbmpImage;
 	bool m_bLoaded;
+	wxTreeItemId m_TreeItemId;
 
 };
 #endif // __IMAGEINFO_H__

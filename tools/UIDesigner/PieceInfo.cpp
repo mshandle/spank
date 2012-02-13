@@ -61,3 +61,13 @@ const wxRect& PieceInfo::GetRect() const
 {
 	return m_Rect;
 }
+
+void PieceInfo::SetTreeItemId(wxTreeItemId itemId)
+{
+	m_TreeItemId = itemId;
+}
+
+wxTreeItemId PieceInfo::GetTreeItemId()
+{
+	return m_TreeItemId;
+}

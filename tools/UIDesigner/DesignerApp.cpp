@@ -1,32 +1,32 @@
 /*!
- * \file UIDesignerApp.cpp
- * \date 8-31-2011 13:07:59
+ * \file DesignerApp.cpp
+ * \date 2-14-2012 1:21:26
  * 
  * 
  * \author zjhlogo (zjhlogo@gmail.com)
  */
-#include "UIDesignerApp.h"
-#include "UIDesignerFrame.h"
+#include "DesignerApp.h"
+#include "DesignerFrame.h"
 
-IMPLEMENT_APP(UIDesignerApp)
+IMPLEMENT_APP(DesignerApp)
 
-UIDesignerApp::UIDesignerApp()
+DesignerApp::DesignerApp()
 {
 	// TODO: 
 }
 
-UIDesignerApp::~UIDesignerApp()
+DesignerApp::~DesignerApp()
 {
 	// TODO: 
 }
 
-bool UIDesignerApp::OnInit()
+bool DesignerApp::OnInit()
 {
 	wxImage::AddHandler(new wxPNGHandler());
 	wxImage::AddHandler(new wxJPEGHandler());
 	wxImage::AddHandler(new wxCURHandler());
 
-	UIDesignerFrame* mainWindow = new UIDesignerFrame();
+	DesignerFrame* mainWindow = new DesignerFrame();
 	mainWindow->Maximize(true);
 	mainWindow->Show(true);
 

@@ -1,23 +1,25 @@
 /*!
- * \file UIImagePieceEditor.h
- * \date 01-09-2011 21:21:40
+ * \file ImagePieceEditor.h
+ * \date 2-14-2012 1:24:31
  * 
  * 
  * \author zjhlogo (zjhlogo@gmail.com)
  */
-#ifndef __UIIMAGEPIECEEDITOR_H__
-#define __UIIMAGEPIECEEDITOR_H__
+#ifndef __IMAGEPIECEEDITOR_H__
+#define __IMAGEPIECEEDITOR_H__
 
 #include <wx/scrolwin.h>
 #include <wx/bitmap.h>
 #include <wx/dcmemory.h>
-#include "UIImagePieceDocument.h"
 #include <vector>
 #include <map>
 
-class UIImagePieceEditor : public wxWindow
+#include "PieceInfo.h"
+#include "ImageInfo.h"
+
+class ImagePieceEditor : public wxWindow
 {
-	DECLARE_DYNAMIC_CLASS(UIImagePieceEditor)
+	DECLARE_DYNAMIC_CLASS(ImagePieceEditor)
 	DECLARE_EVENT_TABLE()
 
 public:
@@ -51,15 +53,15 @@ public:
 	typedef std::map<wxString, wxBitmap*> TM_BITMAP_CACHE;
 
 public:
-	UIImagePieceEditor();
-	UIImagePieceEditor(wxWindow *parent,
+	ImagePieceEditor();
+	ImagePieceEditor(wxWindow *parent,
 		wxWindowID winid,
 		const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,
 		long style = 0,
 		const wxString& name = wxPanelNameStr);
 
-	virtual ~UIImagePieceEditor();
+	virtual ~ImagePieceEditor();
 
 	bool Create(wxWindow *parent,
 		wxWindowID winid,
@@ -120,4 +122,4 @@ private:
 	ImageInfo* m_pImageInfo;
 
 };
-#endif // __UIIMAGEPIECEEDITOR_H__
+#endif // __IMAGEPIECEEDITOR_H__

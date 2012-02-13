@@ -178,11 +178,59 @@
 	</References>
 	<Files>
 		<File
+			RelativePath=".\DesignerApp.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\DesignerApp.h"
+			>
+		</File>
+		<File
+			RelativePath=".\DesignerFrame.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\DesignerFrame.h"
+			>
+		</File>
+		<File
+			RelativePath=".\DocumentBase.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\DocumentBase.h"
+			>
+		</File>
+		<File
 			RelativePath=".\ImageInfo.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\ImageInfo.h"
+			>
+		</File>
+		<File
+			RelativePath=".\ImageListTransformer.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ImageListTransformer.h"
+			>
+		</File>
+		<File
+			RelativePath=".\ImagePieceDocument.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ImagePieceDocument.h"
+			>
+		</File>
+		<File
+			RelativePath=".\ImagePieceEditor.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ImagePieceEditor.h"
 			>
 		</File>
 		<File
@@ -194,43 +242,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\UIDesignerApp.cpp"
+			RelativePath=".\PieceListTransformer.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\UIDesignerApp.h"
-			>
-		</File>
-		<File
-			RelativePath=".\UIDesignerFrame.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\UIDesignerFrame.h"
-			>
-		</File>
-		<File
-			RelativePath=".\UIDocumentBase.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\UIDocumentBase.h"
-			>
-		</File>
-		<File
-			RelativePath=".\UIImagePieceDocument.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\UIImagePieceDocument.h"
-			>
-		</File>
-		<File
-			RelativePath=".\UIImagePieceEditor.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\UIImagePieceEditor.h"
+			RelativePath=".\PieceListTransformer.h"
 			>
 		</File>
 	</Files>

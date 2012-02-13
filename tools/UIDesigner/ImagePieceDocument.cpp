@@ -1,24 +1,24 @@
 /*!
- * \file UIImagePieceDocument.cpp
- * \date 11-09-2011 08:22:09
+ * \file ImagePieceDocument.cpp
+ * \date 2-14-2012 1:23:54
  * 
  * 
  * \author zjhlogo (zjhlogo@gmail.com)
  */
-#include "UIImagePieceDocument.h"
+#include "ImagePieceDocument.h"
 #include <tinyxml-2.6.2/tinyxml.h>
 
-UIImagePieceDocument::UIImagePieceDocument()
+ImagePieceDocument::ImagePieceDocument()
 {
 	// TODO: 
 }
 
-UIImagePieceDocument::~UIImagePieceDocument()
+ImagePieceDocument::~ImagePieceDocument()
 {
 	Clear();
 }
 
-bool UIImagePieceDocument::OpenFile(const wxString& strFile)
+bool ImagePieceDocument::OpenFile(const wxString& strFile)
 {
 	TiXmlDocument doc;
 	if (!doc.LoadFile(strFile)) return false;
@@ -56,7 +56,7 @@ bool UIImagePieceDocument::OpenFile(const wxString& strFile)
 	return true;
 }
 
-bool UIImagePieceDocument::SaveFile(const wxString& strFile)
+bool ImagePieceDocument::SaveFile(const wxString& strFile)
 {
 	TiXmlDocument doc;
 	TiXmlDeclaration* pDecl = new TiXmlDeclaration("1.0", "utf-8", "yes");
@@ -98,33 +98,54 @@ bool UIImagePieceDocument::SaveFile(const wxString& strFile)
 	return doc.SaveFile(strFile);
 }
 
-const wxString& UIImagePieceDocument::GetFileName() const
+const wxString& ImagePieceDocument::GetFileName() const
 {
 	return m_strFile;
 }
 
-ImageInfo* UIImagePieceDocument::FindImageInfo(const wxString& strId)
+ImagePieceDocument& ImagePieceDocument::GetInstance()
+{
+	static ImagePieceDocument s_UIImagePieceDocument;
+	return s_UIImagePieceDocument;
+}
+
+ImageInfo* ImagePieceDocument::FindImageInfo(const wxString& strId)
 {
 	TM_IMAGE_INFO::iterator itfound = m_ImageInfoMap.find(strId);
 	if (itfound == m_ImageInfoMap.end()) return NULL;
 	return itfound->second;
 }
 
-PieceInfo* UIImagePieceDocument::FindPieceInfo(const wxString& strId)
+PieceInfo* ImagePieceDocument::FindPieceInfo(const wxString& strId)
 {
 	TM_PIECE_INFO::iterator itfound = m_PieceInfoMap.find(strId);
 	if (itfound == m_PieceInfoMap.end()) return NULL;
 	return itfound->second;
 }
 
-bool UIImagePieceDocument::NewFile(const wxString& strFile)
+PieceInfo* ImagePieceDocument::FindPieceInfoUnderPoint(const wxPoint& pos, const ImageInfo* pImageInfo)
+{
+	if (!pImageInfo) return NULL;
+
+	for (TM_PIECE_INFO::iterator it = m_PieceInfoMap.begin(); it != m_PieceInfoMap.end(); ++it)
+	{
+		PieceInfo* pPieceInfo = it->second;
+		if (pPieceInfo->GetImageId() != pImageInfo->GetId()) continue;
+
+		if (pPieceInfo->GetRect().Contains(pos)) return pPieceInfo;
+	}
+
+	return NULL;
+}
+
+bool ImagePieceDocument::NewFile(const wxString& strFile)
 {
 	Clear();
 	m_strFile = strFile;
 	return true;
 }
 
-void UIImagePieceDocument::Clear()
+void ImagePieceDocument::Clear()
 {
 	m_strFile = wxEmptyString;
 	for (TM_IMAGE_INFO::iterator it = m_ImageInfoMap.begin(); it != m_ImageInfoMap.end(); ++it)
@@ -142,12 +163,12 @@ void UIImagePieceDocument::Clear()
 	m_PieceInfoMap.clear();
 }
 
-const UIImagePieceDocument::TM_IMAGE_INFO& UIImagePieceDocument::GetImageInfoMap() const
+ImagePieceDocument::TM_IMAGE_INFO& ImagePieceDocument::GetImageInfoMap()
 {
 	return m_ImageInfoMap;
 }
 
-const UIImagePieceDocument::TM_PIECE_INFO& UIImagePieceDocument::GetPieceInfoMap() const
+ImagePieceDocument::TM_PIECE_INFO& ImagePieceDocument::GetPieceInfoMap()
 {
 	return m_PieceInfoMap;
 }

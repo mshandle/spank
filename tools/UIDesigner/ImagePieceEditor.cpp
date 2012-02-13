@@ -1,47 +1,48 @@
 /*!
- * \file UIImagePieceEditor.cpp
- * \date 01-09-2011 21:21:45
+ * \file ImagePieceEditor.cpp
+ * \date 2-14-2012 1:24:48
  * 
  * 
  * \author zjhlogo (zjhlogo@gmail.com)
  */
-#include "UIImagePieceEditor.h"
+#include "ImagePieceEditor.h"
+#include "ImagePieceDocument.h"
 #include <wx/dcclient.h>
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
-BEGIN_EVENT_TABLE(UIImagePieceEditor, wxWindow)
-	EVT_PAINT(UIImagePieceEditor::OnPaint)
-	EVT_MOUSEWHEEL(UIImagePieceEditor::OnMouseWheel)
-	EVT_LEFT_DOWN(UIImagePieceEditor::OnMouseLButtonDown)
-	EVT_SIZE(UIImagePieceEditor::OnSize)
-	EVT_SCROLLWIN_LINEUP(UIImagePieceEditor::OnScrollLineUp)
-	EVT_SCROLLWIN_LINEDOWN(UIImagePieceEditor::OnScrollLineDown)
-	EVT_SCROLLWIN_PAGEUP(UIImagePieceEditor::OnScrollPageUp)
-	EVT_SCROLLWIN_PAGEDOWN(UIImagePieceEditor::OnScrollPageDown)
-	EVT_SCROLLWIN_THUMBTRACK(UIImagePieceEditor::OnScrollThumbTrack)
-	EVT_SCROLLWIN_THUMBRELEASE(UIImagePieceEditor::OnScrollThumbRelease)
+BEGIN_EVENT_TABLE(ImagePieceEditor, wxWindow)
+	EVT_PAINT(ImagePieceEditor::OnPaint)
+	EVT_MOUSEWHEEL(ImagePieceEditor::OnMouseWheel)
+	EVT_LEFT_DOWN(ImagePieceEditor::OnMouseLButtonDown)
+	EVT_SIZE(ImagePieceEditor::OnSize)
+	EVT_SCROLLWIN_LINEUP(ImagePieceEditor::OnScrollLineUp)
+	EVT_SCROLLWIN_LINEDOWN(ImagePieceEditor::OnScrollLineDown)
+	EVT_SCROLLWIN_PAGEUP(ImagePieceEditor::OnScrollPageUp)
+	EVT_SCROLLWIN_PAGEDOWN(ImagePieceEditor::OnScrollPageDown)
+	EVT_SCROLLWIN_THUMBTRACK(ImagePieceEditor::OnScrollThumbTrack)
+	EVT_SCROLLWIN_THUMBRELEASE(ImagePieceEditor::OnScrollThumbRelease)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(UIImagePieceEditor, wxWindow)
+IMPLEMENT_DYNAMIC_CLASS(ImagePieceEditor, wxWindow)
 
-UIImagePieceEditor::UIImagePieceEditor()
+ImagePieceEditor::ImagePieceEditor()
 {
 	Init();
 }
 
-UIImagePieceEditor::UIImagePieceEditor(wxWindow *parent, wxWindowID winid, const wxPoint& pos /* = wxDefaultPosition */, const wxSize& size /* = wxDefaultSize */, long style /* = 0 */, const wxString& name /* = wxPanelNameStr */)
+ImagePieceEditor::ImagePieceEditor(wxWindow *parent, wxWindowID winid, const wxPoint& pos /* = wxDefaultPosition */, const wxSize& size /* = wxDefaultSize */, long style /* = 0 */, const wxString& name /* = wxPanelNameStr */)
 {
 	Init();
 	Create(parent, winid, pos, size, style, name);
 }
 
-UIImagePieceEditor::~UIImagePieceEditor()
+ImagePieceEditor::~ImagePieceEditor()
 {
 	Release();
 }
 
-void UIImagePieceEditor::Init()
+void ImagePieceEditor::Init()
 {
 	// load grid brush
 	m_bmpGrid.LoadFile(wxT("images/grid.png"), wxBITMAP_TYPE_PNG);
@@ -58,45 +59,45 @@ void UIImagePieceEditor::Init()
 	m_pImageInfo = NULL;
 }
 
-void UIImagePieceEditor::Release()
+void ImagePieceEditor::Release()
 {
 	// TODO: 
 }
 
-bool UIImagePieceEditor::Create(wxWindow *parent, wxWindowID winid, const wxPoint& pos /* = wxDefaultPosition */, const wxSize& size /* = wxDefaultSize */, long style /* = 0 */, const wxString& name /* = wxPanelNameStr */)
+bool ImagePieceEditor::Create(wxWindow *parent, wxWindowID winid, const wxPoint& pos /* = wxDefaultPosition */, const wxSize& size /* = wxDefaultSize */, long style /* = 0 */, const wxString& name /* = wxPanelNameStr */)
 {
 	if (!wxWindow::Create(parent, winid, pos, size, style, name)) return false;
 
 	return true;
 }
 
-wxSize UIImagePieceEditor::DoGetBestSize() const
+wxSize ImagePieceEditor::DoGetBestSize() const
 {
 	return m_sizeVirtual;
 }
 
-void UIImagePieceEditor::SetSelection(PieceInfo* pPieceInfo)
+void ImagePieceEditor::SetSelection(PieceInfo* pPieceInfo)
 {
 	m_pPieceInfo = pPieceInfo;
 	Refresh(false);
 }
 
-PieceInfo* UIImagePieceEditor::GetSelection() const
+PieceInfo* ImagePieceEditor::GetSelection() const
 {
 	return m_pPieceInfo;
 }
 
-bool UIImagePieceEditor::ZoomIn()
+bool ImagePieceEditor::ZoomIn()
 {
 	return Zoom(m_nZoom+1);
 }
 
-bool UIImagePieceEditor::ZoomOut()
+bool ImagePieceEditor::ZoomOut()
 {
 	return Zoom(m_nZoom-1);
 }
 
-bool UIImagePieceEditor::Zoom(int zoom)
+bool ImagePieceEditor::Zoom(int zoom)
 {
 	if (zoom < ZOOM_MIN || zoom > ZOOM_MAX) return false;
 	if (m_nZoom == zoom) return true;
@@ -109,12 +110,12 @@ bool UIImagePieceEditor::Zoom(int zoom)
 	return true;
 }
 
-int UIImagePieceEditor::GetZoom() const
+int ImagePieceEditor::GetZoom() const
 {
 	return m_nZoom;
 }
 
-void UIImagePieceEditor::OnPaint(wxPaintEvent& event)
+void ImagePieceEditor::OnPaint(wxPaintEvent& event)
 {
 	wxPaintDC dc(this);
 
@@ -136,7 +137,6 @@ void UIImagePieceEditor::OnPaint(wxPaintEvent& event)
 	// draw image
 	if (pbmpImage)
 	{
-		//Draw the import piece in the Image;
 		m_dcBackBuffer.StretchBlit(-m_ptOrigin, pbmpImage->GetSize()*m_nZoom, &m_dcImage, wxPoint(0, 0), pbmpImage->GetSize());
 		DrawSelection(m_dcBackBuffer);
 	}
@@ -145,7 +145,7 @@ void UIImagePieceEditor::OnPaint(wxPaintEvent& event)
 	dc.Blit(0, 0, m_bmpBackBuffer.GetWidth(), m_bmpBackBuffer.GetHeight(), &m_dcBackBuffer, 0, 0);
 }
 
-void UIImagePieceEditor::OnMouseWheel(wxMouseEvent& event)
+void ImagePieceEditor::OnMouseWheel(wxMouseEvent& event)
 {
 	int lines = -event.GetWheelRotation() / event.GetWheelDelta();
 
@@ -157,8 +157,14 @@ void UIImagePieceEditor::OnMouseWheel(wxMouseEvent& event)
 	}
 	else if (event.ControlDown())
 	{
-		if (lines < 0) ZoomIn();
-		else ZoomOut();
+		if (lines < 0)
+		{
+			ZoomIn();
+		}
+		else
+		{
+			ZoomOut();
+		}
 	}
 	else
 	{
@@ -166,15 +172,18 @@ void UIImagePieceEditor::OnMouseWheel(wxMouseEvent& event)
 		SetScrollPos(wxVERTICAL, nPos + lines * event.GetLinesPerAction() * SCROLL_LINE_DISTANCE);
 		UpdateScrollPosition(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
 	}
-	event.Skip();
 }
 
-void UIImagePieceEditor::OnMouseLButtonDown(wxMouseEvent& event)
+void ImagePieceEditor::OnMouseLButtonDown(wxMouseEvent& event)
 {
-	// TODO: 
+	SetFocus();
+
+	wxPoint posMouse = (event.GetPosition() + m_ptOrigin) / m_nZoom;
+	PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfoUnderPoint(posMouse, m_pImageInfo);
+	SetSelection(pPieceInfo);
 }
 
-void UIImagePieceEditor::OnSize(wxSizeEvent& event)
+void ImagePieceEditor::OnSize(wxSizeEvent& event)
 {
 	UpdateVirtualSize();
 	UpdateScrollPosition(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
@@ -189,7 +198,7 @@ void UIImagePieceEditor::OnSize(wxSizeEvent& event)
 	event.Skip();
 }
 
-void UIImagePieceEditor::OnScrollLineUp(wxScrollWinEvent& event)
+void ImagePieceEditor::OnScrollLineUp(wxScrollWinEvent& event)
 {
 	int nOrientation = event.GetOrientation();
 
@@ -198,7 +207,7 @@ void UIImagePieceEditor::OnScrollLineUp(wxScrollWinEvent& event)
 	UpdateScrollPosition(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
 }
 
-void UIImagePieceEditor::OnScrollLineDown(wxScrollWinEvent& event)
+void ImagePieceEditor::OnScrollLineDown(wxScrollWinEvent& event)
 {
 	int nOrientation = event.GetOrientation();
 
@@ -207,7 +216,7 @@ void UIImagePieceEditor::OnScrollLineDown(wxScrollWinEvent& event)
 	UpdateScrollPosition(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
 }
 
-void UIImagePieceEditor::OnScrollPageUp(wxScrollWinEvent& event)
+void ImagePieceEditor::OnScrollPageUp(wxScrollWinEvent& event)
 {
 	int nOrientation = event.GetOrientation();
 	int nDistance = GetScrollThumb(nOrientation);
@@ -216,7 +225,7 @@ void UIImagePieceEditor::OnScrollPageUp(wxScrollWinEvent& event)
 	UpdateScrollPosition(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
 }
 
-void UIImagePieceEditor::OnScrollPageDown(wxScrollWinEvent& event)
+void ImagePieceEditor::OnScrollPageDown(wxScrollWinEvent& event)
 {
 	int nOrientation = event.GetOrientation();
 	int nDistance = GetScrollThumb(nOrientation);
@@ -225,7 +234,7 @@ void UIImagePieceEditor::OnScrollPageDown(wxScrollWinEvent& event)
 	UpdateScrollPosition(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
 }
 
-void UIImagePieceEditor::OnScrollThumbTrack(wxScrollWinEvent& event)
+void ImagePieceEditor::OnScrollThumbTrack(wxScrollWinEvent& event)
 {
 	int nOrientation = event.GetOrientation();
 	int nPos = event.GetPosition();
@@ -239,7 +248,7 @@ void UIImagePieceEditor::OnScrollThumbTrack(wxScrollWinEvent& event)
 	}
 }
 
-void UIImagePieceEditor::OnScrollThumbRelease(wxScrollWinEvent& event)
+void ImagePieceEditor::OnScrollThumbRelease(wxScrollWinEvent& event)
 {
 	int nOrientation = event.GetOrientation();
 	int nPos = event.GetPosition();
@@ -247,7 +256,7 @@ void UIImagePieceEditor::OnScrollThumbRelease(wxScrollWinEvent& event)
 	UpdateScrollPosition(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
 }
 
-void UIImagePieceEditor::UpdateVirtualSize()
+void ImagePieceEditor::UpdateVirtualSize()
 {
 	if (!m_pImageInfo) return;
 
@@ -288,12 +297,12 @@ void UIImagePieceEditor::UpdateVirtualSize()
 	}
 }
 
-const wxSize& UIImagePieceEditor::GetVirtualSize()
+const wxSize& ImagePieceEditor::GetVirtualSize()
 {
 	return m_sizeVirtual;
 }
 
-void UIImagePieceEditor::UpdateScrollPosition(int x, int y)
+void ImagePieceEditor::UpdateScrollPosition(int x, int y)
 {
 	m_ptOrigin.x = x;
 	m_ptOrigin.y = y;
@@ -301,7 +310,7 @@ void UIImagePieceEditor::UpdateScrollPosition(int x, int y)
 	Refresh(false);
 }
 
-void UIImagePieceEditor::DrawSelection(wxDC& dc)
+void ImagePieceEditor::DrawSelection(wxDC& dc)
 {
 	if (!m_pPieceInfo) return;
 
@@ -313,7 +322,7 @@ void UIImagePieceEditor::DrawSelection(wxDC& dc)
  	dc.DrawRectangle(zoomedRect);
 }
 
-bool UIImagePieceEditor::SetImage(ImageInfo* pImageInfo)
+bool ImagePieceEditor::SetImage(ImageInfo* pImageInfo)
 {
 	if (m_pImageInfo == pImageInfo) return false;
 	m_pImageInfo = pImageInfo;
@@ -332,7 +341,7 @@ bool UIImagePieceEditor::SetImage(ImageInfo* pImageInfo)
 	return true;
 }
 
-ImageInfo* UIImagePieceEditor::GetImage() const
+ImageInfo* ImagePieceEditor::GetImage() const
 {
 	return m_pImageInfo;
 }
