@@ -6,6 +6,7 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "ImageInfo.h"
+#include "ProjectDocument.h"
 
 ImageInfo::ImageInfo()
 {
@@ -58,7 +59,7 @@ bool ImageInfo::LoadImageFromFile()
 	if (m_pbmpImage) return false;
 
 	m_pbmpImage = new wxBitmap();
-	if (!m_pbmpImage->LoadFile("ui/" + m_strPath, wxBITMAP_TYPE_ANY))
+	if (!m_pbmpImage->LoadFile(ProjectDocument::GetInstance().GetRootPath() + m_strPath, wxBITMAP_TYPE_ANY))
 	{
 		delete m_pbmpImage;
 		m_pbmpImage = NULL;

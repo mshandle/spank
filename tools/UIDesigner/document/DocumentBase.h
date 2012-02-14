@@ -18,7 +18,8 @@ public:
 
 	virtual bool OpenFile(const wxString& strFile) = 0;
 	virtual bool SaveFile(const wxString& strFile) = 0;
-	virtual const wxString& GetFileName() const = 0;
+	virtual void Reset() = 0;
+	virtual const wxString& GetFilePath() const = 0;
 
 };
 #endif // __DOCUMENTBASE_H__

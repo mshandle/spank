@@ -20,7 +20,7 @@ public:
 	void UpdateListView();
 
 	ImageInfo* GetSelectedImageInfo();
-	void SetSelectedItem(ImageInfo* pImageInfo);
+	void SetSelectedImageInfo(ImageInfo* pImageInfo);
 
 protected:
 	ImageListTransformer();

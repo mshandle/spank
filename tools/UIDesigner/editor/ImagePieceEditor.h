@@ -14,8 +14,8 @@
 #include <vector>
 #include <map>
 
-#include "document/PieceInfo.h"
-#include "document/ImageInfo.h"
+#include "../document/PieceInfo.h"
+#include "../document/ImageInfo.h"
 
 class ImagePieceEditor : public wxWindow
 {

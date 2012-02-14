@@ -25,8 +25,8 @@ public:
 
 	virtual bool OpenFile(const wxString& strFile);
 	virtual bool SaveFile(const wxString& strFile);
-	virtual bool NewFile(const wxString& strFile);
-	virtual const wxString& GetFileName() const;
+	virtual void Reset();
+	virtual const wxString& GetFilePath() const;
 
 	static ImagePieceDocument& GetInstance();
 
@@ -36,8 +36,6 @@ public:
 
 	TM_IMAGE_INFO& GetImageInfoMap();
 	TM_PIECE_INFO& GetPieceInfoMap();
-
-	void Clear();
 
 protected:
 	ImagePieceDocument();

@@ -33,7 +33,7 @@ bool PieceListTransformer::Initialize(wxTreeCtrl* pTreeCtrl)
 void PieceListTransformer::UpdateListView()
 {
 	m_pListView->DeleteAllItems();
-	wxTreeItemId rootItem = m_pListView->AddRoot(wxT("ImagePiece"));
+	wxTreeItemId rootItem = m_pListView->AddRoot(wxT("PieceList"));
 
 	ImagePieceDocument::TM_PIECE_INFO& pieceInfoMap = ImagePieceDocument::GetInstance().GetPieceInfoMap();
 	for (ImagePieceDocument::TM_PIECE_INFO::iterator it = pieceInfoMap.begin(); it != pieceInfoMap.end(); ++it)

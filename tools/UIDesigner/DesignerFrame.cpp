@@ -12,10 +12,15 @@
 #include <wx/treectrl.h>
 #include <wx/filedlg.h>
 
+#include "document/ProjectDocument.h"
 #include "document/ImagePieceDocument.h"
 #include "transformer/ImageListTransformer.h"
 #include "transformer/PieceListTransformer.h"
-#include "ImagePieceEditor.h"
+#include "transformer/BitmapStyleTransformer.h"
+#include "transformer/NineGridStyleTransformer.h"
+#include "transformer/ColorStyleTransformer.h"
+#include "transformer/ClipBitmapStyleTransformer.h"
+#include "editor/ImagePieceEditor.h"
 
 #include "images/disk.xpm"
 #include "images/document.xpm"
@@ -39,6 +44,10 @@ BEGIN_EVENT_TABLE(DesignerFrame, wxFrame)
 
 	EVT_TREE_SEL_CHANGED(IDC_PIECE_LIST, DesignerFrame::OnImagePieceListSelected)
 	EVT_TREE_SEL_CHANGED(IDC_IMAGE_LIST, DesignerFrame::OnImageListSelected)
+	EVT_TREE_SEL_CHANGED(IDC_BITMAP_STYLE_LIST, DesignerFrame::OnBitmapStyleListSelected)
+	EVT_TREE_SEL_CHANGED(IDC_NINE_GRID_STYLE_LIST, DesignerFrame::OnNineGridStyleListSelected)
+	EVT_TREE_SEL_CHANGED(IDC_COLOR_STYLE_LIST, DesignerFrame::OnColorStyleListSelected)
+	EVT_TREE_SEL_CHANGED(IDC_CLIP_BITMAP_STYLE_LIST, DesignerFrame::OnClipBitmapStyleListSelected)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(DesignerFrame, wxFrame)
@@ -247,15 +256,19 @@ void DesignerFrame::CreateListView()
 
 	wxTreeCtrl* pBitmapStyleListView = new wxTreeCtrl(pNotebookView, IDC_BITMAP_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pNotebookView->AddPage(pBitmapStyleListView, "Bitmap Styles");
+	BitmapStyleTransformer::GetInstance().Initialize(pBitmapStyleListView);
 
 	wxTreeCtrl* pNineGridStyleListView = new wxTreeCtrl(pNotebookView, IDC_NINE_GRID_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pNotebookView->AddPage(pNineGridStyleListView, "9-Grid Styles");
+	NineGridStyleTransformer::GetInstance().Initialize(pNineGridStyleListView);
 
 	wxTreeCtrl* pColorStyleListView = new wxTreeCtrl(pNotebookView, IDC_COLOR_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pNotebookView->AddPage(pColorStyleListView, "Color Styles");
+	ColorStyleTransformer::GetInstance().Initialize(pColorStyleListView);
 
 	wxTreeCtrl* pClipBitmapStyleListView = new wxTreeCtrl(pNotebookView, IDC_CLIP_BITMAP_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pNotebookView->AddPage(pClipBitmapStyleListView, "Clip Bitmap Styles");
+	ClipBitmapStyleTransformer::GetInstance().Initialize(pClipBitmapStyleListView);
 }
 
 void DesignerFrame::CreatePropertyView()
@@ -316,38 +329,25 @@ void DesignerFrame::CreateOutputView()
 
 void DesignerFrame::OnFileOpen(wxCommandEvent& event)
 {
-	wxFileDialog dialog(this, wxT("Choose a file"), wxEmptyString, wxEmptyString, wxT("XML files (*.xml)|*.xml"), wxFD_DEFAULT_STYLE);
+	wxFileDialog dialog(this, wxT("Choose a file"), wxEmptyString, wxEmptyString, wxT("Project files (*.udproj)|*.udproj"), wxFD_DEFAULT_STYLE);
 	if (dialog .ShowModal() == wxID_OK)
 	{
 		wxString strPath = dialog.GetPath();
-		ImagePieceDocument::GetInstance().OpenFile(strPath);
-		PieceListTransformer::GetInstance().UpdateListView();
-		ImageListTransformer::GetInstance().UpdateListView();
+		ProjectDocument::GetInstance().OpenFile(strPath);
 	}
 }
 
 void DesignerFrame::OnFileSave(wxCommandEvent& event)
 {
-	if (!ImagePieceDocument::GetInstance().GetFileName().IsEmpty())
+	if (!ProjectDocument::GetInstance().GetFilePath().IsEmpty())
 	{
-		ImagePieceDocument::GetInstance().SaveFile(ImagePieceDocument::GetInstance().GetFileName());
+		ProjectDocument::GetInstance().SaveFile(ProjectDocument::GetInstance().GetFilePath());
 	}
 }
 
 void DesignerFrame::OnFileClose(wxCommandEvent& event)
 {
-	wxMessageDialog Dialog(NULL,"Don't you want to close the file",wxEmptyString, wxNO_DEFAULT|wxYES_NO);
-	if (Dialog.ShowModal() != wxID_YES) return;
-
-	const ImagePieceDocument::TM_IMAGE_INFO& ImageInfoMap = ImagePieceDocument::GetInstance().GetImageInfoMap();
-	if (ImageInfoMap.size() > 0)
-	{
-		wxMessageDialog MessageDialog(NULL, "Do you want to save the file", wxEmptyString, wxNO_DEFAULT|wxYES_NO);
-		if (MessageDialog.ShowModal() == wxID_YES) ImagePieceDocument::GetInstance().SaveFile(ImagePieceDocument::GetInstance().GetFileName());		
-		ImagePieceDocument::GetInstance().Clear();
-		PieceListTransformer::GetInstance().UpdateListView();
-		ImageListTransformer::GetInstance().UpdateListView();
-	}
+	// TODO: 
 }
 
 void DesignerFrame::OnExit(wxCommandEvent& event)
@@ -377,7 +377,7 @@ void DesignerFrame::OnImagePieceListSelected(wxTreeEvent& event)
 	{
 		ImageInfo* pImageInfo = ImagePieceDocument::GetInstance().FindImageInfo(pPieceInfo->GetImageId());
 		ImagePieceEditor::GetInstance().SetImage(pImageInfo);
-		ImageListTransformer::GetInstance().SetSelectedItem(pImageInfo);
+		ImageListTransformer::GetInstance().SetSelectedImageInfo(pImageInfo);
 	}
 	ImagePieceEditor::GetInstance().SetSelection(pPieceInfo);
 }
@@ -387,4 +387,24 @@ void DesignerFrame::OnImageListSelected(wxTreeEvent& event)
 	ImageInfo* pImageInfo = ImageListTransformer::GetInstance().GetSelectedImageInfo();
 	ImagePieceEditor::GetInstance().SetImage(pImageInfo);
 	ImagePieceEditor::GetInstance().SetSelection(NULL);
+}
+
+void DesignerFrame::OnBitmapStyleListSelected(wxTreeEvent& event)
+{
+	// TODO: 
+}
+
+void DesignerFrame::OnNineGridStyleListSelected(wxTreeEvent& event)
+{
+	// TODO: 
+}
+
+void DesignerFrame::OnColorStyleListSelected(wxTreeEvent& event)
+{
+	// TODO: 
+}
+
+void DesignerFrame::OnClipBitmapStyleListSelected(wxTreeEvent& event)
+{
+	// TODO: 
 }

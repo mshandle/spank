@@ -1,0 +1,33 @@
+/*!
+ * \file ColorStyleTransformer.h
+ * \date 2-14-2012 17:00:43
+ * 
+ * 
+ * \author zjhlogo (zjhlogo@gmail.com)
+ */
+#ifndef __COLORSTYLETRANSFORMER_H__
+#define __COLORSTYLETRANSFORMER_H__
+
+#include <wx/treectrl.h>
+#include "../document/ColorStyle.h"
+
+class ColorStyleTransformer
+{
+public:
+	static ColorStyleTransformer& GetInstance();
+
+	bool Initialize(wxTreeCtrl* pTreeCtrl);
+	void UpdateListView();
+
+	ColorStyle* GetSelectedColorStyle();
+	void SetSelectedColorStyle(ColorStyle* pColorStyle);
+
+protected:
+	ColorStyleTransformer();
+	~ColorStyleTransformer();
+
+private:
+	wxTreeCtrl* m_pListView;
+
+};
+#endif // __COLORSTYLETRANSFORMER_H__

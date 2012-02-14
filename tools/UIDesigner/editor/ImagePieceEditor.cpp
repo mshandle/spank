@@ -6,9 +6,9 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "ImagePieceEditor.h"
-#include "document/ImagePieceDocument.h"
-#include "transformer/PieceListTransformer.h"
-#include "transformer/ImageListTransformer.h"
+#include "../document/ImagePieceDocument.h"
+#include "../transformer/PieceListTransformer.h"
+#include "../transformer/ImageListTransformer.h"
 
 #include <wx/dcclient.h>
 

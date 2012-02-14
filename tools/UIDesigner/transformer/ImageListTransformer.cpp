@@ -33,7 +33,7 @@ bool ImageListTransformer::Initialize(wxTreeCtrl* pTreeCtrl)
 void ImageListTransformer::UpdateListView()
 {
 	m_pListView->DeleteAllItems();
-	wxTreeItemId rootItem = m_pListView->AddRoot(wxT("ImageInfo"));
+	wxTreeItemId rootItem = m_pListView->AddRoot(wxT("ImageList"));
 
 	ImagePieceDocument::TM_IMAGE_INFO& ImageInfoMap = ImagePieceDocument::GetInstance().GetImageInfoMap();
 	for (ImagePieceDocument::TM_IMAGE_INFO::iterator it = ImageInfoMap.begin(); it != ImageInfoMap.end(); ++it)
@@ -52,7 +52,7 @@ ImageInfo* ImageListTransformer::GetSelectedImageInfo()
 	return pImageInfo;
 }
 
-void ImageListTransformer::SetSelectedItem(ImageInfo* pImageInfo)
+void ImageListTransformer::SetSelectedImageInfo(ImageInfo* pImageInfo)
 {
 	if (pImageInfo)
 	{

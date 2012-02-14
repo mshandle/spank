@@ -6,6 +6,8 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "ImagePieceDocument.h"
+#include "../transformer/ImageListTransformer.h"
+#include "../transformer/PieceListTransformer.h"
 #include <tinyxml-2.6.2/tinyxml.h>
 
 ImagePieceDocument::ImagePieceDocument()
@@ -15,7 +17,7 @@ ImagePieceDocument::ImagePieceDocument()
 
 ImagePieceDocument::~ImagePieceDocument()
 {
-	Clear();
+	Reset();
 }
 
 bool ImagePieceDocument::OpenFile(const wxString& strFile)
@@ -23,7 +25,7 @@ bool ImagePieceDocument::OpenFile(const wxString& strFile)
 	TiXmlDocument doc;
 	if (!doc.LoadFile(strFile)) return false;
 
-	Clear();
+	Reset();
 
 	TiXmlElement* pElmImagePiece = doc.RootElement();
 	if (!pElmImagePiece || strcmp(pElmImagePiece->Value(), "ImagePiece") != 0) return false;
@@ -53,6 +55,9 @@ bool ImagePieceDocument::OpenFile(const wxString& strFile)
 	}
 
 	m_strFile = strFile;
+
+	ImageListTransformer::GetInstance().UpdateListView();
+	PieceListTransformer::GetInstance().UpdateListView();
 	return true;
 }
 
@@ -98,7 +103,25 @@ bool ImagePieceDocument::SaveFile(const wxString& strFile)
 	return doc.SaveFile(strFile);
 }
 
-const wxString& ImagePieceDocument::GetFileName() const
+void ImagePieceDocument::Reset()
+{
+	m_strFile = wxEmptyString;
+	for (TM_IMAGE_INFO::iterator it = m_ImageInfoMap.begin(); it != m_ImageInfoMap.end(); ++it)
+	{
+		ImageInfo* pImageInfo = it->second;
+		delete pImageInfo;
+	}
+	m_ImageInfoMap.clear();
+
+	for (TM_PIECE_INFO::iterator it = m_PieceInfoMap.begin(); it != m_PieceInfoMap.end(); ++it)
+	{
+		PieceInfo* pPieceInfo = it->second;
+		delete pPieceInfo;
+	}
+	m_PieceInfoMap.clear();
+}
+
+const wxString& ImagePieceDocument::GetFilePath() const
 {
 	return m_strFile;
 }
@@ -136,31 +159,6 @@ PieceInfo* ImagePieceDocument::FindPieceInfoUnderPoint(const wxPoint& pos, const
 	}
 
 	return NULL;
-}
-
-bool ImagePieceDocument::NewFile(const wxString& strFile)
-{
-	Clear();
-	m_strFile = strFile;
-	return true;
-}
-
-void ImagePieceDocument::Clear()
-{
-	m_strFile = wxEmptyString;
-	for (TM_IMAGE_INFO::iterator it = m_ImageInfoMap.begin(); it != m_ImageInfoMap.end(); ++it)
-	{
-		ImageInfo* pImageInfo = it->second;
-		delete pImageInfo;
-	}
-	m_ImageInfoMap.clear();
-
-	for (TM_PIECE_INFO::iterator it = m_PieceInfoMap.begin(); it != m_PieceInfoMap.end(); ++it)
-	{
-		PieceInfo* pPieceInfo = it->second;
-		delete pPieceInfo;
-	}
-	m_PieceInfoMap.clear();
 }
 
 ImagePieceDocument::TM_IMAGE_INFO& ImagePieceDocument::GetImageInfoMap()

@@ -79,6 +79,10 @@ private:
 
 	void OnImagePieceListSelected(wxTreeEvent& event);
 	void OnImageListSelected(wxTreeEvent& event);
+	void OnBitmapStyleListSelected(wxTreeEvent& event);
+	void OnNineGridStyleListSelected(wxTreeEvent& event);
+	void OnColorStyleListSelected(wxTreeEvent& event);
+	void OnClipBitmapStyleListSelected(wxTreeEvent& event);
 
 private:
 	static DesignerFrame* m_pDesignerFrame;
