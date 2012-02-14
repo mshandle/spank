@@ -291,10 +291,6 @@ void DesignerFrame::CreatePropertyView()
 void DesignerFrame::CreateEditorView()
 {
 	wxNotebook* pNotebookView = new wxNotebook(this, IDC_NOTEBOOK_EDITOR, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
-
-	ImagePieceEditor* pImagePieceEditor = new ImagePieceEditor(pNotebookView, IDC_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
-	pNotebookView->AddPage(pImagePieceEditor, "Pieces Editor");
-
 	m_auiManager.AddPane(pNotebookView, wxAuiPaneInfo()
 		.Name(wxT("Editor"))
 		.Caption(wxT("Editor"))
@@ -305,6 +301,9 @@ void DesignerFrame::CreateEditorView()
 		.Resizable(true)
 		.Floatable(false)
 		.Movable(false));
+
+	ImagePieceEditor* pImagePieceEditor = new ImagePieceEditor(pNotebookView, IDC_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
+	pNotebookView->AddPage(pImagePieceEditor, "Pieces Editor");
 }
 
 void DesignerFrame::CreateOutputView()

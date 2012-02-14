@@ -1,25 +1,20 @@
 /*!
- * \file ImagePieceEditor.h
- * \date 2-14-2012 1:24:31
+ * \file BaseEditor.h
+ * \date 2-14-2012 17:58:12
  * 
  * 
  * \author zjhlogo (zjhlogo@gmail.com)
  */
-#ifndef __IMAGEPIECEEDITOR_H__
-#define __IMAGEPIECEEDITOR_H__
+#ifndef __BASEEDITOR_H__
+#define __BASEEDITOR_H__
 
 #include <wx/scrolwin.h>
 #include <wx/bitmap.h>
 #include <wx/dcmemory.h>
-#include <vector>
-#include <map>
 
-#include "../document/PieceInfo.h"
-#include "../document/ImageInfo.h"
-
-class ImagePieceEditor : public wxWindow
+class BaseEditor : public wxWindow
 {
-	DECLARE_DYNAMIC_CLASS(ImagePieceEditor)
+	DECLARE_DYNAMIC_CLASS(BaseEditor)
 	DECLARE_EVENT_TABLE()
 
 public:
@@ -33,15 +28,15 @@ public:
 	};
 
 public:
-	ImagePieceEditor();
-	ImagePieceEditor(wxWindow *parent,
+	BaseEditor();
+	BaseEditor(wxWindow *parent,
 		wxWindowID winid,
 		const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,
 		long style = 0,
 		const wxString& name = wxPanelNameStr);
 
-	virtual ~ImagePieceEditor();
+	virtual ~BaseEditor();
 
 	bool Create(wxWindow *parent,
 		wxWindowID winid,
@@ -52,18 +47,14 @@ public:
 
 	virtual wxSize DoGetBestSize() const;
 
-	static ImagePieceEditor& GetInstance();
-
-	void SetSelection(PieceInfo* pPieceInfo);
-	PieceInfo* GetSelection() const;
-
-	bool SetImage(ImageInfo* pImageInfo);
-	ImageInfo* GetImage() const;
-
 	bool ZoomIn();
 	bool ZoomOut();
 	bool Zoom(int zoom);
 	int GetZoom() const;
+
+protected:
+	virtual wxSize CalculateVirtualSize();
+	virtual void render();
 
 private:
 	void Init();
@@ -85,12 +76,7 @@ private:
 	const wxSize& GetVirtualSize();
 	void UpdateScrollPosition(int x, int y);
 
-	void DrawSelection(wxDC& dc);
-
 private:
-	static ImagePieceEditor* m_pImagePieceEditor;
-	wxMemoryDC m_dcImage;
-	
 	wxBitmap m_bmpBackBuffer;
 	wxMemoryDC m_dcBackBuffer;
 
@@ -98,8 +84,5 @@ private:
 	wxSize m_sizeVirtual;
 	wxPoint m_ptOrigin;
 
-	PieceInfo* m_pPieceInfo;
-	ImageInfo* m_pImageInfo;
-
 };
-#endif // __IMAGEPIECEEDITOR_H__
+#endif // __BASEEDITOR_H__

@@ -29,8 +29,28 @@ public:
 		ZOOM_MIN = 1,
 		ZOOM_STEP = 1,
 		ZOOM_MAX = 10,
+		RECT_SPOT_SIZE = 2,
+		RECT_SENSOR_SIZE = 4,
 		DEFAULT_VIRTUAL_SIZE = 100,
 	};
+
+	enum SELECT_PIECE_TYPE
+	{
+		NORMAL_PIECE_INFO = 0,
+		IMPORT_PIECE_INFO,
+	};
+
+	typedef struct PIECE_VIEW_INFO_tag
+	{
+		wxString strBgImage;
+		wxString strImage;
+		wxBitmap* pBitmap;
+		wxMemoryDC* pMemDc;
+		wxRect pieceRect;
+	} PIECE_VIEW_INFO;
+
+	typedef std::map<wxString, PIECE_VIEW_INFO> TM_PIECE_VIEW_INFO;
+	typedef std::map<wxString, wxBitmap*> TM_BITMAP_CACHE;
 
 public:
 	ImagePieceEditor();

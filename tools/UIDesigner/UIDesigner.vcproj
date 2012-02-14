@@ -349,6 +349,14 @@
 			Name="editor"
 			>
 			<File
+				RelativePath=".\editor\BaseEditor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\editor\BaseEditor.h"
+				>
+			</File>
+			<File
 				RelativePath=".\editor\ImagePieceEditor.cpp"
 				>
 			</File>
