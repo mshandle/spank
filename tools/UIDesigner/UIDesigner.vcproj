@@ -197,6 +197,38 @@
 				>
 			</File>
 			<File
+				RelativePath=".\document\ClipBitmapStyle.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\document\ClipBitmapStyle.h"
+				>
+			</File>
+			<File
+				RelativePath=".\document\ClipBitmapStyleDocument.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\document\ClipBitmapStyleDocument.h"
+				>
+			</File>
+			<File
+				RelativePath=".\document\ColorStyle.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\document\ColorStyle.h"
+				>
+			</File>
+			<File
+				RelativePath=".\document\ColorStyleDocument.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\document\ColorStyleDocument.h"
+				>
+			</File>
+			<File
 				RelativePath=".\document\DocumentBase.cpp"
 				>
 			</File>
@@ -273,11 +305,35 @@
 				>
 			</File>
 			<File
+				RelativePath=".\transformer\ClipBitmapStyleTransformer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\transformer\ClipBitmapStyleTransformer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\transformer\ColorStyleTransformer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\transformer\ColorStyleTransformer.h"
+				>
+			</File>
+			<File
 				RelativePath=".\transformer\ImageListTransformer.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\transformer\ImageListTransformer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\transformer\NineGridStyleTransformer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\transformer\NineGridStyleTransformer.h"
 				>
 			</File>
 			<File
@@ -289,54 +345,18 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\document\ClipBitmapStyle.cpp"
+		<Filter
+			Name="editor"
 			>
-		</File>
-		<File
-			RelativePath=".\document\ClipBitmapStyle.h"
-			>
-		</File>
-		<File
-			RelativePath=".\document\ClipBitmapStyleDocument.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\document\ClipBitmapStyleDocument.h"
-			>
-		</File>
-		<File
-			RelativePath=".\transformer\ClipBitmapStyleTransformer.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\transformer\ClipBitmapStyleTransformer.h"
-			>
-		</File>
-		<File
-			RelativePath=".\document\ColorStyle.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\document\ColorStyle.h"
-			>
-		</File>
-		<File
-			RelativePath=".\document\ColorStyleDocument.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\document\ColorStyleDocument.h"
-			>
-		</File>
-		<File
-			RelativePath=".\transformer\ColorStyleTransformer.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\transformer\ColorStyleTransformer.h"
-			>
-		</File>
+			<File
+				RelativePath=".\editor\ImagePieceEditor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\editor\ImagePieceEditor.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\DesignerApp.cpp"
 			>
@@ -351,22 +371,6 @@
 		</File>
 		<File
 			RelativePath=".\DesignerFrame.h"
-			>
-		</File>
-		<File
-			RelativePath=".\editor\ImagePieceEditor.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\editor\ImagePieceEditor.h"
-			>
-		</File>
-		<File
-			RelativePath=".\transformer\NineGridStyleTransformer.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\transformer\NineGridStyleTransformer.h"
 			>
 		</File>
 	</Files>
