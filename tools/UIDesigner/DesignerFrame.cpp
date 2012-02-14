@@ -12,27 +12,15 @@
 #include <wx/treectrl.h>
 #include <wx/filedlg.h>
 
-#include "ImageListTransformer.h"
-#include "PieceListTransformer.h"
+#include "document/ImagePieceDocument.h"
+#include "transformer/ImageListTransformer.h"
+#include "transformer/PieceListTransformer.h"
 #include "ImagePieceEditor.h"
-#include "ImagePieceDocument.h"
 
 #include "images/disk.xpm"
 #include "images/document.xpm"
 #include "images/document_plus.xpm"
 #include "images/folder_horizontal_open.xpm"
-#include "images/grid.xpm"
-#include "images/move_r.xpm"
-#include "images/shape_aling_bottom.xpm"
-#include "images/shape_aling_center.xpm"
-#include "images/shape_aling_left.xpm"
-#include "images/shape_aling_middle.xpm"
-#include "images/shape_aling_right.xpm"
-#include "images/shape_aling_top.xpm"
-#include "images/size1_r.xpm"
-#include "images/size2_r.xpm"
-#include "images/size3_r.xpm"
-#include "images/size4_r.xpm"
 #include "images/zoom.xpm"
 #include "images/zoom_in.xpm"
 #include "images/zoom_out.xpm"
@@ -234,7 +222,7 @@ void DesignerFrame::CreateToolbar()
 
 void DesignerFrame::CreateListView()
 {
-	wxNotebook* pNotebookView = new wxNotebook(this, IDC_NOTEBOOK, wxDefaultPosition, wxSize(400, 500), wxNO_BORDER);
+	wxNotebook* pNotebookView = new wxNotebook(this, IDC_NOTEBOOK_EDITOR, wxDefaultPosition, wxDefaultSize, wxNB_MULTILINE|wxNO_BORDER);
 	m_auiManager.AddPane(pNotebookView, wxAuiPaneInfo()
 		.Name(wxT("List"))
 		.Caption(wxT("List"))
@@ -250,17 +238,29 @@ void DesignerFrame::CreateListView()
 		.Movable(false));
 
 	wxTreeCtrl* pImagePieceListView = new wxTreeCtrl(pNotebookView, IDC_PIECE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
-	pNotebookView->AddPage(pImagePieceListView, "Piece List");
+	pNotebookView->AddPage(pImagePieceListView, "Pieces");
 	PieceListTransformer::GetInstance().Initialize(pImagePieceListView);
 
 	wxTreeCtrl* pImageListView = new wxTreeCtrl(pNotebookView, IDC_IMAGE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
-	pNotebookView->AddPage(pImageListView, "Image List");
+	pNotebookView->AddPage(pImageListView, "Images");
 	ImageListTransformer::GetInstance().Initialize(pImageListView);
+
+	wxTreeCtrl* pBitmapStyleListView = new wxTreeCtrl(pNotebookView, IDC_BITMAP_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	pNotebookView->AddPage(pBitmapStyleListView, "Bitmap Styles");
+
+	wxTreeCtrl* pNineGridStyleListView = new wxTreeCtrl(pNotebookView, IDC_NINE_GRID_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	pNotebookView->AddPage(pNineGridStyleListView, "9-Grid Styles");
+
+	wxTreeCtrl* pColorStyleListView = new wxTreeCtrl(pNotebookView, IDC_COLOR_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	pNotebookView->AddPage(pColorStyleListView, "Color Styles");
+
+	wxTreeCtrl* pClipBitmapStyleListView = new wxTreeCtrl(pNotebookView, IDC_CLIP_BITMAP_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	pNotebookView->AddPage(pClipBitmapStyleListView, "Clip Bitmap Styles");
 }
 
 void DesignerFrame::CreatePropertyView()
 {
-	m_pPropertyGrid = new wxPropertyGrid(this, IDC_PROPERTY, wxDefaultPosition, wxSize(300, 100), wxPG_SPLITTER_AUTO_CENTER|wxNO_BORDER);
+	m_pPropertyGrid = new wxPropertyGrid(this, IDC_PROPERTY, wxDefaultPosition, wxDefaultSize, wxPG_SPLITTER_AUTO_CENTER|wxNO_BORDER);
 	m_auiManager.AddPane(m_pPropertyGrid, wxAuiPaneInfo()
 		.Name(wxT("Property"))
 		.Caption(wxT("Property"))
@@ -277,8 +277,12 @@ void DesignerFrame::CreatePropertyView()
 
 void DesignerFrame::CreateEditorView()
 {
-	ImagePieceEditor* pImagePieceEditor = new ImagePieceEditor(this, IDC_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
-	m_auiManager.AddPane(pImagePieceEditor, wxAuiPaneInfo()
+	wxNotebook* pNotebookView = new wxNotebook(this, IDC_NOTEBOOK_EDITOR, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+
+	ImagePieceEditor* pImagePieceEditor = new ImagePieceEditor(pNotebookView, IDC_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
+	pNotebookView->AddPage(pImagePieceEditor, "Pieces Editor");
+
+	m_auiManager.AddPane(pNotebookView, wxAuiPaneInfo()
 		.Name(wxT("Editor"))
 		.Caption(wxT("Editor"))
 		.Centre()
@@ -288,7 +292,6 @@ void DesignerFrame::CreateEditorView()
 		.Resizable(true)
 		.Floatable(false)
 		.Movable(false));
-	
 }
 
 void DesignerFrame::CreateOutputView()

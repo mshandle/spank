@@ -9,7 +9,7 @@
 #define __IMAGELISTTRANSFORMER_H__
 
 #include <wx/treectrl.h>
-#include "ImageInfo.h"
+#include "../document/ImageInfo.h"
 
 class ImageListTransformer
 {

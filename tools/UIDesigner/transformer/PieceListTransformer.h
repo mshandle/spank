@@ -9,7 +9,7 @@
 #define __PIECELISTTRANSFORMER_H__
 
 #include <wx/treectrl.h>
-#include "PieceInfo.h"
+#include "../document/PieceInfo.h"
 
 class PieceListTransformer
 {

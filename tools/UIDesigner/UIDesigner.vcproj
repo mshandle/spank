@@ -177,6 +177,62 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="document"
+			>
+			<File
+				RelativePath=".\document\DocumentBase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\document\DocumentBase.h"
+				>
+			</File>
+			<File
+				RelativePath=".\document\ImageInfo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\document\ImageInfo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\document\ImagePieceDocument.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\document\ImagePieceDocument.h"
+				>
+			</File>
+			<File
+				RelativePath=".\document\PieceInfo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\document\PieceInfo.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="transformer"
+			>
+			<File
+				RelativePath=".\transformer\ImageListTransformer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\transformer\ImageListTransformer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\transformer\PieceListTransformer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\transformer\PieceListTransformer.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\DesignerApp.cpp"
 			>
@@ -194,59 +250,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\DocumentBase.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\DocumentBase.h"
-			>
-		</File>
-		<File
-			RelativePath=".\ImageInfo.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\ImageInfo.h"
-			>
-		</File>
-		<File
-			RelativePath=".\ImageListTransformer.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\ImageListTransformer.h"
-			>
-		</File>
-		<File
-			RelativePath=".\ImagePieceDocument.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\ImagePieceDocument.h"
-			>
-		</File>
-		<File
 			RelativePath=".\ImagePieceEditor.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\ImagePieceEditor.h"
-			>
-		</File>
-		<File
-			RelativePath=".\PieceInfo.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\PieceInfo.h"
-			>
-		</File>
-		<File
-			RelativePath=".\PieceListTransformer.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\PieceListTransformer.h"
 			>
 		</File>
 	</Files>

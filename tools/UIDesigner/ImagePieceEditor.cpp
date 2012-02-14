@@ -6,9 +6,9 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "ImagePieceEditor.h"
-#include "ImagePieceDocument.h"
-#include "PieceListTransformer.h"
-#include "ImageListTransformer.h"
+#include "document/ImagePieceDocument.h"
+#include "transformer/PieceListTransformer.h"
+#include "transformer/ImageListTransformer.h"
 
 #include <wx/dcclient.h>
 
@@ -51,11 +51,6 @@ void ImagePieceEditor::Init()
 {
 	m_pImagePieceEditor = this;
 
-	// load grid brush
-	m_bmpGrid.LoadFile(wxT("images/grid.png"), wxBITMAP_TYPE_PNG);
-	m_brushGrid.SetStyle(wxBRUSHSTYLE_STIPPLE);
-	m_brushGrid.SetStipple(m_bmpGrid);
-	
 	m_nZoom = ZOOM_MIN;
 
 	m_sizeVirtual.Set(DEFAULT_VIRTUAL_SIZE*m_nZoom, DEFAULT_VIRTUAL_SIZE*m_nZoom);
@@ -142,7 +137,16 @@ void ImagePieceEditor::OnPaint(wxPaintEvent& event)
 	if (pbmpImage && nWidth < pbmpImage->GetWidth()) nWidth = pbmpImage->GetWidth();
 	if (pbmpImage && nHeight < pbmpImage->GetHeight()) nHeight = pbmpImage->GetHeight();
 
-	m_dcBackBuffer.SetBrush(m_brushGrid);
+	// fill background
+	m_dcBackBuffer.SetBrush(*wxLIGHT_GREY_BRUSH);
+	m_dcBackBuffer.SetPen(*wxTRANSPARENT_PEN);
+	m_dcBackBuffer.DrawRectangle(0, 0, nWidth*m_nZoom, nHeight*m_nZoom);
+
+	// draw cross
+	wxBrush brushGrid;
+	brushGrid.SetColour(*wxWHITE);
+	brushGrid.SetStyle(wxBRUSHSTYLE_CROSSDIAG_HATCH);
+	m_dcBackBuffer.SetBrush(brushGrid);
 	m_dcBackBuffer.SetPen(*wxTRANSPARENT_PEN);
 	m_dcBackBuffer.DrawRectangle(0, 0, nWidth*m_nZoom, nHeight*m_nZoom);
 

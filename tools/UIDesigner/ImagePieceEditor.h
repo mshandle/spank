@@ -14,8 +14,8 @@
 #include <vector>
 #include <map>
 
-#include "PieceInfo.h"
-#include "ImageInfo.h"
+#include "document/PieceInfo.h"
+#include "document/ImageInfo.h"
 
 class ImagePieceEditor : public wxWindow
 {
@@ -114,9 +114,6 @@ private:
 	wxBitmap m_bmpBackBuffer;
 	wxMemoryDC m_dcBackBuffer;
 
-	wxBitmap m_bmpGrid;
-	wxBrush m_brushGrid;
-	
 	int m_nZoom;
 	wxSize m_sizeVirtual;
 	wxPoint m_ptOrigin;

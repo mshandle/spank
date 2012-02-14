@@ -6,7 +6,7 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "ImageListTransformer.h"
-#include "ImagePieceDocument.h"
+#include "../document/ImagePieceDocument.h"
 
 ImageListTransformer::ImageListTransformer()
 {
