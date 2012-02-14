@@ -17,6 +17,26 @@
 #include "ImagePieceEditor.h"
 #include "ImagePieceDocument.h"
 
+#include "images/disk.xpm"
+#include "images/document.xpm"
+#include "images/document_plus.xpm"
+#include "images/folder_horizontal_open.xpm"
+#include "images/grid.xpm"
+#include "images/move_r.xpm"
+#include "images/shape_aling_bottom.xpm"
+#include "images/shape_aling_center.xpm"
+#include "images/shape_aling_left.xpm"
+#include "images/shape_aling_middle.xpm"
+#include "images/shape_aling_right.xpm"
+#include "images/shape_aling_top.xpm"
+#include "images/size1_r.xpm"
+#include "images/size2_r.xpm"
+#include "images/size3_r.xpm"
+#include "images/size4_r.xpm"
+#include "images/zoom.xpm"
+#include "images/zoom_in.xpm"
+#include "images/zoom_out.xpm"
+
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
 BEGIN_EVENT_TABLE(DesignerFrame, wxFrame)
@@ -82,7 +102,7 @@ void DesignerFrame::CreateMenu()
 	wxMenu* pMenuItemFile = new wxMenu();
 	{
 		wxMenuItem* menuItem = new wxMenuItem(pMenuItemFile, wxID_OPEN, wxT("&Open...\tCtrl+O"), wxEmptyString, wxITEM_NORMAL);
-		wxBitmap bitmap(wxT("images/folder-horizontal-open.png"), wxBITMAP_TYPE_PNG);
+		wxBitmap bitmap(folder_horizontal_open_xpm, wxBITMAP_TYPE_XPM);
 		menuItem->SetBitmap(bitmap);
 		pMenuItemFile->Append(menuItem);
 	}
@@ -92,7 +112,7 @@ void DesignerFrame::CreateMenu()
 	pMenuItemFile->AppendSeparator();
 	{
 		wxMenuItem* menuItem = new wxMenuItem(pMenuItemFile, wxID_SAVE, wxT("&Save\tCtrl+S"), wxEmptyString, wxITEM_NORMAL);
-		wxBitmap bitmap(wxT("images/disk.png"), wxBITMAP_TYPE_PNG);
+		wxBitmap bitmap(disk_xpm, wxBITMAP_TYPE_XPM);
 		menuItem->SetBitmap(bitmap);
 		pMenuItemFile->Append(menuItem);
 	}
@@ -121,19 +141,19 @@ void DesignerFrame::CreateMenu()
 	pMenuItemView->AppendSeparator();
 	{
 		wxMenuItem* menuItem = new wxMenuItem(pMenuItemView, wxID_ZOOM_100, wxT("Zoom &100%\tCtrl+1"), wxEmptyString, wxITEM_NORMAL);
-		wxBitmap bitmap(wxT("images/zoom.png"), wxBITMAP_TYPE_PNG);
+		wxBitmap bitmap(zoom_xpm, wxBITMAP_TYPE_XPM);
 		menuItem->SetBitmap(bitmap);
 		pMenuItemView->Append(menuItem);
 	}
 	{
 		wxMenuItem* menuItem = new wxMenuItem(pMenuItemView, wxID_ZOOM_IN, wxT("Zoom &In\tCtrl++"), wxEmptyString, wxITEM_NORMAL);
-		wxBitmap bitmap(wxT("images/zoom_in.png"), wxBITMAP_TYPE_PNG);
+		wxBitmap bitmap(zoom_in_xpm, wxBITMAP_TYPE_XPM);
 		menuItem->SetBitmap(bitmap);
 		pMenuItemView->Append(menuItem);
 	}
 	{
 		wxMenuItem* menuItem = new wxMenuItem(pMenuItemView, wxID_ZOOM_OUT, wxT("Zoom &Out\tCtrl+-"), wxEmptyString, wxITEM_NORMAL);
-		wxBitmap bitmap(wxT("images/zoom_out.png"), wxBITMAP_TYPE_PNG);
+		wxBitmap bitmap(zoom_out_xpm, wxBITMAP_TYPE_XPM);
 		menuItem->SetBitmap(bitmap);
 		pMenuItemView->Append(menuItem);
 	}
@@ -159,19 +179,19 @@ void DesignerFrame::CreateToolbar()
 	wxAuiToolBar* pAuiToolBar = new wxAuiToolBar(this, IDC_TOOLBAR, wxDefaultPosition, wxDefaultSize, 0);
 
 	{
-		wxBitmap bitmap(wxT("images/document--plus.png"), wxBITMAP_TYPE_PNG);
+		wxBitmap bitmap(document_plus_xpm, wxBITMAP_TYPE_XPM);
 		wxBitmap bitmapDisabled;
 		pAuiToolBar->AddTool(wxID_NEW, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxEmptyString, wxEmptyString, NULL);
 	}
 
 	{
-		wxBitmap bitmap(wxT("images/folder-horizontal-open.png"), wxBITMAP_TYPE_PNG);
+		wxBitmap bitmap(folder_horizontal_open_xpm, wxBITMAP_TYPE_XPM);
 		wxBitmap bitmapDisabled;
 		pAuiToolBar->AddTool(wxID_OPEN, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxEmptyString, wxEmptyString, NULL);
 	}
 
 	{
-		wxBitmap bitmap(wxT("images/disk.png"), wxBITMAP_TYPE_PNG);
+		wxBitmap bitmap(disk_xpm, wxBITMAP_TYPE_XPM);
 		wxBitmap bitmapDisabled;
 		pAuiToolBar->AddTool(wxID_SAVE, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxEmptyString, wxEmptyString, NULL);
 	}
@@ -179,19 +199,19 @@ void DesignerFrame::CreateToolbar()
 	pAuiToolBar->AddSeparator();
 
 	{
-		wxBitmap bitmap(wxT("images/zoom.png"), wxBITMAP_TYPE_PNG);
+		wxBitmap bitmap(zoom_xpm, wxBITMAP_TYPE_XPM);
 		wxBitmap bitmapDisabled;
 		pAuiToolBar->AddTool(wxID_ZOOM_100, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxEmptyString, wxEmptyString, NULL);
 	}
 
 	{
-		wxBitmap bitmap(wxT("images/zoom_in.png"), wxBITMAP_TYPE_PNG);
+		wxBitmap bitmap(zoom_in_xpm, wxBITMAP_TYPE_XPM);
 		wxBitmap bitmapDisabled;
 		pAuiToolBar->AddTool(wxID_ZOOM_IN, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxEmptyString, wxEmptyString, NULL);
 	}
 
 	{
-		wxBitmap bitmap(wxT("images/zoom_out.png"), wxBITMAP_TYPE_PNG);
+		wxBitmap bitmap(zoom_out_xpm, wxBITMAP_TYPE_XPM);
 		wxBitmap bitmapDisabled;
 		pAuiToolBar->AddTool(wxID_ZOOM_OUT, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxEmptyString, wxEmptyString, NULL);
 	}

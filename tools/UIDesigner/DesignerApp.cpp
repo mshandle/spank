@@ -22,6 +22,7 @@ DesignerApp::~DesignerApp()
 
 bool DesignerApp::OnInit()
 {
+	wxImage::AddHandler(new wxXPMHandler());
 	wxImage::AddHandler(new wxPNGHandler());
 	wxImage::AddHandler(new wxJPEGHandler());
 	wxImage::AddHandler(new wxCURHandler());
