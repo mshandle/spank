@@ -24,7 +24,7 @@ bool ColorStyle::LoadFromXml(TiXmlElement* pElmColorStyle)
 	wxString strId = pElmColorStyle->Attribute("id");
 	SetId(strId);
 
-	m_nColors[SS_NORMAL] = LoadStateInfo(pElmColorStyle, "normal", 0x808080);
+	m_nColors[SS_NORMAL] = LoadStateInfo(pElmColorStyle, "normal", DEFAULT_COLOR);
 	m_nColors[SS_DOWN] = LoadStateInfo(pElmColorStyle, "down", m_nColors[SS_NORMAL]);
 	m_nColors[SS_HOVER] = LoadStateInfo(pElmColorStyle, "hover", m_nColors[SS_NORMAL]);
 	m_nColors[SS_DISABLED] = LoadStateInfo(pElmColorStyle, "disabled", m_nColors[SS_NORMAL]);
@@ -54,7 +54,7 @@ bool ColorStyle::SaveToXml(TiXmlElement* pElmColorStyleList)
 	return true;
 }
 
-bool ColorStyle::SaveStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& strState, unsigned int nColor, bool force /*= false*/)
+bool ColorStyle::SaveStateInfo(TiXmlElement* pElmColorStyle, const wxString& strState, unsigned int nColor, bool force /*= false*/)
 {
 	if (!force && nColor == m_nColors[SS_NORMAL]) return false;
 
@@ -64,19 +64,29 @@ bool ColorStyle::SaveStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& st
 	sprintf_s(buff, "0x%X", nColor);
 
 	pElmState->SetAttribute("value", buff);
-	pElmBitmapStyle->LinkEndChild(pElmState);
+	pElmColorStyle->LinkEndChild(pElmState);
 
 	return true;
 }
 
-unsigned int ColorStyle::GetStateColor(IStyle::STYLE_STATE eState)
+bool ColorStyle::SetStateColor(unsigned int color, STYLE_STATE eState)
 {
+	if (eState < 0 || eState >= SS_NUM) return false;
+	if (m_nColors[eState] == color) return false;
+
+	m_nColors[eState] = color;
+	return true;
+}
+
+unsigned int ColorStyle::GetStateColor(STYLE_STATE eState)
+{
+	if (eState < 0 || eState >= SS_NUM) return DEFAULT_COLOR;
 	return m_nColors[eState];
 }
 
-unsigned int ColorStyle::LoadStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& strState, unsigned int nDefaultColor)
+unsigned int ColorStyle::LoadStateInfo(TiXmlElement* pElmColorStyle, const wxString& strState, unsigned int nDefaultColor)
 {
-	TiXmlElement* pElmState = pElmBitmapStyle->FirstChildElement(strState);
+	TiXmlElement* pElmState = pElmColorStyle->FirstChildElement(strState);
 	if (!pElmState) return nDefaultColor;
 
 	const char* pszColor = pElmState->Attribute("value");

@@ -21,6 +21,7 @@ public:
 	bool Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid);
 	void UpdateListView();
 	void UpdateProperty(ColorStyle* pColorStyle);
+	void PropertyChanged(wxPGProperty* pProperty);
 
 	void SetSelectedColorStyle(ColorStyle* pColorStyle);
 	ColorStyle* GetSelectedColorStyle();

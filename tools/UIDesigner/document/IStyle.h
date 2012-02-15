@@ -27,13 +27,11 @@ public:
 	IStyle();
 	~IStyle();
 
+	void SetId(const wxString& strId);
 	const wxString& GetId() const;
 
 	void SetTreeItemId(wxTreeItemId itemId);
 	wxTreeItemId GetTreeItemId();
-
-protected:
-	void SetId(const wxString& strId);
 
 private:
 	wxString m_strId;

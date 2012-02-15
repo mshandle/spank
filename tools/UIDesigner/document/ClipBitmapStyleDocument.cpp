@@ -96,3 +96,35 @@ ClipBitmapStyleDocument::TM_CLIP_BITMAP_STYLE& ClipBitmapStyleDocument::GetClipB
 {
 	return m_ClipBitmapStyleMap;
 }
+
+bool ClipBitmapStyleDocument::RenameClipBitmapStyleId(const ClipBitmapStyle* pClipBitmapStyle, const wxString& strNewId)
+{
+	if (!pClipBitmapStyle) return false;
+
+	wxString strOldId = pClipBitmapStyle->GetId();
+	if (strOldId == strNewId) return true;
+	if (FindClipBitmapStyle(strNewId)) return false;
+
+	TM_CLIP_BITMAP_STYLE::iterator itfound = m_ClipBitmapStyleMap.find(strOldId);
+	if (itfound == m_ClipBitmapStyleMap.end()) return false;
+
+	ClipBitmapStyle* pFoundClipBitmapStyle = itfound->second;
+	m_ClipBitmapStyleMap.erase(itfound);
+
+	pFoundClipBitmapStyle->SetId(strNewId);
+	m_ClipBitmapStyleMap.insert(std::make_pair(pFoundClipBitmapStyle->GetId(), pFoundClipBitmapStyle));
+
+	ClipBitmapStyleTransformer::GetInstance().UpdateListView();
+	ClipBitmapStyleTransformer::GetInstance().SetSelectedClipBitmapStyle(pFoundClipBitmapStyle);
+	return true;
+}
+
+bool ClipBitmapStyleDocument::SetStatePiece(const ClipBitmapStyle* pClipBitmapStyle, PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState)
+{
+	if (!pClipBitmapStyle) return false;
+
+	ClipBitmapStyle* pFoundClipBitmapStyle = FindClipBitmapStyle(pClipBitmapStyle->GetId());
+	if (!pFoundClipBitmapStyle) return false;
+
+	return pFoundClipBitmapStyle->SetStatePiece(pPieceInfo, eState);
+}

@@ -31,15 +31,21 @@ public:
 	bool LoadFromXml(TiXmlElement* pElmNineGridStyle);
 	bool SaveToXml(TiXmlElement* pElmNineGridStyleList);
 
+	bool SetStatePiece(PieceInfo* pPieceInfo, STYLE_STATE eState);
+	bool SetStateMinX(int value, IStyle::STYLE_STATE eState);
+	bool SetStateMinY(int value, IStyle::STYLE_STATE eState);
+	bool SetStateMaxX(int value, IStyle::STYLE_STATE eState);
+	bool SetStateMaxY(int value, IStyle::STYLE_STATE eState);
+
 	NINE_GRID_INFO* GetStateGridInfo(STYLE_STATE eState);
 
 private:
-	NINE_GRID_INFO* LoadStateInfo(TiXmlElement* pElmNineGridStyle, const wxString& strState, NINE_GRID_INFO* pDefaultInfo);
-	bool SaveStateInfo(TiXmlElement* pElmNineGridStyle, const wxString& strState, NINE_GRID_INFO* pNineGridInfo, bool force = false);
-	void Clear();
+	bool LoadStateInfo(NINE_GRID_INFO& NineGridInfoOut, TiXmlElement* pElmNineGridStyle, const wxString& strState);
+	bool SaveStateInfo(TiXmlElement* pElmNineGridStyle, const wxString& strState, const NINE_GRID_INFO& NineGridInfo, bool force = false);
+	bool IsNormalGrid(const NINE_GRID_INFO& NineGridInfo);
 
 private:
-	NINE_GRID_INFO* m_NineGridInfo[SS_NUM];
+	NINE_GRID_INFO m_NineGridInfo[SS_NUM];
 
 };
 #endif // __NINEGRIDSTYLE_H__

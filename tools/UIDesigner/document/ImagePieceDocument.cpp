@@ -240,3 +240,51 @@ void ImagePieceDocument::GeneratePieceArrayString()
 		m_PieceIdsIndex.Add(nIndex++);
 	}
 }
+
+bool ImagePieceDocument::RenameImageInfoId(const ImageInfo* pImageInfo, const wxString& strNewId)
+{
+	if (!pImageInfo) return false;
+
+	wxString strOldId = pImageInfo->GetId();
+	if (strOldId == strNewId) return true;
+	if (FindImageInfo(strNewId)) return false;
+
+	TM_IMAGE_INFO::iterator itfound = m_ImageInfoMap.find(strOldId);
+	if (itfound == m_ImageInfoMap.end()) return false;
+
+	ImageInfo* pFoundImageInfo = itfound->second;
+	m_ImageInfoMap.erase(itfound);
+
+	pFoundImageInfo->SetId(strNewId);
+	m_ImageInfoMap.insert(std::make_pair(pFoundImageInfo->GetId(), pFoundImageInfo));
+
+	GenerateImageArrayString();
+
+	ImageListTransformer::GetInstance().UpdateListView();
+	ImageListTransformer::GetInstance().SetSelectedImageInfo(pFoundImageInfo);
+	return true;
+}
+
+bool ImagePieceDocument::RenamePieceInfoId(const PieceInfo* pPieceInfo, const wxString& strNewId)
+{
+	if (!pPieceInfo) return false;
+
+	wxString strOldId = pPieceInfo->GetId();
+	if (strOldId == strNewId) return true;
+	if (FindPieceInfo(strNewId)) return false;
+
+	TM_PIECE_INFO::iterator itfound = m_PieceInfoMap.find(strOldId);
+	if (itfound == m_PieceInfoMap.end()) return false;
+
+	PieceInfo* pFoundPieceInfo = itfound->second;
+	m_PieceInfoMap.erase(itfound);
+
+	pFoundPieceInfo->SetId(strNewId);
+	m_PieceInfoMap.insert(std::make_pair(pFoundPieceInfo->GetId(), pFoundPieceInfo));
+
+	GeneratePieceArrayString();
+
+	PieceListTransformer::GetInstance().UpdateListView();
+	PieceListTransformer::GetInstance().SetSelectedPieceInfo(pFoundPieceInfo);
+	return true;
+}

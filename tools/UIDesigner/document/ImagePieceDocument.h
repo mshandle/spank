@@ -47,6 +47,9 @@ public:
 	int FindPieceIndex(const wxString& strId);
 	const wxString& GetPieceId(int index);
 
+	bool RenameImageInfoId(const ImageInfo* pImageInfo, const wxString& strNewId);
+	bool RenamePieceInfoId(const PieceInfo* pPieceInfo, const wxString& strNewId);
+
 protected:
 	ImagePieceDocument();
 

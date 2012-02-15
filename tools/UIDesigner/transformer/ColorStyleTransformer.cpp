@@ -6,7 +6,9 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "ColorStyleTransformer.h"
+#include "../DesignerFrame.h"
 #include "../document/ColorStyleDocument.h"
+#include "../editor/ColorStyleEditor.h"
 
 ColorStyleTransformer::ColorStyleTransformer()
 {
@@ -50,6 +52,7 @@ void ColorStyleTransformer::UpdateListView()
 void ColorStyleTransformer::UpdateProperty(ColorStyle* pColorStyle)
 {
 	m_pPropertyGrid->Clear();
+	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_UNKNOWN);
 	if (!pColorStyle) return;
 
 	m_pPropertyGrid->Append(new wxStringProperty("id", "id", pColorStyle->GetId()));
@@ -64,6 +67,51 @@ void ColorStyleTransformer::UpdateProperty(ColorStyle* pColorStyle)
 	m_pPropertyGrid->Append(new wxColourProperty("hover", "hover", color));
 	color.SetRGB(pColorStyle->GetStateColor(IStyle::SS_DISABLED));
 	m_pPropertyGrid->Append(new wxColourProperty("disabled", "disabled", color));
+
+	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_COLOR_STYLE);
+}
+
+void ColorStyleTransformer::PropertyChanged(wxPGProperty* pProperty)
+{
+	ColorStyle* pColorStyle = GetSelectedColorStyle();
+	if (!pColorStyle) return;
+
+	bool bRedraw = false;
+	if (pProperty->GetName() == "id")
+	{
+		wxString strNewId = pProperty->GetValueAsString();
+		ColorStyleDocument::GetInstance().RenameColorStyleId(pColorStyle, strNewId);
+	}
+	else if (pProperty->GetName() == "normal")
+	{
+		wxColour color;
+		color << pProperty->GetValue();
+		bRedraw = ColorStyleDocument::GetInstance().SetStateColor(pColorStyle, color, IStyle::SS_NORMAL);
+	}
+	else if (pProperty->GetName() == "down")
+	{
+		wxColour color;
+		color << pProperty->GetValue();
+ 		bRedraw = ColorStyleDocument::GetInstance().SetStateColor(pColorStyle, color, IStyle::SS_DOWN);
+	}
+	else if (pProperty->GetName() == "hover")
+	{
+		wxColour color;
+		color << pProperty->GetValue();
+		bRedraw = ColorStyleDocument::GetInstance().SetStateColor(pColorStyle, color, IStyle::SS_HOVER);
+	}
+	else if (pProperty->GetName() == "disabled")
+	{
+		wxColour color;
+		color << pProperty->GetValue();
+		bRedraw = ColorStyleDocument::GetInstance().SetStateColor(pColorStyle, color, IStyle::SS_DISABLED);
+	}
+
+	if (bRedraw)
+	{
+		ColorStyleEditor::GetInstance().SetColorStyle(NULL);
+		ColorStyleEditor::GetInstance().SetColorStyle(pColorStyle);
+	}
 }
 
 void ColorStyleTransformer::SetSelectedColorStyle(ColorStyle* pColorStyle)

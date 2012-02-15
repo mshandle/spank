@@ -6,6 +6,7 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "PieceListTransformer.h"
+#include "../DesignerFrame.h"
 #include "../document/ImagePieceDocument.h"
 
 PieceListTransformer::PieceListTransformer()
@@ -50,6 +51,7 @@ void PieceListTransformer::UpdateListView()
 void PieceListTransformer::UpdateProperty(PieceInfo* pPieceInfo)
 {
 	m_pPropertyGrid->Clear();
+	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_UNKNOWN);
 	if (!pPieceInfo) return;
 
 	m_pPropertyGrid->Append(new wxStringProperty("id", "id", pPieceInfo->GetId()));
@@ -62,6 +64,20 @@ void PieceListTransformer::UpdateProperty(PieceInfo* pPieceInfo)
 	m_pPropertyGrid->Append(new wxPropertyCategory("size", "size"));
 	m_pPropertyGrid->Append(new wxIntProperty("width", "width", pPieceInfo->GetRect().width))->Enable(false);
 	m_pPropertyGrid->Append(new wxIntProperty("height", "height", pPieceInfo->GetRect().height))->Enable(false);
+
+	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_PIECE);
+}
+
+void PieceListTransformer::PropertyChanged(wxPGProperty* pProperty)
+{
+	PieceInfo* pPieceInfo = GetSelectedPieceInfo();
+	if (!pPieceInfo) return;
+
+	if (pProperty->GetName() == "id")
+	{
+		wxString strNewId = pProperty->GetValueAsString();
+		ImagePieceDocument::GetInstance().RenamePieceInfoId(pPieceInfo, strNewId);
+	}
 }
 
 void PieceListTransformer::SetSelectedPieceInfo(PieceInfo* pPieceInfo)

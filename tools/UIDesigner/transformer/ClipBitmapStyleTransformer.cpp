@@ -6,8 +6,10 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "ClipBitmapStyleTransformer.h"
+#include "../DesignerFrame.h"
 #include "../document/ClipBitmapStyleDocument.h"
 #include "../document/ImagePieceDocument.h"
+#include "../editor/ClipBitmapStyleEditor.h"
 
 ClipBitmapStyleTransformer::ClipBitmapStyleTransformer()
 {
@@ -51,6 +53,7 @@ void ClipBitmapStyleTransformer::UpdateListView()
 void ClipBitmapStyleTransformer::UpdateProperty(ClipBitmapStyle* pClipBitmapStyle)
 {
 	m_pPropertyGrid->Clear();
+	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_UNKNOWN);
 	if (!pClipBitmapStyle) return;
 
 	m_pPropertyGrid->Append(new wxStringProperty("id", "id", pClipBitmapStyle->GetId()));
@@ -67,6 +70,47 @@ void ClipBitmapStyleTransformer::UpdateProperty(ClipBitmapStyle* pClipBitmapStyl
 	m_pPropertyGrid->Append(new wxEnumProperty("hover", "hover", pieceIds, pieceIdsIndex, value));
 	value = ImagePieceDocument::GetInstance().FindPieceIndex(pClipBitmapStyle->GetStatePiece(IStyle::SS_DISABLED)->GetId());
 	m_pPropertyGrid->Append(new wxEnumProperty("disabled", "disabled", pieceIds, pieceIdsIndex, value));
+
+	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_CLIP_BITMAP_STYLE);
+}
+
+void ClipBitmapStyleTransformer::PropertyChanged(wxPGProperty* pProperty)
+{
+	ClipBitmapStyle* pClipBitmapStyle = GetSelectedClipBitmapStyle();
+	if (!pClipBitmapStyle) return;
+
+	bool bRedraw = false;
+	if (pProperty->GetName() == "id")
+	{
+		wxString strNewId = pProperty->GetValueAsString();
+		ClipBitmapStyleDocument::GetInstance().RenameClipBitmapStyleId(pClipBitmapStyle, strNewId);
+	}
+	else if (pProperty->GetName() == "normal")
+	{
+		wxString strNewPieceId = pProperty->GetValueAsString();
+		bRedraw = ClipBitmapStyleDocument::GetInstance().SetStatePiece(pClipBitmapStyle, ImagePieceDocument::GetInstance().FindPieceInfo(strNewPieceId), IStyle::SS_NORMAL);
+	}
+	else if (pProperty->GetName() == "down")
+	{
+		wxString strNewPieceId = pProperty->GetValueAsString();
+		bRedraw = ClipBitmapStyleDocument::GetInstance().SetStatePiece(pClipBitmapStyle, ImagePieceDocument::GetInstance().FindPieceInfo(strNewPieceId), IStyle::SS_DOWN);
+	}
+	else if (pProperty->GetName() == "hover")
+	{
+		wxString strNewPieceId = pProperty->GetValueAsString();
+		bRedraw = ClipBitmapStyleDocument::GetInstance().SetStatePiece(pClipBitmapStyle, ImagePieceDocument::GetInstance().FindPieceInfo(strNewPieceId), IStyle::SS_HOVER);
+	}
+	else if (pProperty->GetName() == "disabled")
+	{
+		wxString strNewPieceId = pProperty->GetValueAsString();
+		bRedraw = ClipBitmapStyleDocument::GetInstance().SetStatePiece(pClipBitmapStyle, ImagePieceDocument::GetInstance().FindPieceInfo(strNewPieceId), IStyle::SS_DISABLED);
+	}
+
+	if (bRedraw)
+	{
+		ClipBitmapStyleEditor::GetInstance().SetClipBitmapStyle(NULL);
+		ClipBitmapStyleEditor::GetInstance().SetClipBitmapStyle(pClipBitmapStyle);
+	}
 }
 
 void ClipBitmapStyleTransformer::SetSelectedClipBitmapStyle(ClipBitmapStyle* pClipBitmapStyle)

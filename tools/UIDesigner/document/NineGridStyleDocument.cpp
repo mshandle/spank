@@ -96,3 +96,75 @@ NineGridStyleDocument::TM_NINE_GRID_STYLE& NineGridStyleDocument::GetNineGridSty
 {
 	return m_NineGridStyleMap;
 }
+
+bool NineGridStyleDocument::RenameNineGridStyleId(const NineGridStyle* pNineGridStyle, const wxString& strNewId)
+{
+	if (!pNineGridStyle) return false;
+
+	wxString strOldId = pNineGridStyle->GetId();
+	if (strOldId == strNewId) return true;
+	if (FindNineGridStyle(strNewId)) return false;
+
+	TM_NINE_GRID_STYLE::iterator itfound = m_NineGridStyleMap.find(strOldId);
+	if (itfound == m_NineGridStyleMap.end()) return false;
+
+	NineGridStyle* pFoundNineGridStyle = itfound->second;
+	m_NineGridStyleMap.erase(itfound);
+
+	pFoundNineGridStyle->SetId(strNewId);
+	m_NineGridStyleMap.insert(std::make_pair(pFoundNineGridStyle->GetId(), pFoundNineGridStyle));
+
+	NineGridStyleTransformer::GetInstance().UpdateListView();
+	NineGridStyleTransformer::GetInstance().SetSelectedNineGridStyle(pFoundNineGridStyle);
+	return true;
+}
+
+bool NineGridStyleDocument::SetStatePiece(const NineGridStyle* pNineGridStyle, PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState)
+{
+	if (!pNineGridStyle) return false;
+
+	NineGridStyle* pFoundNineGridStyle = FindNineGridStyle(pNineGridStyle->GetId());
+	if (!pFoundNineGridStyle) return false;
+
+	return pFoundNineGridStyle->SetStatePiece(pPieceInfo, eState);
+}
+
+bool NineGridStyleDocument::SetStateMinX(const NineGridStyle* pNineGridStyle, int value, IStyle::STYLE_STATE eState)
+{
+	if (!pNineGridStyle) return false;
+
+	NineGridStyle* pFoundNineGridStyle = FindNineGridStyle(pNineGridStyle->GetId());
+	if (!pFoundNineGridStyle) return false;
+
+	return pFoundNineGridStyle->SetStateMinX(value, eState);
+}
+
+bool NineGridStyleDocument::SetStateMinY(const NineGridStyle* pNineGridStyle, int value, IStyle::STYLE_STATE eState)
+{
+	if (!pNineGridStyle) return false;
+
+	NineGridStyle* pFoundNineGridStyle = FindNineGridStyle(pNineGridStyle->GetId());
+	if (!pFoundNineGridStyle) return false;
+
+	return pFoundNineGridStyle->SetStateMinY(value, eState);
+}
+
+bool NineGridStyleDocument::SetStateMaxX(const NineGridStyle* pNineGridStyle, int value, IStyle::STYLE_STATE eState)
+{
+	if (!pNineGridStyle) return false;
+
+	NineGridStyle* pFoundNineGridStyle = FindNineGridStyle(pNineGridStyle->GetId());
+	if (!pFoundNineGridStyle) return false;
+
+	return pFoundNineGridStyle->SetStateMaxX(value, eState);
+}
+
+bool NineGridStyleDocument::SetStateMaxY(const NineGridStyle* pNineGridStyle, int value, IStyle::STYLE_STATE eState)
+{
+	if (!pNineGridStyle) return false;
+
+	NineGridStyle* pFoundNineGridStyle = FindNineGridStyle(pNineGridStyle->GetId());
+	if (!pFoundNineGridStyle) return false;
+
+	return pFoundNineGridStyle->SetStateMaxY(value, eState);
+}

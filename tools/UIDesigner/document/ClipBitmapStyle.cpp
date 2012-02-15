@@ -57,8 +57,20 @@ bool ClipBitmapStyle::SaveToXml(TiXmlElement* pElmClipBitmapStyleList)
 	return true;
 }
 
+bool ClipBitmapStyle::SetStatePiece(PieceInfo* pPieceInfo, STYLE_STATE eState)
+{
+	if (eState < 0 || eState >= SS_NUM) return false;
+	if (m_PieceInfo[eState] == pPieceInfo) return false;
+	if (!pPieceInfo && m_PieceInfo[eState] == m_PieceInfo[SS_NORMAL]) return false;
+
+	m_PieceInfo[eState] = pPieceInfo;
+	return true;
+}
+
 PieceInfo* ClipBitmapStyle::GetStatePiece(STYLE_STATE eState)
 {
+	if (eState < 0 || eState >= SS_NUM) return NULL;
+
 	return m_PieceInfo[eState];
 }
 

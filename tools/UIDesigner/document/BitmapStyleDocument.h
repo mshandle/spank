@@ -29,6 +29,9 @@ public:
 	BitmapStyle* FindBitmapStyle(const wxString& strId);
 	TM_BITMAP_STYLE& GetBitmapStyleMap();
 
+	bool RenameBitmapStyleId(const BitmapStyle* pBitmapStyle, const wxString& strNewId);
+	bool SetStatePiece(const BitmapStyle* pBitmapStyle, PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState);
+
 protected:
 	BitmapStyleDocument();
 

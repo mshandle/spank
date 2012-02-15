@@ -20,6 +20,7 @@ public:
 	bool Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid);
 	void UpdateListView();
 	void UpdateProperty(PieceInfo* pPieceInfo);
+	void PropertyChanged(wxPGProperty* pProperty);
 
 	void SetSelectedPieceInfo(PieceInfo* pPieceInfo);
 	PieceInfo* GetSelectedPieceInfo();

@@ -29,6 +29,13 @@ public:
 	NineGridStyle* FindNineGridStyle(const wxString& strId);
 	TM_NINE_GRID_STYLE& GetNineGridStyleMap();
 
+	bool RenameNineGridStyleId(const NineGridStyle* pNineGridStyle, const wxString& strNewId);
+	bool SetStatePiece(const NineGridStyle* pNineGridStyle, PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState);
+	bool SetStateMinX(const NineGridStyle* pNineGridStyle, int value, IStyle::STYLE_STATE eState);
+	bool SetStateMinY(const NineGridStyle* pNineGridStyle, int value, IStyle::STYLE_STATE eState);
+	bool SetStateMaxX(const NineGridStyle* pNineGridStyle, int value, IStyle::STYLE_STATE eState);
+	bool SetStateMaxY(const NineGridStyle* pNineGridStyle, int value, IStyle::STYLE_STATE eState);
+
 protected:
 	NineGridStyleDocument();
 

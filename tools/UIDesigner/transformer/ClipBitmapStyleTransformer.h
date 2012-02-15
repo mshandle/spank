@@ -20,6 +20,7 @@ public:
 	bool Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid);
 	void UpdateListView();
 	void UpdateProperty(ClipBitmapStyle* pClipBitmapStyle);
+	void PropertyChanged(wxPGProperty* pProperty);
 
 	void SetSelectedClipBitmapStyle(ClipBitmapStyle* pClipBitmapStyle);
 	ClipBitmapStyle* GetSelectedClipBitmapStyle();

@@ -6,6 +6,7 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "ImageListTransformer.h"
+#include "../DesignerFrame.h"
 #include "../document/ImagePieceDocument.h"
 
 ImageListTransformer::ImageListTransformer()
@@ -50,10 +51,24 @@ void ImageListTransformer::UpdateListView()
 void ImageListTransformer::UpdateProperty(ImageInfo* pImageInfo)
 {
 	m_pPropertyGrid->Clear();
+	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_UNKNOWN);
 	if (!pImageInfo) return;
 
 	m_pPropertyGrid->Append(new wxStringProperty("id", "id", pImageInfo->GetId()));
-	m_pPropertyGrid->Append(new wxFileProperty("path", "path", pImageInfo->GetPath()));
+	m_pPropertyGrid->Append(new wxFileProperty("path", "path", pImageInfo->GetPath()))->Enable(false);
+	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_IMAGE);
+}
+
+void ImageListTransformer::PropertyChanged(wxPGProperty* pProperty)
+{
+	ImageInfo* pImageInfo = GetSelectedImageInfo();
+	if (!pImageInfo) return;
+
+	if (pProperty->GetName() == "id")
+	{
+		wxString strNewId = pProperty->GetValueAsString();
+		ImagePieceDocument::GetInstance().RenameImageInfoId(pImageInfo, strNewId);
+	}
 }
 
 void ImageListTransformer::SetSelectedImageInfo(ImageInfo* pImageInfo)

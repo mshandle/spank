@@ -62,6 +62,17 @@ public:
 		NUM_EDITOR,
 	};
 
+	enum PROPERTY_TYPE
+	{
+		PT_UNKNOWN = 0,
+		PT_IMAGE,
+		PT_PIECE,
+		PT_BITMAP_STYLE,
+		PT_NINE_GRID_STYLE,
+		PT_COLOR_STYLE,
+		PT_CLIP_BITMAP_STYLE,
+	};
+
 public:
 	DECLARE_DYNAMIC_CLASS(DesignerFrame)
 	DECLARE_EVENT_TABLE()
@@ -71,6 +82,9 @@ public:
 	virtual ~DesignerFrame();
 
 	static DesignerFrame& GetInstance();
+
+	void SetCurrPropertyType(PROPERTY_TYPE eType);
+	PROPERTY_TYPE GetCurrPropertyType() const;
 
 private:
 	void Init();
@@ -100,12 +114,16 @@ private:
 	void OnColorStyleListSelected(wxTreeEvent& event);
 	void OnClipBitmapStyleListSelected(wxTreeEvent& event);
 
+	void OnPropertyGridChanged(wxPropertyGridEvent& event);
+
 private:
 	static DesignerFrame* m_pDesignerFrame;
 
 	wxAuiManager m_auiManager;
 
 	wxTextCtrl* m_pOutputView;
+
+	PROPERTY_TYPE m_eCurrPropertyType;
 	wxPropertyGrid* m_pPropertyGrid;
 
 	wxNotebook* m_pEditorNotebook;

@@ -29,6 +29,9 @@ public:
 	ColorStyle* FindColorStyle(const wxString& strId);
 	TM_COLOR_STYLE& GetColorStyleMap();
 
+	bool RenameColorStyleId(const ColorStyle* pColorStyle, const wxString& strNewId);
+	bool SetStateColor(const ColorStyle* pColorStyle, const wxColour& color, IStyle::STYLE_STATE eState);
+
 protected:
 	ColorStyleDocument();
 

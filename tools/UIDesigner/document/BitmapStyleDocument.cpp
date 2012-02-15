@@ -96,3 +96,35 @@ BitmapStyleDocument::TM_BITMAP_STYLE& BitmapStyleDocument::GetBitmapStyleMap()
 {
 	return m_BitmapStyleMap;
 }
+
+bool BitmapStyleDocument::RenameBitmapStyleId(const BitmapStyle* pBitmapStyle, const wxString& strNewId)
+{
+	if (!pBitmapStyle) return false;
+
+	wxString strOldId = pBitmapStyle->GetId();
+	if (strOldId == strNewId) return true;
+	if (FindBitmapStyle(strNewId)) return false;
+
+	TM_BITMAP_STYLE::iterator itfound = m_BitmapStyleMap.find(strOldId);
+	if (itfound == m_BitmapStyleMap.end()) return false;
+
+	BitmapStyle* pFoundBitmapStyle = itfound->second;
+	m_BitmapStyleMap.erase(itfound);
+
+	pFoundBitmapStyle->SetId(strNewId);
+	m_BitmapStyleMap.insert(std::make_pair(pFoundBitmapStyle->GetId(), pFoundBitmapStyle));
+
+	BitmapStyleTransformer::GetInstance().UpdateListView();
+	BitmapStyleTransformer::GetInstance().SetSelectedBitmapStyle(pFoundBitmapStyle);
+	return true;
+}
+
+bool BitmapStyleDocument::SetStatePiece(const BitmapStyle* pBitmapStyle, PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState)
+{
+	if (!pBitmapStyle) return false;
+
+	BitmapStyle* pFoundBitmapStyle = FindBitmapStyle(pBitmapStyle->GetId());
+	if (!pFoundBitmapStyle) return false;
+
+	return pFoundBitmapStyle->SetStatePiece(pPieceInfo, eState);
+}

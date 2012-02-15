@@ -52,6 +52,8 @@ BEGIN_EVENT_TABLE(DesignerFrame, wxFrame)
 	EVT_TREE_SEL_CHANGED(IDC_NINE_GRID_STYLE_LIST, DesignerFrame::OnNineGridStyleListSelected)
 	EVT_TREE_SEL_CHANGED(IDC_COLOR_STYLE_LIST, DesignerFrame::OnColorStyleListSelected)
 	EVT_TREE_SEL_CHANGED(IDC_CLIP_BITMAP_STYLE_LIST, DesignerFrame::OnClipBitmapStyleListSelected)
+
+	EVT_PG_CHANGED(IDC_PROPERTY, DesignerFrame::OnPropertyGridChanged)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(DesignerFrame, wxFrame)
@@ -79,6 +81,7 @@ void DesignerFrame::Init()
 {
 	m_pDesignerFrame = this;
 	m_pOutputView = NULL;
+	m_eCurrPropertyType = PT_UNKNOWN;
 	m_pPropertyGrid = NULL;
 	m_pEditorNotebook = NULL;
 	memset(m_pEditors, 0, sizeof(m_pEditors));
@@ -88,6 +91,16 @@ void DesignerFrame::Release()
 {
 	m_auiManager.UnInit();
 	m_pDesignerFrame = NULL;
+}
+
+void DesignerFrame::SetCurrPropertyType(PROPERTY_TYPE eType)
+{
+	m_eCurrPropertyType = eType;
+}
+
+DesignerFrame::PROPERTY_TYPE DesignerFrame::GetCurrPropertyType() const
+{
+	return m_eCurrPropertyType;
 }
 
 void DesignerFrame::CreateControls()
@@ -362,6 +375,7 @@ void DesignerFrame::OnFileOpen(wxCommandEvent& event)
 	if (dialog .ShowModal() == wxID_OK)
 	{
 		wxString strPath = dialog.GetPath();
+		wxString strDir = dialog.GetDirectory();
 		ProjectDocument::GetInstance().OpenFile(strPath);
 	}
 }
@@ -452,4 +466,31 @@ void DesignerFrame::OnClipBitmapStyleListSelected(wxTreeEvent& event)
 	ClipBitmapStyle* pClipBitmapStyle = ClipBitmapStyleTransformer::GetInstance().GetSelectedClipBitmapStyle();
 	ClipBitmapStyleEditor::GetInstance().SetClipBitmapStyle(pClipBitmapStyle);
 	ClipBitmapStyleTransformer::GetInstance().UpdateProperty(pClipBitmapStyle);
+}
+
+void DesignerFrame::OnPropertyGridChanged(wxPropertyGridEvent& event)
+{
+	wxPGProperty* pProperty = event.GetProperty();
+
+	switch (m_eCurrPropertyType)
+	{
+	case PT_IMAGE:
+		ImageListTransformer::GetInstance().PropertyChanged(pProperty);
+		break;
+	case PT_PIECE:
+		PieceListTransformer::GetInstance().PropertyChanged(pProperty);
+		break;
+	case PT_BITMAP_STYLE:
+		BitmapStyleTransformer::GetInstance().PropertyChanged(pProperty);
+		break;
+	case PT_NINE_GRID_STYLE:
+		NineGridStyleTransformer::GetInstance().PropertyChanged(pProperty);
+		break;
+	case PT_COLOR_STYLE:
+		ColorStyleTransformer::GetInstance().PropertyChanged(pProperty);
+		break;
+	case PT_CLIP_BITMAP_STYLE:
+		ClipBitmapStyleTransformer::GetInstance().PropertyChanged(pProperty);
+		break;
+	}
 }

@@ -21,6 +21,7 @@ public:
 	bool LoadFromXml(TiXmlElement* pElmClipBitmapStyle);
 	bool SaveToXml(TiXmlElement* pElmClipBitmapStyleList);
 
+	bool SetStatePiece(PieceInfo* pPieceInfo, STYLE_STATE eState);
 	PieceInfo* GetStatePiece(STYLE_STATE eState);
 
 private:

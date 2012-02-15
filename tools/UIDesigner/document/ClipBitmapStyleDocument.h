@@ -29,6 +29,9 @@ public:
 	ClipBitmapStyle* FindClipBitmapStyle(const wxString& strId);
 	TM_CLIP_BITMAP_STYLE& GetClipBitmapStyleMap();
 
+	bool RenameClipBitmapStyleId(const ClipBitmapStyle* pClipBitmapStyle, const wxString& strNewId);
+	bool SetStatePiece(const ClipBitmapStyle* pClipBitmapStyle, PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState);
+
 protected:
 	ClipBitmapStyleDocument();
 

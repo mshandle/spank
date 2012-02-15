@@ -57,7 +57,7 @@ bool ColorStyleDocument::SaveFile(const wxString& strFile)
 	TiXmlDeclaration* pDecl = new TiXmlDeclaration("1.0", "utf-8", "yes");
 	doc.LinkEndChild(pDecl);
 
-	TiXmlElement* pElmColorStyleList = new TiXmlElement("BitmapStyleList");
+	TiXmlElement* pElmColorStyleList = new TiXmlElement("ColorStyleList");
 	doc.LinkEndChild(pElmColorStyleList);
 
 	for (TM_COLOR_STYLE::iterator it = m_ColorStyleMap.begin(); it != m_ColorStyleMap.end(); ++it)
@@ -95,4 +95,36 @@ ColorStyle* ColorStyleDocument::FindColorStyle(const wxString& strId)
 ColorStyleDocument::TM_COLOR_STYLE& ColorStyleDocument::GetColorStyleMap()
 {
 	return m_ColorStyleMap;
+}
+
+bool ColorStyleDocument::RenameColorStyleId(const ColorStyle* pColorStyle, const wxString& strNewId)
+{
+	if (!pColorStyle) return false;
+
+	wxString strOldId = pColorStyle->GetId();
+	if (strOldId == strNewId) return true;
+	if (FindColorStyle(strNewId)) return false;
+
+	TM_COLOR_STYLE::iterator itfound = m_ColorStyleMap.find(strOldId);
+	if (itfound == m_ColorStyleMap.end()) return false;
+
+	ColorStyle* pFoundColorStyle = itfound->second;
+	m_ColorStyleMap.erase(itfound);
+
+	pFoundColorStyle->SetId(strNewId);
+	m_ColorStyleMap.insert(std::make_pair(pFoundColorStyle->GetId(), pFoundColorStyle));
+
+	ColorStyleTransformer::GetInstance().UpdateListView();
+	ColorStyleTransformer::GetInstance().SetSelectedColorStyle(pFoundColorStyle);
+	return true;
+}
+
+bool ColorStyleDocument::SetStateColor(const ColorStyle* pColorStyle, const wxColour& color, IStyle::STYLE_STATE eState)
+{
+	if (!pColorStyle) return false;
+
+	ColorStyle* pFoundColorStyle = FindColorStyle(pColorStyle->GetId());
+	if (!pFoundColorStyle) return false;
+
+	return pFoundColorStyle->SetStateColor(color.GetRGB(), eState);
 }

@@ -17,14 +17,14 @@ IStyle::~IStyle()
 	// TODO: 
 }
 
-const wxString& IStyle::GetId() const
-{
-	return m_strId;
-}
-
 void IStyle::SetId(const wxString& strId)
 {
 	m_strId = strId;
+}
+
+const wxString& IStyle::GetId() const
+{
+	return m_strId;
 }
 
 void IStyle::SetTreeItemId(wxTreeItemId itemId)

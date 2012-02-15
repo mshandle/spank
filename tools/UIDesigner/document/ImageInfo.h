@@ -21,7 +21,10 @@ public:
 	bool LoadFromXml(TiXmlElement* pElmImage);
 	bool SaveToXml(TiXmlElement* pElmImageList);
 
+	void SetId(const wxString& strId);
 	const wxString& GetId() const;
+
+	void SetPath(const wxString& strPath);
 	const wxString& GetPath() const;
 
 	wxBitmap* GetBitmap();

@@ -6,8 +6,10 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "BitmapStyleTransformer.h"
+#include "../DesignerFrame.h"
 #include "../document/BitmapStyleDocument.h"
 #include "../document/ImagePieceDocument.h"
+#include "../editor/BitmapStyleEditor.h"
 
 BitmapStyleTransformer::BitmapStyleTransformer()
 {
@@ -51,6 +53,7 @@ void BitmapStyleTransformer::UpdateListView()
 void BitmapStyleTransformer::UpdateProperty(BitmapStyle* pBitmapStyle)
 {
 	m_pPropertyGrid->Clear();
+	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_UNKNOWN);
 	if (!pBitmapStyle) return;
 
 	m_pPropertyGrid->Append(new wxStringProperty("id", "id", pBitmapStyle->GetId()));
@@ -67,6 +70,47 @@ void BitmapStyleTransformer::UpdateProperty(BitmapStyle* pBitmapStyle)
 	m_pPropertyGrid->Append(new wxEnumProperty("hover", "hover", pieceIds, pieceIdsIndex, value));
 	value = ImagePieceDocument::GetInstance().FindPieceIndex(pBitmapStyle->GetStatePiece(IStyle::SS_DISABLED)->GetId());
 	m_pPropertyGrid->Append(new wxEnumProperty("disabled", "disabled", pieceIds, pieceIdsIndex, value));
+
+	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_BITMAP_STYLE);
+}
+
+void BitmapStyleTransformer::PropertyChanged(wxPGProperty* pProperty)
+{
+	BitmapStyle* pBitmapStyle = GetSelectedBitmapStyle();
+	if (!pBitmapStyle) return;
+
+	bool bRedraw = false;
+	if (pProperty->GetName() == "id")
+	{
+		wxString strNewId = pProperty->GetValueAsString();
+		BitmapStyleDocument::GetInstance().RenameBitmapStyleId(pBitmapStyle, strNewId);
+	}
+	else if (pProperty->GetName() == "normal")
+	{
+		wxString strNewPieceId = pProperty->GetValueAsString();
+		bRedraw = BitmapStyleDocument::GetInstance().SetStatePiece(pBitmapStyle, ImagePieceDocument::GetInstance().FindPieceInfo(strNewPieceId), IStyle::SS_NORMAL);
+	}
+	else if (pProperty->GetName() == "down")
+	{
+		wxString strNewPieceId = pProperty->GetValueAsString();
+		bRedraw = BitmapStyleDocument::GetInstance().SetStatePiece(pBitmapStyle, ImagePieceDocument::GetInstance().FindPieceInfo(strNewPieceId), IStyle::SS_DOWN);
+	}
+	else if (pProperty->GetName() == "hover")
+	{
+		wxString strNewPieceId = pProperty->GetValueAsString();
+		bRedraw = BitmapStyleDocument::GetInstance().SetStatePiece(pBitmapStyle, ImagePieceDocument::GetInstance().FindPieceInfo(strNewPieceId), IStyle::SS_HOVER);
+	}
+	else if (pProperty->GetName() == "disabled")
+	{
+		wxString strNewPieceId = pProperty->GetValueAsString();
+		bRedraw = BitmapStyleDocument::GetInstance().SetStatePiece(pBitmapStyle, ImagePieceDocument::GetInstance().FindPieceInfo(strNewPieceId), IStyle::SS_DISABLED);
+	}
+
+	if (bRedraw)
+	{
+		BitmapStyleEditor::GetInstance().SetBitmapStyle(NULL);
+		BitmapStyleEditor::GetInstance().SetBitmapStyle(pBitmapStyle);
+	}
 }
 
 void BitmapStyleTransformer::SetSelectedBitmapStyle(BitmapStyle* pBitmapStyle)

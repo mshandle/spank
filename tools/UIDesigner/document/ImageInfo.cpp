@@ -42,9 +42,19 @@ bool ImageInfo::SaveToXml(TiXmlElement* pElmImageList)
 	return true;
 }
 
+void ImageInfo::SetId(const wxString& strId)
+{
+	m_strId = strId;
+}
+
 const wxString& ImageInfo::GetId() const
 {
 	return m_strId;
+}
+
+void ImageInfo::SetPath(const wxString& strPath)
+{
+	m_strPath = strPath;
 }
 
 const wxString& ImageInfo::GetPath() const
