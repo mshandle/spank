@@ -7,10 +7,12 @@
  */
 #include "BitmapStyleTransformer.h"
 #include "../document/BitmapStyleDocument.h"
+#include "../document/ImagePieceDocument.h"
 
 BitmapStyleTransformer::BitmapStyleTransformer()
 {
 	m_pListView = NULL;
+	m_pPropertyGrid = NULL;
 }
 
 BitmapStyleTransformer::~BitmapStyleTransformer()
@@ -24,9 +26,10 @@ BitmapStyleTransformer& BitmapStyleTransformer::GetInstance()
 	return s_BitmapStyleTransformer;
 }
 
-bool BitmapStyleTransformer::Initialize(wxTreeCtrl* pTreeCtrl)
+bool BitmapStyleTransformer::Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid)
 {
 	m_pListView = pTreeCtrl;
+	m_pPropertyGrid = pPropertyGrid;
 	return true;
 }
 
@@ -45,17 +48,37 @@ void BitmapStyleTransformer::UpdateListView()
 	m_pListView->ExpandAll();
 }
 
+void BitmapStyleTransformer::UpdateProperty(BitmapStyle* pBitmapStyle)
+{
+	m_pPropertyGrid->Clear();
+	if (!pBitmapStyle) return;
+
+	m_pPropertyGrid->Append(new wxStringProperty("id", "id", pBitmapStyle->GetId()));
+
+	const wxArrayString& pieceIds = ImagePieceDocument::GetInstance().GetPieceIds();
+	const wxArrayInt& pieceIdsIndex = ImagePieceDocument::GetInstance().GetPieceIdsIndex();
+	int value = -1;
+
+	value = ImagePieceDocument::GetInstance().FindPieceIndex(pBitmapStyle->GetStatePiece(IStyle::SS_NORMAL)->GetId());
+	m_pPropertyGrid->Append(new wxEnumProperty("normal", "normal", pieceIds, pieceIdsIndex, value));
+	value = ImagePieceDocument::GetInstance().FindPieceIndex(pBitmapStyle->GetStatePiece(IStyle::SS_DOWN)->GetId());
+	m_pPropertyGrid->Append(new wxEnumProperty("down", "down", pieceIds, pieceIdsIndex, value));
+	value = ImagePieceDocument::GetInstance().FindPieceIndex(pBitmapStyle->GetStatePiece(IStyle::SS_HOVER)->GetId());
+	m_pPropertyGrid->Append(new wxEnumProperty("hover", "hover", pieceIds, pieceIdsIndex, value));
+	value = ImagePieceDocument::GetInstance().FindPieceIndex(pBitmapStyle->GetStatePiece(IStyle::SS_DISABLED)->GetId());
+	m_pPropertyGrid->Append(new wxEnumProperty("disabled", "disabled", pieceIds, pieceIdsIndex, value));
+}
+
+void BitmapStyleTransformer::SetSelectedBitmapStyle(BitmapStyle* pBitmapStyle)
+{
+	if (!pBitmapStyle) return;
+
+	m_pListView->SelectItem(pBitmapStyle->GetTreeItemId(), true);
+}
+
 BitmapStyle* BitmapStyleTransformer::GetSelectedBitmapStyle()
 {
 	wxString strBitmapStyleId = m_pListView->GetItemText(m_pListView->GetSelection());
 	BitmapStyle* pBitmapStyle = BitmapStyleDocument::GetInstance().FindBitmapStyle(strBitmapStyleId);
 	return pBitmapStyle;
-}
-
-void BitmapStyleTransformer::SetSelectedBitmapStyle(BitmapStyle* pBitmapStyle)
-{
-	if (pBitmapStyle)
-	{
-		m_pListView->SelectItem(pBitmapStyle->GetTreeItemId(), true);
-	}
 }

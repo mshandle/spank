@@ -9,6 +9,8 @@
 #define __COLORSTYLETRANSFORMER_H__
 
 #include <wx/treectrl.h>
+#include <wx/propgrid/propgrid.h>
+#include <wx/propgrid/advprops.h>
 #include "../document/ColorStyle.h"
 
 class ColorStyleTransformer
@@ -16,11 +18,12 @@ class ColorStyleTransformer
 public:
 	static ColorStyleTransformer& GetInstance();
 
-	bool Initialize(wxTreeCtrl* pTreeCtrl);
+	bool Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid);
 	void UpdateListView();
+	void UpdateProperty(ColorStyle* pColorStyle);
 
-	ColorStyle* GetSelectedColorStyle();
 	void SetSelectedColorStyle(ColorStyle* pColorStyle);
+	ColorStyle* GetSelectedColorStyle();
 
 protected:
 	ColorStyleTransformer();
@@ -28,6 +31,7 @@ protected:
 
 private:
 	wxTreeCtrl* m_pListView;
+	wxPropertyGrid* m_pPropertyGrid;
 
 };
 #endif // __COLORSTYLETRANSFORMER_H__

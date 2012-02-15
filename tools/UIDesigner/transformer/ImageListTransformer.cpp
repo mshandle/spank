@@ -11,6 +11,7 @@
 ImageListTransformer::ImageListTransformer()
 {
 	m_pListView = NULL;
+	m_pPropertyGrid = NULL;
 }
 
 ImageListTransformer::~ImageListTransformer()
@@ -24,9 +25,10 @@ ImageListTransformer& ImageListTransformer::GetInstance()
 	return s_ImageListTransformer;
 }
 
-bool ImageListTransformer::Initialize(wxTreeCtrl* pTreeCtrl)
+bool ImageListTransformer::Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid)
 {
 	m_pListView = pTreeCtrl;
+	m_pPropertyGrid = pPropertyGrid;
 	return true;
 }
 
@@ -45,17 +47,25 @@ void ImageListTransformer::UpdateListView()
 	m_pListView->ExpandAll();
 }
 
+void ImageListTransformer::UpdateProperty(ImageInfo* pImageInfo)
+{
+	m_pPropertyGrid->Clear();
+	if (!pImageInfo) return;
+
+	m_pPropertyGrid->Append(new wxStringProperty("id", "id", pImageInfo->GetId()));
+	m_pPropertyGrid->Append(new wxFileProperty("path", "path", pImageInfo->GetPath()));
+}
+
+void ImageListTransformer::SetSelectedImageInfo(ImageInfo* pImageInfo)
+{
+	if (!pImageInfo) return;
+
+	m_pListView->SelectItem(pImageInfo->GetTreeItemId(), true);
+}
+
 ImageInfo* ImageListTransformer::GetSelectedImageInfo()
 {
 	wxString strImageId = m_pListView->GetItemText(m_pListView->GetSelection());
 	ImageInfo* pImageInfo = ImagePieceDocument::GetInstance().FindImageInfo(strImageId);
 	return pImageInfo;
-}
-
-void ImageListTransformer::SetSelectedImageInfo(ImageInfo* pImageInfo)
-{
-	if (pImageInfo)
-	{
-		m_pListView->SelectItem(pImageInfo->GetTreeItemId(), true);
-	}
 }

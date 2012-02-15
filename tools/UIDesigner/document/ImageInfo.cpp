@@ -28,8 +28,17 @@ bool ImageInfo::LoadFromXml(TiXmlElement* pElmImage)
 	if (!pElmImage) return false;
 
 	m_strId = pElmImage->Attribute("id");
-	m_strPath = pElmImage->Attribute("file");
+	m_strPath = pElmImage->Attribute("path");
 
+	return true;
+}
+
+bool ImageInfo::SaveToXml(TiXmlElement* pElmImageList)
+{
+	TiXmlElement* pElmImage = new TiXmlElement("Image");
+	pElmImage->SetAttribute("id", m_strId);
+	pElmImage->SetAttribute("path", m_strPath);
+	pElmImageList->LinkEndChild(pElmImage);
 	return true;
 }
 
@@ -43,7 +52,7 @@ const wxString& ImageInfo::GetPath() const
 	return m_strPath;
 }
 
-wxBitmap* ImageInfo::GetImage()
+wxBitmap* ImageInfo::GetBitmap()
 {
 	if (!m_pbmpImage && !m_bLoaded)
 	{

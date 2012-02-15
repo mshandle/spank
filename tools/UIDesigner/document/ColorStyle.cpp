@@ -54,20 +54,6 @@ bool ColorStyle::SaveToXml(TiXmlElement* pElmColorStyleList)
 	return true;
 }
 
-unsigned int ColorStyle::LoadStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& strState, unsigned int nDefaultColor)
-{
-	TiXmlElement* pElmState = pElmBitmapStyle->FirstChildElement(strState);
-	if (!pElmState) return nDefaultColor;
-
-	const char* pszColor = pElmState->Attribute("value");
-	if (!pszColor) return nDefaultColor;
-
-	unsigned int nColor = 0;
-	sscanf_s(pszColor, "%x", &nColor);
-
-	return nColor;
-}
-
 bool ColorStyle::SaveStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& strState, unsigned int nColor, bool force /*= false*/)
 {
 	if (!force && nColor == m_nColors[SS_NORMAL]) return false;
@@ -81,4 +67,23 @@ bool ColorStyle::SaveStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& st
 	pElmBitmapStyle->LinkEndChild(pElmState);
 
 	return true;
+}
+
+unsigned int ColorStyle::GetStateColor(IStyle::STYLE_STATE eState)
+{
+	return m_nColors[eState];
+}
+
+unsigned int ColorStyle::LoadStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& strState, unsigned int nDefaultColor)
+{
+	TiXmlElement* pElmState = pElmBitmapStyle->FirstChildElement(strState);
+	if (!pElmState) return nDefaultColor;
+
+	const char* pszColor = pElmState->Attribute("value");
+	if (!pszColor) return nDefaultColor;
+
+	unsigned int nColor = 0;
+	sscanf_s(pszColor, "%x", &nColor);
+
+	return nColor;
 }

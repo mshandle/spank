@@ -11,6 +11,7 @@
 #include <wx/wx.h>
 #include <wx/treectrl.h>
 #include <tinyxml-2.6.2/tinyxml.h>
+#include "ImageInfo.h"
 
 class PieceInfo
 {
@@ -19,12 +20,13 @@ public:
 	~PieceInfo();
 
 	bool LoadFromXml(TiXmlElement* pElmPiece);
+	bool SaveToXml(TiXmlElement* pElmPieceList);
 
 	void SetId(const wxString& strId);
 	const wxString& GetId() const;
 
-	void SetImageId(const wxString& strImageId);
-	const wxString& GetImageId() const;
+	void SetImageInfo(ImageInfo* pImageInfo);
+	ImageInfo* GetImageInfo();
 
 	void SetRect(const wxRect& rect);
 	const wxRect& GetRect() const;
@@ -34,7 +36,7 @@ public:
 
 private:
 	wxString m_strId;
-	wxString m_strImageId;
+	ImageInfo* m_pImageInfo;
 	wxRect m_Rect;
 	wxTreeItemId m_TreeItemId;
 

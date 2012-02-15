@@ -8,30 +8,12 @@
 #ifndef __IMAGEPIECEEDITOR_H__
 #define __IMAGEPIECEEDITOR_H__
 
-#include <wx/scrolwin.h>
-#include <wx/bitmap.h>
-#include <wx/dcmemory.h>
-#include <vector>
-#include <map>
-
+#include "BaseEditor.h"
 #include "../document/PieceInfo.h"
 #include "../document/ImageInfo.h"
 
-class ImagePieceEditor : public wxWindow
+class ImagePieceEditor : public BaseEditor
 {
-	DECLARE_DYNAMIC_CLASS(ImagePieceEditor)
-	DECLARE_EVENT_TABLE()
-
-public:
-	enum CONST_DEFINE
-	{
-		SCROLL_LINE_DISTANCE = 10,
-		ZOOM_MIN = 1,
-		ZOOM_STEP = 1,
-		ZOOM_MAX = 10,
-		DEFAULT_VIRTUAL_SIZE = 100,
-	};
-
 public:
 	ImagePieceEditor();
 	ImagePieceEditor(wxWindow *parent,
@@ -43,15 +25,6 @@ public:
 
 	virtual ~ImagePieceEditor();
 
-	bool Create(wxWindow *parent,
-		wxWindowID winid,
-		const wxPoint& pos = wxDefaultPosition,
-		const wxSize& size = wxDefaultSize,
-		long style = 0,
-		const wxString& name = wxPanelNameStr);
-
-	virtual wxSize DoGetBestSize() const;
-
 	static ImagePieceEditor& GetInstance();
 
 	void SetSelection(PieceInfo* pPieceInfo);
@@ -60,44 +33,19 @@ public:
 	bool SetImage(ImageInfo* pImageInfo);
 	ImageInfo* GetImage() const;
 
-	bool ZoomIn();
-	bool ZoomOut();
-	bool Zoom(int zoom);
-	int GetZoom() const;
+	virtual wxSize CalculateVirtualSize();
+	virtual void Draw(wxDC& dc);
+	virtual void OnLButtonDown(const wxPoint& pos);
 
 private:
 	void Init();
 	void Release();
 
-	void OnPaint(wxPaintEvent& event);
-	void OnMouseWheel(wxMouseEvent& event);
-	void OnMouseLButtonDown(wxMouseEvent& event);
-	void OnSize(wxSizeEvent& event);
-
-	void OnScrollLineUp(wxScrollWinEvent& event);
-	void OnScrollLineDown(wxScrollWinEvent& event);
-	void OnScrollPageUp(wxScrollWinEvent& event);
-	void OnScrollPageDown(wxScrollWinEvent& event);
-	void OnScrollThumbTrack(wxScrollWinEvent& event);
-	void OnScrollThumbRelease(wxScrollWinEvent& event);
-
-	void UpdateVirtualSize();
-	const wxSize& GetVirtualSize();
-	void UpdateScrollPosition(int x, int y);
-
 	void DrawSelection(wxDC& dc);
 
 private:
 	static ImagePieceEditor* m_pImagePieceEditor;
-	wxMemoryDC m_dcImage;
-	
-	wxBitmap m_bmpBackBuffer;
-	wxMemoryDC m_dcBackBuffer;
-
-	int m_nZoom;
-	wxSize m_sizeVirtual;
-	wxPoint m_ptOrigin;
-
+	wxMemoryDC m_memDC;
 	PieceInfo* m_pPieceInfo;
 	ImageInfo* m_pImageInfo;
 

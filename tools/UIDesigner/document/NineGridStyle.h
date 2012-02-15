@@ -31,6 +31,8 @@ public:
 	bool LoadFromXml(TiXmlElement* pElmNineGridStyle);
 	bool SaveToXml(TiXmlElement* pElmNineGridStyleList);
 
+	NINE_GRID_INFO* GetStateGridInfo(STYLE_STATE eState);
+
 private:
 	NINE_GRID_INFO* LoadStateInfo(TiXmlElement* pElmNineGridStyle, const wxString& strState, NINE_GRID_INFO* pDefaultInfo);
 	bool SaveStateInfo(TiXmlElement* pElmNineGridStyle, const wxString& strState, NINE_GRID_INFO* pNineGridInfo, bool force = false);

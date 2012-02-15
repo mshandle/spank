@@ -9,6 +9,7 @@
 #define __BITMAPSTYLETRANSFORMER_H__
 
 #include <wx/treectrl.h>
+#include <wx/propgrid/propgrid.h>
 #include "../document/BitmapStyle.h"
 
 class BitmapStyleTransformer
@@ -16,11 +17,12 @@ class BitmapStyleTransformer
 public:
 	static BitmapStyleTransformer& GetInstance();
 
-	bool Initialize(wxTreeCtrl* pTreeCtrl);
+	bool Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid);
 	void UpdateListView();
+	void UpdateProperty(BitmapStyle* pBitmapStyle);
 
-	BitmapStyle* GetSelectedBitmapStyle();
 	void SetSelectedBitmapStyle(BitmapStyle* pBitmapStyle);
+	BitmapStyle* GetSelectedBitmapStyle();
 
 protected:
 	BitmapStyleTransformer();
@@ -28,6 +30,7 @@ protected:
 
 private:
 	wxTreeCtrl* m_pListView;
+	wxPropertyGrid* m_pPropertyGrid;
 
 };
 #endif // __BITMAPSTYLETRANSFORMER_H__

@@ -57,6 +57,11 @@ bool ClipBitmapStyle::SaveToXml(TiXmlElement* pElmClipBitmapStyleList)
 	return true;
 }
 
+PieceInfo* ClipBitmapStyle::GetStatePiece(STYLE_STATE eState)
+{
+	return m_PieceInfo[eState];
+}
+
 PieceInfo* ClipBitmapStyle::LoadStateInfo(TiXmlElement* pElmClipBitmapStyle, const wxString& strState, PieceInfo* pDefaultPieceInfo)
 {
 	TiXmlElement* pElmState = pElmClipBitmapStyle->FirstChildElement(strState);

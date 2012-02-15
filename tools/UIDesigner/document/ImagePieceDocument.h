@@ -37,13 +37,32 @@ public:
 	TM_IMAGE_INFO& GetImageInfoMap();
 	TM_PIECE_INFO& GetPieceInfoMap();
 
+	const wxArrayString& GetImageIds();
+	const wxArrayInt& GetImageIdsIndex();
+	int FindImageIndex(const wxString& strId);
+	const wxString& GetImageId(int index);
+
+	const wxArrayString& GetPieceIds();
+	const wxArrayInt& GetPieceIdsIndex();
+	int FindPieceIndex(const wxString& strId);
+	const wxString& GetPieceId(int index);
+
 protected:
 	ImagePieceDocument();
+
+	void GenerateImageArrayString();
+	void GeneratePieceArrayString();
 
 private:
 	TM_IMAGE_INFO m_ImageInfoMap;
 	TM_PIECE_INFO m_PieceInfoMap;
-	wxString m_strFile;
 
+	wxArrayString m_ImageIds;
+	wxArrayInt m_ImageIdsIndex;
+
+	wxArrayString m_PieceIds;
+	wxArrayInt m_PieceIdsIndex;
+
+	wxString m_strFile;
 };
 #endif // __IMAGEPIECEDOCUMENT_H__

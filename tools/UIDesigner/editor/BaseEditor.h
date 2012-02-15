@@ -52,37 +52,45 @@ public:
 	bool Zoom(int zoom);
 	int GetZoom() const;
 
-protected:
 	virtual wxSize CalculateVirtualSize();
-	virtual void render();
+	virtual wxSize CalculateMaxSize();
+
+	virtual void Draw(wxDC& dc);
+	virtual void OnLButtonDown(const wxPoint& pos);
+
+	void UpdateVirtualSize();
+	void UpdateScrollPosition(int x, int y);
+	const wxPoint& GetOriginOffset() const;
+
+	wxPoint CalculateZoomedPos(const wxPoint& pos);
+	wxPoint CalculateOriginPos(const wxPoint& zoomedPos);
+
+protected:
+	void DrawBitmap(wxDC& dc, wxBitmap& bitmap, const wxPoint& destPos);
+	void DrawRectangle(wxDC& dc, const wxRect& rect);
+	void DrawLine(wxDC& dc, const wxPoint& pt1, const wxPoint& pt2);
 
 private:
 	void Init();
 	void Release();
 
-	void OnPaint(wxPaintEvent& event);
-	void OnMouseWheel(wxMouseEvent& event);
-	void OnMouseLButtonDown(wxMouseEvent& event);
-	void OnSize(wxSizeEvent& event);
+	void OnPaintEvt(wxPaintEvent& event);
+	void OnMouseWheelEvt(wxMouseEvent& event);
+	void OnLButtonDownEvt(wxMouseEvent& event);
+	void OnSizeEvt(wxSizeEvent& event);
 
-	void OnScrollLineUp(wxScrollWinEvent& event);
-	void OnScrollLineDown(wxScrollWinEvent& event);
-	void OnScrollPageUp(wxScrollWinEvent& event);
-	void OnScrollPageDown(wxScrollWinEvent& event);
-	void OnScrollThumbTrack(wxScrollWinEvent& event);
-	void OnScrollThumbRelease(wxScrollWinEvent& event);
-
-	void UpdateVirtualSize();
-	const wxSize& GetVirtualSize();
-	void UpdateScrollPosition(int x, int y);
+	void OnScrollLineUpEvt(wxScrollWinEvent& event);
+	void OnScrollLineDownEvt(wxScrollWinEvent& event);
+	void OnScrollPageUpEvt(wxScrollWinEvent& event);
+	void OnScrollPageDownEvt(wxScrollWinEvent& event);
+	void OnScrollThumbTrackEvt(wxScrollWinEvent& event);
+	void OnScrollThumbReleaseEvt(wxScrollWinEvent& event);
 
 private:
-	wxBitmap m_bmpBackBuffer;
-	wxMemoryDC m_dcBackBuffer;
-
 	int m_nZoom;
-	wxSize m_sizeVirtual;
-	wxPoint m_ptOrigin;
+	wxSize m_ZoomedSize;
+	wxPoint m_ptOriginOffset;
+	wxMemoryDC m_memDC;
 
 };
 #endif // __BASEEDITOR_H__

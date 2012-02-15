@@ -9,6 +9,7 @@
 #define __PIECELISTTRANSFORMER_H__
 
 #include <wx/treectrl.h>
+#include <wx/propgrid/propgrid.h>
 #include "../document/PieceInfo.h"
 
 class PieceListTransformer
@@ -16,11 +17,12 @@ class PieceListTransformer
 public:
 	static PieceListTransformer& GetInstance();
 
-	bool Initialize(wxTreeCtrl* pTreeCtrl);
+	bool Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid);
 	void UpdateListView();
+	void UpdateProperty(PieceInfo* pPieceInfo);
 
+	void SetSelectedPieceInfo(PieceInfo* pPieceInfo);
 	PieceInfo* GetSelectedPieceInfo();
-	void SetSelectedItem(PieceInfo* pPieceInfo);
 
 protected:
 	PieceListTransformer();
@@ -28,6 +30,7 @@ protected:
 
 private:
 	wxTreeCtrl* m_pListView;
+	wxPropertyGrid* m_pPropertyGrid;
 
 };
 #endif // __PIECELISTTRANSFORMER_H__

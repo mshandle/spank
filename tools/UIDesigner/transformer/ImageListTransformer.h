@@ -9,6 +9,7 @@
 #define __IMAGELISTTRANSFORMER_H__
 
 #include <wx/treectrl.h>
+#include <wx/propgrid/propgrid.h>
 #include "../document/ImageInfo.h"
 
 class ImageListTransformer
@@ -16,11 +17,12 @@ class ImageListTransformer
 public:
 	static ImageListTransformer& GetInstance();
 
-	bool Initialize(wxTreeCtrl* pTreeCtrl);
+	bool Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid);
 	void UpdateListView();
+	void UpdateProperty(ImageInfo* pImageInfo);
 
-	ImageInfo* GetSelectedImageInfo();
 	void SetSelectedImageInfo(ImageInfo* pImageInfo);
+	ImageInfo* GetSelectedImageInfo();
 
 protected:
 	ImageListTransformer();
@@ -28,6 +30,7 @@ protected:
 
 private:
 	wxTreeCtrl* m_pListView;
+	wxPropertyGrid* m_pPropertyGrid;
 
 };
 #endif // __IMAGELISTTRANSFORMER_H__

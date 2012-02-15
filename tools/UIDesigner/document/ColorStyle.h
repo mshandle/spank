@@ -20,6 +20,8 @@ public:
 	bool LoadFromXml(TiXmlElement* pElmColorStyle);
 	bool SaveToXml(TiXmlElement* pElmColorStyleList);
 
+	unsigned int GetStateColor(IStyle::STYLE_STATE eState);
+
 private:
 	unsigned int LoadStateInfo(TiXmlElement* pElmColorStyle, const wxString& strState, unsigned int nDefaultColor);
 	bool SaveStateInfo(TiXmlElement* pElmColorStyle, const wxString& strState, unsigned int nColor, bool force = false);

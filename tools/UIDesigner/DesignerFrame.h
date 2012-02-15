@@ -11,7 +11,8 @@
 #include <wx/frame.h>
 #include <wx/aui/aui.h>
 #include <wx/treectrl.h>
-#include <wx/propgrid/property.h>
+#include <wx/propgrid/propgrid.h>
+#include "editor/BaseEditor.h"
 
 class DesignerFrame : public wxFrame
 {
@@ -43,8 +44,22 @@ public:
 		IDC_CLIP_BITMAP_STYLE_LIST,
 
 		IDC_PROPERTY,
-		IDC_EDITOR_VIEW,
+		IDC_IMAGE_PIECE_EDITOR_VIEW,
+		IDC_BITMAP_STYLE_EDITOR_VIEW,
+		IDC_NINE_GRID_STYLE_EDITOR_VIEW,
+		IDC_COLOR_STYLE_EDITOR_VIEW,
+		IDC_CLIP_BITMAP_STYLE_EDITOR_VIEW,
 		IDC_OUTPUT_VIEW,
+	};
+
+	enum EDITOR
+	{
+		EDITOR_IMAGE_PIECE = 0,
+		EDITOR_BITMAP_STYLE,
+		EDITOR_NINE_GRID_STYLE,
+		EDITOR_COLOR_STYLE,
+		EDITOR_CLIP_BITMAP_STYLE,
+		NUM_EDITOR,
 	};
 
 public:
@@ -59,12 +74,13 @@ public:
 
 private:
 	void Init();
+	void Release();
 
 	void CreateControls();
 	void CreateMenu();
 	void CreateToolbar();
-	void CreateListView();
 	void CreatePropertyView();
+	void CreateListView();
 	void CreateEditorView();
 	void CreateOutputView();
 
@@ -91,6 +107,9 @@ private:
 
 	wxTextCtrl* m_pOutputView;
 	wxPropertyGrid* m_pPropertyGrid;
+
+	wxNotebook* m_pEditorNotebook;
+	BaseEditor* m_pEditors[NUM_EDITOR];
 
 };
 #endif // __DESIGNERFRAME_H__

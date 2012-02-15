@@ -9,6 +9,8 @@
 #define __NINEGRIDSTYLETRANSFORMER_H__
 
 #include <wx/treectrl.h>
+#include <wx/propgrid/propgrid.h>
+#include <wx/propgrid/advprops.h>
 #include "../document/NineGridStyle.h"
 
 class NineGridStyleTransformer
@@ -16,11 +18,12 @@ class NineGridStyleTransformer
 public:
 	static NineGridStyleTransformer& GetInstance();
 
-	bool Initialize(wxTreeCtrl* pTreeCtrl);
+	bool Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid);
 	void UpdateListView();
+	void UpdateProperty(NineGridStyle* pNineGrieStyle);
 
-	NineGridStyle* GetSelectedNineGridStyle();
 	void SetSelectedNineGridStyle(NineGridStyle* pNineGrieStyle);
+	NineGridStyle* GetSelectedNineGridStyle();
 
 protected:
 	NineGridStyleTransformer();
@@ -28,6 +31,7 @@ protected:
 
 private:
 	wxTreeCtrl* m_pListView;
+	wxPropertyGrid* m_pPropertyGrid;
 
 };
 #endif // __NINEGRIDSTYLETRANSFORMER_H__

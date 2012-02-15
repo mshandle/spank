@@ -357,11 +357,43 @@
 				>
 			</File>
 			<File
+				RelativePath=".\editor\BitmapStyleEditor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\editor\BitmapStyleEditor.h"
+				>
+			</File>
+			<File
+				RelativePath=".\editor\ClipBitmapStyleEditor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\editor\ClipBitmapStyleEditor.h"
+				>
+			</File>
+			<File
+				RelativePath=".\editor\ColorStyleEditor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\editor\ColorStyleEditor.h"
+				>
+			</File>
+			<File
 				RelativePath=".\editor\ImagePieceEditor.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\editor\ImagePieceEditor.h"
+				>
+			</File>
+			<File
+				RelativePath=".\editor\NineGridStyleEditor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\editor\NineGridStyleEditor.h"
 				>
 			</File>
 		</Filter>

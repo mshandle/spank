@@ -6,21 +6,21 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "BaseEditor.h"
-#include <wx/dcclient.h>
+#include <wx/dcbuffer.h>
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
 BEGIN_EVENT_TABLE(BaseEditor, wxWindow)
-	EVT_PAINT(BaseEditor::OnPaint)
-	EVT_MOUSEWHEEL(BaseEditor::OnMouseWheel)
-	EVT_LEFT_DOWN(BaseEditor::OnMouseLButtonDown)
-	EVT_SIZE(BaseEditor::OnSize)
-	EVT_SCROLLWIN_LINEUP(BaseEditor::OnScrollLineUp)
-	EVT_SCROLLWIN_LINEDOWN(BaseEditor::OnScrollLineDown)
-	EVT_SCROLLWIN_PAGEUP(BaseEditor::OnScrollPageUp)
-	EVT_SCROLLWIN_PAGEDOWN(BaseEditor::OnScrollPageDown)
-	EVT_SCROLLWIN_THUMBTRACK(BaseEditor::OnScrollThumbTrack)
-	EVT_SCROLLWIN_THUMBRELEASE(BaseEditor::OnScrollThumbRelease)
+	EVT_PAINT(BaseEditor::OnPaintEvt)
+	EVT_MOUSEWHEEL(BaseEditor::OnMouseWheelEvt)
+	EVT_LEFT_DOWN(BaseEditor::OnLButtonDownEvt)
+	EVT_SIZE(BaseEditor::OnSizeEvt)
+	EVT_SCROLLWIN_LINEUP(BaseEditor::OnScrollLineUpEvt)
+	EVT_SCROLLWIN_LINEDOWN(BaseEditor::OnScrollLineDownEvt)
+	EVT_SCROLLWIN_PAGEUP(BaseEditor::OnScrollPageUpEvt)
+	EVT_SCROLLWIN_PAGEDOWN(BaseEditor::OnScrollPageDownEvt)
+	EVT_SCROLLWIN_THUMBTRACK(BaseEditor::OnScrollThumbTrackEvt)
+	EVT_SCROLLWIN_THUMBRELEASE(BaseEditor::OnScrollThumbReleaseEvt)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(BaseEditor, wxWindow)
@@ -45,9 +45,9 @@ void BaseEditor::Init()
 {
 	m_nZoom = ZOOM_MIN;
 
-	m_sizeVirtual.Set(DEFAULT_VIRTUAL_SIZE*m_nZoom, DEFAULT_VIRTUAL_SIZE*m_nZoom);
-	m_ptOrigin.x = 0;
-	m_ptOrigin.y = 0;
+	m_ZoomedSize.Set(DEFAULT_VIRTUAL_SIZE*m_nZoom, DEFAULT_VIRTUAL_SIZE*m_nZoom);
+	m_ptOriginOffset.x = 0;
+	m_ptOriginOffset.y = 0;
 }
 
 void BaseEditor::Release()
@@ -64,7 +64,7 @@ bool BaseEditor::Create(wxWindow *parent, wxWindowID winid, const wxPoint& pos /
 
 wxSize BaseEditor::DoGetBestSize() const
 {
-	return m_sizeVirtual;
+	return m_ZoomedSize;
 }
 
 bool BaseEditor::ZoomIn()
@@ -82,7 +82,7 @@ bool BaseEditor::Zoom(int zoom)
 	if (zoom < ZOOM_MIN || zoom > ZOOM_MAX) return false;
 	if (m_nZoom == zoom) return true;
 
-	m_ptOrigin = (m_ptOrigin/m_nZoom)*zoom;
+	m_ptOriginOffset = (m_ptOriginOffset/m_nZoom)*zoom;
 	m_nZoom = zoom;
 	UpdateVirtualSize();
 	UpdateScrollPosition(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
@@ -95,46 +95,54 @@ int BaseEditor::GetZoom() const
 	return m_nZoom;
 }
 
-void BaseEditor::OnPaint(wxPaintEvent& event)
+void BaseEditor::OnPaintEvt(wxPaintEvent& event)
 {
-	wxPaintDC dc(this);
+	wxBufferedPaintDC dc(this);
 
 	// get client size
-	wxRect clientSize = GetClientSize();
-
-	int nWidth = clientSize.GetWidth();
-	int nHeight = clientSize.GetHeight();
-
-	// calculate max size
-	wxSize virtualSize = CalculateVirtualSize();
- 	if (nWidth < virtualSize.GetWidth()) nWidth = virtualSize.GetWidth();
- 	if (nHeight < virtualSize.GetHeight()) nHeight = virtualSize.GetHeight();
+	wxSize maxSize = CalculateMaxSize();
 
 	// fill background
-	m_dcBackBuffer.SetBrush(*wxLIGHT_GREY_BRUSH);
-	m_dcBackBuffer.SetPen(*wxTRANSPARENT_PEN);
-	m_dcBackBuffer.DrawRectangle(0, 0, nWidth*m_nZoom, nHeight*m_nZoom);
+	dc.SetBrush(*wxLIGHT_GREY_BRUSH);
+	dc.SetPen(*wxTRANSPARENT_PEN);
+	dc.DrawRectangle(wxPoint(0, 0), maxSize*m_nZoom);
 
 	// draw cross
-	wxBrush brushGrid;
-	brushGrid.SetColour(*wxWHITE);
-	brushGrid.SetStyle(wxBRUSHSTYLE_CROSSDIAG_HATCH);
-	m_dcBackBuffer.SetBrush(brushGrid);
-	m_dcBackBuffer.SetPen(*wxTRANSPARENT_PEN);
-	m_dcBackBuffer.DrawRectangle(0, 0, nWidth*m_nZoom, nHeight*m_nZoom);
+	dc.SetBrush(wxBrush(*wxWHITE, wxBRUSHSTYLE_CROSSDIAG_HATCH));
+	dc.SetPen(*wxTRANSPARENT_PEN);
+	dc.DrawRectangle(wxPoint(0, 0), maxSize*m_nZoom);
 
-	// TODO: custom draw
-// 	if (pbmpImage)
-// 	{
-// 		m_dcBackBuffer.StretchBlit(-m_ptOrigin, pbmpImage->GetSize()*m_nZoom, &m_dcImage, wxPoint(0, 0), pbmpImage->GetSize());
-// 		DrawSelection(m_dcBackBuffer);
-// 	}
-
-	// flush to dc
-	dc.Blit(0, 0, m_bmpBackBuffer.GetWidth(), m_bmpBackBuffer.GetHeight(), &m_dcBackBuffer, 0, 0);
+	// custom draw
+	Draw(dc);
 }
 
-void BaseEditor::OnMouseWheel(wxMouseEvent& event)
+void BaseEditor::Draw(wxDC& dc)
+{
+	// TODO: 
+}
+
+void BaseEditor::DrawBitmap(wxDC& dc, wxBitmap& bitmap, const wxPoint& destPos)
+{
+	m_memDC.SelectObject(bitmap);
+	dc.StretchBlit(destPos*m_nZoom-m_ptOriginOffset, bitmap.GetSize()*m_nZoom, &m_memDC, wxPoint(0, 0), bitmap.GetSize());
+	m_memDC.SelectObject(wxNullBitmap);
+}
+
+void BaseEditor::DrawRectangle(wxDC& dc, const wxRect& rect)
+{
+	wxPoint pos = rect.GetPosition()*m_nZoom-m_ptOriginOffset;
+	wxSize size = rect.GetSize()*m_nZoom;
+	dc.DrawRectangle(pos, size);
+}
+
+void BaseEditor::DrawLine(wxDC& dc, const wxPoint& pt1, const wxPoint& pt2)
+{
+	wxPoint zoomedPt1 = pt1*m_nZoom-m_ptOriginOffset;
+	wxPoint zoomedPt2 = pt2*m_nZoom-m_ptOriginOffset;
+	dc.DrawLine(zoomedPt1, zoomedPt2);
+}
+
+void BaseEditor::OnMouseWheelEvt(wxMouseEvent& event)
 {
 	int lines = -event.GetWheelRotation() / event.GetWheelDelta();
 
@@ -163,28 +171,20 @@ void BaseEditor::OnMouseWheel(wxMouseEvent& event)
 	}
 }
 
-void BaseEditor::OnMouseLButtonDown(wxMouseEvent& event)
+void BaseEditor::OnLButtonDownEvt(wxMouseEvent& event)
 {
 	SetFocus();
-	// TODO: notify l button down
+	OnLButtonDown(event.GetPosition());
 }
 
-void BaseEditor::OnSize(wxSizeEvent& event)
+void BaseEditor::OnSizeEvt(wxSizeEvent& event)
 {
 	UpdateVirtualSize();
 	UpdateScrollPosition(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
-
-	if (m_bmpBackBuffer.GetSize() != GetClientSize())
-	{
-		m_dcBackBuffer.SelectObject(wxNullBitmap);
-		m_bmpBackBuffer.Create(GetClientSize());
-		m_dcBackBuffer.SelectObject(m_bmpBackBuffer);
-	}
-
 	event.Skip();
 }
 
-void BaseEditor::OnScrollLineUp(wxScrollWinEvent& event)
+void BaseEditor::OnScrollLineUpEvt(wxScrollWinEvent& event)
 {
 	int nOrientation = event.GetOrientation();
 
@@ -193,7 +193,7 @@ void BaseEditor::OnScrollLineUp(wxScrollWinEvent& event)
 	UpdateScrollPosition(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
 }
 
-void BaseEditor::OnScrollLineDown(wxScrollWinEvent& event)
+void BaseEditor::OnScrollLineDownEvt(wxScrollWinEvent& event)
 {
 	int nOrientation = event.GetOrientation();
 
@@ -202,7 +202,7 @@ void BaseEditor::OnScrollLineDown(wxScrollWinEvent& event)
 	UpdateScrollPosition(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
 }
 
-void BaseEditor::OnScrollPageUp(wxScrollWinEvent& event)
+void BaseEditor::OnScrollPageUpEvt(wxScrollWinEvent& event)
 {
 	int nOrientation = event.GetOrientation();
 	int nDistance = GetScrollThumb(nOrientation);
@@ -211,7 +211,7 @@ void BaseEditor::OnScrollPageUp(wxScrollWinEvent& event)
 	UpdateScrollPosition(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
 }
 
-void BaseEditor::OnScrollPageDown(wxScrollWinEvent& event)
+void BaseEditor::OnScrollPageDownEvt(wxScrollWinEvent& event)
 {
 	int nOrientation = event.GetOrientation();
 	int nDistance = GetScrollThumb(nOrientation);
@@ -220,7 +220,7 @@ void BaseEditor::OnScrollPageDown(wxScrollWinEvent& event)
 	UpdateScrollPosition(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
 }
 
-void BaseEditor::OnScrollThumbTrack(wxScrollWinEvent& event)
+void BaseEditor::OnScrollThumbTrackEvt(wxScrollWinEvent& event)
 {
 	int nOrientation = event.GetOrientation();
 	int nPos = event.GetPosition();
@@ -234,7 +234,7 @@ void BaseEditor::OnScrollThumbTrack(wxScrollWinEvent& event)
 	}
 }
 
-void BaseEditor::OnScrollThumbRelease(wxScrollWinEvent& event)
+void BaseEditor::OnScrollThumbReleaseEvt(wxScrollWinEvent& event)
 {
 	int nOrientation = event.GetOrientation();
 	int nPos = event.GetPosition();
@@ -244,21 +244,19 @@ void BaseEditor::OnScrollThumbRelease(wxScrollWinEvent& event)
 
 void BaseEditor::UpdateVirtualSize()
 {
-	m_sizeVirtual = CalculateVirtualSize();
-	m_sizeVirtual *= m_nZoom;
-
+	m_ZoomedSize = CalculateVirtualSize() * m_nZoom;
 	wxRect rect = GetClientRect();
 
 	// hide unnessary scroll bar
 	bool bShowHorizontal = true;
-	if (m_sizeVirtual.GetWidth() <= rect.GetWidth())
+	if (m_ZoomedSize.GetWidth() <= rect.GetWidth())
 	{
 		SetScrollbar(wxHORIZONTAL, 0, 0, 0, true);
 		bShowHorizontal = false;
 	}
 
 	bool bShowVertical = true;
-	if (m_sizeVirtual.GetHeight() <= rect.GetHeight())
+	if (m_ZoomedSize.GetHeight() <= rect.GetHeight())
 	{
 		SetScrollbar(wxVERTICAL, 0, 0, 0, true);
 		bShowVertical = false;
@@ -270,28 +268,52 @@ void BaseEditor::UpdateVirtualSize()
 	// recalculate the scroll bar range
 	if (bShowHorizontal)
 	{
-		SetScrollbar(wxHORIZONTAL, m_ptOrigin.x, rect.GetWidth(), m_sizeVirtual.GetWidth(), true);
+		SetScrollbar(wxHORIZONTAL, m_ptOriginOffset.x, rect.GetWidth(), m_ZoomedSize.GetWidth(), true);
 	}
 	if (bShowVertical)
 	{
-		SetScrollbar(wxVERTICAL, m_ptOrigin.y, rect.GetHeight(), m_sizeVirtual.GetHeight(), true);
+		SetScrollbar(wxVERTICAL, m_ptOriginOffset.y, rect.GetHeight(), m_ZoomedSize.GetHeight(), true);
 	}
-}
-
-const wxSize& BaseEditor::GetVirtualSize()
-{
-	return m_sizeVirtual;
 }
 
 void BaseEditor::UpdateScrollPosition(int x, int y)
 {
-	m_ptOrigin.x = x;
-	m_ptOrigin.y = y;
+	m_ptOriginOffset.x = x;
+	m_ptOriginOffset.y = y;
 
 	Refresh(false);
+}
+
+const wxPoint& BaseEditor::GetOriginOffset() const
+{
+	return m_ptOriginOffset;
 }
 
 wxSize BaseEditor::CalculateVirtualSize()
 {
 	return wxSize(0, 0);
+}
+
+wxSize BaseEditor::CalculateMaxSize()
+{
+	wxSize maxSize = GetClientSize();
+	wxSize virtualSize = CalculateVirtualSize();
+	if (maxSize.x < virtualSize.x) maxSize.x = virtualSize.x;
+	if (maxSize.y < virtualSize.y) maxSize.y = virtualSize.y;
+	return maxSize;
+}
+
+void BaseEditor::OnLButtonDown(const wxPoint& pos)
+{
+	// TODO: 
+}
+
+wxPoint BaseEditor::CalculateZoomedPos(const wxPoint& pos)
+{
+	return pos*m_nZoom + m_ptOriginOffset;
+}
+
+wxPoint BaseEditor::CalculateOriginPos(const wxPoint& zoomedPos)
+{
+	return (zoomedPos - m_ptOriginOffset) / m_nZoom;
 }

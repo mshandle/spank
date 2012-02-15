@@ -1,33 +1,33 @@
 /*!
- * \file BitmapStyleEditor.h
+ * \file ClipBitmapStyleEditor.h
  * \date 2-15-2012 11:01:25
  * 
  * 
  * \author zjhlogo (zjhlogo@gmail.com)
  */
-#ifndef __BITMAPSTYLEEDITOR_H__
-#define __BITMAPSTYLEEDITOR_H__
+#ifndef __CLIPBITMAPSTYLEEDITOR_H__
+#define __CLIPBITMAPSTYLEEDITOR_H__
 
 #include "BaseEditor.h"
-#include "../document/BitmapStyle.h"
+#include "../document/ClipBitmapStyle.h"
 
-class BitmapStyleEditor : public BaseEditor
+class ClipBitmapStyleEditor : public BaseEditor
 {
 public:
-	BitmapStyleEditor();
-	BitmapStyleEditor(wxWindow *parent,
+	ClipBitmapStyleEditor();
+	ClipBitmapStyleEditor(wxWindow *parent,
 		wxWindowID winid,
 		const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,
 		long style = 0,
 		const wxString& name = wxPanelNameStr);
 
-	virtual ~BitmapStyleEditor();
+	virtual ~ClipBitmapStyleEditor();
 
-	static BitmapStyleEditor& GetInstance();
+	static ClipBitmapStyleEditor& GetInstance();
 
-	bool SetBitmapStyle(BitmapStyle* pBitmapStyle);
-	BitmapStyle* GetBitmapStyle();
+	bool SetClipBitmapStyle(ClipBitmapStyle* pClipBitmapStyle);
+	ClipBitmapStyle* GetClipBitmapStyle();
 
 	virtual wxSize CalculateVirtualSize();
 	virtual void Draw(wxDC& dc);
@@ -46,8 +46,8 @@ private:
 	void DrawSelection(wxDC& dc);
 
 private:
-	static BitmapStyleEditor* m_pBitmapStyleEditor;
-	BitmapStyle* m_pBitmapStyle;
+	static ClipBitmapStyleEditor* m_pClipBitmapStyleEditor;
+	ClipBitmapStyle* m_pClipBitmapStyle;
 
 	IStyle::STYLE_STATE m_eSelState;
 	wxBitmap m_bmpState[IStyle::SS_NUM];
@@ -55,4 +55,4 @@ private:
 	wxSize m_TotalSize;
 
 };
-#endif // __BITMAPSTYLEEDITOR_H__
+#endif // __CLIPBITMAPSTYLEEDITOR_H__

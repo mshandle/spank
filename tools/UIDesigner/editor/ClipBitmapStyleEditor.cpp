@@ -1,52 +1,52 @@
 /*!
- * \file BitmapStyleEditor.cpp
+ * \file ClipBitmapStyleEditor.cpp
  * \date 2-15-2012 11:01:35
  * 
  * 
  * \author zjhlogo (zjhlogo@gmail.com)
  */
-#include "BitmapStyleEditor.h"
+#include "ClipBitmapStyleEditor.h"
 
-BitmapStyleEditor* BitmapStyleEditor::m_pBitmapStyleEditor = NULL;
+ClipBitmapStyleEditor* ClipBitmapStyleEditor::m_pClipBitmapStyleEditor = NULL;
 
-BitmapStyleEditor::BitmapStyleEditor()
+ClipBitmapStyleEditor::ClipBitmapStyleEditor()
 :BaseEditor()
 {
 	Init();
 }
 
-BitmapStyleEditor::BitmapStyleEditor(wxWindow *parent, wxWindowID winid, const wxPoint& pos /* = wxDefaultPosition */, const wxSize& size /* = wxDefaultSize */, long style /* = 0 */, const wxString& name /* = wxPanelNameStr */)
+ClipBitmapStyleEditor::ClipBitmapStyleEditor(wxWindow *parent, wxWindowID winid, const wxPoint& pos /* = wxDefaultPosition */, const wxSize& size /* = wxDefaultSize */, long style /* = 0 */, const wxString& name /* = wxPanelNameStr */)
 :BaseEditor(parent, winid, pos, size, style, name)
 {
 	Init();
 }
 
-BitmapStyleEditor::~BitmapStyleEditor()
+ClipBitmapStyleEditor::~ClipBitmapStyleEditor()
 {
 	Release();
 }
 
-void BitmapStyleEditor::Init()
+void ClipBitmapStyleEditor::Init()
 {
-	m_pBitmapStyleEditor = this;
-	m_pBitmapStyle = NULL;
+	m_pClipBitmapStyleEditor = this;
+	m_pClipBitmapStyle = NULL;
 	m_eSelState = IStyle::SS_NUM;
 }
 
-void BitmapStyleEditor::Release()
+void ClipBitmapStyleEditor::Release()
 {
-	m_pBitmapStyleEditor = NULL;
+	m_pClipBitmapStyleEditor = NULL;
 }
 
-BitmapStyleEditor& BitmapStyleEditor::GetInstance()
+ClipBitmapStyleEditor& ClipBitmapStyleEditor::GetInstance()
 {
-	return *m_pBitmapStyleEditor;
+	return *m_pClipBitmapStyleEditor;
 }
 
-bool BitmapStyleEditor::SetBitmapStyle(BitmapStyle* pBitmapStyle)
+bool ClipBitmapStyleEditor::SetClipBitmapStyle(ClipBitmapStyle* pClipBitmapStyle)
 {
-	if (m_pBitmapStyle == pBitmapStyle) return false;
-	m_pBitmapStyle = pBitmapStyle;
+	if (m_pClipBitmapStyle == pClipBitmapStyle) return false;
+	m_pClipBitmapStyle = pClipBitmapStyle;
 
 	UpdateSubBitmap();
 	UpdateSubBitmapRect();
@@ -57,19 +57,19 @@ bool BitmapStyleEditor::SetBitmapStyle(BitmapStyle* pBitmapStyle)
 	return true;
 }
 
-BitmapStyle* BitmapStyleEditor::GetBitmapStyle()
+ClipBitmapStyle* ClipBitmapStyleEditor::GetClipBitmapStyle()
 {
-	return m_pBitmapStyle;
+	return m_pClipBitmapStyle;
 }
 
-wxSize BitmapStyleEditor::CalculateVirtualSize()
+wxSize ClipBitmapStyleEditor::CalculateVirtualSize()
 {
 	return m_TotalSize;
 }
 
-void BitmapStyleEditor::Draw(wxDC& dc)
+void ClipBitmapStyleEditor::Draw(wxDC& dc)
 {
-	if (!m_pBitmapStyle) return;
+	if (!m_pClipBitmapStyle) return;
 
 	for (int i = 0; i < IStyle::SS_NUM; ++i)
 	{
@@ -79,7 +79,7 @@ void BitmapStyleEditor::Draw(wxDC& dc)
 	DrawSelection(dc);
 }
 
-void BitmapStyleEditor::DrawSelection(wxDC& dc)
+void ClipBitmapStyleEditor::DrawSelection(wxDC& dc)
 {
 	if (m_eSelState < 0 || m_eSelState >= IStyle::SS_NUM) return;
 	dc.SetPen(*wxRED_PEN);
@@ -87,7 +87,7 @@ void BitmapStyleEditor::DrawSelection(wxDC& dc)
 	DrawRectangle(dc, m_rectState[m_eSelState]);
 }
 
-void BitmapStyleEditor::OnLButtonDown(const wxPoint& pos)
+void ClipBitmapStyleEditor::OnLButtonDown(const wxPoint& pos)
 {
 	wxPoint posOrigin = (pos + GetOriginOffset()) / GetZoom();
 	for (int i = 0; i < IStyle::SS_NUM; ++i)
@@ -103,24 +103,24 @@ void BitmapStyleEditor::OnLButtonDown(const wxPoint& pos)
 	SetSelState(IStyle::SS_NUM);
 }
 
-void BitmapStyleEditor::SetSelState(IStyle::STYLE_STATE eState)
+void ClipBitmapStyleEditor::SetSelState(IStyle::STYLE_STATE eState)
 {
 	m_eSelState = eState;
 	Refresh(false);
 }
 
-IStyle::STYLE_STATE BitmapStyleEditor::GetSelState() const
+IStyle::STYLE_STATE ClipBitmapStyleEditor::GetSelState() const
 {
 	return m_eSelState;
 }
 
-void BitmapStyleEditor::UpdateSubBitmap()
+void ClipBitmapStyleEditor::UpdateSubBitmap()
 {
 	for (int i = 0; i < IStyle::SS_NUM; ++i)
 	{
-		if (m_pBitmapStyle)
+		if (m_pClipBitmapStyle)
 		{
-			PieceInfo* pPieceInfo = m_pBitmapStyle->GetStatePiece((IStyle::STYLE_STATE)i);
+			PieceInfo* pPieceInfo = m_pClipBitmapStyle->GetStatePiece((IStyle::STYLE_STATE)i);
 			const wxRect& pieceRect = pPieceInfo->GetRect();
 			wxBitmap* pMainBitmap = pPieceInfo->GetImageInfo()->GetBitmap();
 			m_bmpState[i] = pMainBitmap->GetSubBitmap(pieceRect);
@@ -132,7 +132,7 @@ void BitmapStyleEditor::UpdateSubBitmap()
 	}
 }
 
-void BitmapStyleEditor::UpdateSubBitmapRect()
+void ClipBitmapStyleEditor::UpdateSubBitmapRect()
 {
 	wxRect subRect(0, 0, 0, 0);
 	m_TotalSize.x = 0;
@@ -140,9 +140,9 @@ void BitmapStyleEditor::UpdateSubBitmapRect()
 
 	for (int i = 0; i < IStyle::SS_NUM; ++i)
 	{
-		if (m_pBitmapStyle)
+		if (m_pClipBitmapStyle)
 		{
-			PieceInfo* pPieceInfo = m_pBitmapStyle->GetStatePiece((IStyle::STYLE_STATE)i);
+			PieceInfo* pPieceInfo = m_pClipBitmapStyle->GetStatePiece((IStyle::STYLE_STATE)i);
 			const wxRect& pieceRect = pPieceInfo->GetRect();
 
 			subRect.width = pieceRect.width;

@@ -9,6 +9,7 @@
 #define __CLIPBITMAPSTYLETRANSFORMER_H__
 
 #include <wx/treectrl.h>
+#include <wx/propgrid/propgrid.h>
 #include "../document/ClipBitmapStyle.h"
 
 class ClipBitmapStyleTransformer
@@ -16,11 +17,12 @@ class ClipBitmapStyleTransformer
 public:
 	static ClipBitmapStyleTransformer& GetInstance();
 
-	bool Initialize(wxTreeCtrl* pTreeCtrl);
+	bool Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid);
 	void UpdateListView();
+	void UpdateProperty(ClipBitmapStyle* pClipBitmapStyle);
 
-	ClipBitmapStyle* GetSelectedBitmapStyle();
-	void SetSelectedBitmapStyle(ClipBitmapStyle* pClipBitmapStyle);
+	void SetSelectedClipBitmapStyle(ClipBitmapStyle* pClipBitmapStyle);
+	ClipBitmapStyle* GetSelectedClipBitmapStyle();
 
 protected:
 	ClipBitmapStyleTransformer();
@@ -28,6 +30,7 @@ protected:
 
 private:
 	wxTreeCtrl* m_pListView;
+	wxPropertyGrid* m_pPropertyGrid;
 
 };
 #endif // __CLIPBITMAPSTYLETRANSFORMER_H__

@@ -19,11 +19,12 @@ public:
 	~ImageInfo();
 
 	bool LoadFromXml(TiXmlElement* pElmImage);
+	bool SaveToXml(TiXmlElement* pElmImageList);
 
 	const wxString& GetId() const;
 	const wxString& GetPath() const;
 
-	wxBitmap* GetImage();
+	wxBitmap* GetBitmap();
 
 	void SetTreeItemId(wxTreeItemId itemId);
 	wxTreeItemId GetTreeItemId();

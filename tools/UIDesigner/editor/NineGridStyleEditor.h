@@ -1,33 +1,33 @@
 /*!
- * \file BitmapStyleEditor.h
- * \date 2-15-2012 11:01:25
+ * \file NineGridStyleEditor.h
+ * \date 2-15-2012 12:44:33
  * 
  * 
  * \author zjhlogo (zjhlogo@gmail.com)
  */
-#ifndef __BITMAPSTYLEEDITOR_H__
-#define __BITMAPSTYLEEDITOR_H__
+#ifndef __NINEGRIDSTYLEEDITOR_H__
+#define __NINEGRIDSTYLEEDITOR_H__
 
 #include "BaseEditor.h"
-#include "../document/BitmapStyle.h"
+#include "../document/NineGridStyle.h"
 
-class BitmapStyleEditor : public BaseEditor
+class NineGridStyleEditor : public BaseEditor
 {
 public:
-	BitmapStyleEditor();
-	BitmapStyleEditor(wxWindow *parent,
+	NineGridStyleEditor();
+	NineGridStyleEditor(wxWindow *parent,
 		wxWindowID winid,
 		const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,
 		long style = 0,
 		const wxString& name = wxPanelNameStr);
 
-	virtual ~BitmapStyleEditor();
+	virtual ~NineGridStyleEditor();
 
-	static BitmapStyleEditor& GetInstance();
+	static NineGridStyleEditor& GetInstance();
 
-	bool SetBitmapStyle(BitmapStyle* pBitmapStyle);
-	BitmapStyle* GetBitmapStyle();
+	bool SetNineGridStyle(NineGridStyle* pNineGridStyle);
+	NineGridStyle* GetNineGridStyle();
 
 	virtual wxSize CalculateVirtualSize();
 	virtual void Draw(wxDC& dc);
@@ -46,13 +46,12 @@ private:
 	void DrawSelection(wxDC& dc);
 
 private:
-	static BitmapStyleEditor* m_pBitmapStyleEditor;
-	BitmapStyle* m_pBitmapStyle;
+	static NineGridStyleEditor* m_pNineGridStyleEditor;
+	NineGridStyle* m_pNineGridStyle;
 
 	IStyle::STYLE_STATE m_eSelState;
 	wxBitmap m_bmpState[IStyle::SS_NUM];
 	wxRect m_rectState[IStyle::SS_NUM];
 	wxSize m_TotalSize;
-
 };
-#endif // __BITMAPSTYLEEDITOR_H__
+#endif // __NINEGRIDSTYLEEDITOR_H__

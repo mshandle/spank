@@ -11,6 +11,7 @@
 ColorStyleTransformer::ColorStyleTransformer()
 {
 	m_pListView = NULL;
+	m_pPropertyGrid = NULL;
 }
 
 ColorStyleTransformer::~ColorStyleTransformer()
@@ -24,9 +25,10 @@ ColorStyleTransformer& ColorStyleTransformer::GetInstance()
 	return s_ColorStyleTransformer;
 }
 
-bool ColorStyleTransformer::Initialize(wxTreeCtrl* pTreeCtrl)
+bool ColorStyleTransformer::Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid)
 {
 	m_pListView = pTreeCtrl;
+	m_pPropertyGrid = pPropertyGrid;
 	return true;
 }
 
@@ -45,17 +47,35 @@ void ColorStyleTransformer::UpdateListView()
 	m_pListView->ExpandAll();
 }
 
+void ColorStyleTransformer::UpdateProperty(ColorStyle* pColorStyle)
+{
+	m_pPropertyGrid->Clear();
+	if (!pColorStyle) return;
+
+	m_pPropertyGrid->Append(new wxStringProperty("id", "id", pColorStyle->GetId()));
+
+	wxColour color;
+
+	color.SetRGB(pColorStyle->GetStateColor(IStyle::SS_NORMAL));
+	m_pPropertyGrid->Append(new wxColourProperty("normal", "normal", color));
+	color.SetRGB(pColorStyle->GetStateColor(IStyle::SS_DOWN));
+	m_pPropertyGrid->Append(new wxColourProperty("down", "down", color));
+	color.SetRGB(pColorStyle->GetStateColor(IStyle::SS_HOVER));
+	m_pPropertyGrid->Append(new wxColourProperty("hover", "hover", color));
+	color.SetRGB(pColorStyle->GetStateColor(IStyle::SS_DISABLED));
+	m_pPropertyGrid->Append(new wxColourProperty("disabled", "disabled", color));
+}
+
+void ColorStyleTransformer::SetSelectedColorStyle(ColorStyle* pColorStyle)
+{
+	if (!pColorStyle) return;
+
+	m_pListView->SelectItem(pColorStyle->GetTreeItemId(), true);
+}
+
 ColorStyle* ColorStyleTransformer::GetSelectedColorStyle()
 {
 	wxString strColorStyleId = m_pListView->GetItemText(m_pListView->GetSelection());
 	ColorStyle* pColorStyle = ColorStyleDocument::GetInstance().FindColorStyle(strColorStyleId);
 	return pColorStyle;
-}
-
-void ColorStyleTransformer::SetSelectedColorStyle(ColorStyle* pColorStyle)
-{
-	if (pColorStyle)
-	{
-		m_pListView->SelectItem(pColorStyle->GetTreeItemId(), true);
-	}
 }

@@ -1,33 +1,39 @@
 /*!
- * \file BitmapStyleEditor.h
- * \date 2-15-2012 11:01:25
+ * \file ColorStyleEditor.h
+ * \date 2-15-2012 14:16:00
  * 
  * 
  * \author zjhlogo (zjhlogo@gmail.com)
  */
-#ifndef __BITMAPSTYLEEDITOR_H__
-#define __BITMAPSTYLEEDITOR_H__
+#ifndef __COLORSTYLEEDITOR_H__
+#define __COLORSTYLEEDITOR_H__
 
 #include "BaseEditor.h"
-#include "../document/BitmapStyle.h"
+#include "../document/ColorStyle.h"
 
-class BitmapStyleEditor : public BaseEditor
+class ColorStyleEditor : public BaseEditor
 {
 public:
-	BitmapStyleEditor();
-	BitmapStyleEditor(wxWindow *parent,
+	enum CONST_DEFINE
+	{
+		DEFAULT_PIECE_SIZE = 100,
+	};
+
+public:
+	ColorStyleEditor();
+	ColorStyleEditor(wxWindow *parent,
 		wxWindowID winid,
 		const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,
 		long style = 0,
 		const wxString& name = wxPanelNameStr);
 
-	virtual ~BitmapStyleEditor();
+	virtual ~ColorStyleEditor();
 
-	static BitmapStyleEditor& GetInstance();
+	static ColorStyleEditor& GetInstance();
 
-	bool SetBitmapStyle(BitmapStyle* pBitmapStyle);
-	BitmapStyle* GetBitmapStyle();
+	bool SetColorStyle(ColorStyle* pColorStyle);
+	ColorStyle* GetColorStyle();
 
 	virtual wxSize CalculateVirtualSize();
 	virtual void Draw(wxDC& dc);
@@ -40,19 +46,17 @@ private:
 	void Init();
 	void Release();
 
-	void UpdateSubBitmap();
-	void UpdateSubBitmapRect();
+	void UpdateSubRect();
 
 	void DrawSelection(wxDC& dc);
 
 private:
-	static BitmapStyleEditor* m_pBitmapStyleEditor;
-	BitmapStyle* m_pBitmapStyle;
+	static ColorStyleEditor* m_pColorStyleEditor;
+	ColorStyle* m_pColorStyle;
 
 	IStyle::STYLE_STATE m_eSelState;
-	wxBitmap m_bmpState[IStyle::SS_NUM];
 	wxRect m_rectState[IStyle::SS_NUM];
 	wxSize m_TotalSize;
 
 };
-#endif // __BITMAPSTYLEEDITOR_H__
+#endif // __COLORSTYLEEDITOR_H__

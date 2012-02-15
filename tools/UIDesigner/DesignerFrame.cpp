@@ -21,6 +21,10 @@
 #include "transformer/ColorStyleTransformer.h"
 #include "transformer/ClipBitmapStyleTransformer.h"
 #include "editor/ImagePieceEditor.h"
+#include "editor/BitmapStyleEditor.h"
+#include "editor/NineGridStyleEditor.h"
+#include "editor/ColorStyleEditor.h"
+#include "editor/ClipBitmapStyleEditor.h"
 
 #include "images/disk.xpm"
 #include "images/document.xpm"
@@ -57,14 +61,13 @@ DesignerFrame* DesignerFrame::m_pDesignerFrame = NULL;
 DesignerFrame::DesignerFrame()
 :wxFrame(NULL, wxID_ANY, wxT("UI Designer"), wxDefaultPosition, wxSize(800, 600))
 {
-	m_pDesignerFrame = this;
+	Init();
 	CreateControls();
 }
 
 DesignerFrame::~DesignerFrame()
 {
-	m_auiManager.UnInit();
-	m_pDesignerFrame = NULL;
+	Release();
 }
 
 DesignerFrame& DesignerFrame::GetInstance()
@@ -74,7 +77,17 @@ DesignerFrame& DesignerFrame::GetInstance()
 
 void DesignerFrame::Init()
 {
-	// TODO: 
+	m_pDesignerFrame = this;
+	m_pOutputView = NULL;
+	m_pPropertyGrid = NULL;
+	m_pEditorNotebook = NULL;
+	memset(m_pEditors, 0, sizeof(m_pEditors));
+}
+
+void DesignerFrame::Release()
+{
+	m_auiManager.UnInit();
+	m_pDesignerFrame = NULL;
 }
 
 void DesignerFrame::CreateControls()
@@ -83,8 +96,8 @@ void DesignerFrame::CreateControls()
 
 	CreateMenu();
 	CreateToolbar();
-	CreateListView();
 	CreatePropertyView();
+	CreateListView();
 	CreateEditorView();
 	CreateOutputView();
 
@@ -229,6 +242,23 @@ void DesignerFrame::CreateToolbar()
 		.PaneBorder(false));
 }
 
+void DesignerFrame::CreatePropertyView()
+{
+	m_pPropertyGrid = new wxPropertyGrid(this, IDC_PROPERTY, wxDefaultPosition, wxDefaultSize, wxPG_SPLITTER_AUTO_CENTER|wxNO_BORDER);
+	m_auiManager.AddPane(m_pPropertyGrid, wxAuiPaneInfo()
+		.Name(wxT("Property"))
+		.Caption(wxT("Property"))
+		.Right()
+		.BestSize(wxSize(300, 300))
+		.Position(1)
+		.CloseButton(false)
+		.DestroyOnClose(false)
+		.Resizable(true)
+		.Floatable(false)
+		.FloatingSize(wxSize(300, 500))
+		.Movable(false));
+}
+
 void DesignerFrame::CreateListView()
 {
 	wxNotebook* pNotebookView = new wxNotebook(this, IDC_NOTEBOOK_EDITOR, wxDefaultPosition, wxDefaultSize, wxNB_MULTILINE|wxNO_BORDER);
@@ -248,50 +278,33 @@ void DesignerFrame::CreateListView()
 
 	wxTreeCtrl* pImagePieceListView = new wxTreeCtrl(pNotebookView, IDC_PIECE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pNotebookView->AddPage(pImagePieceListView, "Pieces");
-	PieceListTransformer::GetInstance().Initialize(pImagePieceListView);
+	PieceListTransformer::GetInstance().Initialize(pImagePieceListView, m_pPropertyGrid);
 
 	wxTreeCtrl* pImageListView = new wxTreeCtrl(pNotebookView, IDC_IMAGE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pNotebookView->AddPage(pImageListView, "Images");
-	ImageListTransformer::GetInstance().Initialize(pImageListView);
+	ImageListTransformer::GetInstance().Initialize(pImageListView, m_pPropertyGrid);
 
 	wxTreeCtrl* pBitmapStyleListView = new wxTreeCtrl(pNotebookView, IDC_BITMAP_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pNotebookView->AddPage(pBitmapStyleListView, "Bitmap Styles");
-	BitmapStyleTransformer::GetInstance().Initialize(pBitmapStyleListView);
+	BitmapStyleTransformer::GetInstance().Initialize(pBitmapStyleListView, m_pPropertyGrid);
 
 	wxTreeCtrl* pNineGridStyleListView = new wxTreeCtrl(pNotebookView, IDC_NINE_GRID_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pNotebookView->AddPage(pNineGridStyleListView, "9-Grid Styles");
-	NineGridStyleTransformer::GetInstance().Initialize(pNineGridStyleListView);
+	NineGridStyleTransformer::GetInstance().Initialize(pNineGridStyleListView, m_pPropertyGrid);
 
 	wxTreeCtrl* pColorStyleListView = new wxTreeCtrl(pNotebookView, IDC_COLOR_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pNotebookView->AddPage(pColorStyleListView, "Color Styles");
-	ColorStyleTransformer::GetInstance().Initialize(pColorStyleListView);
+	ColorStyleTransformer::GetInstance().Initialize(pColorStyleListView, m_pPropertyGrid);
 
 	wxTreeCtrl* pClipBitmapStyleListView = new wxTreeCtrl(pNotebookView, IDC_CLIP_BITMAP_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pNotebookView->AddPage(pClipBitmapStyleListView, "Clip Bitmap Styles");
-	ClipBitmapStyleTransformer::GetInstance().Initialize(pClipBitmapStyleListView);
-}
-
-void DesignerFrame::CreatePropertyView()
-{
-	m_pPropertyGrid = new wxPropertyGrid(this, IDC_PROPERTY, wxDefaultPosition, wxDefaultSize, wxPG_SPLITTER_AUTO_CENTER|wxNO_BORDER);
-	m_auiManager.AddPane(m_pPropertyGrid, wxAuiPaneInfo()
-		.Name(wxT("Property"))
-		.Caption(wxT("Property"))
-		.Right()
-		.BestSize(wxSize(300, 300))
-		.Position(1)
-		.CloseButton(false)
-		.DestroyOnClose(false)
-		.Resizable(true)
-		.Floatable(false)
-		.FloatingSize(wxSize(300, 500))
-		.Movable(false));
+	ClipBitmapStyleTransformer::GetInstance().Initialize(pClipBitmapStyleListView, m_pPropertyGrid);
 }
 
 void DesignerFrame::CreateEditorView()
 {
-	wxNotebook* pNotebookView = new wxNotebook(this, IDC_NOTEBOOK_EDITOR, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
-	m_auiManager.AddPane(pNotebookView, wxAuiPaneInfo()
+	m_pEditorNotebook = new wxNotebook(this, IDC_NOTEBOOK_EDITOR, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	m_auiManager.AddPane(m_pEditorNotebook, wxAuiPaneInfo()
 		.Name(wxT("Editor"))
 		.Caption(wxT("Editor"))
 		.Centre()
@@ -302,8 +315,25 @@ void DesignerFrame::CreateEditorView()
 		.Floatable(false)
 		.Movable(false));
 
-	ImagePieceEditor* pImagePieceEditor = new ImagePieceEditor(pNotebookView, IDC_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
-	pNotebookView->AddPage(pImagePieceEditor, "Pieces Editor");
+	ImagePieceEditor* pImagePieceEditor = new ImagePieceEditor(m_pEditorNotebook, IDC_IMAGE_PIECE_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
+	m_pEditorNotebook->AddPage(pImagePieceEditor, "Pieces Editor");
+	m_pEditors[EDITOR_IMAGE_PIECE] = pImagePieceEditor;
+
+	BitmapStyleEditor* pBitmapStyleEditor = new BitmapStyleEditor(m_pEditorNotebook, IDC_BITMAP_STYLE_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
+	m_pEditorNotebook->AddPage(pBitmapStyleEditor, "Bitmap Style Editor");
+	m_pEditors[EDITOR_BITMAP_STYLE] = pBitmapStyleEditor;
+
+	NineGridStyleEditor* pNineGridStyleEditor = new NineGridStyleEditor(m_pEditorNotebook, IDC_NINE_GRID_STYLE_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
+	m_pEditorNotebook->AddPage(pNineGridStyleEditor, "Nine Grid Style Editor");
+	m_pEditors[EDITOR_NINE_GRID_STYLE] = pNineGridStyleEditor;
+
+	ColorStyleEditor* pColorStyleEditor = new ColorStyleEditor(m_pEditorNotebook, IDC_COLOR_STYLE_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
+	m_pEditorNotebook->AddPage(pColorStyleEditor, "Color Style Editor");
+	m_pEditors[EDITOR_COLOR_STYLE] = pColorStyleEditor;
+
+	ClipBitmapStyleEditor* pClipBitmapStyleEditor = new ClipBitmapStyleEditor(m_pEditorNotebook, IDC_CLIP_BITMAP_STYLE_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
+	m_pEditorNotebook->AddPage(pClipBitmapStyleEditor, "Clip Bitmap Style Editor");
+	m_pEditors[EDITOR_CLIP_BITMAP_STYLE] = pClipBitmapStyleEditor;
 }
 
 void DesignerFrame::CreateOutputView()
@@ -356,54 +386,70 @@ void DesignerFrame::OnExit(wxCommandEvent& event)
 
 void DesignerFrame::OnViewZoom100(wxCommandEvent& event)
 {
-	ImagePieceEditor::GetInstance().Zoom(ImagePieceEditor::ZOOM_MIN);
+	m_pEditors[m_pEditorNotebook->GetSelection()]->Zoom(BaseEditor::ZOOM_MIN);
 }
 
 void DesignerFrame::OnViewZoomIn(wxCommandEvent& event)
 {
-	ImagePieceEditor::GetInstance().ZoomIn();
+	m_pEditors[m_pEditorNotebook->GetSelection()]->ZoomIn();
 }
 
 void DesignerFrame::OnViewZoomOut(wxCommandEvent& event)
 {
-	ImagePieceEditor::GetInstance().ZoomOut();
+	m_pEditors[m_pEditorNotebook->GetSelection()]->ZoomOut();
 }
 
 void DesignerFrame::OnImagePieceListSelected(wxTreeEvent& event)
 {
+	m_pEditorNotebook->SetSelection(EDITOR_IMAGE_PIECE);
 	PieceInfo* pPieceInfo = PieceListTransformer::GetInstance().GetSelectedPieceInfo();
 	if (pPieceInfo)
 	{
-		ImageInfo* pImageInfo = ImagePieceDocument::GetInstance().FindImageInfo(pPieceInfo->GetImageId());
+		ImageInfo* pImageInfo = pPieceInfo->GetImageInfo();
 		ImagePieceEditor::GetInstance().SetImage(pImageInfo);
 		ImageListTransformer::GetInstance().SetSelectedImageInfo(pImageInfo);
 	}
 	ImagePieceEditor::GetInstance().SetSelection(pPieceInfo);
+	PieceListTransformer::GetInstance().UpdateProperty(pPieceInfo);
 }
 
 void DesignerFrame::OnImageListSelected(wxTreeEvent& event)
 {
+	m_pEditorNotebook->SetSelection(EDITOR_IMAGE_PIECE);
 	ImageInfo* pImageInfo = ImageListTransformer::GetInstance().GetSelectedImageInfo();
 	ImagePieceEditor::GetInstance().SetImage(pImageInfo);
 	ImagePieceEditor::GetInstance().SetSelection(NULL);
+	ImageListTransformer::GetInstance().UpdateProperty(pImageInfo);
 }
 
 void DesignerFrame::OnBitmapStyleListSelected(wxTreeEvent& event)
 {
-	// TODO: 
+	m_pEditorNotebook->SetSelection(EDITOR_BITMAP_STYLE);
+	BitmapStyle* pBitmapStyle = BitmapStyleTransformer::GetInstance().GetSelectedBitmapStyle();
+	BitmapStyleEditor::GetInstance().SetBitmapStyle(pBitmapStyle);
+	BitmapStyleTransformer::GetInstance().UpdateProperty(pBitmapStyle);
 }
 
 void DesignerFrame::OnNineGridStyleListSelected(wxTreeEvent& event)
 {
-	// TODO: 
+	m_pEditorNotebook->SetSelection(EDITOR_NINE_GRID_STYLE);
+	NineGridStyle* pNineGridStyle = NineGridStyleTransformer::GetInstance().GetSelectedNineGridStyle();
+	NineGridStyleEditor::GetInstance().SetNineGridStyle(pNineGridStyle);
+	NineGridStyleTransformer::GetInstance().UpdateProperty(pNineGridStyle);
 }
 
 void DesignerFrame::OnColorStyleListSelected(wxTreeEvent& event)
 {
-	// TODO: 
+	m_pEditorNotebook->SetSelection(EDITOR_COLOR_STYLE);
+	ColorStyle* pColorStyle = ColorStyleTransformer::GetInstance().GetSelectedColorStyle();
+	ColorStyleEditor::GetInstance().SetColorStyle(pColorStyle);
+	ColorStyleTransformer::GetInstance().UpdateProperty(pColorStyle);
 }
 
 void DesignerFrame::OnClipBitmapStyleListSelected(wxTreeEvent& event)
 {
-	// TODO: 
+	m_pEditorNotebook->SetSelection(EDITOR_CLIP_BITMAP_STYLE);
+	ClipBitmapStyle* pClipBitmapStyle = ClipBitmapStyleTransformer::GetInstance().GetSelectedClipBitmapStyle();
+	ClipBitmapStyleEditor::GetInstance().SetClipBitmapStyle(pClipBitmapStyle);
+	ClipBitmapStyleTransformer::GetInstance().UpdateProperty(pClipBitmapStyle);
 }

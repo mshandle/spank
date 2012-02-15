@@ -11,6 +11,7 @@
 PieceListTransformer::PieceListTransformer()
 {
 	m_pListView = NULL;
+	m_pPropertyGrid = NULL;
 }
 
 PieceListTransformer::~PieceListTransformer()
@@ -24,9 +25,10 @@ PieceListTransformer& PieceListTransformer::GetInstance()
 	return s_ImagePieceListTransformer;
 }
 
-bool PieceListTransformer::Initialize(wxTreeCtrl* pTreeCtrl)
+bool PieceListTransformer::Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid)
 {
 	m_pListView = pTreeCtrl;
+	m_pPropertyGrid = pPropertyGrid;
 	return true;
 }
 
@@ -45,17 +47,33 @@ void PieceListTransformer::UpdateListView()
 	m_pListView->ExpandAll();
 }
 
+void PieceListTransformer::UpdateProperty(PieceInfo* pPieceInfo)
+{
+	m_pPropertyGrid->Clear();
+	if (!pPieceInfo) return;
+
+	m_pPropertyGrid->Append(new wxStringProperty("id", "id", pPieceInfo->GetId()));
+	m_pPropertyGrid->Append(new wxStringProperty("image_id", "image_id", pPieceInfo->GetImageInfo()->GetId()))->Enable(false);
+
+	m_pPropertyGrid->Append(new wxPropertyCategory("position", "position"));
+	m_pPropertyGrid->Append(new wxIntProperty("x", "x", pPieceInfo->GetRect().x))->Enable(false);
+	m_pPropertyGrid->Append(new wxIntProperty("y", "y", pPieceInfo->GetRect().y))->Enable(false);
+
+	m_pPropertyGrid->Append(new wxPropertyCategory("size", "size"));
+	m_pPropertyGrid->Append(new wxIntProperty("width", "width", pPieceInfo->GetRect().width))->Enable(false);
+	m_pPropertyGrid->Append(new wxIntProperty("height", "height", pPieceInfo->GetRect().height))->Enable(false);
+}
+
+void PieceListTransformer::SetSelectedPieceInfo(PieceInfo* pPieceInfo)
+{
+	if (!pPieceInfo) return;
+
+	m_pListView->SelectItem(pPieceInfo->GetTreeItemId(), true);
+}
+
 PieceInfo* PieceListTransformer::GetSelectedPieceInfo()
 {
 	wxString strPieceId = m_pListView->GetItemText(m_pListView->GetSelection());
 	PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfo(strPieceId);
 	return pPieceInfo;
-}
-
-void PieceListTransformer::SetSelectedItem(PieceInfo* pPieceInfo)
-{
-	if (pPieceInfo)
-	{
-		m_pListView->SelectItem(pPieceInfo->GetTreeItemId(), true);
-	}
 }

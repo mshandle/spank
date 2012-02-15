@@ -7,10 +7,12 @@
  */
 #include "NineGridStyleTransformer.h"
 #include "../document/NineGridStyleDocument.h"
+#include "../document/ImagePieceDocument.h"
 
 NineGridStyleTransformer::NineGridStyleTransformer()
 {
 	m_pListView = NULL;
+	m_pPropertyGrid = NULL;
 }
 
 NineGridStyleTransformer::~NineGridStyleTransformer()
@@ -24,9 +26,10 @@ NineGridStyleTransformer& NineGridStyleTransformer::GetInstance()
 	return s_NineGridStyleTransformer;
 }
 
-bool NineGridStyleTransformer::Initialize(wxTreeCtrl* pTreeCtrl)
+bool NineGridStyleTransformer::Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid)
 {
 	m_pListView = pTreeCtrl;
+	m_pPropertyGrid = pPropertyGrid;
 	return true;
 }
 
@@ -45,6 +48,13 @@ void NineGridStyleTransformer::UpdateListView()
 	m_pListView->ExpandAll();
 }
 
+void NineGridStyleTransformer::SetSelectedNineGridStyle(NineGridStyle* pNineGrieStyle)
+{
+	if (!pNineGrieStyle) return;
+
+	m_pListView->SelectItem(pNineGrieStyle->GetTreeItemId(), true);
+}
+
 NineGridStyle* NineGridStyleTransformer::GetSelectedNineGridStyle()
 {
 	wxString strNineGridStyleId = m_pListView->GetItemText(m_pListView->GetSelection());
@@ -52,10 +62,46 @@ NineGridStyle* NineGridStyleTransformer::GetSelectedNineGridStyle()
 	return pNineGridStyle;
 }
 
-void NineGridStyleTransformer::SetSelectedNineGridStyle(NineGridStyle* pNineGrieStyle)
+void NineGridStyleTransformer::UpdateProperty(NineGridStyle* pNineGrieStyle)
 {
-	if (pNineGrieStyle)
-	{
-		m_pListView->SelectItem(pNineGrieStyle->GetTreeItemId(), true);
-	}
+	m_pPropertyGrid->Clear();
+	if (!pNineGrieStyle) return;
+
+	m_pPropertyGrid->Append(new wxStringProperty("id", "id", pNineGrieStyle->GetId()));
+
+	const wxArrayString& pieceIds = ImagePieceDocument::GetInstance().GetPieceIds();
+	const wxArrayInt& pieceIdsIndex = ImagePieceDocument::GetInstance().GetPieceIdsIndex();
+	int value = -1;
+
+	m_pPropertyGrid->Append(new wxPropertyCategory("normal", "normal"));
+	value = ImagePieceDocument::GetInstance().FindPieceIndex(pNineGrieStyle->GetStateGridInfo(IStyle::SS_NORMAL)->pPieceInfo->GetId());
+	m_pPropertyGrid->Append(new wxEnumProperty("piece_id", "normal_piece_id", pieceIds, pieceIdsIndex, value));
+	m_pPropertyGrid->Append(new wxIntProperty("min_x", "normal_min_x", pNineGrieStyle->GetStateGridInfo(IStyle::SS_NORMAL)->min_x))->SetEditor(wxPGEditor_SpinCtrl);
+	m_pPropertyGrid->Append(new wxIntProperty("min_y", "normal_min_y", pNineGrieStyle->GetStateGridInfo(IStyle::SS_NORMAL)->min_y))->SetEditor(wxPGEditor_SpinCtrl);
+	m_pPropertyGrid->Append(new wxIntProperty("max_x", "normal_max_x", pNineGrieStyle->GetStateGridInfo(IStyle::SS_NORMAL)->max_x))->SetEditor(wxPGEditor_SpinCtrl);
+	m_pPropertyGrid->Append(new wxIntProperty("max_y", "normal_max_y", pNineGrieStyle->GetStateGridInfo(IStyle::SS_NORMAL)->max_y))->SetEditor(wxPGEditor_SpinCtrl);
+
+	m_pPropertyGrid->Append(new wxPropertyCategory("down", "down"));
+	value = ImagePieceDocument::GetInstance().FindPieceIndex(pNineGrieStyle->GetStateGridInfo(IStyle::SS_DOWN)->pPieceInfo->GetId());
+	m_pPropertyGrid->Append(new wxEnumProperty("piece_id", "down_piece_id", pieceIds, pieceIdsIndex, value));
+	m_pPropertyGrid->Append(new wxIntProperty("min_x", "down_min_x", pNineGrieStyle->GetStateGridInfo(IStyle::SS_DOWN)->min_x))->SetEditor(wxPGEditor_SpinCtrl);
+	m_pPropertyGrid->Append(new wxIntProperty("min_y", "down_min_y", pNineGrieStyle->GetStateGridInfo(IStyle::SS_DOWN)->min_y))->SetEditor(wxPGEditor_SpinCtrl);
+	m_pPropertyGrid->Append(new wxIntProperty("max_x", "down_max_x", pNineGrieStyle->GetStateGridInfo(IStyle::SS_DOWN)->max_x))->SetEditor(wxPGEditor_SpinCtrl);
+	m_pPropertyGrid->Append(new wxIntProperty("max_y", "down_max_y", pNineGrieStyle->GetStateGridInfo(IStyle::SS_DOWN)->max_y))->SetEditor(wxPGEditor_SpinCtrl);
+
+	m_pPropertyGrid->Append(new wxPropertyCategory("hover", "hover"));
+	value = ImagePieceDocument::GetInstance().FindPieceIndex(pNineGrieStyle->GetStateGridInfo(IStyle::SS_HOVER)->pPieceInfo->GetId());
+	m_pPropertyGrid->Append(new wxEnumProperty("piece_id", "hover_piece_id", pieceIds, pieceIdsIndex, value));
+	m_pPropertyGrid->Append(new wxIntProperty("min_x", "hover_min_x", pNineGrieStyle->GetStateGridInfo(IStyle::SS_HOVER)->min_x))->SetEditor(wxPGEditor_SpinCtrl);
+	m_pPropertyGrid->Append(new wxIntProperty("min_y", "hover_min_y", pNineGrieStyle->GetStateGridInfo(IStyle::SS_HOVER)->min_y))->SetEditor(wxPGEditor_SpinCtrl);
+	m_pPropertyGrid->Append(new wxIntProperty("max_x", "hover_max_x", pNineGrieStyle->GetStateGridInfo(IStyle::SS_HOVER)->max_x))->SetEditor(wxPGEditor_SpinCtrl);
+	m_pPropertyGrid->Append(new wxIntProperty("max_y", "hover_max_y", pNineGrieStyle->GetStateGridInfo(IStyle::SS_HOVER)->max_y))->SetEditor(wxPGEditor_SpinCtrl);
+
+	m_pPropertyGrid->Append(new wxPropertyCategory("disabled", "disabled"));
+	value = ImagePieceDocument::GetInstance().FindPieceIndex(pNineGrieStyle->GetStateGridInfo(IStyle::SS_DISABLED)->pPieceInfo->GetId());
+	m_pPropertyGrid->Append(new wxEnumProperty("piece_id", "disabled_piece_id", pieceIds, pieceIdsIndex, value));
+	m_pPropertyGrid->Append(new wxIntProperty("min_x", "disabled_min_x", pNineGrieStyle->GetStateGridInfo(IStyle::SS_DISABLED)->min_x))->SetEditor(wxPGEditor_SpinCtrl);
+	m_pPropertyGrid->Append(new wxIntProperty("min_y", "disabled_min_y", pNineGrieStyle->GetStateGridInfo(IStyle::SS_DISABLED)->min_y))->SetEditor(wxPGEditor_SpinCtrl);
+	m_pPropertyGrid->Append(new wxIntProperty("max_x", "disabled_max_x", pNineGrieStyle->GetStateGridInfo(IStyle::SS_DISABLED)->max_x))->SetEditor(wxPGEditor_SpinCtrl);
+	m_pPropertyGrid->Append(new wxIntProperty("max_y", "disabled_max_y", pNineGrieStyle->GetStateGridInfo(IStyle::SS_DISABLED)->max_y))->SetEditor(wxPGEditor_SpinCtrl);
 }

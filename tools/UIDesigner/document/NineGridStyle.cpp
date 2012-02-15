@@ -61,6 +61,11 @@ bool NineGridStyle::SaveToXml(TiXmlElement* pElmBitmapStyleList)
 	return true;
 }
 
+NineGridStyle::NINE_GRID_INFO* NineGridStyle::GetStateGridInfo(STYLE_STATE eState)
+{
+	return m_NineGridInfo[eState];
+}
+
 NineGridStyle::NINE_GRID_INFO* NineGridStyle::LoadStateInfo(TiXmlElement* pElmNineGridStyle, const wxString& strState, NINE_GRID_INFO* pDefaultInfo)
 {
 	TiXmlElement* pElmState = pElmNineGridStyle->FirstChildElement(strState);
