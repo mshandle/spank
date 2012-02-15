@@ -19,11 +19,11 @@ public:
 
 	bool Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid);
 	void UpdateListView();
-	void UpdateProperty(PieceInfo* pPieceInfo);
-	void PropertyChanged(wxPGProperty* pProperty);
+	void UpdateProperty(const PieceInfo* pPieceInfo);
+	void PropertyChanged(const wxPGProperty* pProperty);
 
-	void SetSelectedPieceInfo(PieceInfo* pPieceInfo);
-	PieceInfo* GetSelectedPieceInfo();
+	void SetSelectedPieceInfo(const PieceInfo* pPieceInfo);
+	const PieceInfo* GetSelectedPieceInfo();
 
 protected:
 	PieceListTransformer();

@@ -21,5 +21,12 @@ public:
 	virtual void Reset() = 0;
 	virtual const wxString& GetFilePath() const = 0;
 
+	void SetModifiedFlag();
+	void ClearModifiedFlag();
+	bool isModified() const;
+
+private:
+	bool m_bModifiedFlag;
+
 };
 #endif // __DOCUMENTBASE_H__

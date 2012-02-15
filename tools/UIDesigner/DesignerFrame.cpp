@@ -416,10 +416,10 @@ void DesignerFrame::OnViewZoomOut(wxCommandEvent& event)
 void DesignerFrame::OnImagePieceListSelected(wxTreeEvent& event)
 {
 	m_pEditorNotebook->SetSelection(EDITOR_IMAGE_PIECE);
-	PieceInfo* pPieceInfo = PieceListTransformer::GetInstance().GetSelectedPieceInfo();
+	const PieceInfo* pPieceInfo = PieceListTransformer::GetInstance().GetSelectedPieceInfo();
 	if (pPieceInfo)
 	{
-		ImageInfo* pImageInfo = pPieceInfo->GetImageInfo();
+		const ImageInfo* pImageInfo = pPieceInfo->GetImageInfo();
 		ImagePieceEditor::GetInstance().SetImage(pImageInfo);
 		ImageListTransformer::GetInstance().SetSelectedImageInfo(pImageInfo);
 	}
@@ -430,7 +430,7 @@ void DesignerFrame::OnImagePieceListSelected(wxTreeEvent& event)
 void DesignerFrame::OnImageListSelected(wxTreeEvent& event)
 {
 	m_pEditorNotebook->SetSelection(EDITOR_IMAGE_PIECE);
-	ImageInfo* pImageInfo = ImageListTransformer::GetInstance().GetSelectedImageInfo();
+	const ImageInfo* pImageInfo = ImageListTransformer::GetInstance().GetSelectedImageInfo();
 	ImagePieceEditor::GetInstance().SetImage(pImageInfo);
 	ImagePieceEditor::GetInstance().SetSelection(NULL);
 	ImageListTransformer::GetInstance().UpdateProperty(pImageInfo);
@@ -439,7 +439,7 @@ void DesignerFrame::OnImageListSelected(wxTreeEvent& event)
 void DesignerFrame::OnBitmapStyleListSelected(wxTreeEvent& event)
 {
 	m_pEditorNotebook->SetSelection(EDITOR_BITMAP_STYLE);
-	BitmapStyle* pBitmapStyle = BitmapStyleTransformer::GetInstance().GetSelectedBitmapStyle();
+	const BitmapStyle* pBitmapStyle = BitmapStyleTransformer::GetInstance().GetSelectedBitmapStyle();
 	BitmapStyleEditor::GetInstance().SetBitmapStyle(pBitmapStyle);
 	BitmapStyleTransformer::GetInstance().UpdateProperty(pBitmapStyle);
 }
@@ -447,7 +447,7 @@ void DesignerFrame::OnBitmapStyleListSelected(wxTreeEvent& event)
 void DesignerFrame::OnNineGridStyleListSelected(wxTreeEvent& event)
 {
 	m_pEditorNotebook->SetSelection(EDITOR_NINE_GRID_STYLE);
-	NineGridStyle* pNineGridStyle = NineGridStyleTransformer::GetInstance().GetSelectedNineGridStyle();
+	const NineGridStyle* pNineGridStyle = NineGridStyleTransformer::GetInstance().GetSelectedNineGridStyle();
 	NineGridStyleEditor::GetInstance().SetNineGridStyle(pNineGridStyle);
 	NineGridStyleTransformer::GetInstance().UpdateProperty(pNineGridStyle);
 }
@@ -455,7 +455,7 @@ void DesignerFrame::OnNineGridStyleListSelected(wxTreeEvent& event)
 void DesignerFrame::OnColorStyleListSelected(wxTreeEvent& event)
 {
 	m_pEditorNotebook->SetSelection(EDITOR_COLOR_STYLE);
-	ColorStyle* pColorStyle = ColorStyleTransformer::GetInstance().GetSelectedColorStyle();
+	const ColorStyle* pColorStyle = ColorStyleTransformer::GetInstance().GetSelectedColorStyle();
 	ColorStyleEditor::GetInstance().SetColorStyle(pColorStyle);
 	ColorStyleTransformer::GetInstance().UpdateProperty(pColorStyle);
 }
@@ -463,7 +463,7 @@ void DesignerFrame::OnColorStyleListSelected(wxTreeEvent& event)
 void DesignerFrame::OnClipBitmapStyleListSelected(wxTreeEvent& event)
 {
 	m_pEditorNotebook->SetSelection(EDITOR_CLIP_BITMAP_STYLE);
-	ClipBitmapStyle* pClipBitmapStyle = ClipBitmapStyleTransformer::GetInstance().GetSelectedClipBitmapStyle();
+	const ClipBitmapStyle* pClipBitmapStyle = ClipBitmapStyleTransformer::GetInstance().GetSelectedClipBitmapStyle();
 	ClipBitmapStyleEditor::GetInstance().SetClipBitmapStyle(pClipBitmapStyle);
 	ClipBitmapStyleTransformer::GetInstance().UpdateProperty(pClipBitmapStyle);
 }

@@ -121,9 +121,9 @@ void BaseEditor::Draw(wxDC& dc)
 	// TODO: 
 }
 
-void BaseEditor::DrawBitmap(wxDC& dc, wxBitmap& bitmap, const wxPoint& destPos)
+void BaseEditor::DrawBitmap(wxDC& dc, const wxBitmap& bitmap, const wxPoint& destPos)
 {
-	m_memDC.SelectObject(bitmap);
+	m_memDC.SelectObject((wxBitmap)bitmap);
 	dc.StretchBlit(destPos*m_nZoom-m_ptOriginOffset, bitmap.GetSize()*m_nZoom, &m_memDC, wxPoint(0, 0), bitmap.GetSize());
 	m_memDC.SelectObject(wxNullBitmap);
 }

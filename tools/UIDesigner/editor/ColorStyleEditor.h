@@ -32,8 +32,8 @@ public:
 
 	static ColorStyleEditor& GetInstance();
 
-	bool SetColorStyle(ColorStyle* pColorStyle);
-	ColorStyle* GetColorStyle();
+	bool SetColorStyle(const ColorStyle* pColorStyle);
+	const ColorStyle* GetColorStyle();
 
 	virtual wxSize CalculateVirtualSize();
 	virtual void Draw(wxDC& dc);
@@ -52,7 +52,7 @@ private:
 
 private:
 	static ColorStyleEditor* m_pColorStyleEditor;
-	ColorStyle* m_pColorStyle;
+	const ColorStyle* m_pColorStyle;
 
 	IStyle::STYLE_STATE m_eSelState;
 	wxRect m_rectState[IStyle::SS_NUM];

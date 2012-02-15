@@ -62,7 +62,7 @@ const wxString& ImageInfo::GetPath() const
 	return m_strPath;
 }
 
-wxBitmap* ImageInfo::GetBitmap()
+const wxBitmap* ImageInfo::GetBitmap()
 {
 	if (!m_pbmpImage && !m_bLoaded)
 	{
@@ -88,12 +88,12 @@ bool ImageInfo::LoadImageFromFile()
 	return true;
 }
 
-void ImageInfo::SetTreeItemId(wxTreeItemId itemId)
+void ImageInfo::SetTreeItemId(const wxTreeItemId& itemId)
 {
 	m_TreeItemId = itemId;
 }
 
-wxTreeItemId ImageInfo::GetTreeItemId()
+const wxTreeItemId& ImageInfo::GetTreeItemId() const
 {
 	return m_TreeItemId;
 }

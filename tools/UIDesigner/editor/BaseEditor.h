@@ -66,7 +66,7 @@ public:
 	wxPoint CalculateOriginPos(const wxPoint& zoomedPos);
 
 protected:
-	void DrawBitmap(wxDC& dc, wxBitmap& bitmap, const wxPoint& destPos);
+	void DrawBitmap(wxDC& dc, const wxBitmap& bitmap, const wxPoint& destPos);
 	void DrawRectangle(wxDC& dc, const wxRect& rect);
 	void DrawLine(wxDC& dc, const wxPoint& pt1, const wxPoint& pt2);
 

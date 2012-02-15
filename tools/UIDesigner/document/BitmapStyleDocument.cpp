@@ -85,14 +85,12 @@ const wxString& BitmapStyleDocument::GetFilePath() const
 	return m_strFile;
 }
 
-BitmapStyle* BitmapStyleDocument::FindBitmapStyle(const wxString& strId)
+const BitmapStyle* BitmapStyleDocument::FindBitmapStyle(const wxString& strId)
 {
-	TM_BITMAP_STYLE::iterator itfound = m_BitmapStyleMap.find(strId);
-	if (itfound == m_BitmapStyleMap.end()) return NULL;
-	return itfound->second;
+	return InternalFindBitmapStyle(strId);
 }
 
-BitmapStyleDocument::TM_BITMAP_STYLE& BitmapStyleDocument::GetBitmapStyleMap()
+const BitmapStyleDocument::TM_BITMAP_STYLE& BitmapStyleDocument::GetBitmapStyleMap()
 {
 	return m_BitmapStyleMap;
 }
@@ -119,12 +117,19 @@ bool BitmapStyleDocument::RenameBitmapStyleId(const BitmapStyle* pBitmapStyle, c
 	return true;
 }
 
-bool BitmapStyleDocument::SetStatePiece(const BitmapStyle* pBitmapStyle, PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState)
+bool BitmapStyleDocument::SetStatePiece(const BitmapStyle* pBitmapStyle, const PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState)
 {
 	if (!pBitmapStyle) return false;
 
-	BitmapStyle* pFoundBitmapStyle = FindBitmapStyle(pBitmapStyle->GetId());
+	BitmapStyle* pFoundBitmapStyle = InternalFindBitmapStyle(pBitmapStyle->GetId());
 	if (!pFoundBitmapStyle) return false;
 
 	return pFoundBitmapStyle->SetStatePiece(pPieceInfo, eState);
+}
+
+BitmapStyle* BitmapStyleDocument::InternalFindBitmapStyle(const wxString& strId)
+{
+	TM_BITMAP_STYLE::iterator itfound = m_BitmapStyleMap.find(strId);
+	if (itfound == m_BitmapStyleMap.end()) return NULL;
+	return itfound->second;
 }

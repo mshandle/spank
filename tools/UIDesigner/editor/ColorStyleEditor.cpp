@@ -43,7 +43,7 @@ ColorStyleEditor& ColorStyleEditor::GetInstance()
 	return *m_pColorStyleEditor;
 }
 
-bool ColorStyleEditor::SetColorStyle(ColorStyle* pColorStyle)
+bool ColorStyleEditor::SetColorStyle(const ColorStyle* pColorStyle)
 {
 	if (m_pColorStyle == pColorStyle) return false;
 	m_pColorStyle = pColorStyle;
@@ -56,7 +56,7 @@ bool ColorStyleEditor::SetColorStyle(ColorStyle* pColorStyle)
 	return true;
 }
 
-ColorStyle* ColorStyleEditor::GetColorStyle()
+const ColorStyle* ColorStyleEditor::GetColorStyle()
 {
 	return m_pColorStyle;
 }

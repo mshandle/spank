@@ -38,17 +38,17 @@ void ImageListTransformer::UpdateListView()
 	m_pListView->DeleteAllItems();
 	wxTreeItemId rootItem = m_pListView->AddRoot(wxT("ImageList"));
 
-	ImagePieceDocument::TM_IMAGE_INFO& ImageInfoMap = ImagePieceDocument::GetInstance().GetImageInfoMap();
-	for (ImagePieceDocument::TM_IMAGE_INFO::iterator it = ImageInfoMap.begin(); it != ImageInfoMap.end(); ++it)
+	const ImagePieceDocument::TM_IMAGE_INFO& ImageInfoMap = ImagePieceDocument::GetInstance().GetImageInfoMap();
+	for (ImagePieceDocument::TM_IMAGE_INFO::const_iterator it = ImageInfoMap.begin(); it != ImageInfoMap.end(); ++it)
 	{
 		ImageInfo* pImageInfo = it->second;
 		wxTreeItemId itemId = m_pListView->AppendItem(rootItem, pImageInfo->GetId());
-		pImageInfo->SetTreeItemId(itemId);
+		((ImageInfo*)pImageInfo)->SetTreeItemId(itemId);
 	}
 	m_pListView->ExpandAll();
 }
 
-void ImageListTransformer::UpdateProperty(ImageInfo* pImageInfo)
+void ImageListTransformer::UpdateProperty(const ImageInfo* pImageInfo)
 {
 	m_pPropertyGrid->Clear();
 	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_UNKNOWN);
@@ -61,7 +61,7 @@ void ImageListTransformer::UpdateProperty(ImageInfo* pImageInfo)
 
 void ImageListTransformer::PropertyChanged(wxPGProperty* pProperty)
 {
-	ImageInfo* pImageInfo = GetSelectedImageInfo();
+	const ImageInfo* pImageInfo = GetSelectedImageInfo();
 	if (!pImageInfo) return;
 
 	if (pProperty->GetName() == "id")
@@ -71,16 +71,16 @@ void ImageListTransformer::PropertyChanged(wxPGProperty* pProperty)
 	}
 }
 
-void ImageListTransformer::SetSelectedImageInfo(ImageInfo* pImageInfo)
+void ImageListTransformer::SetSelectedImageInfo(const ImageInfo* pImageInfo)
 {
 	if (!pImageInfo) return;
 
 	m_pListView->SelectItem(pImageInfo->GetTreeItemId(), true);
 }
 
-ImageInfo* ImageListTransformer::GetSelectedImageInfo()
+const ImageInfo* ImageListTransformer::GetSelectedImageInfo()
 {
 	wxString strImageId = m_pListView->GetItemText(m_pListView->GetSelection());
-	ImageInfo* pImageInfo = ImagePieceDocument::GetInstance().FindImageInfo(strImageId);
+	const ImageInfo* pImageInfo = ImagePieceDocument::GetInstance().FindImageInfo(strImageId);
 	return pImageInfo;
 }

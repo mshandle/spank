@@ -126,21 +126,21 @@ ImagePieceDocument& ImagePieceDocument::GetInstance()
 	return s_UIImagePieceDocument;
 }
 
-ImageInfo* ImagePieceDocument::FindImageInfo(const wxString& strId)
+const ImageInfo* ImagePieceDocument::FindImageInfo(const wxString& strId)
 {
 	TM_IMAGE_INFO::iterator itfound = m_ImageInfoMap.find(strId);
 	if (itfound == m_ImageInfoMap.end()) return NULL;
 	return itfound->second;
 }
 
-PieceInfo* ImagePieceDocument::FindPieceInfo(const wxString& strId)
+const PieceInfo* ImagePieceDocument::FindPieceInfo(const wxString& strId)
 {
 	TM_PIECE_INFO::iterator itfound = m_PieceInfoMap.find(strId);
 	if (itfound == m_PieceInfoMap.end()) return NULL;
 	return itfound->second;
 }
 
-PieceInfo* ImagePieceDocument::FindPieceInfoUnderPoint(const wxPoint& pos, const ImageInfo* pImageInfo)
+const PieceInfo* ImagePieceDocument::FindPieceInfoUnderPoint(const wxPoint& pos, const ImageInfo* pImageInfo)
 {
 	if (!pImageInfo) return NULL;
 
@@ -155,12 +155,12 @@ PieceInfo* ImagePieceDocument::FindPieceInfoUnderPoint(const wxPoint& pos, const
 	return NULL;
 }
 
-ImagePieceDocument::TM_IMAGE_INFO& ImagePieceDocument::GetImageInfoMap()
+const ImagePieceDocument::TM_IMAGE_INFO& ImagePieceDocument::GetImageInfoMap()
 {
 	return m_ImageInfoMap;
 }
 
-ImagePieceDocument::TM_PIECE_INFO& ImagePieceDocument::GetPieceInfoMap()
+const ImagePieceDocument::TM_PIECE_INFO& ImagePieceDocument::GetPieceInfoMap()
 {
 	return m_PieceInfoMap;
 }

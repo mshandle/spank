@@ -26,17 +26,17 @@ public:
 	const wxString& GetId() const;
 
 	void SetImageInfo(ImageInfo* pImageInfo);
-	ImageInfo* GetImageInfo();
+	const ImageInfo* GetImageInfo() const;
 
 	void SetRect(const wxRect& rect);
 	const wxRect& GetRect() const;
 
-	void SetTreeItemId(wxTreeItemId itemId);
-	wxTreeItemId GetTreeItemId();
+	void SetTreeItemId(const wxTreeItemId& itemId);
+	const wxTreeItemId& GetTreeItemId() const;
 
 private:
 	wxString m_strId;
-	ImageInfo* m_pImageInfo;
+	const ImageInfo* m_pImageInfo;
 	wxRect m_Rect;
 	wxTreeItemId m_TreeItemId;
 

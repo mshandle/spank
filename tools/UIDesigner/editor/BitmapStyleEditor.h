@@ -26,8 +26,8 @@ public:
 
 	static BitmapStyleEditor& GetInstance();
 
-	bool SetBitmapStyle(BitmapStyle* pBitmapStyle);
-	BitmapStyle* GetBitmapStyle();
+	bool SetBitmapStyle(const BitmapStyle* pBitmapStyle);
+	const BitmapStyle* GetBitmapStyle();
 
 	virtual wxSize CalculateVirtualSize();
 	virtual void Draw(wxDC& dc);
@@ -47,7 +47,7 @@ private:
 
 private:
 	static BitmapStyleEditor* m_pBitmapStyleEditor;
-	BitmapStyle* m_pBitmapStyle;
+	const BitmapStyle* m_pBitmapStyle;
 
 	IStyle::STYLE_STATE m_eSelState;
 	wxBitmap m_bmpState[IStyle::SS_NUM];

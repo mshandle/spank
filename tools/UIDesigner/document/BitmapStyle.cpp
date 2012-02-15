@@ -57,7 +57,7 @@ bool BitmapStyle::SaveToXml(TiXmlElement* pElmBitmapStyleList)
 	return true;
 }
 
-bool BitmapStyle::SetStatePiece(PieceInfo* pPieceInfo, STYLE_STATE eState)
+bool BitmapStyle::SetStatePiece(const PieceInfo* pPieceInfo, STYLE_STATE eState)
 {
 	if (eState < 0 || eState >= SS_NUM) return false;
 	if (m_PieceInfo[eState] == pPieceInfo) return false;
@@ -67,27 +67,27 @@ bool BitmapStyle::SetStatePiece(PieceInfo* pPieceInfo, STYLE_STATE eState)
 	return true;
 }
 
-PieceInfo* BitmapStyle::GetStatePiece(STYLE_STATE eState)
+const PieceInfo* BitmapStyle::GetStatePiece(STYLE_STATE eState) const
 {
 	if (eState < 0 || eState >= SS_NUM) return NULL;
 	return m_PieceInfo[eState];
 }
 
-PieceInfo* BitmapStyle::LoadStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& strState, PieceInfo* defaultPieceInfo)
+const PieceInfo* BitmapStyle::LoadStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& strState, const PieceInfo* pDefaultPieceInfo)
 {
 	TiXmlElement* pElmState = pElmBitmapStyle->FirstChildElement(strState);
-	if (!pElmState) return defaultPieceInfo;
+	if (!pElmState) return pDefaultPieceInfo;
 
 	const char* pszPieceId = pElmState->Attribute("piece_id");
-	if (!pszPieceId) return defaultPieceInfo;
+	if (!pszPieceId) return pDefaultPieceInfo;
 
-	PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfo(pszPieceId);
-	if (!pPieceInfo) return defaultPieceInfo;
+	const PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfo(pszPieceId);
+	if (!pPieceInfo) return pDefaultPieceInfo;
 
 	return pPieceInfo;
 }
 
-bool BitmapStyle::SaveStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& strState, PieceInfo* pPieceInfo, bool force /*= false*/)
+bool BitmapStyle::SaveStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& strState, const PieceInfo* pPieceInfo, bool force /*= false*/)
 {
 	if (!pPieceInfo) return false;
 	if (!force && pPieceInfo == m_PieceInfo[SS_NORMAL]) return false;

@@ -72,7 +72,7 @@ void PieceInfo::SetImageInfo(ImageInfo* pImageInfo)
 	m_pImageInfo = pImageInfo;
 }
 
-ImageInfo* PieceInfo::GetImageInfo()
+const ImageInfo* PieceInfo::GetImageInfo() const
 {
 	return m_pImageInfo;
 }
@@ -87,12 +87,12 @@ const wxRect& PieceInfo::GetRect() const
 	return m_Rect;
 }
 
-void PieceInfo::SetTreeItemId(wxTreeItemId itemId)
+void PieceInfo::SetTreeItemId(const wxTreeItemId& itemId)
 {
 	m_TreeItemId = itemId;
 }
 
-wxTreeItemId PieceInfo::GetTreeItemId()
+const wxTreeItemId& PieceInfo::GetTreeItemId() const
 {
 	return m_TreeItemId;
 }

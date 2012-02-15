@@ -9,8 +9,24 @@
 
 DocumentBase::DocumentBase()
 {
+	m_bModifiedFlag = false;
 }
 
 DocumentBase::~DocumentBase()
 {
+}
+
+void DocumentBase::SetModifiedFlag()
+{
+	m_bModifiedFlag = true;
+}
+
+void DocumentBase::ClearModifiedFlag()
+{
+	m_bModifiedFlag = false;
+}
+
+bool DocumentBase::isModified() const
+{
+	return m_bModifiedFlag;
 }

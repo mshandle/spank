@@ -57,7 +57,7 @@ bool NineGridStyle::SaveToXml(TiXmlElement* pElmBitmapStyleList)
 	return true;
 }
 
-bool NineGridStyle::SetStatePiece(PieceInfo* pPieceInfo, STYLE_STATE eState)
+bool NineGridStyle::SetStatePiece(const PieceInfo* pPieceInfo, STYLE_STATE eState)
 {
 	if (eState < 0 || eState >= SS_NUM) return false;
 	if (m_NineGridInfo[eState].pPieceInfo == pPieceInfo) return false;
@@ -67,7 +67,7 @@ bool NineGridStyle::SetStatePiece(PieceInfo* pPieceInfo, STYLE_STATE eState)
 	return true;
 }
 
-NineGridStyle::NINE_GRID_INFO* NineGridStyle::GetStateGridInfo(STYLE_STATE eState)
+const NineGridStyle::NINE_GRID_INFO* NineGridStyle::GetStateGridInfo(STYLE_STATE eState) const
 {
 	return &m_NineGridInfo[eState];
 }
@@ -80,7 +80,7 @@ bool NineGridStyle::LoadStateInfo(NINE_GRID_INFO& NineGridInfoOut, TiXmlElement*
 	const char* pszPieceId = pElmState->Attribute("piece_id");
 	if (!pszPieceId) return false;
 
-	PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfo(pszPieceId);
+	const PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfo(pszPieceId);
 	if (!pPieceInfo) return false;
 
 	NineGridInfoOut.pPieceInfo = pPieceInfo;

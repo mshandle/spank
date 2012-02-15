@@ -20,11 +20,11 @@ public:
 
 	bool Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid);
 	void UpdateListView();
-	void UpdateProperty(ColorStyle* pColorStyle);
-	void PropertyChanged(wxPGProperty* pProperty);
+	void UpdateProperty(const ColorStyle* pColorStyle);
+	void PropertyChanged(const wxPGProperty* pProperty);
 
-	void SetSelectedColorStyle(ColorStyle* pColorStyle);
-	ColorStyle* GetSelectedColorStyle();
+	void SetSelectedColorStyle(const ColorStyle* pColorStyle);
+	const ColorStyle* GetSelectedColorStyle();
 
 protected:
 	ColorStyleTransformer();

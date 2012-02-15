@@ -38,17 +38,17 @@ void PieceListTransformer::UpdateListView()
 	m_pListView->DeleteAllItems();
 	wxTreeItemId rootItem = m_pListView->AddRoot(wxT("PieceList"));
 
-	ImagePieceDocument::TM_PIECE_INFO& pieceInfoMap = ImagePieceDocument::GetInstance().GetPieceInfoMap();
-	for (ImagePieceDocument::TM_PIECE_INFO::iterator it = pieceInfoMap.begin(); it != pieceInfoMap.end(); ++it)
+	const ImagePieceDocument::TM_PIECE_INFO& pieceInfoMap = ImagePieceDocument::GetInstance().GetPieceInfoMap();
+	for (ImagePieceDocument::TM_PIECE_INFO::const_iterator it = pieceInfoMap.begin(); it != pieceInfoMap.end(); ++it)
 	{
 		PieceInfo* pPieceInfo = it->second;
 		wxTreeItemId itemId = m_pListView->AppendItem(rootItem, pPieceInfo->GetId());
-		pPieceInfo->SetTreeItemId(itemId);
+		((PieceInfo*)pPieceInfo)->SetTreeItemId(itemId);
 	}
 	m_pListView->ExpandAll();
 }
 
-void PieceListTransformer::UpdateProperty(PieceInfo* pPieceInfo)
+void PieceListTransformer::UpdateProperty(const PieceInfo* pPieceInfo)
 {
 	m_pPropertyGrid->Clear();
 	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_UNKNOWN);
@@ -68,9 +68,9 @@ void PieceListTransformer::UpdateProperty(PieceInfo* pPieceInfo)
 	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_PIECE);
 }
 
-void PieceListTransformer::PropertyChanged(wxPGProperty* pProperty)
+void PieceListTransformer::PropertyChanged(const wxPGProperty* pProperty)
 {
-	PieceInfo* pPieceInfo = GetSelectedPieceInfo();
+	const PieceInfo* pPieceInfo = GetSelectedPieceInfo();
 	if (!pPieceInfo) return;
 
 	if (pProperty->GetName() == "id")
@@ -80,16 +80,16 @@ void PieceListTransformer::PropertyChanged(wxPGProperty* pProperty)
 	}
 }
 
-void PieceListTransformer::SetSelectedPieceInfo(PieceInfo* pPieceInfo)
+void PieceListTransformer::SetSelectedPieceInfo(const PieceInfo* pPieceInfo)
 {
 	if (!pPieceInfo) return;
 
 	m_pListView->SelectItem(pPieceInfo->GetTreeItemId(), true);
 }
 
-PieceInfo* PieceListTransformer::GetSelectedPieceInfo()
+const PieceInfo* PieceListTransformer::GetSelectedPieceInfo()
 {
 	wxString strPieceId = m_pListView->GetItemText(m_pListView->GetSelection());
-	PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfo(strPieceId);
+	const PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfo(strPieceId);
 	return pPieceInfo;
 }

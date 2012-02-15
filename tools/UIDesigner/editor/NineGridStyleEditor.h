@@ -26,8 +26,8 @@ public:
 
 	static NineGridStyleEditor& GetInstance();
 
-	bool SetNineGridStyle(NineGridStyle* pNineGridStyle);
-	NineGridStyle* GetNineGridStyle();
+	bool SetNineGridStyle(const NineGridStyle* pNineGridStyle);
+	const NineGridStyle* GetNineGridStyle();
 
 	virtual wxSize CalculateVirtualSize();
 	virtual void Draw(wxDC& dc);
@@ -47,7 +47,7 @@ private:
 
 private:
 	static NineGridStyleEditor* m_pNineGridStyleEditor;
-	NineGridStyle* m_pNineGridStyle;
+	const NineGridStyle* m_pNineGridStyle;
 
 	IStyle::STYLE_STATE m_eSelState;
 	wxBitmap m_bmpState[IStyle::SS_NUM];

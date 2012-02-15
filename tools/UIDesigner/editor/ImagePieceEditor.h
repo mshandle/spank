@@ -27,11 +27,11 @@ public:
 
 	static ImagePieceEditor& GetInstance();
 
-	void SetSelection(PieceInfo* pPieceInfo);
-	PieceInfo* GetSelection() const;
+	void SetSelection(const PieceInfo* pPieceInfo);
+	const PieceInfo* GetSelection() const;
 
-	bool SetImage(ImageInfo* pImageInfo);
-	ImageInfo* GetImage() const;
+	bool SetImage(const ImageInfo* pImageInfo);
+	const ImageInfo* GetImage() const;
 
 	virtual wxSize CalculateVirtualSize();
 	virtual void Draw(wxDC& dc);
@@ -46,8 +46,8 @@ private:
 private:
 	static ImagePieceEditor* m_pImagePieceEditor;
 	wxMemoryDC m_memDC;
-	PieceInfo* m_pPieceInfo;
-	ImageInfo* m_pImageInfo;
+	const PieceInfo* m_pPieceInfo;
+	const ImageInfo* m_pImageInfo;
 
 };
 #endif // __IMAGEPIECEEDITOR_H__

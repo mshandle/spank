@@ -43,7 +43,7 @@ ClipBitmapStyleEditor& ClipBitmapStyleEditor::GetInstance()
 	return *m_pClipBitmapStyleEditor;
 }
 
-bool ClipBitmapStyleEditor::SetClipBitmapStyle(ClipBitmapStyle* pClipBitmapStyle)
+bool ClipBitmapStyleEditor::SetClipBitmapStyle(const ClipBitmapStyle* pClipBitmapStyle)
 {
 	if (m_pClipBitmapStyle == pClipBitmapStyle) return false;
 	m_pClipBitmapStyle = pClipBitmapStyle;
@@ -57,7 +57,7 @@ bool ClipBitmapStyleEditor::SetClipBitmapStyle(ClipBitmapStyle* pClipBitmapStyle
 	return true;
 }
 
-ClipBitmapStyle* ClipBitmapStyleEditor::GetClipBitmapStyle()
+const ClipBitmapStyle* ClipBitmapStyleEditor::GetClipBitmapStyle() const
 {
 	return m_pClipBitmapStyle;
 }
@@ -120,9 +120,10 @@ void ClipBitmapStyleEditor::UpdateSubBitmap()
 	{
 		if (m_pClipBitmapStyle)
 		{
-			PieceInfo* pPieceInfo = m_pClipBitmapStyle->GetStatePiece((IStyle::STYLE_STATE)i);
+			const PieceInfo* pPieceInfo = m_pClipBitmapStyle->GetStatePiece((IStyle::STYLE_STATE)i);
 			const wxRect& pieceRect = pPieceInfo->GetRect();
-			wxBitmap* pMainBitmap = pPieceInfo->GetImageInfo()->GetBitmap();
+			ImageInfo* pImageInfo = (ImageInfo*)pPieceInfo->GetImageInfo();
+			const wxBitmap* pMainBitmap = pImageInfo->GetBitmap();
 			m_bmpState[i] = pMainBitmap->GetSubBitmap(pieceRect);
 		}
 		else
@@ -142,7 +143,7 @@ void ClipBitmapStyleEditor::UpdateSubBitmapRect()
 	{
 		if (m_pClipBitmapStyle)
 		{
-			PieceInfo* pPieceInfo = m_pClipBitmapStyle->GetStatePiece((IStyle::STYLE_STATE)i);
+			const PieceInfo* pPieceInfo = m_pClipBitmapStyle->GetStatePiece((IStyle::STYLE_STATE)i);
 			const wxRect& pieceRect = pPieceInfo->GetRect();
 
 			subRect.width = pieceRect.width;

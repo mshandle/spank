@@ -49,18 +49,18 @@ ImagePieceEditor& ImagePieceEditor::GetInstance()
 	return *m_pImagePieceEditor;
 }
 
-void ImagePieceEditor::SetSelection(PieceInfo* pPieceInfo)
+void ImagePieceEditor::SetSelection(const PieceInfo* pPieceInfo)
 {
 	m_pPieceInfo = pPieceInfo;
 	Refresh(false);
 }
 
-PieceInfo* ImagePieceEditor::GetSelection() const
+const PieceInfo* ImagePieceEditor::GetSelection() const
 {
 	return m_pPieceInfo;
 }
 
-bool ImagePieceEditor::SetImage(ImageInfo* pImageInfo)
+bool ImagePieceEditor::SetImage(const ImageInfo* pImageInfo)
 {
 	if (m_pImageInfo == pImageInfo) return false;
 	m_pImageInfo = pImageInfo;
@@ -70,7 +70,7 @@ bool ImagePieceEditor::SetImage(ImageInfo* pImageInfo)
 	return true;
 }
 
-ImageInfo* ImagePieceEditor::GetImage() const
+const ImageInfo* ImagePieceEditor::GetImage() const
 {
 	return m_pImageInfo;
 }
@@ -79,7 +79,7 @@ wxSize ImagePieceEditor::CalculateVirtualSize()
 {
 	if (!m_pImageInfo)	return wxSize(0, 0);
 
-	wxBitmap* pBitmap = m_pImageInfo->GetBitmap();
+	const wxBitmap* pBitmap = ((ImageInfo*)m_pImageInfo)->GetBitmap();
 	if (!pBitmap) return wxSize(0, 0);
 
 	return pBitmap->GetSize();
@@ -89,8 +89,8 @@ void ImagePieceEditor::Draw(wxDC& dc)
 {
 	if (!m_pImageInfo) return;
 
-	wxBitmap* pBitmap = NULL;
-	if (m_pImageInfo) pBitmap = m_pImageInfo->GetBitmap();
+	const wxBitmap* pBitmap = NULL;
+	if (m_pImageInfo) pBitmap = ((ImageInfo*)m_pImageInfo)->GetBitmap();
 	if (!pBitmap) return;
 
 	DrawBitmap(dc, *pBitmap, wxPoint(0, 0));
@@ -109,7 +109,7 @@ void ImagePieceEditor::DrawSelection(wxDC& dc)
 void ImagePieceEditor::OnLButtonDown(const wxPoint& pos)
 {
 	wxPoint posMouse = (pos + GetOriginOffset()) / GetZoom();
-	PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfoUnderPoint(posMouse, m_pImageInfo);
+	const PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfoUnderPoint(posMouse, m_pImageInfo);
 	SetSelection(pPieceInfo);
 
 	PieceListTransformer::GetInstance().SetSelectedPieceInfo(pPieceInfo);

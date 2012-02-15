@@ -78,7 +78,7 @@ bool ColorStyle::SetStateColor(unsigned int color, STYLE_STATE eState)
 	return true;
 }
 
-unsigned int ColorStyle::GetStateColor(STYLE_STATE eState)
+unsigned int ColorStyle::GetStateColor(STYLE_STATE eState) const
 {
 	if (eState < 0 || eState >= SS_NUM) return DEFAULT_COLOR;
 	return m_nColors[eState];

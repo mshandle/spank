@@ -30,12 +30,12 @@ public:
 
 	static ImagePieceDocument& GetInstance();
 
-	ImageInfo* FindImageInfo(const wxString& strId);
-	PieceInfo* FindPieceInfo(const wxString& strId);
-	PieceInfo* FindPieceInfoUnderPoint(const wxPoint& pos, const ImageInfo* pImageInfo);
+	const ImageInfo* FindImageInfo(const wxString& strId);
+	const PieceInfo* FindPieceInfo(const wxString& strId);
+	const PieceInfo* FindPieceInfoUnderPoint(const wxPoint& pos, const ImageInfo* pImageInfo);
 
-	TM_IMAGE_INFO& GetImageInfoMap();
-	TM_PIECE_INFO& GetPieceInfoMap();
+	const TM_IMAGE_INFO& GetImageInfoMap();
+	const TM_PIECE_INFO& GetPieceInfoMap();
 
 	const wxArrayString& GetImageIds();
 	const wxArrayInt& GetImageIdsIndex();

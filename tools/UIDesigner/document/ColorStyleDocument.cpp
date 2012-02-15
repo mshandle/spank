@@ -85,14 +85,12 @@ const wxString& ColorStyleDocument::GetFilePath() const
 	return m_strFile;
 }
 
-ColorStyle* ColorStyleDocument::FindColorStyle(const wxString& strId)
+const ColorStyle* ColorStyleDocument::FindColorStyle(const wxString& strId)
 {
-	TM_COLOR_STYLE::iterator itfound = m_ColorStyleMap.find(strId);
-	if (itfound == m_ColorStyleMap.end()) return NULL;
-	return itfound->second;
+	return InternalFindColorStyle(strId);
 }
 
-ColorStyleDocument::TM_COLOR_STYLE& ColorStyleDocument::GetColorStyleMap()
+const ColorStyleDocument::TM_COLOR_STYLE& ColorStyleDocument::GetColorStyleMap()
 {
 	return m_ColorStyleMap;
 }
@@ -123,8 +121,15 @@ bool ColorStyleDocument::SetStateColor(const ColorStyle* pColorStyle, const wxCo
 {
 	if (!pColorStyle) return false;
 
-	ColorStyle* pFoundColorStyle = FindColorStyle(pColorStyle->GetId());
+	ColorStyle* pFoundColorStyle = InternalFindColorStyle(pColorStyle->GetId());
 	if (!pFoundColorStyle) return false;
 
 	return pFoundColorStyle->SetStateColor(color.GetRGB(), eState);
+}
+
+ColorStyle* ColorStyleDocument::InternalFindColorStyle(const wxString& strId)
+{
+	TM_COLOR_STYLE::iterator itfound = m_ColorStyleMap.find(strId);
+	if (itfound == m_ColorStyleMap.end()) return NULL;
+	return itfound->second;
 }

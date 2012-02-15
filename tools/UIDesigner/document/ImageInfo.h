@@ -27,10 +27,10 @@ public:
 	void SetPath(const wxString& strPath);
 	const wxString& GetPath() const;
 
-	wxBitmap* GetBitmap();
+	const wxBitmap* GetBitmap();
 
-	void SetTreeItemId(wxTreeItemId itemId);
-	wxTreeItemId GetTreeItemId();
+	void SetTreeItemId(const wxTreeItemId& itemId);
+	const wxTreeItemId& GetTreeItemId() const;
 
 private:
 	bool LoadImageFromFile();

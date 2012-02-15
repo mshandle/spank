@@ -26,14 +26,15 @@ public:
 	virtual void Reset();
 	virtual const wxString& GetFilePath() const;
 
-	ColorStyle* FindColorStyle(const wxString& strId);
-	TM_COLOR_STYLE& GetColorStyleMap();
+	const ColorStyle* FindColorStyle(const wxString& strId);
+	const TM_COLOR_STYLE& GetColorStyleMap();
 
 	bool RenameColorStyleId(const ColorStyle* pColorStyle, const wxString& strNewId);
 	bool SetStateColor(const ColorStyle* pColorStyle, const wxColour& color, IStyle::STYLE_STATE eState);
 
 protected:
 	ColorStyleDocument();
+	ColorStyle* InternalFindColorStyle(const wxString& strId);
 
 private:
 	TM_COLOR_STYLE m_ColorStyleMap;

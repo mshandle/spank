@@ -40,17 +40,17 @@ void ClipBitmapStyleTransformer::UpdateListView()
 	m_pListView->DeleteAllItems();
 	wxTreeItemId rootItem = m_pListView->AddRoot(wxT("ClipBitmapStyleList"));
 
-	ClipBitmapStyleDocument::TM_CLIP_BITMAP_STYLE& ClipBitmapStyleMap = ClipBitmapStyleDocument::GetInstance().GetClipBitmapStyleMap();
-	for (ClipBitmapStyleDocument::TM_CLIP_BITMAP_STYLE::iterator it = ClipBitmapStyleMap.begin(); it != ClipBitmapStyleMap.end(); ++it)
+	const ClipBitmapStyleDocument::TM_CLIP_BITMAP_STYLE& ClipBitmapStyleMap = ClipBitmapStyleDocument::GetInstance().GetClipBitmapStyleMap();
+	for (ClipBitmapStyleDocument::TM_CLIP_BITMAP_STYLE::const_iterator it = ClipBitmapStyleMap.begin(); it != ClipBitmapStyleMap.end(); ++it)
 	{
 		ClipBitmapStyle* pClipBitmapStyle = it->second;
 		wxTreeItemId itemId = m_pListView->AppendItem(rootItem, pClipBitmapStyle->GetId());
-		pClipBitmapStyle->SetTreeItemId(itemId);
+		((ClipBitmapStyle*)pClipBitmapStyle)->SetTreeItemId(itemId);
 	}
 	m_pListView->ExpandAll();
 }
 
-void ClipBitmapStyleTransformer::UpdateProperty(ClipBitmapStyle* pClipBitmapStyle)
+void ClipBitmapStyleTransformer::UpdateProperty(const ClipBitmapStyle* pClipBitmapStyle)
 {
 	m_pPropertyGrid->Clear();
 	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_UNKNOWN);
@@ -74,9 +74,9 @@ void ClipBitmapStyleTransformer::UpdateProperty(ClipBitmapStyle* pClipBitmapStyl
 	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_CLIP_BITMAP_STYLE);
 }
 
-void ClipBitmapStyleTransformer::PropertyChanged(wxPGProperty* pProperty)
+void ClipBitmapStyleTransformer::PropertyChanged(const wxPGProperty* pProperty)
 {
-	ClipBitmapStyle* pClipBitmapStyle = GetSelectedClipBitmapStyle();
+	const ClipBitmapStyle* pClipBitmapStyle = GetSelectedClipBitmapStyle();
 	if (!pClipBitmapStyle) return;
 
 	bool bRedraw = false;
@@ -113,16 +113,16 @@ void ClipBitmapStyleTransformer::PropertyChanged(wxPGProperty* pProperty)
 	}
 }
 
-void ClipBitmapStyleTransformer::SetSelectedClipBitmapStyle(ClipBitmapStyle* pClipBitmapStyle)
+void ClipBitmapStyleTransformer::SetSelectedClipBitmapStyle(const ClipBitmapStyle* pClipBitmapStyle)
 {
 	if (!pClipBitmapStyle) return;
 
 	m_pListView->SelectItem(pClipBitmapStyle->GetTreeItemId(), true);
 }
 
-ClipBitmapStyle* ClipBitmapStyleTransformer::GetSelectedClipBitmapStyle()
+const ClipBitmapStyle* ClipBitmapStyleTransformer::GetSelectedClipBitmapStyle()
 {
 	wxString strClipBitmapStyleId = m_pListView->GetItemText(m_pListView->GetSelection());
-	ClipBitmapStyle* pClipBitmapStyle = ClipBitmapStyleDocument::GetInstance().FindClipBitmapStyle(strClipBitmapStyleId);
+	const ClipBitmapStyle* pClipBitmapStyle = ClipBitmapStyleDocument::GetInstance().FindClipBitmapStyle(strClipBitmapStyleId);
 	return pClipBitmapStyle;
 }

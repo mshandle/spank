@@ -31,7 +31,7 @@ public:
 	const wxString& GetId() const;
 
 	void SetTreeItemId(wxTreeItemId itemId);
-	wxTreeItemId GetTreeItemId();
+	const wxTreeItemId& GetTreeItemId() const;
 
 private:
 	wxString m_strId;

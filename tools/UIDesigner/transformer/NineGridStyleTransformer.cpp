@@ -40,17 +40,17 @@ void NineGridStyleTransformer::UpdateListView()
 	m_pListView->DeleteAllItems();
 	wxTreeItemId rootItem = m_pListView->AddRoot(wxT("NineGridStyleList"));
 
-	NineGridStyleDocument::TM_NINE_GRID_STYLE& NineGridStyleMap = NineGridStyleDocument::GetInstance().GetNineGridStyleMap();
-	for (NineGridStyleDocument::TM_NINE_GRID_STYLE::iterator it = NineGridStyleMap.begin(); it != NineGridStyleMap.end(); ++it)
+	const NineGridStyleDocument::TM_NINE_GRID_STYLE& NineGridStyleMap = NineGridStyleDocument::GetInstance().GetNineGridStyleMap();
+	for (NineGridStyleDocument::TM_NINE_GRID_STYLE::const_iterator it = NineGridStyleMap.begin(); it != NineGridStyleMap.end(); ++it)
 	{
 		NineGridStyle* pNineGridStyle = it->second;
 		wxTreeItemId itemId = m_pListView->AppendItem(rootItem, pNineGridStyle->GetId());
-		pNineGridStyle->SetTreeItemId(itemId);
+		((NineGridStyle*)pNineGridStyle)->SetTreeItemId(itemId);
 	}
 	m_pListView->ExpandAll();
 }
 
-void NineGridStyleTransformer::UpdateProperty(NineGridStyle* pNineGrieStyle)
+void NineGridStyleTransformer::UpdateProperty(const NineGridStyle* pNineGrieStyle)
 {
 	m_pPropertyGrid->Clear();
 	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_UNKNOWN);
@@ -97,9 +97,9 @@ void NineGridStyleTransformer::UpdateProperty(NineGridStyle* pNineGrieStyle)
 	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_NINE_GRID_STYLE);
 }
 
-void NineGridStyleTransformer::PropertyChanged(wxPGProperty* pProperty)
+void NineGridStyleTransformer::PropertyChanged(const wxPGProperty* pProperty)
 {
-	NineGridStyle* pNineGridStyle = GetSelectedNineGridStyle();
+	const NineGridStyle* pNineGridStyle = GetSelectedNineGridStyle();
 	if (!pNineGridStyle) return;
 
 	bool bResetStyle = false;
@@ -223,16 +223,16 @@ void NineGridStyleTransformer::PropertyChanged(wxPGProperty* pProperty)
 	}
 }
 
-void NineGridStyleTransformer::SetSelectedNineGridStyle(NineGridStyle* pNineGrieStyle)
+void NineGridStyleTransformer::SetSelectedNineGridStyle(const NineGridStyle* pNineGrieStyle)
 {
 	if (!pNineGrieStyle) return;
 
 	m_pListView->SelectItem(pNineGrieStyle->GetTreeItemId(), true);
 }
 
-NineGridStyle* NineGridStyleTransformer::GetSelectedNineGridStyle()
+const NineGridStyle* NineGridStyleTransformer::GetSelectedNineGridStyle()
 {
 	wxString strNineGridStyleId = m_pListView->GetItemText(m_pListView->GetSelection());
-	NineGridStyle* pNineGridStyle = NineGridStyleDocument::GetInstance().FindNineGridStyle(strNineGridStyleId);
+	const NineGridStyle* pNineGridStyle = NineGridStyleDocument::GetInstance().FindNineGridStyle(strNineGridStyleId);
 	return pNineGridStyle;
 }

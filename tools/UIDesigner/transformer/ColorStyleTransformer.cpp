@@ -39,17 +39,17 @@ void ColorStyleTransformer::UpdateListView()
 	m_pListView->DeleteAllItems();
 	wxTreeItemId rootItem = m_pListView->AddRoot(wxT("ColorStyleList"));
 
-	ColorStyleDocument::TM_COLOR_STYLE& ColorStyleMap = ColorStyleDocument::GetInstance().GetColorStyleMap();
-	for (ColorStyleDocument::TM_COLOR_STYLE::iterator it = ColorStyleMap.begin(); it != ColorStyleMap.end(); ++it)
+	const ColorStyleDocument::TM_COLOR_STYLE& ColorStyleMap = ColorStyleDocument::GetInstance().GetColorStyleMap();
+	for (ColorStyleDocument::TM_COLOR_STYLE::const_iterator it = ColorStyleMap.begin(); it != ColorStyleMap.end(); ++it)
 	{
 		ColorStyle* pColorStyle = it->second;
 		wxTreeItemId itemId = m_pListView->AppendItem(rootItem, pColorStyle->GetId());
-		pColorStyle->SetTreeItemId(itemId);
+		((ColorStyle*)pColorStyle)->SetTreeItemId(itemId);
 	}
 	m_pListView->ExpandAll();
 }
 
-void ColorStyleTransformer::UpdateProperty(ColorStyle* pColorStyle)
+void ColorStyleTransformer::UpdateProperty(const ColorStyle* pColorStyle)
 {
 	m_pPropertyGrid->Clear();
 	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_UNKNOWN);
@@ -71,9 +71,9 @@ void ColorStyleTransformer::UpdateProperty(ColorStyle* pColorStyle)
 	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_COLOR_STYLE);
 }
 
-void ColorStyleTransformer::PropertyChanged(wxPGProperty* pProperty)
+void ColorStyleTransformer::PropertyChanged(const wxPGProperty* pProperty)
 {
-	ColorStyle* pColorStyle = GetSelectedColorStyle();
+	const ColorStyle* pColorStyle = GetSelectedColorStyle();
 	if (!pColorStyle) return;
 
 	bool bRedraw = false;
@@ -114,16 +114,16 @@ void ColorStyleTransformer::PropertyChanged(wxPGProperty* pProperty)
 	}
 }
 
-void ColorStyleTransformer::SetSelectedColorStyle(ColorStyle* pColorStyle)
+void ColorStyleTransformer::SetSelectedColorStyle(const ColorStyle* pColorStyle)
 {
 	if (!pColorStyle) return;
 
 	m_pListView->SelectItem(pColorStyle->GetTreeItemId(), true);
 }
 
-ColorStyle* ColorStyleTransformer::GetSelectedColorStyle()
+const ColorStyle* ColorStyleTransformer::GetSelectedColorStyle()
 {
 	wxString strColorStyleId = m_pListView->GetItemText(m_pListView->GetSelection());
-	ColorStyle* pColorStyle = ColorStyleDocument::GetInstance().FindColorStyle(strColorStyleId);
+	const ColorStyle* pColorStyle = ColorStyleDocument::GetInstance().FindColorStyle(strColorStyleId);
 	return pColorStyle;
 }

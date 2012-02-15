@@ -26,14 +26,15 @@ public:
 	virtual void Reset();
 	virtual const wxString& GetFilePath() const;
 
-	BitmapStyle* FindBitmapStyle(const wxString& strId);
-	TM_BITMAP_STYLE& GetBitmapStyleMap();
+	const BitmapStyle* FindBitmapStyle(const wxString& strId);
+	const TM_BITMAP_STYLE& GetBitmapStyleMap();
 
 	bool RenameBitmapStyleId(const BitmapStyle* pBitmapStyle, const wxString& strNewId);
-	bool SetStatePiece(const BitmapStyle* pBitmapStyle, PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState);
+	bool SetStatePiece(const BitmapStyle* pBitmapStyle, const PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState);
 
 protected:
 	BitmapStyleDocument();
+	BitmapStyle* InternalFindBitmapStyle(const wxString& strId);
 
 private:
 	TM_BITMAP_STYLE m_BitmapStyleMap;

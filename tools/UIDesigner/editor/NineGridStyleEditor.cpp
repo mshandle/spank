@@ -42,7 +42,7 @@ NineGridStyleEditor& NineGridStyleEditor::GetInstance()
 	return *m_pNineGridStyleEditor;
 }
 
-bool NineGridStyleEditor::SetNineGridStyle(NineGridStyle* pNineGridStyle)
+bool NineGridStyleEditor::SetNineGridStyle(const NineGridStyle* pNineGridStyle)
 {
 	if (m_pNineGridStyle == pNineGridStyle) return false;
 	m_pNineGridStyle = pNineGridStyle;
@@ -57,7 +57,7 @@ bool NineGridStyleEditor::SetNineGridStyle(NineGridStyle* pNineGridStyle)
 	return true;
 }
 
-NineGridStyle* NineGridStyleEditor::GetNineGridStyle()
+const NineGridStyle* NineGridStyleEditor::GetNineGridStyle()
 {
 	return m_pNineGridStyle;
 }
@@ -90,7 +90,7 @@ void NineGridStyleEditor::DrawSelection(wxDC& dc)
 	DrawRectangle(dc, rect);
 
 	wxSize maxSize = CalculateMaxSize();
-	NineGridStyle::NINE_GRID_INFO* pGridInfo = m_pNineGridStyle->GetStateGridInfo(m_eSelState);
+	const NineGridStyle::NINE_GRID_INFO* pGridInfo = m_pNineGridStyle->GetStateGridInfo(m_eSelState);
 
 	dc.SetPen(*wxBLUE_PEN);
 	if (pGridInfo->min_y != pGridInfo->max_y)
@@ -138,9 +138,10 @@ void NineGridStyleEditor::UpdateSubBitmap()
 	{
 		if (m_pNineGridStyle)
 		{
-			PieceInfo* pPieceInfo = m_pNineGridStyle->GetStateGridInfo((IStyle::STYLE_STATE)i)->pPieceInfo;
+			const PieceInfo* pPieceInfo = m_pNineGridStyle->GetStateGridInfo((IStyle::STYLE_STATE)i)->pPieceInfo;
 			const wxRect& pieceRect = pPieceInfo->GetRect();
-			wxBitmap* pMainBitmap = pPieceInfo->GetImageInfo()->GetBitmap();
+			ImageInfo* pImageInfo = (ImageInfo*)pPieceInfo->GetImageInfo();
+			const wxBitmap* pMainBitmap = pImageInfo->GetBitmap();
 			m_bmpState[i] = pMainBitmap->GetSubBitmap(pieceRect);
 		}
 		else
@@ -160,7 +161,7 @@ void NineGridStyleEditor::UpdateSubBitmapRect()
 	{
 		if (m_pNineGridStyle)
 		{
-			PieceInfo* pPieceInfo = m_pNineGridStyle->GetStateGridInfo((IStyle::STYLE_STATE)i)->pPieceInfo;
+			const PieceInfo* pPieceInfo = m_pNineGridStyle->GetStateGridInfo((IStyle::STYLE_STATE)i)->pPieceInfo;
 			const wxRect& pieceRect = pPieceInfo->GetRect();
 
 			subRect.width = pieceRect.width;

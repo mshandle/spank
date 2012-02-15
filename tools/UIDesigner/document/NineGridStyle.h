@@ -17,7 +17,7 @@ class NineGridStyle : public IStyle
 public:
 	typedef struct NINE_GRID_INFO_tag
 	{
-		PieceInfo* pPieceInfo;
+		const PieceInfo* pPieceInfo;
 		int min_x;
 		int min_y;
 		int max_x;
@@ -31,13 +31,13 @@ public:
 	bool LoadFromXml(TiXmlElement* pElmNineGridStyle);
 	bool SaveToXml(TiXmlElement* pElmNineGridStyleList);
 
-	bool SetStatePiece(PieceInfo* pPieceInfo, STYLE_STATE eState);
+	bool SetStatePiece(const PieceInfo* pPieceInfo, STYLE_STATE eState);
 	bool SetStateMinX(int value, IStyle::STYLE_STATE eState);
 	bool SetStateMinY(int value, IStyle::STYLE_STATE eState);
 	bool SetStateMaxX(int value, IStyle::STYLE_STATE eState);
 	bool SetStateMaxY(int value, IStyle::STYLE_STATE eState);
 
-	NINE_GRID_INFO* GetStateGridInfo(STYLE_STATE eState);
+	const NINE_GRID_INFO* GetStateGridInfo(STYLE_STATE eState) const;
 
 private:
 	bool LoadStateInfo(NINE_GRID_INFO& NineGridInfoOut, TiXmlElement* pElmNineGridStyle, const wxString& strState);

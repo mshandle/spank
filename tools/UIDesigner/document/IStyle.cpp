@@ -32,7 +32,7 @@ void IStyle::SetTreeItemId(wxTreeItemId itemId)
 	m_TreeItemId = itemId;
 }
 
-wxTreeItemId IStyle::GetTreeItemId()
+const wxTreeItemId& IStyle::GetTreeItemId() const
 {
 	return m_TreeItemId;
 }

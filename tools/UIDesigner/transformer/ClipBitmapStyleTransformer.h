@@ -19,11 +19,11 @@ public:
 
 	bool Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid);
 	void UpdateListView();
-	void UpdateProperty(ClipBitmapStyle* pClipBitmapStyle);
-	void PropertyChanged(wxPGProperty* pProperty);
+	void UpdateProperty(const ClipBitmapStyle* pClipBitmapStyle);
+	void PropertyChanged(const wxPGProperty* pProperty);
 
-	void SetSelectedClipBitmapStyle(ClipBitmapStyle* pClipBitmapStyle);
-	ClipBitmapStyle* GetSelectedClipBitmapStyle();
+	void SetSelectedClipBitmapStyle(const ClipBitmapStyle* pClipBitmapStyle);
+	const ClipBitmapStyle* GetSelectedClipBitmapStyle();
 
 protected:
 	ClipBitmapStyleTransformer();

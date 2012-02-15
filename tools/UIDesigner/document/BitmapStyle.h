@@ -21,15 +21,15 @@ public:
 	bool LoadFromXml(TiXmlElement* pElmBitmapStyle);
 	bool SaveToXml(TiXmlElement* pElmBitmapStyleList);
 
-	bool SetStatePiece(PieceInfo* pPieceInfo, STYLE_STATE eState);
-	PieceInfo* GetStatePiece(STYLE_STATE eState);
+	bool SetStatePiece(const PieceInfo* pPieceInfo, STYLE_STATE eState);
+	const PieceInfo* GetStatePiece(STYLE_STATE eState) const;
 
 private:
-	PieceInfo* LoadStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& strState, PieceInfo* defaultPieceInfo);
-	bool SaveStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& strState, PieceInfo* pPieceInfo, bool force = false);
+	const PieceInfo* LoadStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& strState, const PieceInfo* pDefaultPieceInfo);
+	bool SaveStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& strState, const PieceInfo* pPieceInfo, bool force = false);
 
 private:
-	PieceInfo* m_PieceInfo[SS_NUM];
+	const PieceInfo* m_PieceInfo[SS_NUM];
 
 };
 #endif // __BITMAPSTYLE_H__

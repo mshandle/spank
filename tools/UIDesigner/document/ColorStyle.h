@@ -27,7 +27,7 @@ public:
 	bool SaveToXml(TiXmlElement* pElmColorStyleList);
 
 	bool SetStateColor(unsigned int color, STYLE_STATE eState);
-	unsigned int GetStateColor(STYLE_STATE eState);
+	unsigned int GetStateColor(STYLE_STATE eState) const;
 
 private:
 	unsigned int LoadStateInfo(TiXmlElement* pElmColorStyle, const wxString& strState, unsigned int nDefaultColor);

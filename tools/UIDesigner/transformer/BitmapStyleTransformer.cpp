@@ -40,17 +40,17 @@ void BitmapStyleTransformer::UpdateListView()
 	m_pListView->DeleteAllItems();
 	wxTreeItemId rootItem = m_pListView->AddRoot(wxT("BitmapStyleList"));
 
-	BitmapStyleDocument::TM_BITMAP_STYLE& BitmapStyleMap = BitmapStyleDocument::GetInstance().GetBitmapStyleMap();
-	for (BitmapStyleDocument::TM_BITMAP_STYLE::iterator it = BitmapStyleMap.begin(); it != BitmapStyleMap.end(); ++it)
+	const BitmapStyleDocument::TM_BITMAP_STYLE& BitmapStyleMap = BitmapStyleDocument::GetInstance().GetBitmapStyleMap();
+	for (BitmapStyleDocument::TM_BITMAP_STYLE::const_iterator it = BitmapStyleMap.begin(); it != BitmapStyleMap.end(); ++it)
 	{
-		BitmapStyle* pBitmapStyle = it->second;
+		const BitmapStyle* pBitmapStyle = it->second;
 		wxTreeItemId itemId = m_pListView->AppendItem(rootItem, pBitmapStyle->GetId());
-		pBitmapStyle->SetTreeItemId(itemId);
+		((BitmapStyle*)pBitmapStyle)->SetTreeItemId(itemId);
 	}
 	m_pListView->ExpandAll();
 }
 
-void BitmapStyleTransformer::UpdateProperty(BitmapStyle* pBitmapStyle)
+void BitmapStyleTransformer::UpdateProperty(const BitmapStyle* pBitmapStyle)
 {
 	m_pPropertyGrid->Clear();
 	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_UNKNOWN);
@@ -76,7 +76,7 @@ void BitmapStyleTransformer::UpdateProperty(BitmapStyle* pBitmapStyle)
 
 void BitmapStyleTransformer::PropertyChanged(wxPGProperty* pProperty)
 {
-	BitmapStyle* pBitmapStyle = GetSelectedBitmapStyle();
+	const BitmapStyle* pBitmapStyle = GetSelectedBitmapStyle();
 	if (!pBitmapStyle) return;
 
 	bool bRedraw = false;
@@ -113,16 +113,16 @@ void BitmapStyleTransformer::PropertyChanged(wxPGProperty* pProperty)
 	}
 }
 
-void BitmapStyleTransformer::SetSelectedBitmapStyle(BitmapStyle* pBitmapStyle)
+void BitmapStyleTransformer::SetSelectedBitmapStyle(const BitmapStyle* pBitmapStyle)
 {
 	if (!pBitmapStyle) return;
 
 	m_pListView->SelectItem(pBitmapStyle->GetTreeItemId(), true);
 }
 
-BitmapStyle* BitmapStyleTransformer::GetSelectedBitmapStyle()
+const BitmapStyle* BitmapStyleTransformer::GetSelectedBitmapStyle()
 {
 	wxString strBitmapStyleId = m_pListView->GetItemText(m_pListView->GetSelection());
-	BitmapStyle* pBitmapStyle = BitmapStyleDocument::GetInstance().FindBitmapStyle(strBitmapStyleId);
+	const BitmapStyle* pBitmapStyle = BitmapStyleDocument::GetInstance().FindBitmapStyle(strBitmapStyleId);
 	return pBitmapStyle;
 }
