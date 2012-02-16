@@ -32,9 +32,13 @@ public:
 	bool RenameBitmapStyleId(const BitmapStyle* pBitmapStyle, const wxString& strNewId);
 	bool SetStatePiece(const BitmapStyle* pBitmapStyle, const PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState);
 
+	const BitmapStyle* AddBitmapStyle(const wxString& strId);
+
 protected:
 	BitmapStyleDocument();
 	BitmapStyle* InternalFindBitmapStyle(const wxString& strId);
+
+	wxString GenerateNewBitmapStyleId(const wxString& strId);
 
 private:
 	TM_BITMAP_STYLE m_BitmapStyleMap;

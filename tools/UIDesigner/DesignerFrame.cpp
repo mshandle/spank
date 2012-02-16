@@ -11,6 +11,7 @@
 #include <wx/propgrid/advprops.h>
 #include <wx/treectrl.h>
 #include <wx/filedlg.h>
+#include <wx/textdlg.h>
 
 #include "document/ProjectDocument.h"
 #include "document/ImagePieceDocument.h"
@@ -52,6 +53,10 @@ BEGIN_EVENT_TABLE(DesignerFrame, wxFrame)
 	EVT_MENU(wxID_EXIT, DesignerFrame::OnExit)
 
 	EVT_MENU(IDM_ELEMENT_ADD_PIECE, DesignerFrame::OnAddPiece)
+	EVT_MENU(IDM_ELEMENT_ADD_BITMAP_STYLE, DesignerFrame::OnAddBitmapStyle)
+	EVT_MENU(IDM_ELEMENT_ADD_NINE_GRID_STYLE, DesignerFrame::OnAddNineGridStyle)
+	EVT_MENU(IDM_ELEMENT_ADD_COLOR_STYLE, DesignerFrame::OnAddColorStyle)
+	EVT_MENU(IDM_ELEMENT_ADD_CLIP_BITMAP_STYLE, DesignerFrame::OnAddClipBitmapStyle)
 
 	EVT_MENU(wxID_ZOOM_100, DesignerFrame::OnViewZoom100)
 	EVT_MENU(wxID_ZOOM_IN, DesignerFrame::OnViewZoomIn)
@@ -479,6 +484,26 @@ void DesignerFrame::OnAddPiece(wxCommandEvent& event)
 {
 	DialogAddPiece dialog(this);
 	dialog.ShowModal();
+}
+
+void DesignerFrame::OnAddBitmapStyle(wxCommandEvent& event)
+{
+	BitmapStyleDocument::GetInstance().
+}
+
+void DesignerFrame::OnAddNineGridStyle(wxCommandEvent& event)
+{
+	// TODO: 
+}
+
+void DesignerFrame::OnAddColorStyle(wxCommandEvent& event)
+{
+	// TODO: 
+}
+
+void DesignerFrame::OnAddClipBitmapStyle(wxCommandEvent& event)
+{
+	// TODO: 
 }
 
 void DesignerFrame::OnViewZoom100(wxCommandEvent& event)

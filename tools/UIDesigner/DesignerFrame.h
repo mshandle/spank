@@ -113,6 +113,10 @@ private:
 	bool IsModified() const;
 
 	void OnAddPiece(wxCommandEvent& event);
+	void OnAddBitmapStyle(wxCommandEvent& event);
+	void OnAddNineGridStyle(wxCommandEvent& event);
+	void OnAddColorStyle(wxCommandEvent& event);
+	void OnAddClipBitmapStyle(wxCommandEvent& event);
 
 	void OnViewZoom100(wxCommandEvent& event);
 	void OnViewZoomIn(wxCommandEvent& event);

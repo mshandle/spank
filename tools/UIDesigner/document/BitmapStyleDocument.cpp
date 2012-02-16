@@ -133,9 +133,43 @@ bool BitmapStyleDocument::SetStatePiece(const BitmapStyle* pBitmapStyle, const P
 	return pFoundBitmapStyle->SetStatePiece(pPieceInfo, eState);
 }
 
+const BitmapStyle* BitmapStyleDocument::AddBitmapStyle(const wxString& strId)
+{
+	if (strId.empty()) return NULL;
+	SetModifiedFlag();
+
+	wxString strNewId = GenerateNewBitmapStyleId(strId);
+	BitmapStyle* pNewBitmapStyle = new BitmapStyle();
+	pNewBitmapStyle->SetId(strNewId);
+	m_PieceInfoMap.insert(std::make_pair(pNewPieceInfo->GetId(), pNewPieceInfo));
+
+	// update view
+	if (bUpdateView)
+	{
+		GeneratePieceArrayString();
+
+		PieceListTransformer::GetInstance().UpdateListView();
+		PieceListTransformer::GetInstance().SetSelectedPieceInfo(pNewPieceInfo);
+	}
+	return pNewPieceInfo;
+}
+
 BitmapStyle* BitmapStyleDocument::InternalFindBitmapStyle(const wxString& strId)
 {
 	TM_BITMAP_STYLE::iterator itfound = m_BitmapStyleMap.find(strId);
 	if (itfound == m_BitmapStyleMap.end()) return NULL;
 	return itfound->second;
+}
+
+wxString BitmapStyleDocument::GenerateNewBitmapStyleId(const wxString& strId)
+{
+	wxString strNewId = strId;
+	int index = 0;
+
+	while (FindBitmapStyle(strNewId))
+	{
+		strNewId = wxString::Format("%s%d", strId, index++);
+	}
+
+	return strNewId;
 }
