@@ -27,6 +27,7 @@ public:
 	void SetPath(const wxString& strPath);
 	const wxString& GetPath() const;
 
+	void SetBitmap(wxBitmap* pBitmap);
 	const wxBitmap* GetBitmap();
 
 	void SetTreeItemId(const wxTreeItemId& itemId);

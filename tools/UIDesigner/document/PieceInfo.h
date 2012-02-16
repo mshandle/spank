@@ -25,7 +25,7 @@ public:
 	void SetId(const wxString& strId);
 	const wxString& GetId() const;
 
-	void SetImageInfo(ImageInfo* pImageInfo);
+	void SetImageInfo(const ImageInfo* pImageInfo);
 	const ImageInfo* GetImageInfo() const;
 
 	void SetRect(const wxRect& rect);

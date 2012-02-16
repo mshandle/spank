@@ -25,6 +25,7 @@
 #include "editor/NineGridStyleEditor.h"
 #include "editor/ColorStyleEditor.h"
 #include "editor/ClipBitmapStyleEditor.h"
+#include "dialog/DialogAddPiece.h"
 
 #include "images/disk.xpm"
 #include "images/document.xpm"
@@ -41,6 +42,8 @@ BEGIN_EVENT_TABLE(DesignerFrame, wxFrame)
 	EVT_MENU(wxID_SAVE, DesignerFrame::OnFileSave)
 	EVT_MENU(wxID_CLOSE, DesignerFrame::OnFileClose)
 	EVT_MENU(wxID_EXIT, DesignerFrame::OnExit)
+
+	EVT_MENU(IDM_ELEMENT_ADD_PIECE, DesignerFrame::OnAddPiece)
 
 	EVT_MENU(wxID_ZOOM_100, DesignerFrame::OnViewZoom100)
 	EVT_MENU(wxID_ZOOM_IN, DesignerFrame::OnViewZoomIn)
@@ -145,7 +148,6 @@ void DesignerFrame::CreateMenu()
 	pMenuItemFile->Append(wxID_EXIT, wxT("E&xit\tAlt+F4"), wxEmptyString, wxITEM_NORMAL);
 	pMenuBar->Append(pMenuItemFile, wxT("&File"));
 
-
 	// edit
 	wxMenu* pMenuItemEdit = new wxMenu();
 	pMenuItemEdit->Append(IDM_EDIT_UNDO, wxT("&Undo\tCtrl+Z"), wxEmptyString, wxITEM_NORMAL);
@@ -156,6 +158,15 @@ void DesignerFrame::CreateMenu()
 	pMenuItemEdit->Append(IDM_EDIT_PAST, wxT("&Past\tCtrl+V"), wxEmptyString, wxITEM_NORMAL);
 	pMenuItemEdit->Append(IDM_EDIT_DELETE, wxT("&Delete\tDel"), wxEmptyString, wxITEM_NORMAL);
 	pMenuBar->Append(pMenuItemEdit, wxT("&Edit"));
+
+	// elements
+	wxMenu* pMenuItemElement = new wxMenu();
+	pMenuItemElement->Append(IDM_ELEMENT_ADD_PIECE, wxT("Add &Piece"), wxEmptyString, wxITEM_NORMAL);
+	pMenuItemElement->Append(IDM_ELEMENT_ADD_BITMAP_STYLE, wxT("Add &Bitmap Style"), wxEmptyString, wxITEM_NORMAL);
+	pMenuItemElement->Append(IDM_ELEMENT_ADD_NINE_GRID_STYLE, wxT("Add 9-&Grid Style"), wxEmptyString, wxITEM_NORMAL);
+	pMenuItemElement->Append(IDM_ELEMENT_ADD_COLOR_STYLE, wxT("Add &Color Style"), wxEmptyString, wxITEM_NORMAL);
+	pMenuItemElement->Append(IDM_ELEMENT_ADD_CLIP_BITMAP_STYLE, wxT("Add C&lip Bitmap Style"), wxEmptyString, wxITEM_NORMAL);
+	pMenuBar->Append(pMenuItemElement, wxT("E&lement"));
 
 	// view
 	wxMenu* pMenuItemView = new wxMenu();
@@ -377,6 +388,7 @@ void DesignerFrame::OnFileOpen(wxCommandEvent& event)
 		wxString strPath = dialog.GetPath();
 		wxString strDir = dialog.GetDirectory();
 		ProjectDocument::GetInstance().OpenFile(strPath);
+		ProjectDocument::GetInstance().SetProjectDir(strDir);
 	}
 }
 
@@ -396,6 +408,12 @@ void DesignerFrame::OnFileClose(wxCommandEvent& event)
 void DesignerFrame::OnExit(wxCommandEvent& event)
 {
 	Destroy();
+}
+
+void DesignerFrame::OnAddPiece(wxCommandEvent& event)
+{
+	DialogAddPiece dialog(this);
+	dialog.ShowModal();
 }
 
 void DesignerFrame::OnViewZoom100(wxCommandEvent& event)

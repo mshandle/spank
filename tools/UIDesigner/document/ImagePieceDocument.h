@@ -11,6 +11,7 @@
 #include "DocumentBase.h"
 #include <wx/gdicmn.h>
 #include <map>
+#include <vector>
 #include "ImageInfo.h"
 #include "PieceInfo.h"
 
@@ -19,6 +20,7 @@ class ImagePieceDocument : public DocumentBase
 public:
 	typedef std::map<wxString, ImageInfo*> TM_IMAGE_INFO;
 	typedef std::map<wxString, PieceInfo*> TM_PIECE_INFO;
+	typedef std::vector<PieceInfo*> TV_PIECE_INFO;
 
 public:
 	virtual ~ImagePieceDocument();
@@ -33,6 +35,7 @@ public:
 	const ImageInfo* FindImageInfo(const wxString& strId);
 	const PieceInfo* FindPieceInfo(const wxString& strId);
 	const PieceInfo* FindPieceInfoUnderPoint(const wxPoint& pos, const ImageInfo* pImageInfo);
+	int EnumImagePieces(TV_PIECE_INFO& PieceOut, const ImageInfo* pImageInfo);
 
 	const TM_IMAGE_INFO& GetImageInfoMap();
 	const TM_PIECE_INFO& GetPieceInfoMap();
@@ -50,11 +53,18 @@ public:
 	bool RenameImageInfoId(const ImageInfo* pImageInfo, const wxString& strNewId);
 	bool RenamePieceInfoId(const PieceInfo* pPieceInfo, const wxString& strNewId);
 
-protected:
-	ImagePieceDocument();
+	bool SetImageBitmap(const ImageInfo* pImageInfo, wxBitmap* pNewBitmap);
+	bool SetPieceRect(const PieceInfo* pPieceInfo, const wxRect& rect);
+
+	bool AddPiece(const wxString& strId, const wxRect& rect, const ImageInfo* pImageInfo, bool bUpdateView = true);
 
 	void GenerateImageArrayString();
 	void GeneratePieceArrayString();
+
+protected:
+	ImagePieceDocument();
+
+	wxString GenerateNewPieceId(const wxString& strId);
 
 private:
 	TM_IMAGE_INFO m_ImageInfoMap;

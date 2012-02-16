@@ -67,7 +67,7 @@ const wxString& PieceInfo::GetId() const
 	return m_strId;
 }
 
-void PieceInfo::SetImageInfo(ImageInfo* pImageInfo)
+void PieceInfo::SetImageInfo(const ImageInfo* pImageInfo)
 {
 	m_pImageInfo = pImageInfo;
 }

@@ -8,6 +8,8 @@
 #include "ImageInfo.h"
 #include "ProjectDocument.h"
 
+#define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
+
 ImageInfo::ImageInfo()
 {
 	m_pbmpImage = NULL;
@@ -16,11 +18,7 @@ ImageInfo::ImageInfo()
 
 ImageInfo::~ImageInfo()
 {
-	if (m_pbmpImage)
-	{
-		delete m_pbmpImage;
-		m_pbmpImage = NULL;
-	}
+	SAFE_DELETE(m_pbmpImage);
 }
 
 bool ImageInfo::LoadFromXml(TiXmlElement* pElmImage)
@@ -62,6 +60,11 @@ const wxString& ImageInfo::GetPath() const
 	return m_strPath;
 }
 
+void ImageInfo::SetBitmap(wxBitmap* pBitmap)
+{
+	m_pbmpImage = pBitmap;
+}
+
 const wxBitmap* ImageInfo::GetBitmap()
 {
 	if (!m_pbmpImage && !m_bLoaded)
@@ -77,11 +80,12 @@ bool ImageInfo::LoadImageFromFile()
 {
 	if (m_pbmpImage) return false;
 
+	SAFE_DELETE(m_pbmpImage);
+
 	m_pbmpImage = new wxBitmap();
-	if (!m_pbmpImage->LoadFile(ProjectDocument::GetInstance().GetRootPath() + m_strPath, wxBITMAP_TYPE_ANY))
+	if (!m_pbmpImage->LoadFile(ProjectDocument::GetInstance().GetRootDir() + "/" + m_strPath, wxBITMAP_TYPE_ANY))
 	{
-		delete m_pbmpImage;
-		m_pbmpImage = NULL;
+		SAFE_DELETE(m_pbmpImage);
 		return false;
 	}
 

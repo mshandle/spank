@@ -28,6 +28,12 @@ public:
 		IDM_EDIT_PAST,
 		IDM_EDIT_DELETE,
 
+		IDM_ELEMENT_ADD_PIECE,
+		IDM_ELEMENT_ADD_BITMAP_STYLE,
+		IDM_ELEMENT_ADD_NINE_GRID_STYLE,
+		IDM_ELEMENT_ADD_COLOR_STYLE,
+		IDM_ELEMENT_ADD_CLIP_BITMAP_STYLE,
+
 		IDM_VIEW_GRID,
 		IDM_TOOL_PREFERENCES,
 		IDM_HELP_SUPPORT,
@@ -102,6 +108,8 @@ private:
 	void OnFileSave(wxCommandEvent& event);
 	void OnFileClose(wxCommandEvent& event);
 	void OnExit(wxCommandEvent& event);
+
+	void OnAddPiece(wxCommandEvent& event);
 
 	void OnViewZoom100(wxCommandEvent& event);
 	void OnViewZoomIn(wxCommandEvent& event);

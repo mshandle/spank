@@ -22,14 +22,19 @@ public:
 	virtual void Reset();
 	virtual const wxString& GetFilePath() const;
 
-	const wxString& GetRootPath() const;
+	const wxString& GetRootDir() const;
+	wxString GetRootPath() const;
+
+	void SetProjectDir(const wxString& strProjectDir);
+	const wxString& GetProjectDir() const;
 
 protected:
 	ProjectDocument();
 
 private:
-	wxString m_strRootPath;
-	wxString m_strFile;
+	wxString m_strRootDir;
+	wxString m_strProjectDir;
+	wxString m_strFilePath;
 
 };
 

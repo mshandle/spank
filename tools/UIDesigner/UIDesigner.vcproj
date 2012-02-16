@@ -397,6 +397,38 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="dialog"
+			>
+			<File
+				RelativePath=".\dialog\DialogAddPiece.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dialog\DialogAddPiece.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="utils"
+			>
+			<File
+				RelativePath=".\utils\FileUtil.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\utils\FileUtil.h"
+				>
+			</File>
+			<File
+				RelativePath=".\utils\RectangleBinPack.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\utils\RectangleBinPack.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\DesignerApp.cpp"
 			>

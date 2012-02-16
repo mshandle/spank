@@ -155,6 +155,22 @@ const PieceInfo* ImagePieceDocument::FindPieceInfoUnderPoint(const wxPoint& pos,
 	return NULL;
 }
 
+int ImagePieceDocument::EnumImagePieces(TV_PIECE_INFO& PieceOut, const ImageInfo* pImageInfo)
+{
+	int nFound = 0;
+	for (TM_PIECE_INFO::iterator it = m_PieceInfoMap.begin(); it != m_PieceInfoMap.end(); ++it)
+	{
+		PieceInfo* pPieceInfo = it->second;
+		if (pPieceInfo->GetImageInfo() == pImageInfo)
+		{
+			PieceOut.push_back(pPieceInfo);
+			nFound++;
+		}
+	}
+
+	return nFound;
+}
+
 const ImagePieceDocument::TM_IMAGE_INFO& ImagePieceDocument::GetImageInfoMap()
 {
 	return m_ImageInfoMap;
@@ -287,4 +303,69 @@ bool ImagePieceDocument::RenamePieceInfoId(const PieceInfo* pPieceInfo, const wx
 	PieceListTransformer::GetInstance().UpdateListView();
 	PieceListTransformer::GetInstance().SetSelectedPieceInfo(pFoundPieceInfo);
 	return true;
+}
+
+bool ImagePieceDocument::SetImageBitmap(const ImageInfo* pImageInfo, wxBitmap* pNewBitmap)
+{
+	if (!pImageInfo) return false;
+
+	TM_IMAGE_INFO::iterator itfound = m_ImageInfoMap.find(pImageInfo->GetId());
+	if (itfound == m_ImageInfoMap.end()) return false;
+
+	ImageInfo* pFoundImageInfo = itfound->second;
+
+	pFoundImageInfo->SetBitmap(pNewBitmap);
+
+	// TODO: update view
+	return true;
+}
+
+bool ImagePieceDocument::SetPieceRect(const PieceInfo* pPieceInfo, const wxRect& rect)
+{
+	if (!pPieceInfo) return false;
+
+	TM_PIECE_INFO::iterator itfound = m_PieceInfoMap.find(pPieceInfo->GetId());
+	if (itfound == m_PieceInfoMap.end()) return false;
+
+	PieceInfo* pFoundPieceInfo = itfound->second;
+	pFoundPieceInfo->SetRect(rect);
+
+	// TODO: update view
+	return true;
+}
+
+bool ImagePieceDocument::AddPiece(const wxString& strId, const wxRect& rect, const ImageInfo* pImageInfo, bool bUpdateView /* = true */)
+{
+	if (!pImageInfo) return false;
+	if (rect.width <= 0 || rect.height <= 0) return false;
+
+	wxString strNewId = GenerateNewPieceId(strId);
+	PieceInfo* pNewPieceInfo = new PieceInfo();
+	pNewPieceInfo->SetId(strNewId);
+	pNewPieceInfo->SetRect(rect);
+	pNewPieceInfo->SetImageInfo(pImageInfo);
+	m_PieceInfoMap.insert(std::make_pair(pNewPieceInfo->GetId(), pNewPieceInfo));
+
+	// update view
+	if (bUpdateView)
+	{
+		GeneratePieceArrayString();
+
+		PieceListTransformer::GetInstance().UpdateListView();
+		PieceListTransformer::GetInstance().SetSelectedPieceInfo(pNewPieceInfo);
+	}
+	return true;
+}
+
+wxString ImagePieceDocument::GenerateNewPieceId(const wxString& strId)
+{
+	wxString strNewId = strId;
+	int index = 0;
+
+	while (FindPieceInfo(strNewId))
+	{
+		strNewId = wxString::Format("%s%d", strId, index++);
+	}
+
+	return strNewId;
 }
