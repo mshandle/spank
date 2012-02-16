@@ -55,41 +55,66 @@ bool ProjectDocument::OpenFile(const wxString& strFile)
 
 	TiXmlElement* pElmImagePiece = pElmUdProject->FirstChildElement("image_piece");
 	if (!pElmImagePiece) return false;
-	ImagePieceDocument::GetInstance().OpenFile(m_strRootDir + "/" + pElmImagePiece->Attribute("path"));
+	ImagePieceDocument::GetInstance().OpenFile(m_strProjectDir + "/" + pElmImagePiece->Attribute("path"));
 
 	TiXmlElement* pElmBitmapStyle = pElmUdProject->FirstChildElement("bitmap_style");
 	if (!pElmBitmapStyle) return false;
-	BitmapStyleDocument::GetInstance().OpenFile(m_strRootDir + "/" + pElmBitmapStyle->Attribute("path"));
+	BitmapStyleDocument::GetInstance().OpenFile(m_strProjectDir + "/" + pElmBitmapStyle->Attribute("path"));
 
 	TiXmlElement* pElmNineGridStyle = pElmUdProject->FirstChildElement("nine_grid_style");
 	if (!pElmNineGridStyle) return false;
-	NineGridStyleDocument::GetInstance().OpenFile(m_strRootDir + "/" + pElmNineGridStyle->Attribute("path"));
+	NineGridStyleDocument::GetInstance().OpenFile(m_strProjectDir + "/" + pElmNineGridStyle->Attribute("path"));
 
 	TiXmlElement* pElmColorStyle = pElmUdProject->FirstChildElement("color_style");
 	if (!pElmColorStyle) return false;
-	ColorStyleDocument::GetInstance().OpenFile(m_strRootDir + "/" + pElmColorStyle->Attribute("path"));
+	ColorStyleDocument::GetInstance().OpenFile(m_strProjectDir + "/" + pElmColorStyle->Attribute("path"));
 
 	TiXmlElement* pElmClipBitmapStyle = pElmUdProject->FirstChildElement("clip_bitmap_style");
 	if (!pElmClipBitmapStyle) return false;
-	ClipBitmapStyleDocument::GetInstance().OpenFile(m_strRootDir + "/" + pElmClipBitmapStyle->Attribute("path"));
+	ClipBitmapStyleDocument::GetInstance().OpenFile(m_strProjectDir + "/" + pElmClipBitmapStyle->Attribute("path"));
 
 	return true;
 }
 
 bool ProjectDocument::SaveFile(const wxString& strFile)
 {
-	ImagePieceDocument::GetInstance().SaveFile(ImagePieceDocument::GetInstance().GetFilePath());
-	BitmapStyleDocument::GetInstance().SaveFile(BitmapStyleDocument::GetInstance().GetFilePath());
-	NineGridStyleDocument::GetInstance().SaveFile(NineGridStyleDocument::GetInstance().GetFilePath());
-	ColorStyleDocument::GetInstance().SaveFile(ColorStyleDocument::GetInstance().GetFilePath());
-	ClipBitmapStyleDocument::GetInstance().SaveFile(ClipBitmapStyleDocument::GetInstance().GetFilePath());
+	if (!isModified()) return true;
+	ClearModifiedFlag();
 
-	return true;
+	TiXmlDocument doc;
+	TiXmlDeclaration* pDecl = new TiXmlDeclaration("1.0", "utf-8", "yes");
+	doc.LinkEndChild(pDecl);
+
+	TiXmlElement* pElmUdProject = new TiXmlElement("ud_project");
+	doc.LinkEndChild(pElmUdProject);
+	pElmUdProject->SetAttribute("root_dir", m_strRootDir);
+
+	TiXmlElement* pElmImagePiece = new TiXmlElement("image_piece");
+	pElmUdProject->LinkEndChild(pElmImagePiece);
+	pElmImagePiece->SetAttribute("path", FileUtil::RemoveRootDir(ImagePieceDocument::GetInstance().GetFilePath(), m_strProjectDir + "/"));
+
+	TiXmlElement* pElmBitmapStyle = pElmUdProject->FirstChildElement("bitmap_style");
+	pElmUdProject->LinkEndChild(pElmBitmapStyle);
+	pElmBitmapStyle->SetAttribute("path", FileUtil::RemoveRootDir(BitmapStyleDocument::GetInstance().GetFilePath(), m_strProjectDir + "/"));
+
+	TiXmlElement* pElmNineGridStyle = pElmUdProject->FirstChildElement("nine_grid_style");
+	pElmUdProject->LinkEndChild(pElmNineGridStyle);
+	pElmNineGridStyle->SetAttribute("path", FileUtil::RemoveRootDir(NineGridStyleDocument::GetInstance().GetFilePath(), m_strProjectDir + "/"));
+
+	TiXmlElement* pElmColorStyle = pElmUdProject->FirstChildElement("color_style");
+	pElmUdProject->LinkEndChild(pElmColorStyle);
+	pElmColorStyle->SetAttribute("path", FileUtil::RemoveRootDir(ColorStyleDocument::GetInstance().GetFilePath(), m_strProjectDir + "/"));
+
+	TiXmlElement* pElmClipBitmapStyle = pElmUdProject->FirstChildElement("clip_bitmap_style");
+	pElmUdProject->LinkEndChild(pElmClipBitmapStyle);
+	pElmClipBitmapStyle->SetAttribute("path", FileUtil::RemoveRootDir(ClipBitmapStyleDocument::GetInstance().GetFilePath(), m_strProjectDir + "/"));
+
+	return doc.SaveFile(strFile);
 }
 
 void ProjectDocument::Reset()
 {
-	// TODO: 
+	ClearModifiedFlag();
 }
 
 const wxString& ProjectDocument::GetFilePath() const

@@ -53,6 +53,9 @@ bool NineGridStyleDocument::OpenFile(const wxString& strFile)
 
 bool NineGridStyleDocument::SaveFile(const wxString& strFile)
 {
+	if (!isModified()) return true;
+	ClearModifiedFlag();
+
 	TiXmlDocument doc;
 	TiXmlDeclaration* pDecl = new TiXmlDeclaration("1.0", "utf-8", "yes");
 	doc.LinkEndChild(pDecl);
@@ -78,6 +81,7 @@ void NineGridStyleDocument::Reset()
 		delete pNineGridStyle;
 	}
 	m_NineGridStyleMap.clear();
+	ClearModifiedFlag();
 }
 
 const wxString& NineGridStyleDocument::GetFilePath() const
@@ -105,6 +109,7 @@ bool NineGridStyleDocument::RenameNineGridStyleId(const NineGridStyle* pNineGrid
 
 	TM_NINE_GRID_STYLE::iterator itfound = m_NineGridStyleMap.find(strOldId);
 	if (itfound == m_NineGridStyleMap.end()) return false;
+	SetModifiedFlag();
 
 	NineGridStyle* pFoundNineGridStyle = itfound->second;
 	m_NineGridStyleMap.erase(itfound);
@@ -123,6 +128,7 @@ bool NineGridStyleDocument::SetStatePiece(const NineGridStyle* pNineGridStyle, c
 
 	NineGridStyle* pFoundNineGridStyle = InternalFindNineGridStyle(pNineGridStyle->GetId());
 	if (!pFoundNineGridStyle) return false;
+	SetModifiedFlag();
 
 	return pFoundNineGridStyle->SetStatePiece(pPieceInfo, eState);
 }
@@ -133,6 +139,7 @@ bool NineGridStyleDocument::SetStateMinX(const NineGridStyle* pNineGridStyle, in
 
 	NineGridStyle* pFoundNineGridStyle = InternalFindNineGridStyle(pNineGridStyle->GetId());
 	if (!pFoundNineGridStyle) return false;
+	SetModifiedFlag();
 
 	return pFoundNineGridStyle->SetStateMinX(value, eState);
 }
@@ -143,6 +150,7 @@ bool NineGridStyleDocument::SetStateMinY(const NineGridStyle* pNineGridStyle, in
 
 	NineGridStyle* pFoundNineGridStyle = InternalFindNineGridStyle(pNineGridStyle->GetId());
 	if (!pFoundNineGridStyle) return false;
+	SetModifiedFlag();
 
 	return pFoundNineGridStyle->SetStateMinY(value, eState);
 }
@@ -153,6 +161,7 @@ bool NineGridStyleDocument::SetStateMaxX(const NineGridStyle* pNineGridStyle, in
 
 	NineGridStyle* pFoundNineGridStyle = InternalFindNineGridStyle(pNineGridStyle->GetId());
 	if (!pFoundNineGridStyle) return false;
+	SetModifiedFlag();
 
 	return pFoundNineGridStyle->SetStateMaxX(value, eState);
 }
@@ -163,6 +172,7 @@ bool NineGridStyleDocument::SetStateMaxY(const NineGridStyle* pNineGridStyle, in
 
 	NineGridStyle* pFoundNineGridStyle = InternalFindNineGridStyle(pNineGridStyle->GetId());
 	if (!pFoundNineGridStyle) return false;
+	SetModifiedFlag();
 
 	return pFoundNineGridStyle->SetStateMaxY(value, eState);
 }

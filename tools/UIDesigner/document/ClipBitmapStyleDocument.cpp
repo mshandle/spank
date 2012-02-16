@@ -53,6 +53,9 @@ bool ClipBitmapStyleDocument::OpenFile(const wxString& strFile)
 
 bool ClipBitmapStyleDocument::SaveFile(const wxString& strFile)
 {
+	if (!isModified()) return true;
+	ClearModifiedFlag();
+
 	TiXmlDocument doc;
 	TiXmlDeclaration* pDecl = new TiXmlDeclaration("1.0", "utf-8", "yes");
 	doc.LinkEndChild(pDecl);
@@ -78,6 +81,7 @@ void ClipBitmapStyleDocument::Reset()
 		delete pClipBitmapStyle;
 	}
 	m_ClipBitmapStyleMap.clear();
+	ClearModifiedFlag();
 }
 
 const wxString& ClipBitmapStyleDocument::GetFilePath() const
@@ -105,6 +109,7 @@ bool ClipBitmapStyleDocument::RenameClipBitmapStyleId(const ClipBitmapStyle* pCl
 
 	TM_CLIP_BITMAP_STYLE::iterator itfound = m_ClipBitmapStyleMap.find(strOldId);
 	if (itfound == m_ClipBitmapStyleMap.end()) return false;
+	SetModifiedFlag();
 
 	ClipBitmapStyle* pFoundClipBitmapStyle = itfound->second;
 	m_ClipBitmapStyleMap.erase(itfound);
@@ -123,6 +128,7 @@ bool ClipBitmapStyleDocument::SetStatePiece(const ClipBitmapStyle* pClipBitmapSt
 
 	ClipBitmapStyle* pFoundClipBitmapStyle = InternalFindClipBitmapStyle(pClipBitmapStyle->GetId());
 	if (!pFoundClipBitmapStyle) return false;
+	SetModifiedFlag();
 
 	return pFoundClipBitmapStyle->SetStatePiece(pPieceInfo, eState);
 }

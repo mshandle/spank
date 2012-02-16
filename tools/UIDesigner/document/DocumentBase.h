@@ -23,7 +23,7 @@ public:
 
 	void SetModifiedFlag();
 	void ClearModifiedFlag();
-	bool isModified() const;
+	virtual bool isModified() const;
 
 private:
 	bool m_bModifiedFlag;

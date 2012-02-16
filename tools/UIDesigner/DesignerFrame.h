@@ -105,9 +105,12 @@ private:
 	void CreateOutputView();
 
 	void OnFileOpen(wxCommandEvent& event);
+	void DoOpenFile();
 	void OnFileSave(wxCommandEvent& event);
-	void OnFileClose(wxCommandEvent& event);
+	void DoSaveFile();
 	void OnExit(wxCommandEvent& event);
+	void OnClose(wxCloseEvent& event);
+	bool IsModified() const;
 
 	void OnAddPiece(wxCommandEvent& event);
 

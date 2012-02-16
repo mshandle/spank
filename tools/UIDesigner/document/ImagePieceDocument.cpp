@@ -65,6 +65,9 @@ bool ImagePieceDocument::OpenFile(const wxString& strFile)
 
 bool ImagePieceDocument::SaveFile(const wxString& strFile)
 {
+	if (!isModified()) return true;
+	ClearModifiedFlag();
+
 	TiXmlDocument doc;
 	TiXmlDeclaration* pDecl = new TiXmlDeclaration("1.0", "utf-8", "yes");
 	doc.LinkEndChild(pDecl);
@@ -114,6 +117,7 @@ void ImagePieceDocument::Reset()
 
 	m_PieceIds.Clear();
 	m_PieceIdsIndex.Clear();
+	ClearModifiedFlag();
 }
 
 const wxString& ImagePieceDocument::GetFilePath() const
@@ -268,6 +272,7 @@ bool ImagePieceDocument::RenameImageInfoId(const ImageInfo* pImageInfo, const wx
 
 	TM_IMAGE_INFO::iterator itfound = m_ImageInfoMap.find(strOldId);
 	if (itfound == m_ImageInfoMap.end()) return false;
+	SetModifiedFlag();
 
 	ImageInfo* pFoundImageInfo = itfound->second;
 	m_ImageInfoMap.erase(itfound);
@@ -292,6 +297,7 @@ bool ImagePieceDocument::RenamePieceInfoId(const PieceInfo* pPieceInfo, const wx
 
 	TM_PIECE_INFO::iterator itfound = m_PieceInfoMap.find(strOldId);
 	if (itfound == m_PieceInfoMap.end()) return false;
+	SetModifiedFlag();
 
 	PieceInfo* pFoundPieceInfo = itfound->second;
 	m_PieceInfoMap.erase(itfound);
@@ -312,6 +318,7 @@ bool ImagePieceDocument::SetImageBitmap(const ImageInfo* pImageInfo, wxBitmap* p
 
 	TM_IMAGE_INFO::iterator itfound = m_ImageInfoMap.find(pImageInfo->GetId());
 	if (itfound == m_ImageInfoMap.end()) return false;
+	SetModifiedFlag();
 
 	ImageInfo* pFoundImageInfo = itfound->second;
 
@@ -327,6 +334,7 @@ bool ImagePieceDocument::SetPieceRect(const PieceInfo* pPieceInfo, const wxRect&
 
 	TM_PIECE_INFO::iterator itfound = m_PieceInfoMap.find(pPieceInfo->GetId());
 	if (itfound == m_PieceInfoMap.end()) return false;
+	SetModifiedFlag();
 
 	PieceInfo* pFoundPieceInfo = itfound->second;
 	pFoundPieceInfo->SetRect(rect);
@@ -338,6 +346,7 @@ bool ImagePieceDocument::SetPieceRect(const PieceInfo* pPieceInfo, const wxRect&
 const ImageInfo* ImagePieceDocument::AddImage(const wxString& strImageId, const wxString& strPath, wxBitmap* pImageBitmap)
 {
 	if (!pImageBitmap) return NULL;
+	SetModifiedFlag();
 
 	wxString strNewId = GenerateNewImageId(strImageId);
 	ImageInfo* pImageInfo = new ImageInfo();
@@ -359,6 +368,7 @@ const PieceInfo* ImagePieceDocument::AddPiece(const wxString& strId, const wxRec
 {
 	if (!pImageInfo) return NULL;
 	if (rect.width <= 0 || rect.height <= 0) return NULL;
+	SetModifiedFlag();
 
 	wxString strNewId = GenerateNewPieceId(strId);
 	PieceInfo* pNewPieceInfo = new PieceInfo();

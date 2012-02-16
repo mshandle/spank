@@ -53,6 +53,9 @@ bool ColorStyleDocument::OpenFile(const wxString& strFile)
 
 bool ColorStyleDocument::SaveFile(const wxString& strFile)
 {
+	if (!isModified()) return true;
+	ClearModifiedFlag();
+
 	TiXmlDocument doc;
 	TiXmlDeclaration* pDecl = new TiXmlDeclaration("1.0", "utf-8", "yes");
 	doc.LinkEndChild(pDecl);
@@ -78,6 +81,7 @@ void ColorStyleDocument::Reset()
 		delete pColorStyle;
 	}
 	m_ColorStyleMap.clear();
+	ClearModifiedFlag();
 }
 
 const wxString& ColorStyleDocument::GetFilePath() const
@@ -105,6 +109,7 @@ bool ColorStyleDocument::RenameColorStyleId(const ColorStyle* pColorStyle, const
 
 	TM_COLOR_STYLE::iterator itfound = m_ColorStyleMap.find(strOldId);
 	if (itfound == m_ColorStyleMap.end()) return false;
+	SetModifiedFlag();
 
 	ColorStyle* pFoundColorStyle = itfound->second;
 	m_ColorStyleMap.erase(itfound);
@@ -123,6 +128,7 @@ bool ColorStyleDocument::SetStateColor(const ColorStyle* pColorStyle, const wxCo
 
 	ColorStyle* pFoundColorStyle = InternalFindColorStyle(pColorStyle->GetId());
 	if (!pFoundColorStyle) return false;
+	SetModifiedFlag();
 
 	return pFoundColorStyle->SetStateColor(color.GetRGB(), eState);
 }

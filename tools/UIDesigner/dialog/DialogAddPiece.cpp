@@ -179,7 +179,7 @@ void DialogAddPiece::OnBtnAddPieceClicked(wxCommandEvent& event)
 {
 	wxFileDialog dialog(this,
 		wxT("Choose a file"),
-		ProjectDocument::GetInstance().GetProjectDir() + "/" + ProjectDocument::GetInstance().GetRootDir(),
+		ProjectDocument::GetInstance().GetRootPath(),
 		wxEmptyString,
 		wxT("Image files (*.png;*.jpg)|*.png;*.jpg"),
 		wxFD_OPEN|wxFD_MULTIPLE);
@@ -266,7 +266,7 @@ void DialogAddPiece::OnOkClicked(wxCommandEvent& event)
 	{
 		wxFileDialog dialog(this,
 			wxT("Save to file"),
-			ProjectDocument::GetInstance().GetProjectDir() + "/" + ProjectDocument::GetInstance().GetRootDir(),
+			ProjectDocument::GetInstance().GetRootPath(),
 			wxT("Untitled.png"),
 			wxT("Image files (*.png)|*.png"),
 			wxFD_SAVE);
@@ -457,8 +457,7 @@ bool DialogAddPiece::AddPieceIntoNewImage(const wxSize& newSize)
 	// apply new image and piece info to documents
 	wxString strImageId = FileUtil::GetFileName(strPath);
 	FileUtil::FormatId(strImageId);
-	wxString strRootDir = ProjectDocument::GetInstance().GetProjectDir() + "/" + ProjectDocument::GetInstance().GetRootDir() + "/";
-	wxString strRelativePath = FileUtil::RemoveRootDir(strPath, strRootDir);
+	wxString strRelativePath = FileUtil::RemoveRootDir(strPath, ProjectDocument::GetInstance().GetRootPath() + "/");
 	const ImageInfo* pImageInfo = ImagePieceDocument::GetInstance().AddImage(strImageId, strRelativePath, pNewBitmap);
 
 	for (TV_PACKING_PIECE_INFO::iterator it = vPackingInfo.begin(); it != vPackingInfo.end(); ++it)

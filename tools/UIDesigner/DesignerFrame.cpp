@@ -14,17 +14,24 @@
 
 #include "document/ProjectDocument.h"
 #include "document/ImagePieceDocument.h"
+#include "document/BitmapStyleDocument.h"
+#include "document/NineGridStyleDocument.h"
+#include "document/ColorStyleDocument.h"
+#include "document/ClipBitmapStyleDocument.h"
+
 #include "transformer/ImageListTransformer.h"
 #include "transformer/PieceListTransformer.h"
 #include "transformer/BitmapStyleTransformer.h"
 #include "transformer/NineGridStyleTransformer.h"
 #include "transformer/ColorStyleTransformer.h"
 #include "transformer/ClipBitmapStyleTransformer.h"
+
 #include "editor/ImagePieceEditor.h"
 #include "editor/BitmapStyleEditor.h"
 #include "editor/NineGridStyleEditor.h"
 #include "editor/ColorStyleEditor.h"
 #include "editor/ClipBitmapStyleEditor.h"
+
 #include "dialog/DialogAddPiece.h"
 
 #include "images/disk.xpm"
@@ -38,9 +45,10 @@
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
 BEGIN_EVENT_TABLE(DesignerFrame, wxFrame)
+	EVT_CLOSE(DesignerFrame::OnClose)
+
 	EVT_MENU(wxID_OPEN, DesignerFrame::OnFileOpen)
 	EVT_MENU(wxID_SAVE, DesignerFrame::OnFileSave)
-	EVT_MENU(wxID_CLOSE, DesignerFrame::OnFileClose)
 	EVT_MENU(wxID_EXIT, DesignerFrame::OnExit)
 
 	EVT_MENU(IDM_ELEMENT_ADD_PIECE, DesignerFrame::OnAddPiece)
@@ -132,10 +140,6 @@ void DesignerFrame::CreateMenu()
 		menuItem->SetBitmap(bitmap);
 		pMenuItemFile->Append(menuItem);
 	}
-	pMenuItemFile->AppendSeparator();
-	pMenuItemFile->Append(wxID_CLOSE, wxT("&Close"), wxEmptyString, wxITEM_NORMAL);
-
-	pMenuItemFile->AppendSeparator();
 	{
 		wxMenuItem* menuItem = new wxMenuItem(pMenuItemFile, wxID_SAVE, wxT("&Save\tCtrl+S"), wxEmptyString, wxITEM_NORMAL);
 		wxBitmap bitmap(disk_xpm, wxBITMAP_TYPE_XPM);
@@ -212,11 +216,11 @@ void DesignerFrame::CreateToolbar()
 {
 	wxAuiToolBar* pAuiToolBar = new wxAuiToolBar(this, IDC_TOOLBAR, wxDefaultPosition, wxDefaultSize, 0);
 
-	{
-		wxBitmap bitmap(document_plus_xpm, wxBITMAP_TYPE_XPM);
-		wxBitmap bitmapDisabled;
-		pAuiToolBar->AddTool(wxID_NEW, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxEmptyString, wxEmptyString, NULL);
-	}
+// 	{
+// 		wxBitmap bitmap(document_plus_xpm, wxBITMAP_TYPE_XPM);
+// 		wxBitmap bitmapDisabled;
+// 		pAuiToolBar->AddTool(wxID_NEW, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxEmptyString, wxEmptyString, NULL);
+// 	}
 
 	{
 		wxBitmap bitmap(folder_horizontal_open_xpm, wxBITMAP_TYPE_XPM);
@@ -382,32 +386,93 @@ void DesignerFrame::CreateOutputView()
 
 void DesignerFrame::OnFileOpen(wxCommandEvent& event)
 {
+	if (IsModified())
+	{
+		wxMessageDialog dialog(this, wxT("Save Project ?"), wxT("Do you want to save the Project ?"), wxYES_NO|wxCANCEL);
+		switch (dialog .ShowModal())
+		{
+		case wxID_YES:
+			DoSaveFile();
+			break;
+		case wxID_NO:
+			DoOpenFile();
+			break;
+		case wxID_CANCEL:
+			break;
+		}
+	}
+	else
+	{
+		DoOpenFile();
+	}
+}
+
+void DesignerFrame::DoOpenFile()
+{
 	wxFileDialog dialog(this, wxT("Choose a file"), wxEmptyString, wxEmptyString, wxT("Project files (*.udproj)|*.udproj"), wxFD_DEFAULT_STYLE);
 	if (dialog .ShowModal() == wxID_OK)
 	{
 		wxString strPath = dialog.GetPath();
 		wxString strDir = dialog.GetDirectory();
-		ProjectDocument::GetInstance().OpenFile(strPath);
 		ProjectDocument::GetInstance().SetProjectDir(strDir);
+		ProjectDocument::GetInstance().OpenFile(strPath);
 	}
 }
 
 void DesignerFrame::OnFileSave(wxCommandEvent& event)
 {
-	if (!ProjectDocument::GetInstance().GetFilePath().IsEmpty())
-	{
-		ProjectDocument::GetInstance().SaveFile(ProjectDocument::GetInstance().GetFilePath());
-	}
+	DoSaveFile();
 }
 
-void DesignerFrame::OnFileClose(wxCommandEvent& event)
+void DesignerFrame::DoSaveFile()
 {
-	// TODO: 
+	ProjectDocument::GetInstance().SaveFile(ProjectDocument::GetInstance().GetFilePath());
+	ImagePieceDocument::GetInstance().SaveFile(ImagePieceDocument::GetInstance().GetFilePath());
+	BitmapStyleDocument::GetInstance().SaveFile(BitmapStyleDocument::GetInstance().GetFilePath());
+	NineGridStyleDocument::GetInstance().SaveFile(NineGridStyleDocument::GetInstance().GetFilePath());
+	ColorStyleDocument::GetInstance().SaveFile(ColorStyleDocument::GetInstance().GetFilePath());
+	ClipBitmapStyleDocument::GetInstance().SaveFile(ClipBitmapStyleDocument::GetInstance().GetFilePath());
 }
 
 void DesignerFrame::OnExit(wxCommandEvent& event)
 {
-	Destroy();
+	Close();
+}
+
+void DesignerFrame::OnClose(wxCloseEvent& event)
+{
+	if (IsModified())
+	{
+		wxMessageDialog dialog(this, wxT("Save Project ?"), wxT("Do you want to save the Project ?"), wxYES_NO|wxCANCEL);
+		switch (dialog .ShowModal())
+		{
+		case wxID_YES:
+			DoSaveFile();
+			event.Skip();
+			break;
+		case wxID_NO:
+			event.Skip();
+			break;
+		case wxID_CANCEL:
+			break;
+		}
+	}
+	else
+	{
+		event.Skip();
+	}
+}
+
+bool DesignerFrame::IsModified() const
+{
+	if (ProjectDocument::GetInstance().isModified()) return true;
+	if (ImagePieceDocument::GetInstance().isModified()) return true;
+	if (BitmapStyleDocument::GetInstance().isModified()) return true;
+	if (NineGridStyleDocument::GetInstance().isModified()) return true;
+	if (ColorStyleDocument::GetInstance().isModified()) return true;
+	if (ClipBitmapStyleDocument::GetInstance().isModified()) return true;
+
+	return false;
 }
 
 void DesignerFrame::OnAddPiece(wxCommandEvent& event)
