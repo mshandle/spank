@@ -92,7 +92,7 @@ void NineGridStyleEditor::DrawSelection(wxDC& dc)
 	wxSize maxSize = CalculateMaxSize();
 	const NineGridStyle::NINE_GRID_INFO* pGridInfo = m_pNineGridStyle->GetStateGridInfo(m_eSelState);
 
-	dc.SetPen(*wxBLUE_PEN);
+	dc.SetPen(*wxGREEN_PEN);
 	if (pGridInfo->min_y != pGridInfo->max_y)
 	{
 		DrawLine(dc, wxPoint(0, rect.y+pGridInfo->min_y), wxPoint(maxSize.x, rect.y+pGridInfo->min_y));

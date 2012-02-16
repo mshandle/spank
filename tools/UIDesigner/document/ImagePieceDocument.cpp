@@ -78,6 +78,7 @@ bool ImagePieceDocument::SaveFile(const wxString& strFile)
 	{
 		ImageInfo* pImageInfo = it->second;
 		pImageInfo->SaveToXml(pElmImageList);
+		pImageInfo->SaveImage();
 	}
 
 	TiXmlElement* pElmPieceList = new TiXmlElement("PieceList");
@@ -334,10 +335,30 @@ bool ImagePieceDocument::SetPieceRect(const PieceInfo* pPieceInfo, const wxRect&
 	return true;
 }
 
-bool ImagePieceDocument::AddPiece(const wxString& strId, const wxRect& rect, const ImageInfo* pImageInfo, bool bUpdateView /* = true */)
+const ImageInfo* ImagePieceDocument::AddImage(const wxString& strImageId, const wxString& strPath, wxBitmap* pImageBitmap)
 {
-	if (!pImageInfo) return false;
-	if (rect.width <= 0 || rect.height <= 0) return false;
+	if (!pImageBitmap) return NULL;
+
+	wxString strNewId = GenerateNewImageId(strImageId);
+	ImageInfo* pImageInfo = new ImageInfo();
+	pImageInfo->SetId(strNewId);
+	pImageInfo->SetBitmap(pImageBitmap);
+	pImageInfo->SetPath(strPath);
+	m_ImageInfoMap.insert(std::make_pair(pImageInfo->GetId(), pImageInfo));
+
+	// update view
+	GenerateImageArrayString();
+
+	ImageListTransformer::GetInstance().UpdateListView();
+	ImageListTransformer::GetInstance().SetSelectedImageInfo(pImageInfo);
+
+	return pImageInfo;
+}
+
+const PieceInfo* ImagePieceDocument::AddPiece(const wxString& strId, const wxRect& rect, const ImageInfo* pImageInfo, bool bUpdateView /* = true */)
+{
+	if (!pImageInfo) return NULL;
+	if (rect.width <= 0 || rect.height <= 0) return NULL;
 
 	wxString strNewId = GenerateNewPieceId(strId);
 	PieceInfo* pNewPieceInfo = new PieceInfo();
@@ -354,7 +375,20 @@ bool ImagePieceDocument::AddPiece(const wxString& strId, const wxRect& rect, con
 		PieceListTransformer::GetInstance().UpdateListView();
 		PieceListTransformer::GetInstance().SetSelectedPieceInfo(pNewPieceInfo);
 	}
-	return true;
+	return pNewPieceInfo;
+}
+
+wxString ImagePieceDocument::GenerateNewImageId(const wxString& strId)
+{
+	wxString strNewId = strId;
+	int index = 0;
+
+	while (FindImageInfo(strNewId))
+	{
+		strNewId = wxString::Format("%s%d", strId, index++);
+	}
+
+	return strNewId;
 }
 
 wxString ImagePieceDocument::GenerateNewPieceId(const wxString& strId)

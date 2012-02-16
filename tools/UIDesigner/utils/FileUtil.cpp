@@ -46,6 +46,26 @@ wxString FileUtil::GetFileName(const wxString& strPath)
 	return strPath.SubString(nStartPos+1, nEndPos-1);
 }
 
+wxString FileUtil::RemoveRootDir(const wxString& strPath, const wxString& strRootDir)
+{
+	int nMinLen = strRootDir.length();
+	if (nMinLen > (int)strPath.length()) nMinLen = strPath.length();
+
+	wxString strPathFormated = strPath.Lower();
+	strPathFormated.Replace("\\", "/");
+
+	wxString strRootDirFormated = strRootDir.Lower();
+	strRootDirFormated.Replace("\\", "/");
+
+	int nEndPos = 0;
+	for (; nEndPos < nMinLen; ++nEndPos)
+	{
+		if (strPathFormated[nEndPos] != strRootDirFormated[nEndPos]) break;
+	}
+
+	return strPath.SubString(nEndPos, strPath.length());
+}
+
 void FileUtil::FormatId(wxString& strId)
 {
 	strId = strId.Lower();

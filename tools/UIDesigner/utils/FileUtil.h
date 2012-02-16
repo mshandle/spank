@@ -15,6 +15,7 @@ class FileUtil
 public:
 	static void FormatDir(wxString& strDirInOut);
 	static wxString GetFileName(const wxString& strPath);
+	static wxString RemoveRootDir(const wxString& strPath, const wxString& strRootDir);
 	static void FormatId(wxString& strId);
 };
 #endif // __FILEUTIL_H__

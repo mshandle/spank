@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ud_project root_dir="ui/" >
+<ud_project root_dir="ui" >
 	<image_piece path="main_ui/MainImagePieceList.xml" />
 	<bitmap_style path="main_ui/MainBitmapStyleList.xml" />
 	<nine_grid_style path="main_ui/MainNineGridStyleList.xml" />

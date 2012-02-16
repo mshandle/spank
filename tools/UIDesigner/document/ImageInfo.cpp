@@ -14,6 +14,7 @@ ImageInfo::ImageInfo()
 {
 	m_pbmpImage = NULL;
 	m_bLoaded = false;
+	m_bIsModified = false;
 }
 
 ImageInfo::~ImageInfo()
@@ -40,6 +41,15 @@ bool ImageInfo::SaveToXml(TiXmlElement* pElmImageList)
 	return true;
 }
 
+bool ImageInfo::SaveImage()
+{
+	if (!m_bIsModified) return true;
+	m_bIsModified = false;
+	if (!m_pbmpImage) return true;
+
+	return m_pbmpImage->SaveFile(ProjectDocument::GetInstance().GetRootDir() + "/" + m_strPath, wxBITMAP_TYPE_PNG);
+}
+
 void ImageInfo::SetId(const wxString& strId)
 {
 	m_strId = strId;
@@ -60,9 +70,14 @@ const wxString& ImageInfo::GetPath() const
 	return m_strPath;
 }
 
-void ImageInfo::SetBitmap(wxBitmap* pBitmap)
+bool ImageInfo::SetBitmap(wxBitmap* pBitmap)
 {
+	if (m_pbmpImage == pBitmap) return false;
+
+	SAFE_DELETE(m_pbmpImage);
 	m_pbmpImage = pBitmap;
+	m_bIsModified = true;
+	return true;
 }
 
 const wxBitmap* ImageInfo::GetBitmap()

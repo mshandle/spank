@@ -20,6 +20,7 @@ public:
 
 	bool LoadFromXml(TiXmlElement* pElmImage);
 	bool SaveToXml(TiXmlElement* pElmImageList);
+	bool SaveImage();
 
 	void SetId(const wxString& strId);
 	const wxString& GetId() const;
@@ -27,7 +28,7 @@ public:
 	void SetPath(const wxString& strPath);
 	const wxString& GetPath() const;
 
-	void SetBitmap(wxBitmap* pBitmap);
+	bool SetBitmap(wxBitmap* pBitmap);
 	const wxBitmap* GetBitmap();
 
 	void SetTreeItemId(const wxTreeItemId& itemId);
@@ -41,6 +42,7 @@ private:
 	wxString m_strPath;
 	wxBitmap* m_pbmpImage;
 	bool m_bLoaded;
+	bool m_bIsModified;
 	wxTreeItemId m_TreeItemId;
 
 };

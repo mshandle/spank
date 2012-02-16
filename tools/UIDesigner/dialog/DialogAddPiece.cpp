@@ -179,7 +179,7 @@ void DialogAddPiece::OnBtnAddPieceClicked(wxCommandEvent& event)
 {
 	wxFileDialog dialog(this,
 		wxT("Choose a file"),
-		ProjectDocument::GetInstance().GetProjectDir(),
+		ProjectDocument::GetInstance().GetProjectDir() + "/" + ProjectDocument::GetInstance().GetRootDir(),
 		wxEmptyString,
 		wxT("Image files (*.png;*.jpg)|*.png;*.jpg"),
 		wxFD_OPEN|wxFD_MULTIPLE);
@@ -218,7 +218,6 @@ void DialogAddPiece::OnLstPiecesSelected(wxCommandEvent& event)
 void DialogAddPiece::OnRadAddImageSelected(wxCommandEvent& event)
 {
 	m_ChoImage->Enable(m_RadAddExisting->GetValue());
-	m_EdtImageName->Enable(!m_RadAddExisting->GetValue());
 
 	if (m_RadAddExisting->GetValue())
 	{
@@ -250,7 +249,12 @@ void DialogAddPiece::OnOkClicked(wxCommandEvent& event)
 	long height = 0;
 	if (!m_EdtImageWidth->GetValue().ToLong(&width)) return;
 	if (!m_EdtImageHeight->GetValue().ToLong(&height)) return;
-	if (width <= 0 || height <= 0) return;
+	if (width <= 0 || height <= 0)
+	{
+		wxMessageDialog msg(this, wxT("width and height must greater than 0"), "Error");
+		msg.ShowModal();
+		return;
+	}
 
 	wxSize newSize(width, height);
 
@@ -260,7 +264,22 @@ void DialogAddPiece::OnOkClicked(wxCommandEvent& event)
 	}
 	else
 	{
-		bOk = AddPieceIntoNewImage(newSize);
+		wxFileDialog dialog(this,
+			wxT("Save to file"),
+			ProjectDocument::GetInstance().GetProjectDir() + "/" + ProjectDocument::GetInstance().GetRootDir(),
+			wxT("Untitled.png"),
+			wxT("Image files (*.png)|*.png"),
+			wxFD_SAVE);
+
+		if (dialog .ShowModal() == wxID_OK)
+		{
+			m_EdtImageName->SetValue(dialog.GetPath());
+			bOk = AddPieceIntoNewImage(newSize);
+		}
+		else
+		{
+			return;
+		}
 	}
 
 	if (!bOk)
@@ -405,8 +424,57 @@ bool DialogAddPiece::AddPieceFromExistingImage(const wxSize& newSize)
 
 bool DialogAddPiece::AddPieceIntoNewImage(const wxSize& newSize)
 {
-	// TODO: 
-	return false;
+	wxString strPath = m_EdtImageName->GetValue();
+	if (strPath.empty()) return false;
+
+	TV_PACKING_PIECE_INFO vPackingInfo;
+
+	// get packing info from list
+	if (!GetPieceFromList(vPackingInfo))
+	{
+		FreePackingPiecesInfo(vPackingInfo);
+		return false;
+	}
+
+	// sort the pieces
+	std::sort(vPackingInfo.begin(), vPackingInfo.end(), ComparePackingInfo);
+
+	// generate packing info, try packing
+	if (!GeneratePackingInfo(vPackingInfo, newSize))
+	{
+		FreePackingPiecesInfo(vPackingInfo);
+		return false;
+	}
+
+	// packing
+	wxBitmap* pNewBitmap = PackingImage(newSize, vPackingInfo);
+	if (!pNewBitmap)
+	{
+		FreePackingPiecesInfo(vPackingInfo);
+		return false;
+	}
+
+	// apply new image and piece info to documents
+	wxString strImageId = FileUtil::GetFileName(strPath);
+	FileUtil::FormatId(strImageId);
+	wxString strRootDir = ProjectDocument::GetInstance().GetProjectDir() + "/" + ProjectDocument::GetInstance().GetRootDir() + "/";
+	wxString strRelativePath = FileUtil::RemoveRootDir(strPath, strRootDir);
+	const ImageInfo* pImageInfo = ImagePieceDocument::GetInstance().AddImage(strImageId, strRelativePath, pNewBitmap);
+
+	for (TV_PACKING_PIECE_INFO::iterator it = vPackingInfo.begin(); it != vPackingInfo.end(); ++it)
+	{
+		PACKING_PIECE_INFO* pPackingInfo = (*it);
+		wxRect rect(pPackingInfo->pNode->x, pPackingInfo->pNode->y, pPackingInfo->pNode->width, pPackingInfo->pNode->height);
+		wxString strId = FileUtil::GetFileName(pPackingInfo->strId);
+		FileUtil::FormatId(strId);
+		ImagePieceDocument::GetInstance().AddPiece(strId, rect, pImageInfo, false);
+	}
+
+	ImagePieceDocument::GetInstance().GeneratePieceArrayString();
+	PieceListTransformer::GetInstance().UpdateListView();
+
+	FreePackingPiecesInfo(vPackingInfo);
+	return true;
 }
 
 void DialogAddPiece::FreePackingPiecesInfo(TV_PACKING_PIECE_INFO& vPackingInfo)
@@ -422,18 +490,13 @@ void DialogAddPiece::FreePackingPiecesInfo(TV_PACKING_PIECE_INFO& vPackingInfo)
 
 wxBitmap* DialogAddPiece::PackingImage(const wxSize& bmpSize, const TV_PACKING_PIECE_INFO& vPackingInfo)
 {
-	wxBitmap* pNewBitmap = new wxBitmap(bmpSize, -1);
+	wxBitmap* pNewBitmap = new wxBitmap(bmpSize);
+	pNewBitmap->UseAlpha();
 
 	wxMemoryDC memDC;
 	memDC.SelectObject(*pNewBitmap);
-	memDC.SetBackground(*wxWHITE_BRUSH);
+	memDC.SetBackground(*wxTRANSPARENT_BRUSH);
 	memDC.Clear();
-	memDC.SelectObject(wxNullBitmap);
-
-	wxMask* pMask = new wxMask(*pNewBitmap, *wxWHITE);
-	pNewBitmap->SetMask(pMask);
-
-	memDC.SelectObject(*pNewBitmap);
 
 	wxMemoryDC memSubDC;
 	for (TV_PACKING_PIECE_INFO::const_iterator it = vPackingInfo.begin(); it != vPackingInfo.end(); ++it)

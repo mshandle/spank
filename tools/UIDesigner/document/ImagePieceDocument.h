@@ -56,7 +56,8 @@ public:
 	bool SetImageBitmap(const ImageInfo* pImageInfo, wxBitmap* pNewBitmap);
 	bool SetPieceRect(const PieceInfo* pPieceInfo, const wxRect& rect);
 
-	bool AddPiece(const wxString& strId, const wxRect& rect, const ImageInfo* pImageInfo, bool bUpdateView = true);
+	const ImageInfo* AddImage(const wxString& strImageId, const wxString& strPath, wxBitmap* pImageBitmap);
+	const PieceInfo* AddPiece(const wxString& strId, const wxRect& rect, const ImageInfo* pImageInfo, bool bUpdateView = true);
 
 	void GenerateImageArrayString();
 	void GeneratePieceArrayString();
@@ -64,6 +65,7 @@ public:
 protected:
 	ImagePieceDocument();
 
+	wxString GenerateNewImageId(const wxString& strId);
 	wxString GenerateNewPieceId(const wxString& strId);
 
 private:

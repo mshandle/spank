@@ -103,9 +103,8 @@ void BaseEditor::OnPaintEvt(wxPaintEvent& event)
 	wxSize maxSize = CalculateMaxSize();
 
 	// fill background
-	dc.SetBrush(*wxLIGHT_GREY_BRUSH);
-	dc.SetPen(*wxTRANSPARENT_PEN);
-	dc.DrawRectangle(wxPoint(0, 0), maxSize*m_nZoom);
+	dc.SetBackground(*wxLIGHT_GREY_BRUSH);
+	dc.Clear();
 
 	// draw cross
 	dc.SetBrush(wxBrush(*wxWHITE, wxBRUSHSTYLE_CROSSDIAG_HATCH));
