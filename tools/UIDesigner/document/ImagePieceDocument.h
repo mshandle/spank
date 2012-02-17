@@ -20,7 +20,7 @@ class ImagePieceDocument : public DocumentBase
 public:
 	typedef std::map<wxString, ImageInfo*> TM_IMAGE_INFO;
 	typedef std::map<wxString, PieceInfo*> TM_PIECE_INFO;
-	typedef std::vector<PieceInfo*> TV_PIECE_INFO;
+	typedef std::vector<const PieceInfo*> TV_PIECE_INFO;
 
 public:
 	virtual ~ImagePieceDocument();
@@ -34,7 +34,7 @@ public:
 	const ImageInfo* FindImageInfo(const wxString& strId);
 	const PieceInfo* FindPieceInfo(const wxString& strId);
 	const PieceInfo* FindPieceInfoUnderPoint(const wxPoint& pos, const ImageInfo* pImageInfo);
-	int EnumImagePieces(TV_PIECE_INFO& PieceOut, const ImageInfo* pImageInfo);
+	int EnumImagePieces(TV_PIECE_INFO& vPieceOut, const ImageInfo* pImageInfo);
 
 	const TM_IMAGE_INFO& GetImageInfoMap();
 	const TM_PIECE_INFO& GetPieceInfoMap();

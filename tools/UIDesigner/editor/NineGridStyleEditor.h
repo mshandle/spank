@@ -26,6 +26,7 @@ public:
 
 	static NineGridStyleEditor& GetInstance();
 
+	virtual void Reset();
 	bool SetNineGridStyle(const NineGridStyle* pNineGridStyle);
 	const NineGridStyle* GetNineGridStyle();
 

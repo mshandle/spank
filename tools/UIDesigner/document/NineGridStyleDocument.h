@@ -11,11 +11,13 @@
 #include "DocumentBase.h"
 #include "NineGridStyle.h"
 #include <map>
+#include <vector>
 
 class NineGridStyleDocument : public DocumentBase
 {
 public:
 	typedef std::map<wxString, NineGridStyle*> TM_NINE_GRID_STYLE;
+	typedef std::vector<const NineGridStyle*> TV_NINE_GRID_STYLE;
 
 public:
 	virtual ~NineGridStyleDocument();
@@ -27,6 +29,7 @@ public:
 
 	const NineGridStyle* FindNineGridStyle(const wxString& strId);
 	const TM_NINE_GRID_STYLE& GetNineGridStyleMap();
+	int EnumNineGridStyles(TV_NINE_GRID_STYLE& vNineGridStyleOut, const PieceInfo* pPieceInfo);
 
 	bool RenameNineGridStyleId(const NineGridStyle* pNineGridStyle, const wxString& strNewId);
 	bool SetStatePiece(const NineGridStyle* pNineGridStyle, const PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState);

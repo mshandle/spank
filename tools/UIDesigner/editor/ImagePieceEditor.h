@@ -27,8 +27,10 @@ public:
 
 	static ImagePieceEditor& GetInstance();
 
-	void SetSelection(const PieceInfo* pPieceInfo);
-	const PieceInfo* GetSelection() const;
+	virtual void Reset();
+
+	void SetPiece(const PieceInfo* pPieceInfo);
+	const PieceInfo* GetPiece() const;
 
 	bool SetImage(const ImageInfo* pImageInfo);
 	const ImageInfo* GetImage() const;

@@ -11,11 +11,13 @@
 #include "DocumentBase.h"
 #include "ClipBitmapStyle.h"
 #include <map>
+#include <vector>
 
 class ClipBitmapStyleDocument : public DocumentBase
 {
 public:
 	typedef std::map<wxString, ClipBitmapStyle*> TM_CLIP_BITMAP_STYLE;
+	typedef std::vector<const ClipBitmapStyle*> TV_CLIP_BITMAP_STYLE;
 
 public:
 	virtual ~ClipBitmapStyleDocument();
@@ -27,6 +29,7 @@ public:
 
 	const ClipBitmapStyle* FindClipBitmapStyle(const wxString& strId);
 	const TM_CLIP_BITMAP_STYLE& GetClipBitmapStyleMap();
+	int EnumClipBitmapStyles(TV_CLIP_BITMAP_STYLE& vClipBitmapStyleOut, const PieceInfo* pPieceInfo);
 
 	bool RenameClipBitmapStyleId(const ClipBitmapStyle* pClipBitmapStyle, const wxString& strNewId);
 	bool SetStatePiece(const ClipBitmapStyle* pClipBitmapStyle, const PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState);

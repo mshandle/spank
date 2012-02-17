@@ -42,12 +42,7 @@ bool ColorStyle::SaveToXml(TiXmlElement* pElmColorStyleList)
 	TiXmlElement* pElmColorStyle = new TiXmlElement("ColorStyle");
 	pElmColorStyle->SetAttribute("id", GetId());
 
-	if (!SaveStateInfo(pElmColorStyle, "normal", m_nColors[SS_NORMAL]))
-	{
-		SAFE_DELETE(pElmColorStyle);
-		return false;
-	}
-
+	SaveStateInfo(pElmColorStyle, "normal", m_nColors[SS_NORMAL]);
 	if (m_nColors[SS_NORMAL] != m_nColors[SS_DOWN]) SaveStateInfo(pElmColorStyle, "down", m_nColors[SS_DOWN]);
 	if (m_nColors[SS_NORMAL] != m_nColors[SS_HOVER]) SaveStateInfo(pElmColorStyle, "hover", m_nColors[SS_HOVER]);
 	if (m_nColors[SS_NORMAL] != m_nColors[SS_DISABLED]) SaveStateInfo(pElmColorStyle, "disabled", m_nColors[SS_DISABLED]);

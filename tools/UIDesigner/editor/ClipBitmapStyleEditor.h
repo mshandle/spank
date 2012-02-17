@@ -26,6 +26,8 @@ public:
 
 	static ClipBitmapStyleEditor& GetInstance();
 
+	virtual void Reset();
+
 	bool SetClipBitmapStyle(const ClipBitmapStyle* pClipBitmapStyle);
 	const ClipBitmapStyle* GetClipBitmapStyle() const;
 

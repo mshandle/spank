@@ -76,7 +76,7 @@ void PieceListTransformer::PropertyChanged(const wxPGProperty* pProperty)
 	if (pProperty->GetName() == "id")
 	{
 		wxString strNewId = pProperty->GetValueAsString();
-		if (!ImagePieceDocument::GetInstance().RenamePieceInfoId(pPieceInfo, strNewId))
+		if (ImagePieceDocument::GetInstance().RenamePieceInfoId(pPieceInfo, strNewId))
 		{
 			PieceListTransformer::GetInstance().UpdateListView();
 			PieceListTransformer::GetInstance().SetSelectedPieceInfo(pPieceInfo);

@@ -7,6 +7,8 @@
  */
 #include "BitmapStyleDocument.h"
 #include <tinyxml-2.6.2/tinyxml.h>
+#include <wx/msgdlg.h>
+#include "../DesignerFrame.h"
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
@@ -32,7 +34,6 @@ bool BitmapStyleDocument::OpenFile(const wxString& strFile)
 	if (!doc.LoadFile(strFile)) return false;
 
 	Reset();
-
 	SetFilePath(strFile);
 
 	TiXmlElement* pElmBitmapStyleList = doc.RootElement();
@@ -43,8 +44,17 @@ bool BitmapStyleDocument::OpenFile(const wxString& strFile)
 	while (pElmBitmapStyle)
 	{
 		BitmapStyle* pBitmapStyle = new BitmapStyle();
-		if (!pBitmapStyle->LoadFromXml(pElmBitmapStyle)) return false;
-		m_BitmapStyleMap.insert(std::make_pair(pBitmapStyle->GetId(), pBitmapStyle));
+		if (!pBitmapStyle->LoadFromXml(pElmBitmapStyle))
+		{
+			wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("load bitmap style failed, id=%s", pBitmapStyle->GetId()));
+			msg.ShowModal();
+			SAFE_DELETE(pBitmapStyle);
+		}
+		else
+		{
+			m_BitmapStyleMap.insert(std::make_pair(pBitmapStyle->GetId(), pBitmapStyle));
+		}
+
 		pElmBitmapStyle = pElmBitmapStyle->NextSiblingElement("BitmapStyle");
 	}
 
@@ -66,7 +76,11 @@ bool BitmapStyleDocument::SaveFile(const wxString& strFile)
 	for (TM_BITMAP_STYLE::iterator it = m_BitmapStyleMap.begin(); it != m_BitmapStyleMap.end(); ++it)
 	{
 		BitmapStyle* pBitmapStyle = it->second;
-		pBitmapStyle->SaveToXml(pElmBitmapStyleList);
+		if (!pBitmapStyle->SaveToXml(pElmBitmapStyleList))
+		{
+			wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("save bitmap style failed, id=%s", pBitmapStyle->GetId()));
+			msg.ShowModal();
+		}
 	}
 
 	return doc.SaveFile(strFile);
@@ -77,7 +91,7 @@ void BitmapStyleDocument::Reset()
 	for (TM_BITMAP_STYLE::iterator it = m_BitmapStyleMap.begin(); it != m_BitmapStyleMap.end(); ++it)
 	{
 		BitmapStyle* pBitmapStyle = it->second;
-		delete pBitmapStyle;
+		SAFE_DELETE(pBitmapStyle);
 	}
 	m_BitmapStyleMap.clear();
 	ClearModifiedFlag();
@@ -91,6 +105,25 @@ const BitmapStyle* BitmapStyleDocument::FindBitmapStyle(const wxString& strId)
 const BitmapStyleDocument::TM_BITMAP_STYLE& BitmapStyleDocument::GetBitmapStyleMap()
 {
 	return m_BitmapStyleMap;
+}
+
+int BitmapStyleDocument::EnumBitmapStyles(TV_BITMAP_STYLE& vBitmapStyleOut, const PieceInfo* pPieceInfo)
+{
+	int nFound = 0;
+	for (TM_BITMAP_STYLE::const_iterator it = m_BitmapStyleMap.begin(); it != m_BitmapStyleMap.end(); ++it)
+	{
+		const BitmapStyle* pBitmapStyle = it->second;
+		if (pBitmapStyle->GetStatePiece(IStyle::SS_NORMAL) == pPieceInfo
+			|| pBitmapStyle->GetStatePiece(IStyle::SS_DOWN) == pPieceInfo
+			|| pBitmapStyle->GetStatePiece(IStyle::SS_HOVER) == pPieceInfo
+			|| pBitmapStyle->GetStatePiece(IStyle::SS_DISABLED) == pPieceInfo)
+		{
+			vBitmapStyleOut.push_back(pBitmapStyle);
+			nFound++;
+		}
+	}
+
+	return nFound;
 }
 
 bool BitmapStyleDocument::RenameBitmapStyleId(const BitmapStyle* pBitmapStyle, const wxString& strNewId)

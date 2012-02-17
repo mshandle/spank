@@ -34,13 +34,14 @@ ImagePieceEditor::~ImagePieceEditor()
 void ImagePieceEditor::Init()
 {
 	m_pImagePieceEditor = this;
-
 	m_pPieceInfo = NULL;
 	m_pImageInfo = NULL;
+	Reset();
 }
 
 void ImagePieceEditor::Release()
 {
+	Reset();
 	m_pImagePieceEditor = NULL;
 }
 
@@ -49,13 +50,19 @@ ImagePieceEditor& ImagePieceEditor::GetInstance()
 	return *m_pImagePieceEditor;
 }
 
-void ImagePieceEditor::SetSelection(const PieceInfo* pPieceInfo)
+void ImagePieceEditor::Reset()
+{
+	SetPiece(NULL);
+	SetImage(NULL);
+}
+
+void ImagePieceEditor::SetPiece(const PieceInfo* pPieceInfo)
 {
 	m_pPieceInfo = pPieceInfo;
 	Refresh(false);
 }
 
-const PieceInfo* ImagePieceEditor::GetSelection() const
+const PieceInfo* ImagePieceEditor::GetPiece() const
 {
 	return m_pPieceInfo;
 }
@@ -106,7 +113,7 @@ void ImagePieceEditor::OnLButtonDown(const wxPoint& pos)
 {
 	wxPoint posMouse = (pos + GetOriginOffset()) / GetZoom();
 	const PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfoUnderPoint(posMouse, m_pImageInfo);
-	SetSelection(pPieceInfo);
+	SetPiece(pPieceInfo);
 
 	PieceListTransformer::GetInstance().SetSelectedPieceInfo(pPieceInfo);
 	PieceListTransformer::GetInstance().UpdateProperty(pPieceInfo);

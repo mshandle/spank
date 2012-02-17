@@ -67,6 +67,11 @@ wxSize BaseEditor::DoGetBestSize() const
 	return m_ZoomedSize;
 }
 
+void BaseEditor::Reset()
+{
+	// TODO: 
+}
+
 bool BaseEditor::ZoomIn()
 {
 	return Zoom(m_nZoom+1);

@@ -32,16 +32,23 @@ void ClipBitmapStyleEditor::Init()
 	m_pClipBitmapStyleEditor = this;
 	m_pClipBitmapStyle = NULL;
 	m_eSelState = IStyle::SS_NUM;
+	Reset();
 }
 
 void ClipBitmapStyleEditor::Release()
 {
+	Reset();
 	m_pClipBitmapStyleEditor = NULL;
 }
 
 ClipBitmapStyleEditor& ClipBitmapStyleEditor::GetInstance()
 {
 	return *m_pClipBitmapStyleEditor;
+}
+
+void ClipBitmapStyleEditor::Reset()
+{
+	SetClipBitmapStyle(NULL);
 }
 
 bool ClipBitmapStyleEditor::SetClipBitmapStyle(const ClipBitmapStyle* pClipBitmapStyle)

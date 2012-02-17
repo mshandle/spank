@@ -32,16 +32,23 @@ void ColorStyleEditor::Init()
 	m_pColorStyleEditor = this;
 	m_pColorStyle = NULL;
 	m_eSelState = IStyle::SS_NUM;
+	Reset();
 }
 
 void ColorStyleEditor::Release()
 {
+	Reset();
 	m_pColorStyleEditor = NULL;
 }
 
 ColorStyleEditor& ColorStyleEditor::GetInstance()
 {
 	return *m_pColorStyleEditor;
+}
+
+void ColorStyleEditor::Reset()
+{
+	SetColorStyle(NULL);
 }
 
 bool ColorStyleEditor::SetColorStyle(const ColorStyle* pColorStyle)

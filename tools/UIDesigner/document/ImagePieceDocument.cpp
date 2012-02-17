@@ -7,6 +7,8 @@
  */
 #include "ImagePieceDocument.h"
 #include <tinyxml-2.6.2/tinyxml.h>
+#include <wx/msgdlg.h>
+#include "../DesignerFrame.h"
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
@@ -40,8 +42,16 @@ bool ImagePieceDocument::OpenFile(const wxString& strFile)
 	while (pElmImage)
 	{
 		ImageInfo* pImageInfo = new ImageInfo();
-		if (!pImageInfo->LoadFromXml(pElmImage)) return false;
-		m_ImageInfoMap.insert(std::make_pair(pImageInfo->GetId(), pImageInfo));
+		if (!pImageInfo->LoadFromXml(pElmImage))
+		{
+			wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("load image failed, id=%s", pImageInfo->GetId()));
+			msg.ShowModal();
+			SAFE_DELETE(pImageInfo);
+		}
+		else
+		{
+			m_ImageInfoMap.insert(std::make_pair(pImageInfo->GetId(), pImageInfo));
+		}
 		pElmImage = pElmImage->NextSiblingElement("Image");
 	}
 	m_bNeedUpdateImageIds = true;
@@ -52,8 +62,16 @@ bool ImagePieceDocument::OpenFile(const wxString& strFile)
 	while (pElmPiece)
 	{
 		PieceInfo* pPieceInfo = new PieceInfo();
-		if (!pPieceInfo->LoadFromXml(pElmPiece)) return false;
-		m_PieceInfoMap.insert(std::make_pair(pPieceInfo->GetId(), pPieceInfo));
+		if (!pPieceInfo->LoadFromXml(pElmPiece))
+		{
+			wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("load piece failed, id=%s", pPieceInfo->GetId()));
+			msg.ShowModal();
+			SAFE_DELETE(pPieceInfo);
+		}
+		else
+		{
+			m_PieceInfoMap.insert(std::make_pair(pPieceInfo->GetId(), pPieceInfo));
+		}
 		pElmPiece = pElmPiece->NextSiblingElement("Piece");
 	}
 	m_bNeedUpdatePieceIds = true;
@@ -157,15 +175,15 @@ const PieceInfo* ImagePieceDocument::FindPieceInfoUnderPoint(const wxPoint& pos,
 	return NULL;
 }
 
-int ImagePieceDocument::EnumImagePieces(TV_PIECE_INFO& PieceOut, const ImageInfo* pImageInfo)
+int ImagePieceDocument::EnumImagePieces(TV_PIECE_INFO& vPieceOut, const ImageInfo* pImageInfo)
 {
 	int nFound = 0;
-	for (TM_PIECE_INFO::iterator it = m_PieceInfoMap.begin(); it != m_PieceInfoMap.end(); ++it)
+	for (TM_PIECE_INFO::const_iterator it = m_PieceInfoMap.begin(); it != m_PieceInfoMap.end(); ++it)
 	{
-		PieceInfo* pPieceInfo = it->second;
+		const PieceInfo* pPieceInfo = it->second;
 		if (pPieceInfo->GetImageInfo() == pImageInfo)
 		{
-			PieceOut.push_back(pPieceInfo);
+			vPieceOut.push_back(pPieceInfo);
 			nFound++;
 		}
 	}

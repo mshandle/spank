@@ -30,16 +30,23 @@ void NineGridStyleEditor::Init()
 {
 	m_pNineGridStyleEditor = this;
 	m_pNineGridStyle = NULL;
+	Reset();
 }
 
 void NineGridStyleEditor::Release()
 {
+	Reset();
 	m_pNineGridStyleEditor = NULL;
 }
 
 NineGridStyleEditor& NineGridStyleEditor::GetInstance()
 {
 	return *m_pNineGridStyleEditor;
+}
+
+void NineGridStyleEditor::Reset()
+{
+	SetNineGridStyle(NULL);
 }
 
 bool NineGridStyleEditor::SetNineGridStyle(const NineGridStyle* pNineGridStyle)

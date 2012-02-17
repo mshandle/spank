@@ -34,6 +34,7 @@
 #include "editor/ClipBitmapStyleEditor.h"
 
 #include "dialog/DialogAddPiece.h"
+#include "utils/FileUtil.h"
 
 #include "images/disk.xpm"
 #include "images/document.xpm"
@@ -50,7 +51,9 @@ BEGIN_EVENT_TABLE(DesignerFrame, wxFrame)
 
 	EVT_MENU(wxID_OPEN, DesignerFrame::OnFileOpen)
 	EVT_MENU(wxID_SAVE, DesignerFrame::OnFileSave)
-	EVT_MENU(wxID_EXIT, DesignerFrame::OnExit)
+	EVT_MENU(wxID_EXIT, DesignerFrame::OnFileExit)
+
+	EVT_MENU(IDM_EDIT_DELETE, DesignerFrame::OnEditDelete)
 
 	EVT_MENU(IDM_ELEMENT_ADD_PIECE, DesignerFrame::OnAddPiece)
 	EVT_MENU(IDM_ELEMENT_ADD_BITMAP_STYLE, DesignerFrame::OnAddBitmapStyle)
@@ -101,7 +104,9 @@ void DesignerFrame::Init()
 	m_pPropertyGrid = NULL;
 	m_pListNotebook = NULL;
 	m_pEditorNotebook = NULL;
+	m_eCurrEditor = NUM_EDITOR;
 	memset(m_pEditors, 0, sizeof(m_pEditors));
+	m_bTitleModifiedFlag = false;
 }
 
 void DesignerFrame::Release()
@@ -118,6 +123,20 @@ void DesignerFrame::SetCurrPropertyType(PROPERTY_TYPE eType)
 DesignerFrame::PROPERTY_TYPE DesignerFrame::GetCurrPropertyType() const
 {
 	return m_eCurrPropertyType;
+}
+
+void DesignerFrame::UpdateTitle(bool bModified, bool bForce /* = false */)
+{
+	if (!bForce && m_bTitleModifiedFlag == bModified) return;
+	m_bTitleModifiedFlag = bModified;
+	if (m_bTitleModifiedFlag)
+	{
+		SetTitle(FileUtil::GetFileName(ProjectDocument::GetInstance().GetFilePath()) + wxT(" *"));
+	}
+	else
+	{
+		SetTitle(FileUtil::GetFileName(ProjectDocument::GetInstance().GetFilePath()));
+	}
 }
 
 void DesignerFrame::CreateControls()
@@ -435,6 +454,8 @@ void DesignerFrame::DoOpenFile()
 			NineGridStyleTransformer::GetInstance().UpdateListView();
 			ColorStyleTransformer::GetInstance().UpdateListView();
 			ClipBitmapStyleTransformer::GetInstance().UpdateListView();
+
+			UpdateTitle(false, true);
 		}
 	}
 }
@@ -452,9 +473,10 @@ void DesignerFrame::DoSaveFile()
 	NineGridStyleDocument::GetInstance().SaveFile(ProjectDocument::GetInstance().GetNineGridStyleFilePath());
 	ColorStyleDocument::GetInstance().SaveFile(ProjectDocument::GetInstance().GetColorStyleFilePath());
 	ClipBitmapStyleDocument::GetInstance().SaveFile(ProjectDocument::GetInstance().GetClipBitmapStyleFilePath());
+	UpdateTitle(false);
 }
 
-void DesignerFrame::OnExit(wxCommandEvent& event)
+void DesignerFrame::OnFileExit(wxCommandEvent& event)
 {
 	Close();
 }
@@ -495,10 +517,279 @@ bool DesignerFrame::IsModified() const
 	return false;
 }
 
+void DesignerFrame::OnEditDelete(wxCommandEvent& event)
+{
+	switch (m_eCurrEditor)
+	{
+	case EDITOR_IMAGE_PIECE:
+		{
+			const PieceInfo* pPieceInfo = ImagePieceEditor::GetInstance().GetPiece();
+			const ImageInfo* pImageInfo = ImagePieceEditor::GetInstance().GetImage();
+			if (pPieceInfo) DoDeletePiece(pPieceInfo);
+			else if (pImageInfo) DoDeleteImage(pImageInfo);
+		}
+		break;
+	case EDITOR_BITMAP_STYLE:
+		{
+			const BitmapStyle* pBitmapStyle = BitmapStyleEditor::GetInstance().GetBitmapStyle();
+			if (pBitmapStyle) DoDeleteBitmapStyle(pBitmapStyle);
+		}
+		break;
+	case EDITOR_NINE_GRID_STYLE:
+		{
+			const NineGridStyle* pNineGridStyle = NineGridStyleEditor::GetInstance().GetNineGridStyle();
+			if (pNineGridStyle) DoDeleteNineGridStyle(pNineGridStyle);
+		}
+		break;
+	case EDITOR_COLOR_STYLE:
+		{
+			const ColorStyle* pColorStyle = ColorStyleEditor::GetInstance().GetColorStyle();
+			if (pColorStyle) DoDeleteColorStyle(pColorStyle);
+		}
+		break;
+	case EDITOR_CLIP_BITMAP_STYLE:
+		{
+			const ClipBitmapStyle* pClipBitmapStyle = ClipBitmapStyleEditor::GetInstance().GetClipBitmapStyle();
+			if (pClipBitmapStyle) DoDeleteClipBitmapStyle(pClipBitmapStyle);
+		}
+		break;
+	}
+}
+
+bool DesignerFrame::FindStyleIdsUsingThePiece(TS_WX_STRING& vBitmapStyleIds, TS_WX_STRING& vNineGridStyleIds, TS_WX_STRING& vClipBitmapStyleIds, const PieceInfo* pPieceInfo)
+{
+	if (!pPieceInfo) return false;
+
+	BitmapStyleDocument::TV_BITMAP_STYLE vBitmapStyles;
+	if (BitmapStyleDocument::GetInstance().EnumBitmapStyles(vBitmapStyles, pPieceInfo) > 0)
+	{
+		for (BitmapStyleDocument::TV_BITMAP_STYLE::iterator it = vBitmapStyles.begin(); it != vBitmapStyles.end(); ++it)
+		{
+			vBitmapStyleIds.insert((*it)->GetId());
+		}
+	}
+
+	NineGridStyleDocument::TV_NINE_GRID_STYLE vNineGridStyles;
+	if (NineGridStyleDocument::GetInstance().EnumNineGridStyles(vNineGridStyles, pPieceInfo) > 0)
+	{
+		for (NineGridStyleDocument::TV_NINE_GRID_STYLE::iterator it = vNineGridStyles.begin(); it != vNineGridStyles.end(); ++it)
+		{
+			vNineGridStyleIds.insert((*it)->GetId());
+		}
+	}
+
+	ClipBitmapStyleDocument::TV_CLIP_BITMAP_STYLE vClipBitmapStyles;
+	if (ClipBitmapStyleDocument::GetInstance().EnumClipBitmapStyles(vClipBitmapStyles, pPieceInfo) > 0)
+	{
+		for (ClipBitmapStyleDocument::TV_CLIP_BITMAP_STYLE::iterator it = vClipBitmapStyles.begin(); it != vClipBitmapStyles.end(); ++it)
+		{
+			vClipBitmapStyleIds.insert((*it)->GetId());
+		}
+	}
+
+	return true;
+}
+
+bool DesignerFrame::MakeIdsString(wxString& strOut, const TS_WX_STRING& vIds, const wxString& strHeader)
+{
+	if (vIds.size() <= 0) return false;
+
+	strOut += wxString::Format("\n\n%s\n", strHeader);
+	for (TS_WX_STRING::const_iterator it = vIds.begin(); it != vIds.end(); ++it)
+	{
+		strOut += wxString::Format("\"%s\" ", (*it));
+	}
+
+	return true;
+}
+
+void DesignerFrame::DoDeletePiece(const PieceInfo* pPieceInfo)
+{
+	if (!pPieceInfo) return;
+
+	// find styles using the piece
+	TS_WX_STRING vBitmapStyleIds;
+	TS_WX_STRING vNineGridStyleIds;
+	TS_WX_STRING vClipBitmapStyleIds;
+	FindStyleIdsUsingThePiece(vBitmapStyleIds, vNineGridStyleIds, vClipBitmapStyleIds, pPieceInfo);
+
+	// make prompt string
+	wxString strDeleteStyles;
+	MakeIdsString(strDeleteStyles, vBitmapStyleIds, wxT("also delete bitmap styles:"));
+	MakeIdsString(strDeleteStyles, vNineGridStyleIds, wxT("also delete 9-grid styles:"));
+	MakeIdsString(strDeleteStyles, vClipBitmapStyleIds, wxT("also delete clip bitmap styles:"));
+
+	// prompt
+	wxString wxMsg = wxString::Format(wxT("Do you want to delete the piece: %s ?%s"), pPieceInfo->GetId(), strDeleteStyles);
+	wxMessageDialog msgPrompt(this, wxMsg, wxT("Delete Piece"), wxYES_NO|wxCENTER);
+	if (msgPrompt.ShowModal() != wxID_YES) return;
+
+	// delete bitmap styles
+	for (TS_WX_STRING::const_iterator it = vBitmapStyleIds.begin(); it != vBitmapStyleIds.end(); ++it)
+	{
+		BitmapStyleDocument::GetInstance().RemoveBitmapStyle((*it));
+	}
+	if (vBitmapStyleIds.size() > 0) BitmapStyleTransformer::GetInstance().UpdateListView();
+
+	// delete nine grid styles
+	for (TS_WX_STRING::const_iterator it = vNineGridStyleIds.begin(); it != vNineGridStyleIds.end(); ++it)
+	{
+		NineGridStyleDocument::GetInstance().RemoveNineGridStyle((*it));
+	}
+	if (vNineGridStyleIds.size() > 0) NineGridStyleTransformer::GetInstance().UpdateListView();
+
+	// delete clip bitmap styles
+	for (TS_WX_STRING::const_iterator it = vClipBitmapStyleIds.begin(); it != vClipBitmapStyleIds.end(); ++it)
+	{
+		ClipBitmapStyleDocument::GetInstance().RemoveClipBitmapStyle((*it));
+	}
+	if (vClipBitmapStyleIds.size() > 0) ClipBitmapStyleTransformer::GetInstance().UpdateListView();
+
+	// delete the piece
+	ImagePieceEditor::GetInstance().SetPiece(NULL);
+	ImagePieceDocument::GetInstance().RemovePiece(pPieceInfo->GetId());
+	PieceListTransformer::GetInstance().UpdateListView();
+	PieceListTransformer::GetInstance().UpdateProperty(NULL);
+}
+
+void DesignerFrame::DoDeleteImage(const ImageInfo* pImageInfo)
+{
+	if (!pImageInfo) return;
+
+	TS_WX_STRING vPieceInfoIds;
+	TS_WX_STRING vBitmapStyleIds;
+	TS_WX_STRING vNineGridStyleIds;
+	TS_WX_STRING vClipBitmapStyleIds;
+
+	// find pieces and styles using the image
+	ImagePieceDocument::TV_PIECE_INFO vPieceInfo;
+	if (ImagePieceDocument::GetInstance().EnumImagePieces(vPieceInfo, pImageInfo) > 0)
+	{
+		for (ImagePieceDocument::TV_PIECE_INFO::iterator it = vPieceInfo.begin(); it != vPieceInfo.end(); ++it)
+		{
+			const PieceInfo* pPieceInfo = (*it);
+			vPieceInfoIds.insert(pPieceInfo->GetId());
+			FindStyleIdsUsingThePiece(vBitmapStyleIds, vNineGridStyleIds, vClipBitmapStyleIds, pPieceInfo);
+		}
+	}
+
+	// make prompt string
+	wxString strDeletePiecesAndStyles;
+	MakeIdsString(strDeletePiecesAndStyles, vBitmapStyleIds, wxT("also delete bitmap styles:"));
+	MakeIdsString(strDeletePiecesAndStyles, vNineGridStyleIds, wxT("also delete 9-grid styles:"));
+	MakeIdsString(strDeletePiecesAndStyles, vClipBitmapStyleIds, wxT("also delete clip bitmap styles:"));
+
+	// prompt
+	wxString wxMsg = wxString::Format(wxT("Do you want to delete the image: %s ?%s"), pImageInfo->GetId(), strDeletePiecesAndStyles);
+	wxMessageDialog msgPrompt(this, wxMsg, wxT("Delete Image"), wxYES_NO|wxCENTER);
+	if (msgPrompt.ShowModal() != wxID_YES) return;
+
+	// delete bitmap styles
+	for (TS_WX_STRING::const_iterator it = vBitmapStyleIds.begin(); it != vBitmapStyleIds.end(); ++it)
+	{
+		BitmapStyleDocument::GetInstance().RemoveBitmapStyle((*it));
+	}
+	if (vBitmapStyleIds.size() > 0) BitmapStyleTransformer::GetInstance().UpdateListView();
+
+	// delete nine grid styles
+	for (TS_WX_STRING::const_iterator it = vNineGridStyleIds.begin(); it != vNineGridStyleIds.end(); ++it)
+	{
+		NineGridStyleDocument::GetInstance().RemoveNineGridStyle((*it));
+	}
+	if (vNineGridStyleIds.size() > 0) NineGridStyleTransformer::GetInstance().UpdateListView();
+
+	// delete clip bitmap styles
+	for (TS_WX_STRING::const_iterator it = vClipBitmapStyleIds.begin(); it != vClipBitmapStyleIds.end(); ++it)
+	{
+		ClipBitmapStyleDocument::GetInstance().RemoveClipBitmapStyle((*it));
+	}
+	if (vClipBitmapStyleIds.size() > 0) ClipBitmapStyleTransformer::GetInstance().UpdateListView();
+
+	// delete the pieces
+	for (TS_WX_STRING::const_iterator it = vPieceInfoIds.begin(); it != vPieceInfoIds.end(); ++it)
+	{
+		ImagePieceDocument::GetInstance().RemovePiece((*it));
+	}
+	if (vPieceInfoIds.size() > 0) PieceListTransformer::GetInstance().UpdateListView();
+
+	// delete the image
+	ImagePieceEditor::GetInstance().SetImage(NULL);
+	ImagePieceDocument::GetInstance().RemoveImage(pImageInfo->GetId());
+	ImageListTransformer::GetInstance().UpdateListView();
+	ImageListTransformer::GetInstance().UpdateProperty(NULL);
+}
+
+void DesignerFrame::DoDeleteBitmapStyle(const BitmapStyle* pBitmapStyle)
+{
+	if (!pBitmapStyle) return;
+	wxString wxMsg = wxString::Format(wxT("Do you want to delete the bitmap style: %s"), pBitmapStyle->GetId());
+	wxMessageDialog msgPrompt(this, wxMsg, wxT("Delete Bitmap Style"), wxYES_NO|wxCENTER);
+	if (msgPrompt.ShowModal() == wxID_YES)
+	{
+		// delete bitmap style
+		BitmapStyleEditor::GetInstance().SetBitmapStyle(NULL);
+		BitmapStyleDocument::GetInstance().RemoveBitmapStyle(pBitmapStyle->GetId());
+		BitmapStyleTransformer::GetInstance().UpdateListView();
+		BitmapStyleTransformer::GetInstance().UpdateProperty(NULL);
+	}
+}
+
+void DesignerFrame::DoDeleteNineGridStyle(const NineGridStyle* pNineGridStyle)
+{
+	if (!pNineGridStyle) return;
+	wxString wxMsg = wxString::Format(wxT("Do you want to delete the 9-grid style: %s"), pNineGridStyle->GetId());
+	wxMessageDialog msgPrompt(this, wxMsg, wxT("Delete 9-Grid Style"), wxYES_NO|wxCENTER);
+	if (msgPrompt.ShowModal() == wxID_YES)
+	{
+		// delete nine grid style
+		NineGridStyleEditor::GetInstance().SetNineGridStyle(NULL);
+		NineGridStyleDocument::GetInstance().RemoveNineGridStyle(pNineGridStyle->GetId());
+		NineGridStyleTransformer::GetInstance().UpdateListView();
+		NineGridStyleTransformer::GetInstance().UpdateProperty(NULL);
+	}
+}
+
+void DesignerFrame::DoDeleteColorStyle(const ColorStyle* pColorStyle)
+{
+	if (!pColorStyle) return;
+	wxString wxMsg = wxString::Format(wxT("Do you want to delete the color style: %s"), pColorStyle->GetId());
+	wxMessageDialog msgPrompt(this, wxMsg, wxT("Delete Color Style"), wxYES_NO|wxCENTER);
+	if (msgPrompt.ShowModal() == wxID_YES)
+	{
+		// delete color style
+		ColorStyleEditor::GetInstance().SetColorStyle(NULL);
+		ColorStyleDocument::GetInstance().RemoveColorStyle(pColorStyle->GetId());
+		ColorStyleTransformer::GetInstance().UpdateListView();
+		ColorStyleTransformer::GetInstance().UpdateProperty(NULL);
+	}
+}
+
+void DesignerFrame::DoDeleteClipBitmapStyle(const ClipBitmapStyle* pClipBitmapStyle)
+{
+	if (!pClipBitmapStyle) return;
+	wxString wxMsg = wxString::Format(wxT("Do you want to delete the clip bitmap style: %s"), pClipBitmapStyle->GetId());
+	wxMessageDialog msgPrompt(this, wxMsg, wxT("Delete Clip Bitmap Style"), wxYES_NO|wxCENTER);
+	if (msgPrompt.ShowModal() == wxID_YES)
+	{
+		// delete clip bitmap style
+		ClipBitmapStyleEditor::GetInstance().SetClipBitmapStyle(NULL);
+		ClipBitmapStyleDocument::GetInstance().RemoveClipBitmapStyle(pClipBitmapStyle->GetId());
+		ClipBitmapStyleTransformer::GetInstance().UpdateListView();
+		ClipBitmapStyleTransformer::GetInstance().UpdateProperty(NULL);
+	}
+}
+
 void DesignerFrame::OnAddPiece(wxCommandEvent& event)
 {
 	DialogAddPiece dialog(this);
 	dialog.ShowModal();
+	const ImageInfo* pImageInfo = dialog.GetCurrImageInfo();
+	if (pImageInfo)
+	{
+		m_pListNotebook->SetSelection(LIST_VIEW_IMAGE);
+		SwitchEditor(EDITOR_IMAGE_PIECE);
+		ImagePieceEditor::GetInstance().SetImage(pImageInfo);
+	}
 }
 
 void DesignerFrame::OnAddBitmapStyle(wxCommandEvent& event)
@@ -550,7 +841,7 @@ void DesignerFrame::OnViewZoomOut(wxCommandEvent& event)
 
 void DesignerFrame::OnImagePieceListSelected(wxTreeEvent& event)
 {
-	m_pEditorNotebook->SetSelection(EDITOR_IMAGE_PIECE);
+	SwitchEditor(EDITOR_IMAGE_PIECE);
 	const PieceInfo* pPieceInfo = PieceListTransformer::GetInstance().GetSelectedPieceInfo();
 	if (pPieceInfo)
 	{
@@ -558,22 +849,22 @@ void DesignerFrame::OnImagePieceListSelected(wxTreeEvent& event)
 		ImagePieceEditor::GetInstance().SetImage(pImageInfo);
 		ImageListTransformer::GetInstance().SetSelectedImageInfo(pImageInfo);
 	}
-	ImagePieceEditor::GetInstance().SetSelection(pPieceInfo);
+	ImagePieceEditor::GetInstance().SetPiece(pPieceInfo);
 	PieceListTransformer::GetInstance().UpdateProperty(pPieceInfo);
 }
 
 void DesignerFrame::OnImageListSelected(wxTreeEvent& event)
 {
-	m_pEditorNotebook->SetSelection(EDITOR_IMAGE_PIECE);
+	SwitchEditor(EDITOR_IMAGE_PIECE);
 	const ImageInfo* pImageInfo = ImageListTransformer::GetInstance().GetSelectedImageInfo();
 	ImagePieceEditor::GetInstance().SetImage(pImageInfo);
-	ImagePieceEditor::GetInstance().SetSelection(NULL);
+	ImagePieceEditor::GetInstance().SetPiece(NULL);
 	ImageListTransformer::GetInstance().UpdateProperty(pImageInfo);
 }
 
 void DesignerFrame::OnBitmapStyleListSelected(wxTreeEvent& event)
 {
-	m_pEditorNotebook->SetSelection(EDITOR_BITMAP_STYLE);
+	SwitchEditor(EDITOR_BITMAP_STYLE);
 	const BitmapStyle* pBitmapStyle = BitmapStyleTransformer::GetInstance().GetSelectedBitmapStyle();
 	BitmapStyleEditor::GetInstance().SetBitmapStyle(pBitmapStyle);
 	BitmapStyleTransformer::GetInstance().UpdateProperty(pBitmapStyle);
@@ -581,7 +872,7 @@ void DesignerFrame::OnBitmapStyleListSelected(wxTreeEvent& event)
 
 void DesignerFrame::OnNineGridStyleListSelected(wxTreeEvent& event)
 {
-	m_pEditorNotebook->SetSelection(EDITOR_NINE_GRID_STYLE);
+	SwitchEditor(EDITOR_NINE_GRID_STYLE);
 	const NineGridStyle* pNineGridStyle = NineGridStyleTransformer::GetInstance().GetSelectedNineGridStyle();
 	NineGridStyleEditor::GetInstance().SetNineGridStyle(pNineGridStyle);
 	NineGridStyleTransformer::GetInstance().UpdateProperty(pNineGridStyle);
@@ -589,7 +880,7 @@ void DesignerFrame::OnNineGridStyleListSelected(wxTreeEvent& event)
 
 void DesignerFrame::OnColorStyleListSelected(wxTreeEvent& event)
 {
-	m_pEditorNotebook->SetSelection(EDITOR_COLOR_STYLE);
+	SwitchEditor(EDITOR_COLOR_STYLE);
 	const ColorStyle* pColorStyle = ColorStyleTransformer::GetInstance().GetSelectedColorStyle();
 	ColorStyleEditor::GetInstance().SetColorStyle(pColorStyle);
 	ColorStyleTransformer::GetInstance().UpdateProperty(pColorStyle);
@@ -597,7 +888,7 @@ void DesignerFrame::OnColorStyleListSelected(wxTreeEvent& event)
 
 void DesignerFrame::OnClipBitmapStyleListSelected(wxTreeEvent& event)
 {
-	m_pEditorNotebook->SetSelection(EDITOR_CLIP_BITMAP_STYLE);
+	SwitchEditor(EDITOR_CLIP_BITMAP_STYLE);
 	const ClipBitmapStyle* pClipBitmapStyle = ClipBitmapStyleTransformer::GetInstance().GetSelectedClipBitmapStyle();
 	ClipBitmapStyleEditor::GetInstance().SetClipBitmapStyle(pClipBitmapStyle);
 	ClipBitmapStyleTransformer::GetInstance().UpdateProperty(pClipBitmapStyle);
@@ -627,5 +918,21 @@ void DesignerFrame::OnPropertyGridChanged(wxPropertyGridEvent& event)
 	case PT_CLIP_BITMAP_STYLE:
 		ClipBitmapStyleTransformer::GetInstance().PropertyChanged(pProperty);
 		break;
+	}
+}
+
+void DesignerFrame::SwitchEditor(EDITOR eEditor)
+{
+	for (int i = 0; i < NUM_EDITOR; ++i)
+	{
+		if (i == eEditor)
+		{
+			m_pEditorNotebook->SetSelection(eEditor);
+			m_eCurrEditor = eEditor;
+		}
+		else
+		{
+			m_pEditors[i]->Reset();
+		}
 	}
 }

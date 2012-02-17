@@ -26,6 +26,8 @@ public:
 
 	static BitmapStyleEditor& GetInstance();
 
+	virtual void Reset();
+
 	bool SetBitmapStyle(const BitmapStyle* pBitmapStyle);
 	const BitmapStyle* GetBitmapStyle();
 

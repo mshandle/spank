@@ -7,6 +7,8 @@
  */
 #include "ColorStyleDocument.h"
 #include <tinyxml-2.6.2/tinyxml.h>
+#include <wx/msgdlg.h>
+#include "../DesignerFrame.h"
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
@@ -42,8 +44,16 @@ bool ColorStyleDocument::OpenFile(const wxString& strFile)
 	while (pElmColorStyle)
 	{
 		ColorStyle* pColorStyle = new ColorStyle();
-		if (!pColorStyle->LoadFromXml(pElmColorStyle)) return false;
-		m_ColorStyleMap.insert(std::make_pair(pColorStyle->GetId(), pColorStyle));
+		if (!pColorStyle->LoadFromXml(pElmColorStyle))
+		{
+			wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("load color style failed, id=%s", pColorStyle->GetId()));
+			msg.ShowModal();
+			SAFE_DELETE(pColorStyle);
+		}
+		else
+		{
+			m_ColorStyleMap.insert(std::make_pair(pColorStyle->GetId(), pColorStyle));
+		}
 		pElmColorStyle = pElmColorStyle->NextSiblingElement("ColorStyle");
 	}
 
@@ -65,7 +75,11 @@ bool ColorStyleDocument::SaveFile(const wxString& strFile)
 	for (TM_COLOR_STYLE::iterator it = m_ColorStyleMap.begin(); it != m_ColorStyleMap.end(); ++it)
 	{
 		ColorStyle* pColorStyle = it->second;
-		pColorStyle->SaveToXml(pElmColorStyleList);
+		if (!pColorStyle->SaveToXml(pElmColorStyleList))
+		{
+			wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("save color style failed, id=%s", pColorStyle->GetId()));
+			msg.ShowModal();
+		}
 	}
 
 	return doc.SaveFile(strFile);
@@ -77,7 +91,7 @@ void ColorStyleDocument::Reset()
 	for (TM_COLOR_STYLE::iterator it = m_ColorStyleMap.begin(); it != m_ColorStyleMap.end(); ++it)
 	{
 		ColorStyle* pColorStyle = it->second;
-		delete pColorStyle;
+		SAFE_DELETE(pColorStyle);
 	}
 	m_ColorStyleMap.clear();
 	ClearModifiedFlag();

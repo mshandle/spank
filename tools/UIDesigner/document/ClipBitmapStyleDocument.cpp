@@ -7,6 +7,8 @@
  */
 #include "ClipBitmapStyleDocument.h"
 #include <tinyxml-2.6.2/tinyxml.h>
+#include <wx/msgdlg.h>
+#include "../DesignerFrame.h"
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
@@ -42,8 +44,16 @@ bool ClipBitmapStyleDocument::OpenFile(const wxString& strFile)
 	while (pElmClipBitmapStyle)
 	{
 		ClipBitmapStyle* pClipBitmapStyle = new ClipBitmapStyle();
-		if (!pClipBitmapStyle->LoadFromXml(pElmClipBitmapStyle)) return false;
-		m_ClipBitmapStyleMap.insert(std::make_pair(pClipBitmapStyle->GetId(), pClipBitmapStyle));
+		if (!pClipBitmapStyle->LoadFromXml(pElmClipBitmapStyle))
+		{
+			wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("load clip bitmap style failed, id=%s", pClipBitmapStyle->GetId()));
+			msg.ShowModal();
+			SAFE_DELETE(pClipBitmapStyle);
+		}
+		else
+		{
+			m_ClipBitmapStyleMap.insert(std::make_pair(pClipBitmapStyle->GetId(), pClipBitmapStyle));
+		}
 		pElmClipBitmapStyle = pElmClipBitmapStyle->NextSiblingElement("ClipBitmapStyle");
 	}
 
@@ -65,7 +75,11 @@ bool ClipBitmapStyleDocument::SaveFile(const wxString& strFile)
 	for (TM_CLIP_BITMAP_STYLE::iterator it = m_ClipBitmapStyleMap.begin(); it != m_ClipBitmapStyleMap.end(); ++it)
 	{
 		ClipBitmapStyle* pClipBitmapStyle = it->second;
-		pClipBitmapStyle->SaveToXml(pElmClipBitmapStyleList);
+		if (!pClipBitmapStyle->SaveToXml(pElmClipBitmapStyleList))
+		{
+			wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("save clip bitmap style failed, id=%s", pClipBitmapStyle->GetId()));
+			msg.ShowModal();
+		}
 	}
 
 	return doc.SaveFile(strFile);
@@ -77,7 +91,7 @@ void ClipBitmapStyleDocument::Reset()
 	for (TM_CLIP_BITMAP_STYLE::iterator it = m_ClipBitmapStyleMap.begin(); it != m_ClipBitmapStyleMap.end(); ++it)
 	{
 		ClipBitmapStyle* pClipBitmapStyle = it->second;
-		delete pClipBitmapStyle;
+		SAFE_DELETE(pClipBitmapStyle);
 	}
 	m_ClipBitmapStyleMap.clear();
 	ClearModifiedFlag();
@@ -91,6 +105,25 @@ const ClipBitmapStyle* ClipBitmapStyleDocument::FindClipBitmapStyle(const wxStri
 const ClipBitmapStyleDocument::TM_CLIP_BITMAP_STYLE& ClipBitmapStyleDocument::GetClipBitmapStyleMap()
 {
 	return m_ClipBitmapStyleMap;
+}
+
+int ClipBitmapStyleDocument::EnumClipBitmapStyles(TV_CLIP_BITMAP_STYLE& vClipBitmapStyleOut, const PieceInfo* pPieceInfo)
+{
+	int nFound = 0;
+	for (TM_CLIP_BITMAP_STYLE::const_iterator it = m_ClipBitmapStyleMap.begin(); it != m_ClipBitmapStyleMap.end(); ++it)
+	{
+		const ClipBitmapStyle* pClipBitmapStyle = it->second;
+		if (pClipBitmapStyle->GetStatePiece(IStyle::SS_NORMAL) == pPieceInfo
+			|| pClipBitmapStyle->GetStatePiece(IStyle::SS_DOWN) == pPieceInfo
+			|| pClipBitmapStyle->GetStatePiece(IStyle::SS_HOVER) == pPieceInfo
+			|| pClipBitmapStyle->GetStatePiece(IStyle::SS_DISABLED) == pPieceInfo)
+		{
+			vClipBitmapStyleOut.push_back(pClipBitmapStyle);
+			nFound++;
+		}
+	}
+
+	return nFound;
 }
 
 bool ClipBitmapStyleDocument::RenameClipBitmapStyleId(const ClipBitmapStyle* pClipBitmapStyle, const wxString& strNewId)

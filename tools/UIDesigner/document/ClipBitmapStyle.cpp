@@ -7,6 +7,8 @@
  */
 #include "ClipBitmapStyle.h"
 #include "ImagePieceDocument.h"
+#include <wx/msgdlg.h>
+#include "../DesignerFrame.h"
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
@@ -82,7 +84,12 @@ const PieceInfo* ClipBitmapStyle::LoadStateInfo(TiXmlElement* pElmClipBitmapStyl
 	if (!pszPieceId) return pDefaultPieceInfo;
 
 	const PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfo(pszPieceId);
-	if (!pPieceInfo) return pDefaultPieceInfo;
+	if (!pPieceInfo)
+	{
+		wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("can not found piece id=%s, for clip bitmap style id=%s", pszPieceId, GetId()));
+		msg.ShowModal();
+		return pDefaultPieceInfo;
+	}
 
 	return pPieceInfo;
 }

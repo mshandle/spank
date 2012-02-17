@@ -51,6 +51,8 @@ public:
 
 	virtual bool Create(wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE);
 
+	const ImageInfo* GetCurrImageInfo();
+
 private:
 	void Init();
 	void CreateControls();
@@ -90,6 +92,8 @@ private:
 
 	wxString m_strError;
 	RectangleBinPack m_Packer;
+	const ImageInfo* m_pCurrImageInfo;
+
 };
 
 #endif // __DIALOGADDPIECE_H__

@@ -32,16 +32,23 @@ void BitmapStyleEditor::Init()
 	m_pBitmapStyleEditor = this;
 	m_pBitmapStyle = NULL;
 	m_eSelState = IStyle::SS_NUM;
+	Reset();
 }
 
 void BitmapStyleEditor::Release()
 {
+	Reset();
 	m_pBitmapStyleEditor = NULL;
 }
 
 BitmapStyleEditor& BitmapStyleEditor::GetInstance()
 {
 	return *m_pBitmapStyleEditor;
+}
+
+void BitmapStyleEditor::Reset()
+{
+	SetBitmapStyle(NULL);
 }
 
 bool BitmapStyleEditor::SetBitmapStyle(const BitmapStyle* pBitmapStyle)

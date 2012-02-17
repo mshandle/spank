@@ -47,6 +47,7 @@ public:
 		const wxString& name = wxPanelNameStr);
 
 	virtual wxSize DoGetBestSize() const;
+	virtual void Reset();
 
 	bool ZoomIn();
 	bool ZoomOut();

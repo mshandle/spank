@@ -7,6 +7,8 @@
  */
 #include "ImageInfo.h"
 #include "ProjectDocument.h"
+#include <wx/msgdlg.h>
+#include "../DesignerFrame.h"
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
@@ -47,7 +49,13 @@ bool ImageInfo::SaveImage()
 	m_bIsModified = false;
 	if (!m_pbmpImage) return true;
 
-	return m_pbmpImage->SaveFile(ProjectDocument::GetInstance().GetRootDir() + "/" + m_strPath, wxBITMAP_TYPE_PNG);
+	if (!m_pbmpImage->SaveFile(ProjectDocument::GetInstance().GetRootDir() + "/" + m_strPath, wxBITMAP_TYPE_PNG))
+	{
+		wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("save image bitmap failed, path=%s", ProjectDocument::GetInstance().GetRootDir() + "/" + m_strPath));
+		msg.ShowModal();
+	}
+
+	return true;
 }
 
 void ImageInfo::SetId(const wxString& strId)
@@ -100,6 +108,8 @@ bool ImageInfo::LoadImageFromFile()
 	m_pbmpImage = new wxBitmap();
 	if (!m_pbmpImage->LoadFile(ProjectDocument::GetInstance().GetRootDir() + "/" + m_strPath, wxBITMAP_TYPE_ANY))
 	{
+		wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("can not open file: %s", ProjectDocument::GetInstance().GetRootDir() + "/" + m_strPath));
+		msg.ShowModal();
 		SAFE_DELETE(m_pbmpImage);
 		return false;
 	}

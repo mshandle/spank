@@ -7,6 +7,8 @@
  */
 #include "BitmapStyle.h"
 #include "ImagePieceDocument.h"
+#include <wx/msgdlg.h>
+#include "../DesignerFrame.h"
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
@@ -81,7 +83,12 @@ const PieceInfo* BitmapStyle::LoadStateInfo(TiXmlElement* pElmBitmapStyle, const
 	if (!pszPieceId) return pDefaultPieceInfo;
 
 	const PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfo(pszPieceId);
-	if (!pPieceInfo) return pDefaultPieceInfo;
+	if (!pPieceInfo)
+	{
+		wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("can not found piece id=%s, for bitmap style id=%s", pszPieceId, GetId()));
+		msg.ShowModal();
+		return pDefaultPieceInfo;
+	}
 
 	return pPieceInfo;
 }

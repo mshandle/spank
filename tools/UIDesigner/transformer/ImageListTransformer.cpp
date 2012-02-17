@@ -56,6 +56,11 @@ void ImageListTransformer::UpdateProperty(const ImageInfo* pImageInfo)
 
 	m_pPropertyGrid->Append(new wxStringProperty("id", "id", pImageInfo->GetId()));
 	m_pPropertyGrid->Append(new wxFileProperty("path", "path", pImageInfo->GetPath()))->Enable(false);
+
+	wxSize bitmapSize = ((ImageInfo*)pImageInfo)->GetBitmap()->GetSize();
+	m_pPropertyGrid->Append(new wxPropertyCategory("size", "size"));
+	m_pPropertyGrid->Append(new wxIntProperty("width", "width", bitmapSize.x))->Enable(false);
+	m_pPropertyGrid->Append(new wxIntProperty("height", "height", bitmapSize.y))->Enable(false);
 	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_IMAGE);
 }
 

@@ -81,6 +81,7 @@ void DialogAddPiece::Init()
 	m_EdtImageName = NULL;
 	m_EdtImageWidth = NULL;
 	m_EdtImageHeight = NULL;
+	m_pCurrImageInfo = NULL;
 }
 
 void DialogAddPiece::CreateControls()
@@ -284,7 +285,7 @@ void DialogAddPiece::OnOkClicked(wxCommandEvent& event)
 
 	if (!bOk)
 	{
-		wxMessageDialog msg(this, m_strError, "Error");
+		wxMessageDialog msg(this, m_strError);
 		msg.ShowModal();
 		return;
 	}
@@ -417,6 +418,8 @@ bool DialogAddPiece::AddPieceFromExistingImage(const wxSize& newSize)
 
 	PieceListTransformer::GetInstance().UpdateListView();
 	FreePackingPiecesInfo(vPackingInfo);
+
+	m_pCurrImageInfo = pImageInfo;
 	return true;
 }
 
@@ -469,6 +472,7 @@ bool DialogAddPiece::AddPieceIntoNewImage(const wxSize& newSize)
 
 	PieceListTransformer::GetInstance().UpdateListView();
 	FreePackingPiecesInfo(vPackingInfo);
+	m_pCurrImageInfo = pImageInfo;
 	return true;
 }
 
@@ -560,9 +564,9 @@ bool DialogAddPiece::GetPieceFromImage(TV_PACKING_PIECE_INFO& vPackingInfo, cons
 {
 	ImagePieceDocument::TV_PIECE_INFO PiecesInImage;
 	int numPieces = ImagePieceDocument::GetInstance().EnumImagePieces(PiecesInImage, pImageInfo);
-	for (ImagePieceDocument::TV_PIECE_INFO::iterator it = PiecesInImage.begin(); it != PiecesInImage.end(); ++it)
+	for (ImagePieceDocument::TV_PIECE_INFO::const_iterator it = PiecesInImage.begin(); it != PiecesInImage.end(); ++it)
 	{
-		PieceInfo* pPieceInfo = (*it);
+		const PieceInfo* pPieceInfo = (*it);
 		const wxRect& pieceRect = pPieceInfo->GetRect();
 
 		PACKING_PIECE_INFO* pPackingInfo = new PACKING_PIECE_INFO();
@@ -576,4 +580,9 @@ bool DialogAddPiece::GetPieceFromImage(TV_PACKING_PIECE_INFO& vPackingInfo, cons
 	}
 
 	return true;
+}
+
+const ImageInfo* DialogAddPiece::GetCurrImageInfo()
+{
+	return m_pCurrImageInfo;
 }

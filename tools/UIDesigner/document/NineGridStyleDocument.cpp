@@ -7,6 +7,8 @@
  */
 #include "NineGridStyleDocument.h"
 #include <tinyxml-2.6.2/tinyxml.h>
+#include <wx/msgdlg.h>
+#include "../DesignerFrame.h"
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
@@ -42,8 +44,16 @@ bool NineGridStyleDocument::OpenFile(const wxString& strFile)
 	while (pElmNineGridStyle)
 	{
 		NineGridStyle* pNineGridStyle = new NineGridStyle();
-		if (!pNineGridStyle->LoadFromXml(pElmNineGridStyle)) return false;
-		m_NineGridStyleMap.insert(std::make_pair(pNineGridStyle->GetId(), pNineGridStyle));
+		if (!pNineGridStyle->LoadFromXml(pElmNineGridStyle))
+		{
+			wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("load 9-grid style failed, id=%s", pNineGridStyle->GetId()));
+			msg.ShowModal();
+			SAFE_DELETE(pNineGridStyle);
+		}
+		else
+		{
+			m_NineGridStyleMap.insert(std::make_pair(pNineGridStyle->GetId(), pNineGridStyle));
+		}
 		pElmNineGridStyle = pElmNineGridStyle->NextSiblingElement("NineGridStyle");
 	}
 
@@ -65,7 +75,11 @@ bool NineGridStyleDocument::SaveFile(const wxString& strFile)
 	for (TM_NINE_GRID_STYLE::iterator it = m_NineGridStyleMap.begin(); it != m_NineGridStyleMap.end(); ++it)
 	{
 		NineGridStyle* pNineGridStyle = it->second;
-		pNineGridStyle->SaveToXml(pElmNineGridStyleList);
+		if (!pNineGridStyle->SaveToXml(pElmNineGridStyleList))
+		{
+			wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("save 9-grid style failed, id=%s", pNineGridStyle->GetId()));
+			msg.ShowModal();
+		}
 	}
 
 	return doc.SaveFile(strFile);
@@ -77,7 +91,7 @@ void NineGridStyleDocument::Reset()
 	for (TM_NINE_GRID_STYLE::iterator it = m_NineGridStyleMap.begin(); it != m_NineGridStyleMap.end(); ++it)
 	{
 		NineGridStyle* pNineGridStyle = it->second;
-		delete pNineGridStyle;
+		SAFE_DELETE(pNineGridStyle);
 	}
 	m_NineGridStyleMap.clear();
 	ClearModifiedFlag();
@@ -91,6 +105,25 @@ const NineGridStyle* NineGridStyleDocument::FindNineGridStyle(const wxString& st
 const NineGridStyleDocument::TM_NINE_GRID_STYLE& NineGridStyleDocument::GetNineGridStyleMap()
 {
 	return m_NineGridStyleMap;
+}
+
+int NineGridStyleDocument::EnumNineGridStyles(TV_NINE_GRID_STYLE& vNineGridStyleOut, const PieceInfo* pPieceInfo)
+{
+	int nFound = 0;
+	for (TM_NINE_GRID_STYLE::const_iterator it = m_NineGridStyleMap.begin(); it != m_NineGridStyleMap.end(); ++it)
+	{
+		const NineGridStyle* pNineGridStyle = it->second;
+		if (pNineGridStyle->GetStateGridInfo(IStyle::SS_NORMAL)->pPieceInfo == pPieceInfo
+			|| pNineGridStyle->GetStateGridInfo(IStyle::SS_DOWN)->pPieceInfo == pPieceInfo
+			|| pNineGridStyle->GetStateGridInfo(IStyle::SS_HOVER)->pPieceInfo == pPieceInfo
+			|| pNineGridStyle->GetStateGridInfo(IStyle::SS_DISABLED)->pPieceInfo == pPieceInfo)
+		{
+			vNineGridStyleOut.push_back(pNineGridStyle);
+			nFound++;
+		}
+	}
+
+	return nFound;
 }
 
 bool NineGridStyleDocument::RenameNineGridStyleId(const NineGridStyle* pNineGridStyle, const wxString& strNewId)

@@ -12,6 +12,15 @@
 #include <wx/aui/aui.h>
 #include <wx/treectrl.h>
 #include <wx/propgrid/propgrid.h>
+#include <set>
+
+#include "document/PieceInfo.h"
+#include "document/ImageInfo.h"
+#include "document/BitmapStyle.h"
+#include "document/NineGridStyle.h"
+#include "document/ColorStyle.h"
+#include "document/ClipBitmapStyle.h"
+
 #include "editor/BaseEditor.h"
 
 class DesignerFrame : public wxFrame
@@ -90,6 +99,8 @@ public:
 		PT_CLIP_BITMAP_STYLE,
 	};
 
+	typedef std::set<wxString> TS_WX_STRING;
+
 public:
 	DECLARE_DYNAMIC_CLASS(DesignerFrame)
 	DECLARE_EVENT_TABLE()
@@ -102,6 +113,8 @@ public:
 
 	void SetCurrPropertyType(PROPERTY_TYPE eType);
 	PROPERTY_TYPE GetCurrPropertyType() const;
+
+	void UpdateTitle(bool bModified, bool bForce = false);
 
 private:
 	void Init();
@@ -119,9 +132,19 @@ private:
 	void DoOpenFile();
 	void OnFileSave(wxCommandEvent& event);
 	void DoSaveFile();
-	void OnExit(wxCommandEvent& event);
+	void OnFileExit(wxCommandEvent& event);
 	void OnClose(wxCloseEvent& event);
 	bool IsModified() const;
+
+	void OnEditDelete(wxCommandEvent& event);
+	bool FindStyleIdsUsingThePiece(TS_WX_STRING& vBitmapStyleIds, TS_WX_STRING& vNineGridStyleIds, TS_WX_STRING& vClipBitmapStyleIds, const PieceInfo* pPieceInfo);
+	bool MakeIdsString(wxString& strOut, const TS_WX_STRING& vIds, const wxString& strHeader);
+	void DoDeletePiece(const PieceInfo* pPieceInfo);
+	void DoDeleteImage(const ImageInfo* pImageInfo);
+	void DoDeleteBitmapStyle(const BitmapStyle* pBitmapStyle);
+	void DoDeleteNineGridStyle(const NineGridStyle* pNineGridStyle);
+	void DoDeleteColorStyle(const ColorStyle* pColorStyle);
+	void DoDeleteClipBitmapStyle(const ClipBitmapStyle* pClipBitmapStyle);
 
 	void OnAddPiece(wxCommandEvent& event);
 	void OnAddBitmapStyle(wxCommandEvent& event);
@@ -142,6 +165,8 @@ private:
 
 	void OnPropertyGridChanged(wxPropertyGridEvent& event);
 
+	void SwitchEditor(EDITOR eEditor);
+
 private:
 	static DesignerFrame* m_pDesignerFrame;
 
@@ -154,7 +179,10 @@ private:
 	wxPropertyGrid* m_pPropertyGrid;
 
 	wxNotebook* m_pEditorNotebook;
+	EDITOR m_eCurrEditor;
 	BaseEditor* m_pEditors[NUM_EDITOR];
+
+	bool m_bTitleModifiedFlag;
 
 };
 #endif // __DESIGNERFRAME_H__

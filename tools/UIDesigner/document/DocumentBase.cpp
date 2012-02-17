@@ -6,6 +6,7 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "DocumentBase.h"
+#include "../DesignerFrame.h"
 
 DocumentBase::DocumentBase()
 {
@@ -29,6 +30,7 @@ const wxString& DocumentBase::GetFilePath() const
 void DocumentBase::SetModifiedFlag()
 {
 	m_bModifiedFlag = true;
+	DesignerFrame::GetInstance().UpdateTitle(m_bModifiedFlag);
 }
 
 void DocumentBase::ClearModifiedFlag()

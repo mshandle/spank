@@ -7,6 +7,8 @@
  */
 #include "NineGridStyle.h"
 #include "ImagePieceDocument.h"
+#include <wx/msgdlg.h>
+#include "../DesignerFrame.h"
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
@@ -28,7 +30,6 @@ bool NineGridStyle::LoadFromXml(TiXmlElement* pElmNineGridStyle)
 	SetId(strId);
 
 	if (!LoadStateInfo(m_NineGridInfo[SS_NORMAL], pElmNineGridStyle, "normal")) return false;
-
 	LoadStateInfo(m_NineGridInfo[SS_DOWN], pElmNineGridStyle, "down");
 	LoadStateInfo(m_NineGridInfo[SS_HOVER], pElmNineGridStyle, "hover");
 	LoadStateInfo(m_NineGridInfo[SS_DISABLED], pElmNineGridStyle, "disabled");
@@ -79,7 +80,12 @@ bool NineGridStyle::LoadStateInfo(NINE_GRID_INFO& NineGridInfoOut, TiXmlElement*
 	if (!pszPieceId) return false;
 
 	const PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfo(pszPieceId);
-	if (!pPieceInfo) return false;
+	if (!pPieceInfo)
+	{
+		wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("can not found piece id=%s, for 9-grid style id=", pszPieceId, GetId()));
+		msg.ShowModal();
+		return false;
+	}
 
 	NineGridInfoOut.pPieceInfo = pPieceInfo;
 	pElmState->Attribute("min_x", &NineGridInfoOut.min_x);

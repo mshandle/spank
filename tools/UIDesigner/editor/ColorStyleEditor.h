@@ -26,6 +26,7 @@ public:
 
 	static ColorStyleEditor& GetInstance();
 
+	virtual void Reset();
 	bool SetColorStyle(const ColorStyle* pColorStyle);
 	const ColorStyle* GetColorStyle();
 
