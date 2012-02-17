@@ -49,6 +49,7 @@ bool ColorStyleDocument::OpenFile(const wxString& strFile)
 			wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("load color style failed, id=%s", pColorStyle->GetId()));
 			msg.ShowModal();
 			SAFE_DELETE(pColorStyle);
+			SetModifiedFlag();
 		}
 		else
 		{

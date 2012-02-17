@@ -47,6 +47,7 @@ bool ImagePieceDocument::OpenFile(const wxString& strFile)
 			wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("load image failed, id=%s", pImageInfo->GetId()));
 			msg.ShowModal();
 			SAFE_DELETE(pImageInfo);
+			SetModifiedFlag();
 		}
 		else
 		{
@@ -67,6 +68,7 @@ bool ImagePieceDocument::OpenFile(const wxString& strFile)
 			wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("load piece failed, id=%s", pPieceInfo->GetId()));
 			msg.ShowModal();
 			SAFE_DELETE(pPieceInfo);
+			SetModifiedFlag();
 		}
 		else
 		{

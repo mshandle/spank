@@ -49,6 +49,7 @@ bool NineGridStyleDocument::OpenFile(const wxString& strFile)
 			wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("load 9-grid style failed, id=%s", pNineGridStyle->GetId()));
 			msg.ShowModal();
 			SAFE_DELETE(pNineGridStyle);
+			SetModifiedFlag();
 		}
 		else
 		{

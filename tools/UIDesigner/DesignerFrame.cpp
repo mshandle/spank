@@ -185,7 +185,7 @@ void DesignerFrame::CreateMenu()
 	pMenuItemEdit->Append(IDM_EDIT_COPY, wxT("&Copy\tCtrl+C"), wxEmptyString, wxITEM_NORMAL);
 	pMenuItemEdit->Append(IDM_EDIT_CUT, wxT("Cu&t\tCtrl+X"), wxEmptyString, wxITEM_NORMAL);
 	pMenuItemEdit->Append(IDM_EDIT_PAST, wxT("&Past\tCtrl+V"), wxEmptyString, wxITEM_NORMAL);
-	pMenuItemEdit->Append(IDM_EDIT_DELETE, wxT("&Delete\tDel"), wxEmptyString, wxITEM_NORMAL);
+	pMenuItemEdit->Append(IDM_EDIT_DELETE, wxT("&Delete\tCtrl+D"), wxEmptyString, wxITEM_NORMAL);
 	pMenuBar->Append(pMenuItemEdit, wxT("&Edit"));
 
 	// elements
@@ -455,7 +455,7 @@ void DesignerFrame::DoOpenFile()
 			ColorStyleTransformer::GetInstance().UpdateListView();
 			ClipBitmapStyleTransformer::GetInstance().UpdateListView();
 
-			UpdateTitle(false, true);
+			UpdateTitle(IsModified(), true);
 		}
 	}
 }

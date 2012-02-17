@@ -49,6 +49,7 @@ bool ClipBitmapStyleDocument::OpenFile(const wxString& strFile)
 			wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("load clip bitmap style failed, id=%s", pClipBitmapStyle->GetId()));
 			msg.ShowModal();
 			SAFE_DELETE(pClipBitmapStyle);
+			SetModifiedFlag();
 		}
 		else
 		{

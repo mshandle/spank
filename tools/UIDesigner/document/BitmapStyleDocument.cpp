@@ -49,6 +49,7 @@ bool BitmapStyleDocument::OpenFile(const wxString& strFile)
 			wxMessageDialog msg(&DesignerFrame::GetInstance(), wxString::Format("load bitmap style failed, id=%s", pBitmapStyle->GetId()));
 			msg.ShowModal();
 			SAFE_DELETE(pBitmapStyle);
+			SetModifiedFlag();
 		}
 		else
 		{
