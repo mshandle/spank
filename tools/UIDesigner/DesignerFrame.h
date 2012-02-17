@@ -68,6 +68,17 @@ public:
 		NUM_EDITOR,
 	};
 
+	enum LIST_VIEW
+	{
+		LIST_VIEW_IMAGE = 0,
+		LIST_VIEW_PIECE,
+		LIST_VIEW_BITMAP_STYLE,
+		LIST_VIEW_NINE_GRID_STYLE,
+		LIST_VIEW_COLOR_STYLE,
+		LIST_VIEW_CLIP_BITMAP_STYLE,
+		NUM_LIST_VIEW,
+	};
+
 	enum PROPERTY_TYPE
 	{
 		PT_UNKNOWN = 0,
@@ -136,6 +147,7 @@ private:
 
 	wxAuiManager m_auiManager;
 
+	wxNotebook* m_pListNotebook;
 	wxTextCtrl* m_pOutputView;
 
 	PROPERTY_TYPE m_eCurrPropertyType;

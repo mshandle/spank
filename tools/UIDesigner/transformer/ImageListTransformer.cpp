@@ -67,7 +67,11 @@ void ImageListTransformer::PropertyChanged(wxPGProperty* pProperty)
 	if (pProperty->GetName() == "id")
 	{
 		wxString strNewId = pProperty->GetValueAsString();
-		ImagePieceDocument::GetInstance().RenameImageInfoId(pImageInfo, strNewId);
+		if (ImagePieceDocument::GetInstance().RenameImageInfoId(pImageInfo, strNewId))
+		{
+			ImageListTransformer::GetInstance().UpdateListView();
+			ImageListTransformer::GetInstance().SetSelectedImageInfo(pImageInfo);
+		}
 	}
 }
 

@@ -41,7 +41,7 @@ public:
 
 private:
 	bool LoadStateInfo(NINE_GRID_INFO& NineGridInfoOut, TiXmlElement* pElmNineGridStyle, const wxString& strState);
-	bool SaveStateInfo(TiXmlElement* pElmNineGridStyle, const wxString& strState, const NINE_GRID_INFO& NineGridInfo, bool force = false);
+	bool SaveStateInfo(TiXmlElement* pElmNineGridStyle, const wxString& strState, const NINE_GRID_INFO& NineGridInfo);
 	bool IsNormalGrid(const NINE_GRID_INFO& NineGridInfo);
 
 private:

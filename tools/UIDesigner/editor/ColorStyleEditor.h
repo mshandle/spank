@@ -14,12 +14,6 @@
 class ColorStyleEditor : public BaseEditor
 {
 public:
-	enum CONST_DEFINE
-	{
-		DEFAULT_PIECE_SIZE = 100,
-	};
-
-public:
 	ColorStyleEditor();
 	ColorStyleEditor(wxWindow *parent,
 		wxWindowID winid,

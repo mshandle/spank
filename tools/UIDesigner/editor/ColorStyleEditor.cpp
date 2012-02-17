@@ -6,6 +6,7 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "ColorStyleEditor.h"
+#include "../Config.h"
 
 ColorStyleEditor* ColorStyleEditor::m_pColorStyleEditor = NULL;
 
@@ -126,16 +127,16 @@ void ColorStyleEditor::UpdateSubRect()
 	{
 		if (m_pColorStyle)
 		{
-			subRect.width = DEFAULT_PIECE_SIZE;
-			subRect.height = DEFAULT_PIECE_SIZE;
+			subRect.width = Config::DEFAULT_PIECE_SIZE;
+			subRect.height = Config::DEFAULT_PIECE_SIZE;
 
 			m_rectState[i] = subRect;
 
 			subRect.x = 0;
-			subRect.y += DEFAULT_PIECE_SIZE;
+			subRect.y += Config::DEFAULT_PIECE_SIZE;
 
-			if (m_TotalSize.x < DEFAULT_PIECE_SIZE) m_TotalSize.x = DEFAULT_PIECE_SIZE;
-			m_TotalSize.y += DEFAULT_PIECE_SIZE;
+			if (m_TotalSize.x < Config::DEFAULT_PIECE_SIZE) m_TotalSize.x = Config::DEFAULT_PIECE_SIZE;
+			m_TotalSize.y += Config::DEFAULT_PIECE_SIZE;
 		}
 		else
 		{

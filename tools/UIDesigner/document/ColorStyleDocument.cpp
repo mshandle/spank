@@ -6,8 +6,9 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "ColorStyleDocument.h"
-#include "../transformer/ColorStyleTransformer.h"
 #include <tinyxml-2.6.2/tinyxml.h>
+
+#define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
 ColorStyleDocument::ColorStyleDocument()
 {
@@ -31,6 +32,7 @@ bool ColorStyleDocument::OpenFile(const wxString& strFile)
 	if (!doc.LoadFile(strFile)) return false;
 
 	Reset();
+	SetFilePath(strFile);
 
 	TiXmlElement* pElmColorStyleList = doc.RootElement();
 	if (!pElmColorStyleList || strcmp(pElmColorStyleList->Value(), "ColorStyleList") != 0) return false;
@@ -45,9 +47,6 @@ bool ColorStyleDocument::OpenFile(const wxString& strFile)
 		pElmColorStyle = pElmColorStyle->NextSiblingElement("ColorStyle");
 	}
 
-	m_strFile = strFile;
-
-	ColorStyleTransformer::GetInstance().UpdateListView();
 	return true;
 }
 
@@ -74,7 +73,7 @@ bool ColorStyleDocument::SaveFile(const wxString& strFile)
 
 void ColorStyleDocument::Reset()
 {
-	m_strFile = wxEmptyString;
+	SetFilePath(wxEmptyString);
 	for (TM_COLOR_STYLE::iterator it = m_ColorStyleMap.begin(); it != m_ColorStyleMap.end(); ++it)
 	{
 		ColorStyle* pColorStyle = it->second;
@@ -82,11 +81,6 @@ void ColorStyleDocument::Reset()
 	}
 	m_ColorStyleMap.clear();
 	ClearModifiedFlag();
-}
-
-const wxString& ColorStyleDocument::GetFilePath() const
-{
-	return m_strFile;
 }
 
 const ColorStyle* ColorStyleDocument::FindColorStyle(const wxString& strId)
@@ -117,8 +111,6 @@ bool ColorStyleDocument::RenameColorStyleId(const ColorStyle* pColorStyle, const
 	pFoundColorStyle->SetId(strNewId);
 	m_ColorStyleMap.insert(std::make_pair(pFoundColorStyle->GetId(), pFoundColorStyle));
 
-	ColorStyleTransformer::GetInstance().UpdateListView();
-	ColorStyleTransformer::GetInstance().SetSelectedColorStyle(pFoundColorStyle);
 	return true;
 }
 
@@ -133,9 +125,48 @@ bool ColorStyleDocument::SetStateColor(const ColorStyle* pColorStyle, const wxCo
 	return pFoundColorStyle->SetStateColor(color.GetRGB(), eState);
 }
 
+const ColorStyle* ColorStyleDocument::AddColorStyle(const wxString& strId)
+{
+	if (strId.empty()) return NULL;
+	SetModifiedFlag();
+
+	wxString strNewId = GenerateNewColorStyleId(strId);
+	ColorStyle* pNewColorStyle = new ColorStyle();
+	pNewColorStyle->SetId(strNewId);
+	m_ColorStyleMap.insert(std::make_pair(pNewColorStyle->GetId(), pNewColorStyle));
+
+	return pNewColorStyle;
+}
+
+bool ColorStyleDocument::RemoveColorStyle(const wxString& strId)
+{
+	TM_COLOR_STYLE::iterator itfound = m_ColorStyleMap.find(strId);
+	if (itfound == m_ColorStyleMap.end()) return false;
+	SetModifiedFlag();
+
+	ColorStyle* pFoundColorStyle = (itfound->second);
+	m_ColorStyleMap.erase(itfound);
+
+	SAFE_DELETE(pFoundColorStyle);
+	return true;
+}
+
 ColorStyle* ColorStyleDocument::InternalFindColorStyle(const wxString& strId)
 {
 	TM_COLOR_STYLE::iterator itfound = m_ColorStyleMap.find(strId);
 	if (itfound == m_ColorStyleMap.end()) return NULL;
 	return itfound->second;
+}
+
+wxString ColorStyleDocument::GenerateNewColorStyleId(const wxString& strId)
+{
+	wxString strNewId = strId;
+	int index = 0;
+
+	while (FindColorStyle(strNewId))
+	{
+		strNewId = wxString::Format("%s%d", strId, index++);
+	}
+
+	return strNewId;
 }

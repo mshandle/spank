@@ -8,6 +8,8 @@
 #include "ClipBitmapStyle.h"
 #include "ImagePieceDocument.h"
 
+#define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
+
 ClipBitmapStyle::ClipBitmapStyle()
 {
 	memset(m_PieceInfo, 0, sizeof(m_PieceInfo));
@@ -28,9 +30,9 @@ bool ClipBitmapStyle::LoadFromXml(TiXmlElement* pElmClipBitmapStyle)
 	m_PieceInfo[SS_NORMAL] = LoadStateInfo(pElmClipBitmapStyle, "normal", NULL);
 	if (!m_PieceInfo[SS_NORMAL]) return false;
 
-	m_PieceInfo[SS_DOWN] = LoadStateInfo(pElmClipBitmapStyle, "down", m_PieceInfo[SS_NORMAL]);
-	m_PieceInfo[SS_HOVER] = LoadStateInfo(pElmClipBitmapStyle, "hover", m_PieceInfo[SS_NORMAL]);
-	m_PieceInfo[SS_DISABLED] = LoadStateInfo(pElmClipBitmapStyle, "disabled", m_PieceInfo[SS_NORMAL]);
+	m_PieceInfo[SS_DOWN] = LoadStateInfo(pElmClipBitmapStyle, "down", NULL);
+	m_PieceInfo[SS_HOVER] = LoadStateInfo(pElmClipBitmapStyle, "hover", NULL);
+	m_PieceInfo[SS_DISABLED] = LoadStateInfo(pElmClipBitmapStyle, "disabled", NULL);
 
 	return true;
 }
@@ -42,16 +44,15 @@ bool ClipBitmapStyle::SaveToXml(TiXmlElement* pElmClipBitmapStyleList)
 	TiXmlElement* pElmClipBitmapStyle = new TiXmlElement("ClipBitmapStyle");
 	pElmClipBitmapStyle->SetAttribute("id", GetId());
 
-	if (!SaveStateInfo(pElmClipBitmapStyle, "normal", m_PieceInfo[SS_NORMAL], true))
+	if (!SaveStateInfo(pElmClipBitmapStyle, "normal", m_PieceInfo[SS_NORMAL]))
 	{
-		delete pElmClipBitmapStyle;
-		pElmClipBitmapStyle = NULL;
+		SAFE_DELETE(pElmClipBitmapStyle);
 		return false;
 	}
 
-	SaveStateInfo(pElmClipBitmapStyle, "down", m_PieceInfo[SS_DOWN]);
-	SaveStateInfo(pElmClipBitmapStyle, "hover", m_PieceInfo[SS_HOVER]);
-	SaveStateInfo(pElmClipBitmapStyle, "disabled", m_PieceInfo[SS_DISABLED]);
+	if (m_PieceInfo[SS_NORMAL] != m_PieceInfo[SS_DOWN]) SaveStateInfo(pElmClipBitmapStyle, "down", m_PieceInfo[SS_DOWN]);
+	if (m_PieceInfo[SS_NORMAL] != m_PieceInfo[SS_HOVER]) SaveStateInfo(pElmClipBitmapStyle, "hover", m_PieceInfo[SS_HOVER]);
+	if (m_PieceInfo[SS_NORMAL] != m_PieceInfo[SS_DISABLED]) SaveStateInfo(pElmClipBitmapStyle, "disabled", m_PieceInfo[SS_DISABLED]);
 
 	pElmClipBitmapStyleList->LinkEndChild(pElmClipBitmapStyle);
 	return true;
@@ -61,8 +62,6 @@ bool ClipBitmapStyle::SetStatePiece(const PieceInfo* pPieceInfo, STYLE_STATE eSt
 {
 	if (eState < 0 || eState >= SS_NUM) return false;
 	if (m_PieceInfo[eState] == pPieceInfo) return false;
-	if (!pPieceInfo && m_PieceInfo[eState] == m_PieceInfo[SS_NORMAL]) return false;
-
 	m_PieceInfo[eState] = pPieceInfo;
 	return true;
 }
@@ -88,10 +87,9 @@ const PieceInfo* ClipBitmapStyle::LoadStateInfo(TiXmlElement* pElmClipBitmapStyl
 	return pPieceInfo;
 }
 
-bool ClipBitmapStyle::SaveStateInfo(TiXmlElement* pElmClipBitmapStyle, const wxString& strState, const PieceInfo* pPieceInfo, bool force /*= false*/)
+bool ClipBitmapStyle::SaveStateInfo(TiXmlElement* pElmClipBitmapStyle, const wxString& strState, const PieceInfo* pPieceInfo)
 {
 	if (!pPieceInfo) return false;
-	if (!force && pPieceInfo == m_PieceInfo[SS_NORMAL]) return false;
 
 	TiXmlElement* pElmState = new TiXmlElement(strState);
 	pElmState->SetAttribute("piece_id", pPieceInfo->GetId());

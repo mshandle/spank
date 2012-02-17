@@ -120,10 +120,30 @@ void BaseEditor::Draw(wxDC& dc)
 	// TODO: 
 }
 
-void BaseEditor::DrawBitmap(wxDC& dc, const wxBitmap& bitmap, const wxPoint& destPos)
+void BaseEditor::DrawImage(wxDC& dc, const wxPoint& destPos, const ImageInfo* pImageInfo)
 {
-	m_memDC.SelectObject((wxBitmap)bitmap);
-	dc.StretchBlit(destPos*m_nZoom-m_ptOriginOffset, bitmap.GetSize()*m_nZoom, &m_memDC, wxPoint(0, 0), bitmap.GetSize());
+	if (!pImageInfo) return;
+
+	const wxBitmap* pBitmap = ((ImageInfo*)pImageInfo)->GetBitmap();
+	if (!pBitmap) return;
+
+	m_memDC.SelectObject((wxBitmap)(*pBitmap));
+	dc.StretchBlit(destPos*m_nZoom-m_ptOriginOffset, pBitmap->GetSize()*m_nZoom, &m_memDC, wxPoint(0, 0), pBitmap->GetSize());
+	m_memDC.SelectObject(wxNullBitmap);
+}
+
+void BaseEditor::DrawPiece(wxDC& dc, const wxPoint& destPos, const PieceInfo* pPieceInfo)
+{
+	if (!pPieceInfo) return;
+
+	const ImageInfo* pImageInfo = pPieceInfo->GetImageInfo();
+	if (!pImageInfo) return;
+
+	const wxBitmap* pBitmap = ((ImageInfo*)pImageInfo)->GetBitmap();
+	if (!pBitmap) return;
+
+	m_memDC.SelectObject((wxBitmap)(*pBitmap));
+	dc.StretchBlit(destPos*m_nZoom-m_ptOriginOffset, pPieceInfo->GetRect().GetSize()*m_nZoom, &m_memDC, pPieceInfo->GetRect().GetPosition(), pPieceInfo->GetRect().GetSize());
 	m_memDC.SelectObject(wxNullBitmap);
 }
 

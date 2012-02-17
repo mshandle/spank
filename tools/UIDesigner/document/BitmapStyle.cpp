@@ -8,6 +8,8 @@
 #include "BitmapStyle.h"
 #include "ImagePieceDocument.h"
 
+#define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
+
 BitmapStyle::BitmapStyle()
 {
 	memset(m_PieceInfo, 0, sizeof(m_PieceInfo));
@@ -28,9 +30,9 @@ bool BitmapStyle::LoadFromXml(TiXmlElement* pElmBitmapStyle)
 	m_PieceInfo[SS_NORMAL] = LoadStateInfo(pElmBitmapStyle, "normal", NULL);
 	if (!m_PieceInfo[SS_NORMAL]) return false;
 
-	m_PieceInfo[SS_DOWN] = LoadStateInfo(pElmBitmapStyle, "down", m_PieceInfo[SS_NORMAL]);
-	m_PieceInfo[SS_HOVER] = LoadStateInfo(pElmBitmapStyle, "hover", m_PieceInfo[SS_NORMAL]);
-	m_PieceInfo[SS_DISABLED] = LoadStateInfo(pElmBitmapStyle, "disabled", m_PieceInfo[SS_NORMAL]);
+	m_PieceInfo[SS_DOWN] = LoadStateInfo(pElmBitmapStyle, "down", NULL);
+	m_PieceInfo[SS_HOVER] = LoadStateInfo(pElmBitmapStyle, "hover", NULL);
+	m_PieceInfo[SS_DISABLED] = LoadStateInfo(pElmBitmapStyle, "disabled", NULL);
 
 	return true;
 }
@@ -42,16 +44,15 @@ bool BitmapStyle::SaveToXml(TiXmlElement* pElmBitmapStyleList)
 	TiXmlElement* pElmBitmapStyle = new TiXmlElement("BitmapStyle");
 	pElmBitmapStyle->SetAttribute("id", GetId());
 
-	if (!SaveStateInfo(pElmBitmapStyle, "normal", m_PieceInfo[SS_NORMAL], true))
+	if (!SaveStateInfo(pElmBitmapStyle, "normal", m_PieceInfo[SS_NORMAL]))
 	{
-		delete pElmBitmapStyle;
-		pElmBitmapStyle = NULL;
+		SAFE_DELETE(pElmBitmapStyle);
 		return false;
 	}
 
-	SaveStateInfo(pElmBitmapStyle, "down", m_PieceInfo[SS_DOWN]);
-	SaveStateInfo(pElmBitmapStyle, "hover", m_PieceInfo[SS_HOVER]);
-	SaveStateInfo(pElmBitmapStyle, "disabled", m_PieceInfo[SS_DISABLED]);
+	if (m_PieceInfo[SS_NORMAL] != m_PieceInfo[SS_DOWN]) SaveStateInfo(pElmBitmapStyle, "down", m_PieceInfo[SS_DOWN]);
+	if (m_PieceInfo[SS_NORMAL] != m_PieceInfo[SS_HOVER]) SaveStateInfo(pElmBitmapStyle, "hover", m_PieceInfo[SS_HOVER]);
+	if (m_PieceInfo[SS_NORMAL] != m_PieceInfo[SS_DISABLED]) SaveStateInfo(pElmBitmapStyle, "disabled", m_PieceInfo[SS_DISABLED]);
 
 	pElmBitmapStyleList->LinkEndChild(pElmBitmapStyle);
 	return true;
@@ -61,8 +62,6 @@ bool BitmapStyle::SetStatePiece(const PieceInfo* pPieceInfo, STYLE_STATE eState)
 {
 	if (eState < 0 || eState >= SS_NUM) return false;
 	if (m_PieceInfo[eState] == pPieceInfo) return false;
-	if (!pPieceInfo && m_PieceInfo[eState] == m_PieceInfo[SS_NORMAL]) return false;
-
 	m_PieceInfo[eState] = pPieceInfo;
 	return true;
 }
@@ -87,10 +86,9 @@ const PieceInfo* BitmapStyle::LoadStateInfo(TiXmlElement* pElmBitmapStyle, const
 	return pPieceInfo;
 }
 
-bool BitmapStyle::SaveStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& strState, const PieceInfo* pPieceInfo, bool force /*= false*/)
+bool BitmapStyle::SaveStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& strState, const PieceInfo* pPieceInfo)
 {
 	if (!pPieceInfo) return false;
-	if (!force && pPieceInfo == m_PieceInfo[SS_NORMAL]) return false;
 
 	TiXmlElement* pElmState = new TiXmlElement(strState);
 	pElmState->SetAttribute("piece_id", pPieceInfo->GetId());

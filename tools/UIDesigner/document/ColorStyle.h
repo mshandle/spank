@@ -14,12 +14,6 @@
 class ColorStyle : public IStyle
 {
 public:
-	enum CONST_DEFINE
-	{
-		DEFAULT_COLOR = 0x808080,
-	};
-
-public:
 	ColorStyle();
 	~ColorStyle();
 
@@ -31,7 +25,7 @@ public:
 
 private:
 	unsigned int LoadStateInfo(TiXmlElement* pElmColorStyle, const wxString& strState, unsigned int nDefaultColor);
-	bool SaveStateInfo(TiXmlElement* pElmColorStyle, const wxString& strState, unsigned int nColor, bool force = false);
+	bool SaveStateInfo(TiXmlElement* pElmColorStyle, const wxString& strState, unsigned int nColor);
 
 private:
 	unsigned int m_nColors[SS_NUM];

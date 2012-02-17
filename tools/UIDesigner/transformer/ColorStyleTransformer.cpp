@@ -80,7 +80,11 @@ void ColorStyleTransformer::PropertyChanged(const wxPGProperty* pProperty)
 	if (pProperty->GetName() == "id")
 	{
 		wxString strNewId = pProperty->GetValueAsString();
-		ColorStyleDocument::GetInstance().RenameColorStyleId(pColorStyle, strNewId);
+		if (ColorStyleDocument::GetInstance().RenameColorStyleId(pColorStyle, strNewId))
+		{
+			ColorStyleTransformer::GetInstance().UpdateListView();
+			ColorStyleTransformer::GetInstance().SetSelectedColorStyle(pColorStyle);
+		}
 	}
 	else if (pProperty->GetName() == "normal")
 	{

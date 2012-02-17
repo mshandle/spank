@@ -24,7 +24,6 @@ public:
 	virtual bool OpenFile(const wxString& strFile);
 	virtual bool SaveFile(const wxString& strFile);
 	virtual void Reset();
-	virtual const wxString& GetFilePath() const;
 
 	const NineGridStyle* FindNineGridStyle(const wxString& strId);
 	const TM_NINE_GRID_STYLE& GetNineGridStyleMap();
@@ -36,13 +35,16 @@ public:
 	bool SetStateMaxX(const NineGridStyle* pNineGridStyle, int value, IStyle::STYLE_STATE eState);
 	bool SetStateMaxY(const NineGridStyle* pNineGridStyle, int value, IStyle::STYLE_STATE eState);
 
+	const NineGridStyle* AddNineGridStyle(const wxString& strId);
+	bool RemoveNineGridStyle(const wxString& strId);
+
 protected:
 	NineGridStyleDocument();
 	NineGridStyle* InternalFindNineGridStyle(const wxString& strId);
+	wxString GenerateNewNineGridStyleId(const wxString& strId);
 
 private:
 	TM_NINE_GRID_STYLE m_NineGridStyleMap;
-	wxString m_strFile;
 
 };
 #endif // __NINEGRIDSTYLEDOCUMENT_H__

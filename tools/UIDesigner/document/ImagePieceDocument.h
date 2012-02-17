@@ -28,7 +28,6 @@ public:
 	virtual bool OpenFile(const wxString& strFile);
 	virtual bool SaveFile(const wxString& strFile);
 	virtual void Reset();
-	virtual const wxString& GetFilePath() const;
 
 	static ImagePieceDocument& GetInstance();
 
@@ -47,6 +46,7 @@ public:
 
 	const wxArrayString& GetPieceIds();
 	const wxArrayInt& GetPieceIdsIndex();
+	int FindPieceIndex(const PieceInfo* pPieceInfo);
 	int FindPieceIndex(const wxString& strId);
 	const wxString& GetPieceId(int index);
 
@@ -57,16 +57,19 @@ public:
 	bool SetPieceRect(const PieceInfo* pPieceInfo, const wxRect& rect);
 
 	const ImageInfo* AddImage(const wxString& strImageId, const wxString& strPath, wxBitmap* pImageBitmap);
-	const PieceInfo* AddPiece(const wxString& strId, const wxRect& rect, const ImageInfo* pImageInfo, bool bUpdateView = true);
+	bool RemoveImage(const wxString& strId);
 
-	void GenerateImageArrayString();
-	void GeneratePieceArrayString();
+	const PieceInfo* AddPiece(const wxString& strId, const wxRect& rect, const ImageInfo* pImageInfo);
+	bool RemovePiece(const wxString& strId);
 
 protected:
 	ImagePieceDocument();
 
 	wxString GenerateNewImageId(const wxString& strId);
 	wxString GenerateNewPieceId(const wxString& strId);
+
+	void UpdateImageArrayString();
+	void UpdatePieceArrayString();
 
 private:
 	TM_IMAGE_INFO m_ImageInfoMap;
@@ -78,6 +81,8 @@ private:
 	wxArrayString m_PieceIds;
 	wxArrayInt m_PieceIdsIndex;
 
-	wxString m_strFile;
+	bool m_bNeedUpdateImageIds;
+	bool m_bNeedUpdatePieceIds;
+
 };
 #endif // __IMAGEPIECEDOCUMENT_H__

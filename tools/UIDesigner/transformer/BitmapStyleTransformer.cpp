@@ -62,13 +62,13 @@ void BitmapStyleTransformer::UpdateProperty(const BitmapStyle* pBitmapStyle)
 	const wxArrayInt& pieceIdsIndex = ImagePieceDocument::GetInstance().GetPieceIdsIndex();
 	int value = -1;
 
-	value = ImagePieceDocument::GetInstance().FindPieceIndex(pBitmapStyle->GetStatePiece(IStyle::SS_NORMAL)->GetId());
+	value = ImagePieceDocument::GetInstance().FindPieceIndex(pBitmapStyle->GetStatePiece(IStyle::SS_NORMAL));
 	m_pPropertyGrid->Append(new wxEnumProperty("normal", "normal", pieceIds, pieceIdsIndex, value));
-	value = ImagePieceDocument::GetInstance().FindPieceIndex(pBitmapStyle->GetStatePiece(IStyle::SS_DOWN)->GetId());
+	value = ImagePieceDocument::GetInstance().FindPieceIndex(pBitmapStyle->GetStatePiece(IStyle::SS_DOWN));
 	m_pPropertyGrid->Append(new wxEnumProperty("down", "down", pieceIds, pieceIdsIndex, value));
-	value = ImagePieceDocument::GetInstance().FindPieceIndex(pBitmapStyle->GetStatePiece(IStyle::SS_HOVER)->GetId());
+	value = ImagePieceDocument::GetInstance().FindPieceIndex(pBitmapStyle->GetStatePiece(IStyle::SS_HOVER));
 	m_pPropertyGrid->Append(new wxEnumProperty("hover", "hover", pieceIds, pieceIdsIndex, value));
-	value = ImagePieceDocument::GetInstance().FindPieceIndex(pBitmapStyle->GetStatePiece(IStyle::SS_DISABLED)->GetId());
+	value = ImagePieceDocument::GetInstance().FindPieceIndex(pBitmapStyle->GetStatePiece(IStyle::SS_DISABLED));
 	m_pPropertyGrid->Append(new wxEnumProperty("disabled", "disabled", pieceIds, pieceIdsIndex, value));
 
 	DesignerFrame::GetInstance().SetCurrPropertyType(DesignerFrame::PT_BITMAP_STYLE);
@@ -83,7 +83,11 @@ void BitmapStyleTransformer::PropertyChanged(wxPGProperty* pProperty)
 	if (pProperty->GetName() == "id")
 	{
 		wxString strNewId = pProperty->GetValueAsString();
-		BitmapStyleDocument::GetInstance().RenameBitmapStyleId(pBitmapStyle, strNewId);
+		if (BitmapStyleDocument::GetInstance().RenameBitmapStyleId(pBitmapStyle, strNewId))
+		{
+			BitmapStyleTransformer::GetInstance().UpdateListView();
+			BitmapStyleTransformer::GetInstance().SetSelectedBitmapStyle(pBitmapStyle);
+		}
 	}
 	else if (pProperty->GetName() == "normal")
 	{

@@ -24,7 +24,6 @@ public:
 	virtual bool OpenFile(const wxString& strFile);
 	virtual bool SaveFile(const wxString& strFile);
 	virtual void Reset();
-	virtual const wxString& GetFilePath() const;
 
 	const BitmapStyle* FindBitmapStyle(const wxString& strId);
 	const TM_BITMAP_STYLE& GetBitmapStyleMap();
@@ -33,6 +32,7 @@ public:
 	bool SetStatePiece(const BitmapStyle* pBitmapStyle, const PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState);
 
 	const BitmapStyle* AddBitmapStyle(const wxString& strId);
+	bool RemoveBitmapStyle(const wxString& strId);
 
 protected:
 	BitmapStyleDocument();
@@ -42,7 +42,6 @@ protected:
 
 private:
 	TM_BITMAP_STYLE m_BitmapStyleMap;
-	wxString m_strFile;
 
 };
 #endif // __BITMAPSTYLEDOCUMENT_H__

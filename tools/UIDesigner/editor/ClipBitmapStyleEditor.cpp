@@ -6,6 +6,7 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "ClipBitmapStyleEditor.h"
+#include "../Config.h"
 
 ClipBitmapStyleEditor* ClipBitmapStyleEditor::m_pClipBitmapStyleEditor = NULL;
 
@@ -48,7 +49,6 @@ bool ClipBitmapStyleEditor::SetClipBitmapStyle(const ClipBitmapStyle* pClipBitma
 	if (m_pClipBitmapStyle == pClipBitmapStyle) return false;
 	m_pClipBitmapStyle = pClipBitmapStyle;
 
-	UpdateSubBitmap();
 	UpdateSubBitmapRect();
 
 	SetSelState(IStyle::SS_NUM);
@@ -71,9 +71,26 @@ void ClipBitmapStyleEditor::Draw(wxDC& dc)
 {
 	if (!m_pClipBitmapStyle) return;
 
+	const PieceInfo* pDefaultPieceInfo = m_pClipBitmapStyle->GetStatePiece(IStyle::SS_NORMAL);
+
 	for (int i = 0; i < IStyle::SS_NUM; ++i)
 	{
-		DrawBitmap(dc, m_bmpState[i], m_rectState[i].GetPosition());
+		const PieceInfo* pPieceInfo = pDefaultPieceInfo;
+		const PieceInfo* pCurrPieceInfo = m_pClipBitmapStyle->GetStatePiece((IStyle::STYLE_STATE)i);
+		if (pCurrPieceInfo) pPieceInfo = pCurrPieceInfo;
+
+		if (!pPieceInfo)
+		{
+			dc.SetPen(wxPen(*wxLIGHT_GREY, Config::DISABLED_PEN_WIDTH));
+			dc.SetBrush(*wxGREY_BRUSH);
+			DrawRectangle(dc, m_rectState[i]);
+			DrawLine(dc, wxPoint(m_rectState[i].x, m_rectState[i].y), wxPoint(m_rectState[i].x+m_rectState[i].width, m_rectState[i].y+m_rectState[i].height));
+			DrawLine(dc, wxPoint(m_rectState[i].x, m_rectState[i].y+m_rectState[i].height), wxPoint(m_rectState[i].x+m_rectState[i].width, m_rectState[i].y));
+		}
+		else
+		{
+			DrawPiece(dc, m_rectState[i].GetPosition(), pPieceInfo);
+		}
 	}
 
 	DrawSelection(dc);
@@ -114,52 +131,33 @@ IStyle::STYLE_STATE ClipBitmapStyleEditor::GetSelState() const
 	return m_eSelState;
 }
 
-void ClipBitmapStyleEditor::UpdateSubBitmap()
-{
-	for (int i = 0; i < IStyle::SS_NUM; ++i)
-	{
-		if (m_pClipBitmapStyle)
-		{
-			const PieceInfo* pPieceInfo = m_pClipBitmapStyle->GetStatePiece((IStyle::STYLE_STATE)i);
-			const wxRect& pieceRect = pPieceInfo->GetRect();
-			ImageInfo* pImageInfo = (ImageInfo*)pPieceInfo->GetImageInfo();
-			const wxBitmap* pMainBitmap = pImageInfo->GetBitmap();
-			m_bmpState[i] = pMainBitmap->GetSubBitmap(pieceRect);
-		}
-		else
-		{
-			m_bmpState[i] = wxNullBitmap;
-		}
-	}
-}
-
 void ClipBitmapStyleEditor::UpdateSubBitmapRect()
 {
 	wxRect subRect(0, 0, 0, 0);
 	m_TotalSize.x = 0;
 	m_TotalSize.y = 0;
 
+	wxSize defaultPieceSize(Config::DEFAULT_PIECE_SIZE, Config::DEFAULT_PIECE_SIZE);
+
 	for (int i = 0; i < IStyle::SS_NUM; ++i)
 	{
+		wxSize pieceSize = defaultPieceSize;
+
 		if (m_pClipBitmapStyle)
 		{
 			const PieceInfo* pPieceInfo = m_pClipBitmapStyle->GetStatePiece((IStyle::STYLE_STATE)i);
-			const wxRect& pieceRect = pPieceInfo->GetRect();
-
-			subRect.width = pieceRect.width;
-			subRect.height = pieceRect.height;
-
-			m_rectState[i] = subRect;
-
-			subRect.x = 0;
-			subRect.y += subRect.height;
-
-			if (m_TotalSize.x < pieceRect.width) m_TotalSize.x = pieceRect.width;
-			m_TotalSize.y += pieceRect.height;
+			if (!pPieceInfo) pPieceInfo = m_pClipBitmapStyle->GetStatePiece(IStyle::SS_NORMAL);
+			if (pPieceInfo) pieceSize = pPieceInfo->GetRect().GetSize();
 		}
-		else
-		{
-			m_rectState[i] = subRect;
-		}
+
+		subRect.width = pieceSize.x;
+		subRect.height = pieceSize.y;
+
+		m_rectState[i] = subRect;
+
+		subRect.y += pieceSize.y;
+
+		if (m_TotalSize.x < pieceSize.x) m_TotalSize.x = pieceSize.x;
+		m_TotalSize.y += pieceSize.y;
 	}
 }

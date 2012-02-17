@@ -6,6 +6,9 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "ColorStyle.h"
+#include "../Config.h"
+
+#define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
 ColorStyle::ColorStyle()
 {
@@ -24,10 +27,10 @@ bool ColorStyle::LoadFromXml(TiXmlElement* pElmColorStyle)
 	wxString strId = pElmColorStyle->Attribute("id");
 	SetId(strId);
 
-	m_nColors[SS_NORMAL] = LoadStateInfo(pElmColorStyle, "normal", DEFAULT_COLOR);
-	m_nColors[SS_DOWN] = LoadStateInfo(pElmColorStyle, "down", m_nColors[SS_NORMAL]);
-	m_nColors[SS_HOVER] = LoadStateInfo(pElmColorStyle, "hover", m_nColors[SS_NORMAL]);
-	m_nColors[SS_DISABLED] = LoadStateInfo(pElmColorStyle, "disabled", m_nColors[SS_NORMAL]);
+	m_nColors[SS_NORMAL] = LoadStateInfo(pElmColorStyle, "normal", Config::DEFAULT_COLOR);
+	m_nColors[SS_DOWN] = LoadStateInfo(pElmColorStyle, "down", Config::DEFAULT_COLOR);
+	m_nColors[SS_HOVER] = LoadStateInfo(pElmColorStyle, "hover", Config::DEFAULT_COLOR);
+	m_nColors[SS_DISABLED] = LoadStateInfo(pElmColorStyle, "disabled", Config::DEFAULT_COLOR);
 
 	return true;
 }
@@ -39,25 +42,22 @@ bool ColorStyle::SaveToXml(TiXmlElement* pElmColorStyleList)
 	TiXmlElement* pElmColorStyle = new TiXmlElement("ColorStyle");
 	pElmColorStyle->SetAttribute("id", GetId());
 
-	if (!SaveStateInfo(pElmColorStyle, "normal", m_nColors[SS_NORMAL], true))
+	if (!SaveStateInfo(pElmColorStyle, "normal", m_nColors[SS_NORMAL]))
 	{
-		delete pElmColorStyle;
-		pElmColorStyle = NULL;
+		SAFE_DELETE(pElmColorStyle);
 		return false;
 	}
 
-	SaveStateInfo(pElmColorStyle, "down", m_nColors[SS_DOWN]);
-	SaveStateInfo(pElmColorStyle, "hover", m_nColors[SS_HOVER]);
-	SaveStateInfo(pElmColorStyle, "disabled", m_nColors[SS_DISABLED]);
+	if (m_nColors[SS_NORMAL] != m_nColors[SS_DOWN]) SaveStateInfo(pElmColorStyle, "down", m_nColors[SS_DOWN]);
+	if (m_nColors[SS_NORMAL] != m_nColors[SS_HOVER]) SaveStateInfo(pElmColorStyle, "hover", m_nColors[SS_HOVER]);
+	if (m_nColors[SS_NORMAL] != m_nColors[SS_DISABLED]) SaveStateInfo(pElmColorStyle, "disabled", m_nColors[SS_DISABLED]);
 
 	pElmColorStyleList->LinkEndChild(pElmColorStyle);
 	return true;
 }
 
-bool ColorStyle::SaveStateInfo(TiXmlElement* pElmColorStyle, const wxString& strState, unsigned int nColor, bool force /*= false*/)
+bool ColorStyle::SaveStateInfo(TiXmlElement* pElmColorStyle, const wxString& strState, unsigned int nColor)
 {
-	if (!force && nColor == m_nColors[SS_NORMAL]) return false;
-
 	TiXmlElement* pElmState = new TiXmlElement(strState);
 
 	char buff[128];
@@ -73,14 +73,13 @@ bool ColorStyle::SetStateColor(unsigned int color, STYLE_STATE eState)
 {
 	if (eState < 0 || eState >= SS_NUM) return false;
 	if (m_nColors[eState] == color) return false;
-
 	m_nColors[eState] = color;
 	return true;
 }
 
 unsigned int ColorStyle::GetStateColor(STYLE_STATE eState) const
 {
-	if (eState < 0 || eState >= SS_NUM) return DEFAULT_COLOR;
+	if (eState < 0 || eState >= SS_NUM) return Config::DEFAULT_COLOR;
 	return m_nColors[eState];
 }
 

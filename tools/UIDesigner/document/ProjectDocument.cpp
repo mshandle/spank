@@ -36,8 +36,7 @@ bool ProjectDocument::OpenFile(const wxString& strFile)
 	if (!doc.LoadFile(strFile)) return false;
 
 	Reset();
-
-	m_strFilePath = strFile;
+	SetFilePath(strFile);
 
 	TiXmlElement* pElmUdProject = doc.RootElement();
 	if (!pElmUdProject || strcmp(pElmUdProject->Value(), "ud_project") != 0) return false;
@@ -55,23 +54,23 @@ bool ProjectDocument::OpenFile(const wxString& strFile)
 
 	TiXmlElement* pElmImagePiece = pElmUdProject->FirstChildElement("image_piece");
 	if (!pElmImagePiece) return false;
-	ImagePieceDocument::GetInstance().OpenFile(m_strProjectDir + "/" + pElmImagePiece->Attribute("path"));
+	m_strImagePieceFilePath = (m_strProjectDir + "/" + pElmImagePiece->Attribute("path"));
 
 	TiXmlElement* pElmBitmapStyle = pElmUdProject->FirstChildElement("bitmap_style");
 	if (!pElmBitmapStyle) return false;
-	BitmapStyleDocument::GetInstance().OpenFile(m_strProjectDir + "/" + pElmBitmapStyle->Attribute("path"));
+	m_strBitmapStyleFilePath = (m_strProjectDir + "/" + pElmBitmapStyle->Attribute("path"));
 
 	TiXmlElement* pElmNineGridStyle = pElmUdProject->FirstChildElement("nine_grid_style");
 	if (!pElmNineGridStyle) return false;
-	NineGridStyleDocument::GetInstance().OpenFile(m_strProjectDir + "/" + pElmNineGridStyle->Attribute("path"));
+	m_strNineGridStyleFilePath = (m_strProjectDir + "/" + pElmNineGridStyle->Attribute("path"));
 
 	TiXmlElement* pElmColorStyle = pElmUdProject->FirstChildElement("color_style");
 	if (!pElmColorStyle) return false;
-	ColorStyleDocument::GetInstance().OpenFile(m_strProjectDir + "/" + pElmColorStyle->Attribute("path"));
+	m_strColorStyleFilePath = (m_strProjectDir + "/" + pElmColorStyle->Attribute("path"));
 
 	TiXmlElement* pElmClipBitmapStyle = pElmUdProject->FirstChildElement("clip_bitmap_style");
 	if (!pElmClipBitmapStyle) return false;
-	ClipBitmapStyleDocument::GetInstance().OpenFile(m_strProjectDir + "/" + pElmClipBitmapStyle->Attribute("path"));
+	m_strClipBitmapStyleFilePath = (m_strProjectDir + "/" + pElmClipBitmapStyle->Attribute("path"));
 
 	return true;
 }
@@ -117,11 +116,6 @@ void ProjectDocument::Reset()
 	ClearModifiedFlag();
 }
 
-const wxString& ProjectDocument::GetFilePath() const
-{
-	return m_strFilePath;
-}
-
 const wxString& ProjectDocument::GetRootDir() const
 {
 	return m_strRootDir;
@@ -141,4 +135,59 @@ void ProjectDocument::SetProjectDir(const wxString& strProjectDir)
 const wxString& ProjectDocument::GetProjectDir() const
 {
 	return m_strProjectDir;
+}
+
+bool ProjectDocument::SetImagePieceFilePath(const wxString& strPath)
+{
+	m_strImagePieceFilePath = strPath;
+	return true;
+}
+
+const wxString& ProjectDocument::GetImagePieceFilePath() const
+{
+	return m_strImagePieceFilePath;
+}
+
+bool ProjectDocument::SetBitmapStyleFilePath(const wxString& strPath)
+{
+	m_strBitmapStyleFilePath = strPath;
+	return true;
+}
+
+const wxString& ProjectDocument::GetBitmapStyleFilePath() const
+{
+	return m_strBitmapStyleFilePath;
+}
+
+bool ProjectDocument::SetNineGridStyleFilePath(const wxString& strPath)
+{
+	m_strNineGridStyleFilePath = strPath;
+	return true;
+}
+
+const wxString& ProjectDocument::GetNineGridStyleFilePath() const
+{
+	return m_strNineGridStyleFilePath;
+}
+
+bool ProjectDocument::SetColorStyleFilePath(const wxString& strPath)
+{
+	m_strColorStyleFilePath = strPath;
+	return true;
+}
+
+const wxString& ProjectDocument::GetColorStyleFilePath() const
+{
+	return m_strColorStyleFilePath;
+}
+
+bool ProjectDocument::SetClipBitmapStyleFilePath(const wxString& strPath)
+{
+	m_strClipBitmapStyleFilePath = strPath;
+	return true;
+}
+
+const wxString& ProjectDocument::GetClipBitmapStyleFilePath() const
+{
+	return m_strClipBitmapStyleFilePath;
 }

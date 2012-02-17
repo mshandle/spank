@@ -89,11 +89,7 @@ void ImagePieceEditor::Draw(wxDC& dc)
 {
 	if (!m_pImageInfo) return;
 
-	const wxBitmap* pBitmap = NULL;
-	if (m_pImageInfo) pBitmap = ((ImageInfo*)m_pImageInfo)->GetBitmap();
-	if (!pBitmap) return;
-
-	DrawBitmap(dc, *pBitmap, wxPoint(0, 0));
+	DrawImage(dc, wxPoint(0, 0), m_pImageInfo);
 	DrawSelection(dc);
 }
 

@@ -28,9 +28,10 @@ bool NineGridStyle::LoadFromXml(TiXmlElement* pElmNineGridStyle)
 	SetId(strId);
 
 	if (!LoadStateInfo(m_NineGridInfo[SS_NORMAL], pElmNineGridStyle, "normal")) return false;
-	if (!LoadStateInfo(m_NineGridInfo[SS_DOWN], pElmNineGridStyle, "down")) m_NineGridInfo[SS_DOWN] = m_NineGridInfo[SS_NORMAL];
-	if (!LoadStateInfo(m_NineGridInfo[SS_HOVER], pElmNineGridStyle, "hover")) m_NineGridInfo[SS_HOVER] = m_NineGridInfo[SS_NORMAL];
-	if (!LoadStateInfo(m_NineGridInfo[SS_DISABLED], pElmNineGridStyle, "disabled")) m_NineGridInfo[SS_DISABLED] = m_NineGridInfo[SS_NORMAL];
+
+	LoadStateInfo(m_NineGridInfo[SS_DOWN], pElmNineGridStyle, "down");
+	LoadStateInfo(m_NineGridInfo[SS_HOVER], pElmNineGridStyle, "hover");
+	LoadStateInfo(m_NineGridInfo[SS_DISABLED], pElmNineGridStyle, "disabled");
 
 	return true;
 }
@@ -42,16 +43,15 @@ bool NineGridStyle::SaveToXml(TiXmlElement* pElmBitmapStyleList)
 	TiXmlElement* pElmBitmapStyle = new TiXmlElement("NineGridStyle");
 	pElmBitmapStyle->SetAttribute("id", GetId());
 
-	if (!SaveStateInfo(pElmBitmapStyle, "normal", m_NineGridInfo[SS_NORMAL], true))
+	if (!SaveStateInfo(pElmBitmapStyle, "normal", m_NineGridInfo[SS_NORMAL]))
 	{
-		delete pElmBitmapStyle;
-		pElmBitmapStyle = NULL;
+		SAFE_DELETE(pElmBitmapStyle);
 		return false;
 	}
 
-	SaveStateInfo(pElmBitmapStyle, "down", m_NineGridInfo[SS_DOWN]);
-	SaveStateInfo(pElmBitmapStyle, "hover", m_NineGridInfo[SS_HOVER]);
-	SaveStateInfo(pElmBitmapStyle, "disabled", m_NineGridInfo[SS_DISABLED]);
+	if (!IsNormalGrid(m_NineGridInfo[SS_DOWN])) SaveStateInfo(pElmBitmapStyle, "down", m_NineGridInfo[SS_DOWN]);
+	if (!IsNormalGrid(m_NineGridInfo[SS_HOVER])) SaveStateInfo(pElmBitmapStyle, "hover", m_NineGridInfo[SS_HOVER]);
+	if (!IsNormalGrid(m_NineGridInfo[SS_DISABLED])) SaveStateInfo(pElmBitmapStyle, "disabled", m_NineGridInfo[SS_DISABLED]);
 
 	pElmBitmapStyleList->LinkEndChild(pElmBitmapStyle);
 	return true;
@@ -61,8 +61,6 @@ bool NineGridStyle::SetStatePiece(const PieceInfo* pPieceInfo, STYLE_STATE eStat
 {
 	if (eState < 0 || eState >= SS_NUM) return false;
 	if (m_NineGridInfo[eState].pPieceInfo == pPieceInfo) return false;
-	if (!pPieceInfo && m_NineGridInfo[eState].pPieceInfo == m_NineGridInfo[SS_NORMAL].pPieceInfo) return false;
-
 	m_NineGridInfo[eState].pPieceInfo = pPieceInfo;
 	return true;
 }
@@ -92,9 +90,9 @@ bool NineGridStyle::LoadStateInfo(NINE_GRID_INFO& NineGridInfoOut, TiXmlElement*
 	return true;
 }
 
-bool NineGridStyle::SaveStateInfo(TiXmlElement* pElmNineGridStyle, const wxString& strState, const NINE_GRID_INFO& NineGridInfo, bool force /* = false */)
+bool NineGridStyle::SaveStateInfo(TiXmlElement* pElmNineGridStyle, const wxString& strState, const NINE_GRID_INFO& NineGridInfo)
 {
-	if (!force && IsNormalGrid(NineGridInfo)) return false;
+	if (!NineGridInfo.pPieceInfo) return false;
 
 	TiXmlElement* pElmState = new TiXmlElement(strState);
 	pElmState->SetAttribute("piece_id", NineGridInfo.pPieceInfo->GetId());
@@ -102,7 +100,6 @@ bool NineGridStyle::SaveStateInfo(TiXmlElement* pElmNineGridStyle, const wxStrin
 	pElmState->SetAttribute("min_y", NineGridInfo.min_y);
 	pElmState->SetAttribute("max_x", NineGridInfo.max_x);
 	pElmState->SetAttribute("max_y", NineGridInfo.max_y);
-
 	pElmNineGridStyle->LinkEndChild(pElmState);
 
 	return true;

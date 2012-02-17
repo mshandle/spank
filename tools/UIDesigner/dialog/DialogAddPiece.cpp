@@ -411,13 +411,11 @@ bool DialogAddPiece::AddPieceFromExistingImage(const wxSize& newSize)
 		{
 			wxString strId = FileUtil::GetFileName(pPackingInfo->strId);
 			FileUtil::FormatId(strId);
-			ImagePieceDocument::GetInstance().AddPiece(strId, rect, pImageInfo, false);
+			ImagePieceDocument::GetInstance().AddPiece(strId, rect, pImageInfo);
 		}
 	}
 
-	ImagePieceDocument::GetInstance().GeneratePieceArrayString();
 	PieceListTransformer::GetInstance().UpdateListView();
-
 	FreePackingPiecesInfo(vPackingInfo);
 	return true;
 }
@@ -466,12 +464,10 @@ bool DialogAddPiece::AddPieceIntoNewImage(const wxSize& newSize)
 		wxRect rect(pPackingInfo->pNode->x, pPackingInfo->pNode->y, pPackingInfo->pNode->width, pPackingInfo->pNode->height);
 		wxString strId = FileUtil::GetFileName(pPackingInfo->strId);
 		FileUtil::FormatId(strId);
-		ImagePieceDocument::GetInstance().AddPiece(strId, rect, pImageInfo, false);
+		ImagePieceDocument::GetInstance().AddPiece(strId, rect, pImageInfo);
 	}
 
-	ImagePieceDocument::GetInstance().GeneratePieceArrayString();
 	PieceListTransformer::GetInstance().UpdateListView();
-
 	FreePackingPiecesInfo(vPackingInfo);
 	return true;
 }

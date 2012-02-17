@@ -99,6 +99,7 @@ void DesignerFrame::Init()
 	m_pOutputView = NULL;
 	m_eCurrPropertyType = PT_UNKNOWN;
 	m_pPropertyGrid = NULL;
+	m_pListNotebook = NULL;
 	m_pEditorNotebook = NULL;
 	memset(m_pEditors, 0, sizeof(m_pEditors));
 }
@@ -294,8 +295,8 @@ void DesignerFrame::CreatePropertyView()
 
 void DesignerFrame::CreateListView()
 {
-	wxNotebook* pNotebookView = new wxNotebook(this, IDC_NOTEBOOK_EDITOR, wxDefaultPosition, wxDefaultSize, wxNB_MULTILINE|wxNO_BORDER);
-	m_auiManager.AddPane(pNotebookView, wxAuiPaneInfo()
+	m_pListNotebook = new wxNotebook(this, IDC_NOTEBOOK_EDITOR, wxDefaultPosition, wxDefaultSize, wxNB_MULTILINE|wxNO_BORDER);
+	m_auiManager.AddPane(m_pListNotebook, wxAuiPaneInfo()
 		.Name(wxT("List"))
 		.Caption(wxT("List"))
 		.Left()
@@ -309,28 +310,28 @@ void DesignerFrame::CreateListView()
 		.FloatingSize(wxSize(400, 500))
 		.Movable(false));
 
-	wxTreeCtrl* pImagePieceListView = new wxTreeCtrl(pNotebookView, IDC_PIECE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
-	pNotebookView->AddPage(pImagePieceListView, "Pieces");
+	wxTreeCtrl* pImagePieceListView = new wxTreeCtrl(m_pListNotebook, IDC_PIECE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	m_pListNotebook->AddPage(pImagePieceListView, "Pieces");
 	PieceListTransformer::GetInstance().Initialize(pImagePieceListView, m_pPropertyGrid);
 
-	wxTreeCtrl* pImageListView = new wxTreeCtrl(pNotebookView, IDC_IMAGE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
-	pNotebookView->AddPage(pImageListView, "Images");
+	wxTreeCtrl* pImageListView = new wxTreeCtrl(m_pListNotebook, IDC_IMAGE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	m_pListNotebook->AddPage(pImageListView, "Images");
 	ImageListTransformer::GetInstance().Initialize(pImageListView, m_pPropertyGrid);
 
-	wxTreeCtrl* pBitmapStyleListView = new wxTreeCtrl(pNotebookView, IDC_BITMAP_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
-	pNotebookView->AddPage(pBitmapStyleListView, "Bitmap Styles");
+	wxTreeCtrl* pBitmapStyleListView = new wxTreeCtrl(m_pListNotebook, IDC_BITMAP_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	m_pListNotebook->AddPage(pBitmapStyleListView, "Bitmap Styles");
 	BitmapStyleTransformer::GetInstance().Initialize(pBitmapStyleListView, m_pPropertyGrid);
 
-	wxTreeCtrl* pNineGridStyleListView = new wxTreeCtrl(pNotebookView, IDC_NINE_GRID_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
-	pNotebookView->AddPage(pNineGridStyleListView, "9-Grid Styles");
+	wxTreeCtrl* pNineGridStyleListView = new wxTreeCtrl(m_pListNotebook, IDC_NINE_GRID_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	m_pListNotebook->AddPage(pNineGridStyleListView, "9-Grid Styles");
 	NineGridStyleTransformer::GetInstance().Initialize(pNineGridStyleListView, m_pPropertyGrid);
 
-	wxTreeCtrl* pColorStyleListView = new wxTreeCtrl(pNotebookView, IDC_COLOR_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
-	pNotebookView->AddPage(pColorStyleListView, "Color Styles");
+	wxTreeCtrl* pColorStyleListView = new wxTreeCtrl(m_pListNotebook, IDC_COLOR_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	m_pListNotebook->AddPage(pColorStyleListView, "Color Styles");
 	ColorStyleTransformer::GetInstance().Initialize(pColorStyleListView, m_pPropertyGrid);
 
-	wxTreeCtrl* pClipBitmapStyleListView = new wxTreeCtrl(pNotebookView, IDC_CLIP_BITMAP_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
-	pNotebookView->AddPage(pClipBitmapStyleListView, "Clip Bitmap Styles");
+	wxTreeCtrl* pClipBitmapStyleListView = new wxTreeCtrl(m_pListNotebook, IDC_CLIP_BITMAP_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	m_pListNotebook->AddPage(pClipBitmapStyleListView, "Clip Bitmap Styles");
 	ClipBitmapStyleTransformer::GetInstance().Initialize(pClipBitmapStyleListView, m_pPropertyGrid);
 }
 
@@ -420,7 +421,21 @@ void DesignerFrame::DoOpenFile()
 		wxString strPath = dialog.GetPath();
 		wxString strDir = dialog.GetDirectory();
 		ProjectDocument::GetInstance().SetProjectDir(strDir);
-		ProjectDocument::GetInstance().OpenFile(strPath);
+		if (ProjectDocument::GetInstance().OpenFile(strPath))
+		{
+			ImagePieceDocument::GetInstance().OpenFile(ProjectDocument::GetInstance().GetImagePieceFilePath());
+			BitmapStyleDocument::GetInstance().OpenFile(ProjectDocument::GetInstance().GetBitmapStyleFilePath());
+			NineGridStyleDocument::GetInstance().OpenFile(ProjectDocument::GetInstance().GetNineGridStyleFilePath());
+			ColorStyleDocument::GetInstance().OpenFile(ProjectDocument::GetInstance().GetColorStyleFilePath());
+			ClipBitmapStyleDocument::GetInstance().OpenFile(ProjectDocument::GetInstance().GetClipBitmapStyleFilePath());
+
+			ImageListTransformer::GetInstance().UpdateListView();
+			PieceListTransformer::GetInstance().UpdateListView();
+			BitmapStyleTransformer::GetInstance().UpdateListView();
+			NineGridStyleTransformer::GetInstance().UpdateListView();
+			ColorStyleTransformer::GetInstance().UpdateListView();
+			ClipBitmapStyleTransformer::GetInstance().UpdateListView();
+		}
 	}
 }
 
@@ -432,11 +447,11 @@ void DesignerFrame::OnFileSave(wxCommandEvent& event)
 void DesignerFrame::DoSaveFile()
 {
 	ProjectDocument::GetInstance().SaveFile(ProjectDocument::GetInstance().GetFilePath());
-	ImagePieceDocument::GetInstance().SaveFile(ImagePieceDocument::GetInstance().GetFilePath());
-	BitmapStyleDocument::GetInstance().SaveFile(BitmapStyleDocument::GetInstance().GetFilePath());
-	NineGridStyleDocument::GetInstance().SaveFile(NineGridStyleDocument::GetInstance().GetFilePath());
-	ColorStyleDocument::GetInstance().SaveFile(ColorStyleDocument::GetInstance().GetFilePath());
-	ClipBitmapStyleDocument::GetInstance().SaveFile(ClipBitmapStyleDocument::GetInstance().GetFilePath());
+	ImagePieceDocument::GetInstance().SaveFile(ProjectDocument::GetInstance().GetImagePieceFilePath());
+	BitmapStyleDocument::GetInstance().SaveFile(ProjectDocument::GetInstance().GetBitmapStyleFilePath());
+	NineGridStyleDocument::GetInstance().SaveFile(ProjectDocument::GetInstance().GetNineGridStyleFilePath());
+	ColorStyleDocument::GetInstance().SaveFile(ProjectDocument::GetInstance().GetColorStyleFilePath());
+	ClipBitmapStyleDocument::GetInstance().SaveFile(ProjectDocument::GetInstance().GetClipBitmapStyleFilePath());
 }
 
 void DesignerFrame::OnExit(wxCommandEvent& event)
@@ -488,22 +503,34 @@ void DesignerFrame::OnAddPiece(wxCommandEvent& event)
 
 void DesignerFrame::OnAddBitmapStyle(wxCommandEvent& event)
 {
-	BitmapStyleDocument::GetInstance().
+	const BitmapStyle* pNewBitmapStyle = BitmapStyleDocument::GetInstance().AddBitmapStyle("bs_bitmap_style");
+	BitmapStyleTransformer::GetInstance().UpdateListView();
+	BitmapStyleTransformer::GetInstance().SetSelectedBitmapStyle(pNewBitmapStyle);
+	m_pListNotebook->SetSelection(LIST_VIEW_BITMAP_STYLE);
 }
 
 void DesignerFrame::OnAddNineGridStyle(wxCommandEvent& event)
 {
-	// TODO: 
+	const NineGridStyle* pNewNineGridStyle = NineGridStyleDocument::GetInstance().AddNineGridStyle("ngs_nine_grid_style");
+	NineGridStyleTransformer::GetInstance().UpdateListView();
+	NineGridStyleTransformer::GetInstance().SetSelectedNineGridStyle(pNewNineGridStyle);
+	m_pListNotebook->SetSelection(LIST_VIEW_NINE_GRID_STYLE);
 }
 
 void DesignerFrame::OnAddColorStyle(wxCommandEvent& event)
 {
-	// TODO: 
+	const ColorStyle* pNewColorStyle = ColorStyleDocument::GetInstance().AddColorStyle("cs_color_style");
+	ColorStyleTransformer::GetInstance().UpdateListView();
+	ColorStyleTransformer::GetInstance().SetSelectedColorStyle(pNewColorStyle);
+	m_pListNotebook->SetSelection(LIST_VIEW_COLOR_STYLE);
 }
 
 void DesignerFrame::OnAddClipBitmapStyle(wxCommandEvent& event)
 {
-	// TODO: 
+	const ClipBitmapStyle* pNewClipBitmapStyle = ClipBitmapStyleDocument::GetInstance().AddClipBitmapStyle("cbs_clip_bitmap_style");
+	ClipBitmapStyleTransformer::GetInstance().UpdateListView();
+	ClipBitmapStyleTransformer::GetInstance().SetSelectedClipBitmapStyle(pNewClipBitmapStyle);
+	m_pListNotebook->SetSelection(LIST_VIEW_CLIP_BITMAP_STYLE);
 }
 
 void DesignerFrame::OnViewZoom100(wxCommandEvent& event)

@@ -6,8 +6,9 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "NineGridStyleDocument.h"
-#include "../transformer/NineGridStyleTransformer.h"
 #include <tinyxml-2.6.2/tinyxml.h>
+
+#define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
 NineGridStyleDocument::NineGridStyleDocument()
 {
@@ -31,6 +32,7 @@ bool NineGridStyleDocument::OpenFile(const wxString& strFile)
 	if (!doc.LoadFile(strFile)) return false;
 
 	Reset();
+	SetFilePath(strFile);
 
 	TiXmlElement* pElmNineGridStyleList = doc.RootElement();
 	if (!pElmNineGridStyleList || strcmp(pElmNineGridStyleList->Value(), "NineGridStyleList") != 0) return false;
@@ -45,9 +47,6 @@ bool NineGridStyleDocument::OpenFile(const wxString& strFile)
 		pElmNineGridStyle = pElmNineGridStyle->NextSiblingElement("NineGridStyle");
 	}
 
-	m_strFile = strFile;
-
-	NineGridStyleTransformer::GetInstance().UpdateListView();
 	return true;
 }
 
@@ -74,7 +73,7 @@ bool NineGridStyleDocument::SaveFile(const wxString& strFile)
 
 void NineGridStyleDocument::Reset()
 {
-	m_strFile = wxEmptyString;
+	SetFilePath(wxEmptyString);
 	for (TM_NINE_GRID_STYLE::iterator it = m_NineGridStyleMap.begin(); it != m_NineGridStyleMap.end(); ++it)
 	{
 		NineGridStyle* pNineGridStyle = it->second;
@@ -82,11 +81,6 @@ void NineGridStyleDocument::Reset()
 	}
 	m_NineGridStyleMap.clear();
 	ClearModifiedFlag();
-}
-
-const wxString& NineGridStyleDocument::GetFilePath() const
-{
-	return m_strFile;
 }
 
 const NineGridStyle* NineGridStyleDocument::FindNineGridStyle(const wxString& strId)
@@ -116,9 +110,6 @@ bool NineGridStyleDocument::RenameNineGridStyleId(const NineGridStyle* pNineGrid
 
 	pFoundNineGridStyle->SetId(strNewId);
 	m_NineGridStyleMap.insert(std::make_pair(pFoundNineGridStyle->GetId(), pFoundNineGridStyle));
-
-	NineGridStyleTransformer::GetInstance().UpdateListView();
-	NineGridStyleTransformer::GetInstance().SetSelectedNineGridStyle(pFoundNineGridStyle);
 	return true;
 }
 
@@ -177,9 +168,48 @@ bool NineGridStyleDocument::SetStateMaxY(const NineGridStyle* pNineGridStyle, in
 	return pFoundNineGridStyle->SetStateMaxY(value, eState);
 }
 
+const NineGridStyle* NineGridStyleDocument::AddNineGridStyle(const wxString& strId)
+{
+	if (strId.empty()) return NULL;
+	SetModifiedFlag();
+
+	wxString strNewId = GenerateNewNineGridStyleId(strId);
+	NineGridStyle* pNewNineGridStyle = new NineGridStyle();
+	pNewNineGridStyle->SetId(strNewId);
+	m_NineGridStyleMap.insert(std::make_pair(pNewNineGridStyle->GetId(), pNewNineGridStyle));
+
+	return pNewNineGridStyle;
+}
+
+bool NineGridStyleDocument::RemoveNineGridStyle(const wxString& strId)
+{
+	TM_NINE_GRID_STYLE::iterator itfound = m_NineGridStyleMap.find(strId);
+	if (itfound == m_NineGridStyleMap.end()) return false;
+	SetModifiedFlag();
+
+	NineGridStyle* pFoundNineGridStyle = (itfound->second);
+	m_NineGridStyleMap.erase(itfound);
+
+	SAFE_DELETE(pFoundNineGridStyle);
+	return true;
+}
+
 NineGridStyle* NineGridStyleDocument::InternalFindNineGridStyle(const wxString& strId)
 {
 	TM_NINE_GRID_STYLE::iterator itfound = m_NineGridStyleMap.find(strId);
 	if (itfound == m_NineGridStyleMap.end()) return NULL;
 	return itfound->second;
+}
+
+wxString NineGridStyleDocument::GenerateNewNineGridStyleId(const wxString& strId)
+{
+	wxString strNewId = strId;
+	int index = 0;
+
+	while (FindNineGridStyle(strNewId))
+	{
+		strNewId = wxString::Format("%s%d", strId, index++);
+	}
+
+	return strNewId;
 }

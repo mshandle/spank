@@ -6,13 +6,14 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "ImagePieceDocument.h"
-#include "../transformer/ImageListTransformer.h"
-#include "../transformer/PieceListTransformer.h"
 #include <tinyxml-2.6.2/tinyxml.h>
+
+#define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
 ImagePieceDocument::ImagePieceDocument()
 {
-	// TODO: 
+	m_bNeedUpdateImageIds = false;
+	m_bNeedUpdatePieceIds = false;
 }
 
 ImagePieceDocument::~ImagePieceDocument()
@@ -26,6 +27,7 @@ bool ImagePieceDocument::OpenFile(const wxString& strFile)
 	if (!doc.LoadFile(strFile)) return false;
 
 	Reset();
+	SetFilePath(strFile);
 
 	TiXmlElement* pElmImagePiece = doc.RootElement();
 	if (!pElmImagePiece || strcmp(pElmImagePiece->Value(), "ImagePiece") != 0) return false;
@@ -42,7 +44,7 @@ bool ImagePieceDocument::OpenFile(const wxString& strFile)
 		m_ImageInfoMap.insert(std::make_pair(pImageInfo->GetId(), pImageInfo));
 		pElmImage = pElmImage->NextSiblingElement("Image");
 	}
-	GenerateImageArrayString();
+	m_bNeedUpdateImageIds = true;
 
 	TiXmlElement* pElmPieceList = pElmImagePiece->FirstChildElement("PieceList");
 	// parse piece list
@@ -54,12 +56,8 @@ bool ImagePieceDocument::OpenFile(const wxString& strFile)
 		m_PieceInfoMap.insert(std::make_pair(pPieceInfo->GetId(), pPieceInfo));
 		pElmPiece = pElmPiece->NextSiblingElement("Piece");
 	}
-	GeneratePieceArrayString();
+	m_bNeedUpdatePieceIds = true;
 
-	m_strFile = strFile;
-
-	ImageListTransformer::GetInstance().UpdateListView();
-	PieceListTransformer::GetInstance().UpdateListView();
 	return true;
 }
 
@@ -97,18 +95,18 @@ bool ImagePieceDocument::SaveFile(const wxString& strFile)
 
 void ImagePieceDocument::Reset()
 {
-	m_strFile = wxEmptyString;
+	SetFilePath(wxEmptyString);
 	for (TM_IMAGE_INFO::iterator it = m_ImageInfoMap.begin(); it != m_ImageInfoMap.end(); ++it)
 	{
 		ImageInfo* pImageInfo = it->second;
-		delete pImageInfo;
+		SAFE_DELETE(pImageInfo);
 	}
 	m_ImageInfoMap.clear();
 
 	for (TM_PIECE_INFO::iterator it = m_PieceInfoMap.begin(); it != m_PieceInfoMap.end(); ++it)
 	{
 		PieceInfo* pPieceInfo = it->second;
-		delete pPieceInfo;
+		SAFE_DELETE(pPieceInfo);
 	}
 	m_PieceInfoMap.clear();
 
@@ -117,12 +115,11 @@ void ImagePieceDocument::Reset()
 
 	m_PieceIds.Clear();
 	m_PieceIdsIndex.Clear();
-	ClearModifiedFlag();
-}
 
-const wxString& ImagePieceDocument::GetFilePath() const
-{
-	return m_strFile;
+	m_bNeedUpdateImageIds = false;
+	m_bNeedUpdatePieceIds = false;
+
+	ClearModifiedFlag();
 }
 
 ImagePieceDocument& ImagePieceDocument::GetInstance()
@@ -188,78 +185,66 @@ const ImagePieceDocument::TM_PIECE_INFO& ImagePieceDocument::GetPieceInfoMap()
 
 const wxArrayString& ImagePieceDocument::GetImageIds()
 {
+	UpdateImageArrayString();
 	return m_ImageIds;
 }
 
 const wxArrayInt& ImagePieceDocument::GetImageIdsIndex()
 {
+	UpdateImageArrayString();
 	return m_ImageIdsIndex;
 }
 
 int ImagePieceDocument::FindImageIndex(const wxString& strId)
 {
+	UpdateImageArrayString();
 	for (size_t i = 0; i < m_ImageIds.GetCount(); ++i)
 	{
 		if (m_ImageIds[i] == strId) return i;
 	}
 
-	return -1;
+	return 0;
 }
 
 const wxString& ImagePieceDocument::GetImageId(int index)
 {
+	UpdateImageArrayString();
 	return m_ImageIds[index];
 }
 
 const wxArrayString& ImagePieceDocument::GetPieceIds()
 {
+	UpdatePieceArrayString();
 	return m_PieceIds;
 }
 
 const wxArrayInt& ImagePieceDocument::GetPieceIdsIndex()
 {
+	UpdatePieceArrayString();
 	return m_PieceIdsIndex;
+}
+
+int ImagePieceDocument::FindPieceIndex(const PieceInfo* pPieceInfo)
+{
+	if (!pPieceInfo) return 0;
+	return FindPieceIndex(pPieceInfo->GetId());
 }
 
 int ImagePieceDocument::FindPieceIndex(const wxString& strId)
 {
-	for (size_t i = 0; i < m_PieceIdsIndex.GetCount(); ++i)
+	UpdatePieceArrayString();
+	for (size_t i = 0; i < m_PieceIds.GetCount(); ++i)
 	{
 		if (m_PieceIds[i] == strId) return i;
 	}
 
-	return -1;
+	return 0;
 }
 
 const wxString& ImagePieceDocument::GetPieceId(int index)
 {
+	UpdatePieceArrayString();
 	return m_PieceIds[index];
-}
-
-void ImagePieceDocument::GenerateImageArrayString()
-{
-	m_ImageIds.Clear();
-	m_ImageIdsIndex.Clear();
-
-	int nIndex = 0;
-	for (TM_IMAGE_INFO::iterator it = m_ImageInfoMap.begin(); it != m_ImageInfoMap.end(); ++it)
-	{
-		m_ImageIds.Add(it->first);
-		m_ImageIdsIndex.Add(nIndex++);
-	}
-}
-
-void ImagePieceDocument::GeneratePieceArrayString()
-{
-	m_PieceIds.Clear();
-	m_PieceIdsIndex.Clear();
-
-	int nIndex = 0;
-	for (TM_PIECE_INFO::iterator it = m_PieceInfoMap.begin(); it != m_PieceInfoMap.end(); ++it)
-	{
-		m_PieceIds.Add(it->first);
-		m_PieceIdsIndex.Add(nIndex++);
-	}
 }
 
 bool ImagePieceDocument::RenameImageInfoId(const ImageInfo* pImageInfo, const wxString& strNewId)
@@ -280,10 +265,7 @@ bool ImagePieceDocument::RenameImageInfoId(const ImageInfo* pImageInfo, const wx
 	pFoundImageInfo->SetId(strNewId);
 	m_ImageInfoMap.insert(std::make_pair(pFoundImageInfo->GetId(), pFoundImageInfo));
 
-	GenerateImageArrayString();
-
-	ImageListTransformer::GetInstance().UpdateListView();
-	ImageListTransformer::GetInstance().SetSelectedImageInfo(pFoundImageInfo);
+	m_bNeedUpdateImageIds = true;
 	return true;
 }
 
@@ -305,10 +287,7 @@ bool ImagePieceDocument::RenamePieceInfoId(const PieceInfo* pPieceInfo, const wx
 	pFoundPieceInfo->SetId(strNewId);
 	m_PieceInfoMap.insert(std::make_pair(pFoundPieceInfo->GetId(), pFoundPieceInfo));
 
-	GeneratePieceArrayString();
-
-	PieceListTransformer::GetInstance().UpdateListView();
-	PieceListTransformer::GetInstance().SetSelectedPieceInfo(pFoundPieceInfo);
+	m_bNeedUpdatePieceIds = true;
 	return true;
 }
 
@@ -323,8 +302,6 @@ bool ImagePieceDocument::SetImageBitmap(const ImageInfo* pImageInfo, wxBitmap* p
 	ImageInfo* pFoundImageInfo = itfound->second;
 
 	pFoundImageInfo->SetBitmap(pNewBitmap);
-
-	// TODO: update view
 	return true;
 }
 
@@ -338,8 +315,6 @@ bool ImagePieceDocument::SetPieceRect(const PieceInfo* pPieceInfo, const wxRect&
 
 	PieceInfo* pFoundPieceInfo = itfound->second;
 	pFoundPieceInfo->SetRect(rect);
-
-	// TODO: update view
 	return true;
 }
 
@@ -355,16 +330,31 @@ const ImageInfo* ImagePieceDocument::AddImage(const wxString& strImageId, const 
 	pImageInfo->SetPath(strPath);
 	m_ImageInfoMap.insert(std::make_pair(pImageInfo->GetId(), pImageInfo));
 
-	// update view
-	GenerateImageArrayString();
-
-	ImageListTransformer::GetInstance().UpdateListView();
-	ImageListTransformer::GetInstance().SetSelectedImageInfo(pImageInfo);
-
+	m_bNeedUpdateImageIds = true;
 	return pImageInfo;
 }
 
-const PieceInfo* ImagePieceDocument::AddPiece(const wxString& strId, const wxRect& rect, const ImageInfo* pImageInfo, bool bUpdateView /* = true */)
+bool ImagePieceDocument::RemoveImage(const wxString& strId)
+{
+	TM_IMAGE_INFO::iterator itfound = m_ImageInfoMap.find(strId);
+	if (itfound == m_ImageInfoMap.end()) return false;
+	SetModifiedFlag();
+
+	ImageInfo* pImageInfo = (itfound->second);
+	m_ImageInfoMap.erase(itfound);
+
+	TV_PIECE_INFO vPieceInfo;
+	EnumImagePieces(vPieceInfo, pImageInfo);
+	for (TV_PIECE_INFO::iterator it = vPieceInfo.begin(); it != vPieceInfo.end(); ++it)
+	{
+		RemovePiece((*it)->GetId());
+	}
+
+	SAFE_DELETE(pImageInfo);
+	return true;
+}
+
+const PieceInfo* ImagePieceDocument::AddPiece(const wxString& strId, const wxRect& rect, const ImageInfo* pImageInfo)
 {
 	if (!pImageInfo) return NULL;
 	if (rect.width <= 0 || rect.height <= 0) return NULL;
@@ -377,15 +367,21 @@ const PieceInfo* ImagePieceDocument::AddPiece(const wxString& strId, const wxRec
 	pNewPieceInfo->SetImageInfo(pImageInfo);
 	m_PieceInfoMap.insert(std::make_pair(pNewPieceInfo->GetId(), pNewPieceInfo));
 
-	// update view
-	if (bUpdateView)
-	{
-		GeneratePieceArrayString();
-
-		PieceListTransformer::GetInstance().UpdateListView();
-		PieceListTransformer::GetInstance().SetSelectedPieceInfo(pNewPieceInfo);
-	}
+	m_bNeedUpdatePieceIds = true;
 	return pNewPieceInfo;
+}
+
+bool ImagePieceDocument::RemovePiece(const wxString& strId)
+{
+	TM_PIECE_INFO::iterator itfound = m_PieceInfoMap.find(strId);
+	if (itfound == m_PieceInfoMap.end()) return false;
+	SetModifiedFlag();
+
+	PieceInfo* pPieceInfo = (itfound->second);
+	m_PieceInfoMap.erase(itfound);
+	SAFE_DELETE(pPieceInfo);
+
+	return true;
 }
 
 wxString ImagePieceDocument::GenerateNewImageId(const wxString& strId)
@@ -412,4 +408,42 @@ wxString ImagePieceDocument::GenerateNewPieceId(const wxString& strId)
 	}
 
 	return strNewId;
+}
+
+void ImagePieceDocument::UpdateImageArrayString()
+{
+	if (!m_bNeedUpdateImageIds) return;
+	m_bNeedUpdateImageIds = false;
+
+	int nIndex = 0;
+	m_ImageIds.Clear();
+	m_ImageIdsIndex.Clear();
+
+	m_ImageIds.Add("null");
+	m_ImageIdsIndex.Add(nIndex++);
+
+	for (TM_IMAGE_INFO::iterator it = m_ImageInfoMap.begin(); it != m_ImageInfoMap.end(); ++it)
+	{
+		m_ImageIds.Add(it->first);
+		m_ImageIdsIndex.Add(nIndex++);
+	}
+}
+
+void ImagePieceDocument::UpdatePieceArrayString()
+{
+	if (!m_bNeedUpdatePieceIds) return;
+	m_bNeedUpdatePieceIds = false;
+
+	int nIndex = 0;
+	m_PieceIds.Clear();
+	m_PieceIdsIndex.Clear();
+
+	m_PieceIds.Add("null");
+	m_PieceIdsIndex.Add(nIndex++);
+
+	for (TM_PIECE_INFO::iterator it = m_PieceInfoMap.begin(); it != m_PieceInfoMap.end(); ++it)
+	{
+		m_PieceIds.Add(it->first);
+		m_PieceIdsIndex.Add(nIndex++);
+	}
 }

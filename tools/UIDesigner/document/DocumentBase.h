@@ -19,7 +19,9 @@ public:
 	virtual bool OpenFile(const wxString& strFile) = 0;
 	virtual bool SaveFile(const wxString& strFile) = 0;
 	virtual void Reset() = 0;
-	virtual const wxString& GetFilePath() const = 0;
+
+	void SetFilePath(const wxString& strFilePath);
+	const wxString& GetFilePath() const;
 
 	void SetModifiedFlag();
 	void ClearModifiedFlag();
@@ -27,6 +29,7 @@ public:
 
 private:
 	bool m_bModifiedFlag;
+	wxString m_strFilePath;
 
 };
 #endif // __DOCUMENTBASE_H__

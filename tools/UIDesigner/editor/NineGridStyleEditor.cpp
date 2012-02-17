@@ -6,7 +6,7 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "NineGridStyleEditor.h"
-
+#include "../Config.h"
 NineGridStyleEditor* NineGridStyleEditor::m_pNineGridStyleEditor = NULL;
 
 NineGridStyleEditor::NineGridStyleEditor()
@@ -47,7 +47,6 @@ bool NineGridStyleEditor::SetNineGridStyle(const NineGridStyle* pNineGridStyle)
 	if (m_pNineGridStyle == pNineGridStyle) return false;
 	m_pNineGridStyle = pNineGridStyle;
 
-	UpdateSubBitmap();
 	UpdateSubBitmapRect();
 
 	SetSelState(IStyle::SS_NUM);
@@ -71,9 +70,28 @@ void NineGridStyleEditor::Draw(wxDC& dc)
 {
 	if (!m_pNineGridStyle) return;
 
+	const PieceInfo* pDefaultPieceInfo = NULL;
+	const NineGridStyle::NINE_GRID_INFO* pDefaultNineGridInfo = m_pNineGridStyle->GetStateGridInfo(IStyle::SS_NORMAL);
+	if (pDefaultNineGridInfo && pDefaultNineGridInfo->pPieceInfo) pDefaultPieceInfo = pDefaultNineGridInfo->pPieceInfo;
+
 	for (int i = 0; i < IStyle::SS_NUM; ++i)
 	{
-		DrawBitmap(dc, m_bmpState[i], m_rectState[i].GetPosition());
+		const PieceInfo* pPieceInfo = pDefaultPieceInfo;
+		const NineGridStyle::NINE_GRID_INFO* pNineGridInfo = m_pNineGridStyle->GetStateGridInfo((IStyle::STYLE_STATE)i);
+		if (pNineGridInfo && pNineGridInfo->pPieceInfo) pPieceInfo = pNineGridInfo->pPieceInfo;
+
+		if (!pPieceInfo)
+		{
+			dc.SetPen(wxPen(*wxLIGHT_GREY, Config::DISABLED_PEN_WIDTH));
+			dc.SetBrush(*wxGREY_BRUSH);
+			DrawRectangle(dc, m_rectState[i]);
+			DrawLine(dc, wxPoint(m_rectState[i].x, m_rectState[i].y), wxPoint(m_rectState[i].x+m_rectState[i].width, m_rectState[i].y+m_rectState[i].height));
+			DrawLine(dc, wxPoint(m_rectState[i].x, m_rectState[i].y+m_rectState[i].height), wxPoint(m_rectState[i].x+m_rectState[i].width, m_rectState[i].y));
+		}
+		else
+		{
+			DrawPiece(dc, m_rectState[i].GetPosition(), pPieceInfo);
+		}
 	}
 
 	DrawSelection(dc);
@@ -89,6 +107,7 @@ void NineGridStyleEditor::DrawSelection(wxDC& dc)
 	dc.SetBrush(*wxTRANSPARENT_BRUSH);
 	DrawRectangle(dc, rect);
 
+	if (!m_pNineGridStyle) return;
 	wxSize maxSize = CalculateMaxSize();
 	const NineGridStyle::NINE_GRID_INFO* pGridInfo = m_pNineGridStyle->GetStateGridInfo(m_eSelState);
 
@@ -132,52 +151,33 @@ IStyle::STYLE_STATE NineGridStyleEditor::GetSelState() const
 	return m_eSelState;
 }
 
-void NineGridStyleEditor::UpdateSubBitmap()
-{
-	for (int i = 0; i < IStyle::SS_NUM; ++i)
-	{
-		if (m_pNineGridStyle)
-		{
-			const PieceInfo* pPieceInfo = m_pNineGridStyle->GetStateGridInfo((IStyle::STYLE_STATE)i)->pPieceInfo;
-			const wxRect& pieceRect = pPieceInfo->GetRect();
-			ImageInfo* pImageInfo = (ImageInfo*)pPieceInfo->GetImageInfo();
-			const wxBitmap* pMainBitmap = pImageInfo->GetBitmap();
-			m_bmpState[i] = pMainBitmap->GetSubBitmap(pieceRect);
-		}
-		else
-		{
-			m_bmpState[i] = wxNullBitmap;
-		}
-	}
-}
-
 void NineGridStyleEditor::UpdateSubBitmapRect()
 {
 	wxRect subRect(0, 0, 0, 0);
 	m_TotalSize.x = 0;
 	m_TotalSize.y = 0;
 
+	wxSize defaultPieceSize(Config::DEFAULT_PIECE_SIZE, Config::DEFAULT_PIECE_SIZE);
+
 	for (int i = 0; i < IStyle::SS_NUM; ++i)
 	{
+		wxSize pieceSize = defaultPieceSize;
+
 		if (m_pNineGridStyle)
 		{
 			const PieceInfo* pPieceInfo = m_pNineGridStyle->GetStateGridInfo((IStyle::STYLE_STATE)i)->pPieceInfo;
-			const wxRect& pieceRect = pPieceInfo->GetRect();
-
-			subRect.width = pieceRect.width;
-			subRect.height = pieceRect.height;
-
-			m_rectState[i] = subRect;
-
-			subRect.x = 0;
-			subRect.y += subRect.height;
-
-			if (m_TotalSize.x < pieceRect.width) m_TotalSize.x = pieceRect.width;
-			m_TotalSize.y += pieceRect.height;
+			if (!pPieceInfo) pPieceInfo = m_pNineGridStyle->GetStateGridInfo(IStyle::SS_NORMAL)->pPieceInfo;
+			if (pPieceInfo) pieceSize = pPieceInfo->GetRect().GetSize();
 		}
-		else
-		{
-			m_rectState[i] = subRect;
-		}
+
+		subRect.width = pieceSize.x;
+		subRect.height = pieceSize.y;
+
+		m_rectState[i] = subRect;
+
+		subRect.y += pieceSize.y;
+
+		if (m_TotalSize.x < pieceSize.x) m_TotalSize.x = pieceSize.x;
+		m_TotalSize.y += pieceSize.y;
 	}
 }

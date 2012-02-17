@@ -40,7 +40,6 @@ private:
 	void Init();
 	void Release();
 
-	void UpdateSubBitmap();
 	void UpdateSubBitmapRect();
 
 	void DrawSelection(wxDC& dc);
@@ -50,7 +49,6 @@ private:
 	const BitmapStyle* m_pBitmapStyle;
 
 	IStyle::STYLE_STATE m_eSelState;
-	wxBitmap m_bmpState[IStyle::SS_NUM];
 	wxRect m_rectState[IStyle::SS_NUM];
 	wxSize m_TotalSize;
 

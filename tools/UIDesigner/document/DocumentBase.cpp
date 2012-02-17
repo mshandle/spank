@@ -16,6 +16,16 @@ DocumentBase::~DocumentBase()
 {
 }
 
+void DocumentBase::SetFilePath(const wxString& strFilePath)
+{
+	m_strFilePath = strFilePath;
+}
+
+const wxString& DocumentBase::GetFilePath() const
+{
+	return m_strFilePath;
+}
+
 void DocumentBase::SetModifiedFlag()
 {
 	m_bModifiedFlag = true;

@@ -6,8 +6,9 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "BitmapStyleDocument.h"
-#include "../transformer/BitmapStyleTransformer.h"
 #include <tinyxml-2.6.2/tinyxml.h>
+
+#define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
 
 BitmapStyleDocument::BitmapStyleDocument()
 {
@@ -32,6 +33,8 @@ bool BitmapStyleDocument::OpenFile(const wxString& strFile)
 
 	Reset();
 
+	SetFilePath(strFile);
+
 	TiXmlElement* pElmBitmapStyleList = doc.RootElement();
 	if (!pElmBitmapStyleList || strcmp(pElmBitmapStyleList->Value(), "BitmapStyleList") != 0) return false;
 
@@ -45,9 +48,6 @@ bool BitmapStyleDocument::OpenFile(const wxString& strFile)
 		pElmBitmapStyle = pElmBitmapStyle->NextSiblingElement("BitmapStyle");
 	}
 
-	m_strFile = strFile;
-
-	BitmapStyleTransformer::GetInstance().UpdateListView();
 	return true;
 }
 
@@ -74,7 +74,6 @@ bool BitmapStyleDocument::SaveFile(const wxString& strFile)
 
 void BitmapStyleDocument::Reset()
 {
-	m_strFile = wxEmptyString;
 	for (TM_BITMAP_STYLE::iterator it = m_BitmapStyleMap.begin(); it != m_BitmapStyleMap.end(); ++it)
 	{
 		BitmapStyle* pBitmapStyle = it->second;
@@ -82,11 +81,6 @@ void BitmapStyleDocument::Reset()
 	}
 	m_BitmapStyleMap.clear();
 	ClearModifiedFlag();
-}
-
-const wxString& BitmapStyleDocument::GetFilePath() const
-{
-	return m_strFile;
 }
 
 const BitmapStyle* BitmapStyleDocument::FindBitmapStyle(const wxString& strId)
@@ -117,8 +111,6 @@ bool BitmapStyleDocument::RenameBitmapStyleId(const BitmapStyle* pBitmapStyle, c
 	pFoundBitmapStyle->SetId(strNewId);
 	m_BitmapStyleMap.insert(std::make_pair(pFoundBitmapStyle->GetId(), pFoundBitmapStyle));
 
-	BitmapStyleTransformer::GetInstance().UpdateListView();
-	BitmapStyleTransformer::GetInstance().SetSelectedBitmapStyle(pFoundBitmapStyle);
 	return true;
 }
 
@@ -141,17 +133,22 @@ const BitmapStyle* BitmapStyleDocument::AddBitmapStyle(const wxString& strId)
 	wxString strNewId = GenerateNewBitmapStyleId(strId);
 	BitmapStyle* pNewBitmapStyle = new BitmapStyle();
 	pNewBitmapStyle->SetId(strNewId);
-	m_PieceInfoMap.insert(std::make_pair(pNewPieceInfo->GetId(), pNewPieceInfo));
+	m_BitmapStyleMap.insert(std::make_pair(pNewBitmapStyle->GetId(), pNewBitmapStyle));
 
-	// update view
-	if (bUpdateView)
-	{
-		GeneratePieceArrayString();
+	return pNewBitmapStyle;
+}
 
-		PieceListTransformer::GetInstance().UpdateListView();
-		PieceListTransformer::GetInstance().SetSelectedPieceInfo(pNewPieceInfo);
-	}
-	return pNewPieceInfo;
+bool BitmapStyleDocument::RemoveBitmapStyle(const wxString& strId)
+{
+	TM_BITMAP_STYLE::iterator itfound = m_BitmapStyleMap.find(strId);
+	if (itfound == m_BitmapStyleMap.end()) return false;
+	SetModifiedFlag();
+
+	BitmapStyle* pFoundBitmapStyle = itfound->second;
+	m_BitmapStyleMap.erase(itfound);
+
+	SAFE_DELETE(pFoundBitmapStyle);
+	return true;
 }
 
 BitmapStyle* BitmapStyleDocument::InternalFindBitmapStyle(const wxString& strId)

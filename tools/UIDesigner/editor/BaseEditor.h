@@ -11,6 +11,7 @@
 #include <wx/scrolwin.h>
 #include <wx/bitmap.h>
 #include <wx/dcmemory.h>
+#include "../document/PieceInfo.h"
 
 class BaseEditor : public wxWindow
 {
@@ -66,7 +67,8 @@ public:
 	wxPoint CalculateOriginPos(const wxPoint& zoomedPos);
 
 protected:
-	void DrawBitmap(wxDC& dc, const wxBitmap& bitmap, const wxPoint& destPos);
+	void DrawImage(wxDC& dc, const wxPoint& destPos, const ImageInfo* pImageInfo);
+	void DrawPiece(wxDC& dc, const wxPoint& destPos, const PieceInfo* pPieceInfo);
 	void DrawRectangle(wxDC& dc, const wxRect& rect);
 	void DrawLine(wxDC& dc, const wxPoint& pt1, const wxPoint& pt2);
 

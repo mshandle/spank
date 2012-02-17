@@ -26,7 +26,7 @@ public:
 
 private:
 	const PieceInfo* LoadStateInfo(TiXmlElement* pElmClipBitmapStyle, const wxString& strState, const PieceInfo* pDefaultPieceInfo);
-	bool SaveStateInfo(TiXmlElement* pElmClipBitmapStyle, const wxString& strState, const PieceInfo* pPieceInfo, bool force = false);
+	bool SaveStateInfo(TiXmlElement* pElmClipBitmapStyle, const wxString& strState, const PieceInfo* pPieceInfo);
 
 private:
 	const PieceInfo* m_PieceInfo[SS_NUM];
