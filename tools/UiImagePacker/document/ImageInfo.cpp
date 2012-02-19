@@ -49,9 +49,10 @@ bool ImageInfo::SaveImage()
 	m_bIsModified = false;
 	if (!m_pbmpImage) return true;
 
-	if (!m_pbmpImage->SaveFile(ProjectDocument::GetInstance().GetRootDir() + "/" + m_strPath, wxBITMAP_TYPE_PNG))
+	wxString strFullPath = ProjectDocument::GetInstance().GetRootPath() + "/" + m_strPath;
+	if (!m_pbmpImage->SaveFile(strFullPath, wxBITMAP_TYPE_PNG))
 	{
-		wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("save image bitmap failed, path=%s", ProjectDocument::GetInstance().GetRootDir() + "/" + m_strPath));
+		wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("save image bitmap failed, path=%s", strFullPath));
 		msg.ShowModal();
 	}
 
@@ -102,13 +103,16 @@ const wxBitmap* ImageInfo::GetBitmap()
 bool ImageInfo::LoadImageFromFile()
 {
 	if (m_pbmpImage) return false;
-
 	SAFE_DELETE(m_pbmpImage);
 
+	// create new bitmap
 	m_pbmpImage = new wxBitmap();
-	if (!m_pbmpImage->LoadFile(ProjectDocument::GetInstance().GetRootDir() + "/" + m_strPath, wxBITMAP_TYPE_ANY))
+
+	// load bitmap from path
+	wxString strFullPath = ProjectDocument::GetInstance().GetRootPath() + "/" + m_strPath;
+	if (!m_pbmpImage->LoadFile(strFullPath, wxBITMAP_TYPE_ANY))
 	{
-		wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("can not open file: %s", ProjectDocument::GetInstance().GetRootDir() + "/" + m_strPath));
+		wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("can not open file: %s", strFullPath));
 		msg.ShowModal();
 		SAFE_DELETE(m_pbmpImage);
 		return false;

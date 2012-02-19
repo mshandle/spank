@@ -29,11 +29,11 @@ public:
 
 	virtual void Reset();
 
-	void SetPiece(const PieceInfo* pPieceInfo);
-	const PieceInfo* GetPiece() const;
+	void SetPieceInfo(const PieceInfo* pPieceInfo);
+	const PieceInfo* GetPieceInfo() const;
 
-	bool SetImage(const ImageInfo* pImageInfo);
-	const ImageInfo* GetImage() const;
+	bool SetImageInfo(const ImageInfo* pImageInfo);
+	const ImageInfo* GetImageInfo() const;
 
 	virtual wxSize CalculateVirtualSize();
 	virtual void Draw(wxDC& dc);

@@ -51,6 +51,7 @@ public:
 
 	virtual bool Create(wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE);
 
+	void SetDefaultImageInfo(const ImageInfo* pImageInfo);
 	const ImageInfo* GetCurrImageInfo();
 
 private:

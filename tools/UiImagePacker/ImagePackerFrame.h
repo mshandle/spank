@@ -136,6 +136,7 @@ private:
 	bool IsModified() const;
 
 	void OnEditDelete(wxCommandEvent& event);
+	void DoDelete();
 	bool FindStyleIdsUsingThePiece(TS_WX_STRING& vBitmapStyleIds, TS_WX_STRING& vNineGridStyleIds, TS_WX_STRING& vClipBitmapStyleIds, const PieceInfo* pPieceInfo);
 	bool MakeIdsString(wxString& strOut, const TS_WX_STRING& vIds, const wxString& strHeader);
 	void DoDeletePiece(const PieceInfo* pPieceInfo);
@@ -165,6 +166,9 @@ private:
 	void OnClipBitmapStyleListSelected(wxTreeEvent& event);
 
 	void OnPropertyGridChanged(wxPropertyGridEvent& event);
+
+	void OnListKeyDown(wxKeyEvent& event);
+	void OnEditorKeyDown(wxKeyEvent& event);
 
 	void SwitchEditor(EDITOR eEditor);
 

@@ -52,22 +52,22 @@ ImagePieceEditor& ImagePieceEditor::GetInstance()
 
 void ImagePieceEditor::Reset()
 {
-	SetPiece(NULL);
-	SetImage(NULL);
+	SetPieceInfo(NULL);
+	SetImageInfo(NULL);
 }
 
-void ImagePieceEditor::SetPiece(const PieceInfo* pPieceInfo)
+void ImagePieceEditor::SetPieceInfo(const PieceInfo* pPieceInfo)
 {
 	m_pPieceInfo = pPieceInfo;
 	Refresh(false);
 }
 
-const PieceInfo* ImagePieceEditor::GetPiece() const
+const PieceInfo* ImagePieceEditor::GetPieceInfo() const
 {
 	return m_pPieceInfo;
 }
 
-bool ImagePieceEditor::SetImage(const ImageInfo* pImageInfo)
+bool ImagePieceEditor::SetImageInfo(const ImageInfo* pImageInfo)
 {
 	if (m_pImageInfo == pImageInfo) return false;
 	m_pImageInfo = pImageInfo;
@@ -77,7 +77,7 @@ bool ImagePieceEditor::SetImage(const ImageInfo* pImageInfo)
 	return true;
 }
 
-const ImageInfo* ImagePieceEditor::GetImage() const
+const ImageInfo* ImagePieceEditor::GetImageInfo() const
 {
 	return m_pImageInfo;
 }
@@ -113,7 +113,7 @@ void ImagePieceEditor::OnLButtonDown(const wxPoint& pos)
 {
 	wxPoint posMouse = (pos + GetOriginOffset()) / GetZoom();
 	const PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfoUnderPoint(posMouse, m_pImageInfo);
-	SetPiece(pPieceInfo);
+	SetPieceInfo(pPieceInfo);
 
 	PieceListTransformer::GetInstance().SetSelectedPieceInfo(pPieceInfo);
 	PieceListTransformer::GetInstance().UpdateProperty(pPieceInfo);
