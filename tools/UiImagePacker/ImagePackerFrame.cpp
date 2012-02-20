@@ -771,6 +771,7 @@ void ImagePackerFrame::DoDeleteImage(const ImageInfo* pImageInfo)
 
 	// make prompt string
 	wxString strDeletePiecesAndStyles;
+	MakeIdsString(strDeletePiecesAndStyles, vPieceInfoIds, wxT("also delete pieces:"));
 	MakeIdsString(strDeletePiecesAndStyles, vBitmapStyleIds, wxT("also delete bitmap styles:"));
 	MakeIdsString(strDeletePiecesAndStyles, vNineGridStyleIds, wxT("also delete 9-grid styles:"));
 	MakeIdsString(strDeletePiecesAndStyles, vClipBitmapStyleIds, wxT("also delete clip bitmap styles:"));
