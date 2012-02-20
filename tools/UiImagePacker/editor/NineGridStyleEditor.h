@@ -42,8 +42,9 @@ private:
 	void Release();
 
 	void UpdateSubBitmapRect();
-
 	void DrawSelection(wxDC& dc);
+
+	void DoSelState(const wxPoint& pos);
 
 private:
 	static NineGridStyleEditor* m_pNineGridStyleEditor;

@@ -14,6 +14,8 @@ BEGIN_EVENT_TABLE(BaseEditor, wxWindow)
 	EVT_PAINT(BaseEditor::OnPaintEvt)
 	EVT_MOUSEWHEEL(BaseEditor::OnMouseWheelEvt)
 	EVT_LEFT_DOWN(BaseEditor::OnLButtonDownEvt)
+	EVT_LEFT_UP(BaseEditor::OnLButtonUpEvt)
+	EVT_MOTION(BaseEditor::OnMouseMoveEvt)
 	EVT_SIZE(BaseEditor::OnSizeEvt)
 	EVT_SCROLLWIN_LINEUP(BaseEditor::OnScrollLineUpEvt)
 	EVT_SCROLLWIN_LINEDOWN(BaseEditor::OnScrollLineDownEvt)
@@ -154,9 +156,14 @@ void BaseEditor::DrawPiece(wxDC& dc, const wxPoint& destPos, const PieceInfo* pP
 
 void BaseEditor::DrawRectangle(wxDC& dc, const wxRect& rect)
 {
-	wxPoint pos = rect.GetPosition()*m_nZoom-m_ptOriginOffset;
-	wxSize size = rect.GetSize()*m_nZoom;
-	dc.DrawRectangle(pos, size);
+	DrawRectangle(dc, rect.GetPosition(), rect.GetSize());
+}
+
+void BaseEditor::DrawRectangle(wxDC& dc, const wxPoint& pos, const wxSize& size)
+{
+	wxPoint zoomedPos = pos*m_nZoom-m_ptOriginOffset;
+	wxSize zoomedSize = size*m_nZoom;
+	dc.DrawRectangle(zoomedPos, zoomedSize);
 }
 
 void BaseEditor::DrawLine(wxDC& dc, const wxPoint& pt1, const wxPoint& pt2)
@@ -199,6 +206,16 @@ void BaseEditor::OnLButtonDownEvt(wxMouseEvent& event)
 {
 	SetFocus();
 	OnLButtonDown(event.GetPosition());
+}
+
+void BaseEditor::OnLButtonUpEvt(wxMouseEvent& event)
+{
+	OnLButtonUp(event.GetPosition());
+}
+
+void BaseEditor::OnMouseMoveEvt(wxMouseEvent& event)
+{
+	OnMouseMove(event.GetPosition());
 }
 
 void BaseEditor::OnSizeEvt(wxSizeEvent& event)
@@ -328,6 +345,16 @@ wxSize BaseEditor::CalculateMaxSize()
 }
 
 void BaseEditor::OnLButtonDown(const wxPoint& pos)
+{
+	// TODO: 
+}
+
+void BaseEditor::OnLButtonUp(const wxPoint& pos)
+{
+	// TODO: 
+}
+
+void BaseEditor::OnMouseMove(const wxPoint& pos)
 {
 	// TODO: 
 }

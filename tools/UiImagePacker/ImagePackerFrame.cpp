@@ -73,6 +73,8 @@ BEGIN_EVENT_TABLE(ImagePackerFrame, wxFrame)
 	EVT_MENU(wxID_ZOOM_IN, ImagePackerFrame::OnViewZoomIn)
 	EVT_MENU(wxID_ZOOM_OUT, ImagePackerFrame::OnViewZoomOut)
 
+	EVT_MENU(IDM_TOOL_EXTRACT_IMAGE, ImagePackerFrame::OnExtractImage)
+
 	EVT_MENU(IDM_HELP_ABOUT, ImagePackerFrame::OnHelpAbout)
 
 	EVT_TREE_SEL_CHANGED(IDC_PIECE_LIST, ImagePackerFrame::OnImagePieceListSelected)
@@ -260,6 +262,7 @@ void ImagePackerFrame::CreateMenu()
 
 	// tool
 	wxMenu* pMenuItemTool = new wxMenu();
+	pMenuItemTool->Append(IDM_TOOL_EXTRACT_IMAGE, wxT("&Extract Image Pieces..."), wxEmptyString, wxITEM_NORMAL);
 	pMenuItemTool->Append(IDM_TOOL_PREFERENCES, wxT("&Preferences..."), wxEmptyString, wxITEM_NORMAL)->Enable(false);
 	pMenuBar->Append(pMenuItemTool, wxT("&Tools"));
 
@@ -516,6 +519,8 @@ void ImagePackerFrame::DoOpenProject()
 	wxFileDialog dialog(this, wxT("Choose a file"), wxEmptyString, wxEmptyString, wxT("Project files (*.ipproj)|*.ipproj"), wxFD_DEFAULT_STYLE);
 	if (dialog .ShowModal() == wxID_OK)
 	{
+		SwitchEditor(NUM_EDITOR);
+
 		wxString strPath = dialog.GetPath();
 		wxString strDir = dialog.GetDirectory();
 		ProjectDocument::GetInstance().SetProjectDir(strDir);
@@ -965,6 +970,33 @@ void ImagePackerFrame::OnViewZoomIn(wxCommandEvent& event)
 void ImagePackerFrame::OnViewZoomOut(wxCommandEvent& event)
 {
 	m_pEditors[m_pEditorNotebook->GetSelection()]->ZoomOut();
+}
+
+void ImagePackerFrame::OnExtractImage(wxCommandEvent& event)
+{
+	const ImageInfo* pImageInfo = ImagePieceEditor::GetInstance().GetImageInfo();
+	if (!pImageInfo)
+	{
+		wxMessageDialog msg(this, wxT("Please selected a image first."));
+		msg.ShowModal();
+		return;
+	}
+
+	const wxBitmap* pImageBitmap = ((ImageInfo*)pImageInfo)->GetBitmap();
+	if (!pImageBitmap) return;
+
+	ImagePieceDocument::TV_PIECE_INFO vPieceInfo;
+	if (ImagePieceDocument::GetInstance().EnumImagePieces(vPieceInfo, pImageInfo) <= 0) return;
+
+	wxDirDialog dialog(this, wxT("Choose a directory to extract"), wxEmptyString, wxDD_NEW_DIR_BUTTON);
+	if (dialog.ShowModal() != wxID_OK) return;
+
+	for (ImagePieceDocument::TV_PIECE_INFO::iterator it = vPieceInfo.begin(); it != vPieceInfo.end(); ++it)
+	{
+		const PieceInfo* pPieceInfo = (*it);
+		wxBitmap bitmap = pImageBitmap->GetSubBitmap(pPieceInfo->GetRect());
+		bitmap.SaveFile(dialog.GetPath() + "/" + pPieceInfo->GetId() + ".png", wxBITMAP_TYPE_PNG);
+	}
 }
 
 void ImagePackerFrame::OnHelpAbout(wxCommandEvent& event)

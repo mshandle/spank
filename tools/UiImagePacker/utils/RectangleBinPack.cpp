@@ -106,18 +106,6 @@ RectangleBinPack::Node *RectangleBinPack::Insert(RectangleBinPack::Node *node, i
 	node->right = new Node();
 	if (w <= h) // Split the remaining space in horizontal direction.
 	{
-		node->left->x = node->x;
-		node->left->y = node->y + height;
-		node->left->width = width;
-		node->left->height = h;
-
-		node->right->x = node->x + width;
-		node->right->y = node->y;
-		node->right->width = w;
-		node->right->height = node->height;
-	}
-	else // Split the remaining space in vertical direction.
-	{
 		node->left->x = node->x + width;
 		node->left->y = node->y;
 		node->left->width = w;
@@ -127,6 +115,18 @@ RectangleBinPack::Node *RectangleBinPack::Insert(RectangleBinPack::Node *node, i
 		node->right->y = node->y + height;
 		node->right->width = node->width;
 		node->right->height = h;
+	}
+	else // Split the remaining space in vertical direction.
+	{
+		node->left->x = node->x;
+		node->left->y = node->y + height;
+		node->left->width = width;
+		node->left->height = h;
+
+		node->right->x = node->x + width;
+		node->right->y = node->y;
+		node->right->width = w;
+		node->right->height = node->height;
 	}
 	// Note that as a result of the above, it can happen that node->left or node->right
 	// is now a degenerate (zero area) rectangle. No need to do anything about it,

@@ -75,7 +75,7 @@ private:
 	bool AddPieceIntoNewImage(const wxSize& newSize);
 	void FreePackingPiecesInfo(TV_PACKING_PIECE_INFO& vPackingInfo);
 
-	wxBitmap* PackingImage(const wxSize& bmpSize, const TV_PACKING_PIECE_INFO& vPackingInfo);
+	wxBitmap* PackImage(const wxSize& bmpSize, const TV_PACKING_PIECE_INFO& vPackingInfo);
 	bool GeneratePackingInfo(TV_PACKING_PIECE_INFO& vPackingInfo, const wxSize& bmpSize);
 	bool GetPieceFromList(TV_PACKING_PIECE_INFO& vPackingInfo);
 	bool GetPieceFromImage(TV_PACKING_PIECE_INFO& vPackingInfo, const ImageInfo* pImageInfo);

@@ -96,7 +96,15 @@ void ImagePieceEditor::Draw(wxDC& dc)
 {
 	if (!m_pImageInfo) return;
 
-	DrawImage(dc, wxPoint(0, 0), m_pImageInfo);
+	ImageInfo* pImageInfo = (ImageInfo*)m_pImageInfo;
+	dc.SetPen(*wxLIGHT_GREY_PEN);
+	if (pImageInfo->GetBitmap())
+	{
+		DrawRectangle(dc, wxPoint(0, 0), pImageInfo->GetBitmap()->GetSize());
+	}
+
+	DrawImage(dc, wxPoint(0, 0), pImageInfo);
+
 	DrawSelection(dc);
 }
 

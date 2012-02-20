@@ -34,13 +34,15 @@ public:
 	void SetTreeItemId(const wxTreeItemId& itemId);
 	const wxTreeItemId& GetTreeItemId() const;
 
+	bool ClearBitmapArea(const wxRect& rect);
+
 private:
 	bool LoadImageFromFile();
 
 private:
 	wxString m_strId;
 	wxString m_strPath;
-	wxBitmap* m_pbmpImage;
+	wxBitmap* m_pBitmap;
 	bool m_bLoaded;
 	bool m_bIsModified;
 	wxTreeItemId m_TreeItemId;

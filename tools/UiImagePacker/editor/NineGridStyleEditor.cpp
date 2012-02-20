@@ -119,32 +119,16 @@ void NineGridStyleEditor::DrawSelection(wxDC& dc)
 	const NineGridStyle::NINE_GRID_INFO* pGridInfo = m_pNineGridStyle->GetStateGridInfo(m_eSelState);
 
 	dc.SetPen(*wxGREEN_PEN);
-	if (pGridInfo->min_y != pGridInfo->max_y)
-	{
-		DrawLine(dc, wxPoint(0, rect.y+pGridInfo->min_y), wxPoint(maxSize.x, rect.y+pGridInfo->min_y));
-		DrawLine(dc, wxPoint(0, rect.y+pGridInfo->max_y), wxPoint(maxSize.x, rect.y+pGridInfo->max_y));
-	}
-	if (pGridInfo->min_x != pGridInfo->max_x)
-	{
-		DrawLine(dc, wxPoint(rect.x+pGridInfo->min_x, 0), wxPoint(rect.x+pGridInfo->min_x, maxSize.y));
-		DrawLine(dc, wxPoint(rect.x+pGridInfo->max_x, 0), wxPoint(rect.x+pGridInfo->max_x, maxSize.y));
-	}
+	DrawLine(dc, wxPoint(0, rect.y+pGridInfo->min_y), wxPoint(maxSize.x, rect.y+pGridInfo->min_y));
+	DrawLine(dc, wxPoint(0, rect.y+pGridInfo->max_y), wxPoint(maxSize.x, rect.y+pGridInfo->max_y));
+	DrawLine(dc, wxPoint(rect.x+pGridInfo->min_x, 0), wxPoint(rect.x+pGridInfo->min_x, maxSize.y));
+	DrawLine(dc, wxPoint(rect.x+pGridInfo->max_x, 0), wxPoint(rect.x+pGridInfo->max_x, maxSize.y));
 }
 
 void NineGridStyleEditor::OnLButtonDown(const wxPoint& pos)
 {
 	wxPoint posOrigin = (pos + GetOriginOffset()) / GetZoom();
-	for (int i = 0; i < IStyle::SS_NUM; ++i)
-	{
-		if (m_rectState[i].Contains(posOrigin))
-		{
-			// set selection
-			SetSelState((IStyle::STYLE_STATE)i);
-			return;
-		}
-	}
-
-	SetSelState(IStyle::SS_NUM);
+	DoSelState(posOrigin);
 }
 
 void NineGridStyleEditor::SetSelState(IStyle::STYLE_STATE eState)
@@ -187,4 +171,19 @@ void NineGridStyleEditor::UpdateSubBitmapRect()
 		if (m_TotalSize.x < pieceSize.x) m_TotalSize.x = pieceSize.x;
 		m_TotalSize.y += pieceSize.y;
 	}
+}
+
+void NineGridStyleEditor::DoSelState(const wxPoint& pos)
+{
+	for (int i = 0; i < IStyle::SS_NUM; ++i)
+	{
+		if (m_rectState[i].Contains(pos))
+		{
+			// set selection
+			SetSelState((IStyle::STYLE_STATE)i);
+			return;
+		}
+	}
+
+	SetSelState(IStyle::SS_NUM);
 }

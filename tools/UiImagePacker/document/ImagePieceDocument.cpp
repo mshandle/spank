@@ -399,6 +399,13 @@ bool ImagePieceDocument::RemovePiece(const wxString& strId)
 
 	PieceInfo* pPieceInfo = (itfound->second);
 	m_PieceInfoMap.erase(itfound);
+
+	ImageInfo* pImageInfo = (ImageInfo*)pPieceInfo->GetImageInfo();
+	if (pImageInfo)
+	{
+		pImageInfo->ClearBitmapArea(pPieceInfo->GetRect());
+	}
+
 	SAFE_DELETE(pPieceInfo);
 
 	return true;

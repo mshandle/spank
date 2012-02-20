@@ -58,7 +58,10 @@ public:
 	virtual wxSize CalculateMaxSize();
 
 	virtual void Draw(wxDC& dc);
+
 	virtual void OnLButtonDown(const wxPoint& pos);
+	virtual void OnLButtonUp(const wxPoint& pos);
+	virtual void OnMouseMove(const wxPoint& pos);
 
 	void UpdateVirtualSize();
 	void UpdateScrollPosition(int x, int y);
@@ -71,6 +74,7 @@ protected:
 	void DrawImage(wxDC& dc, const wxPoint& destPos, const ImageInfo* pImageInfo);
 	void DrawPiece(wxDC& dc, const wxPoint& destPos, const PieceInfo* pPieceInfo);
 	void DrawRectangle(wxDC& dc, const wxRect& rect);
+	void DrawRectangle(wxDC& dc, const wxPoint& pos, const wxSize& size);
 	void DrawLine(wxDC& dc, const wxPoint& pt1, const wxPoint& pt2);
 
 private:
@@ -80,6 +84,8 @@ private:
 	void OnPaintEvt(wxPaintEvent& event);
 	void OnMouseWheelEvt(wxMouseEvent& event);
 	void OnLButtonDownEvt(wxMouseEvent& event);
+	void OnLButtonUpEvt(wxMouseEvent& event);
+	void OnMouseMoveEvt(wxMouseEvent& event);
 	void OnSizeEvt(wxSizeEvent& event);
 
 	void OnScrollLineUpEvt(wxScrollWinEvent& event);

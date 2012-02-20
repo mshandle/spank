@@ -8,11 +8,13 @@
 #include "DialogAddPiece.h"
 #include <wx/msgdlg.h>
 #include <wx/filedlg.h>
+#include <wx/dcgraph.h>
 #include <algorithm>
 
 #include "../Config.h"
 #include "../document/ImagePieceDocument.h"
 #include "../document/ProjectDocument.h"
+#include "../transformer/ImageListTransformer.h"
 #include "../transformer/PieceListTransformer.h"
 #include "../utils/FileUtil.h"
 
@@ -368,15 +370,15 @@ bool DialogAddPiece::AddPieceFromExistingImage(const wxSize& newSize)
 
 	TV_PACKING_PIECE_INFO vPackingInfo;
 
-	// get packing info from images
-	if (!GetPieceFromImage(vPackingInfo, pImageInfo))
+	// get packing info from list
+	if (!GetPieceFromList(vPackingInfo))
 	{
 		FreePackingPiecesInfo(vPackingInfo);
 		return false;
 	}
 
-	// get packing info from list
-	if (!GetPieceFromList(vPackingInfo))
+	// get packing info from images
+	if (!GetPieceFromImage(vPackingInfo, pImageInfo))
 	{
 		FreePackingPiecesInfo(vPackingInfo);
 		return false;
@@ -393,7 +395,7 @@ bool DialogAddPiece::AddPieceFromExistingImage(const wxSize& newSize)
 	}
 
 	// packing
-	wxBitmap* pNewBitmap = PackingImage(newSize, vPackingInfo);
+	wxBitmap* pNewBitmap = PackImage(newSize, vPackingInfo);
 	if (!pNewBitmap)
 	{
 		FreePackingPiecesInfo(vPackingInfo);
@@ -450,7 +452,7 @@ bool DialogAddPiece::AddPieceIntoNewImage(const wxSize& newSize)
 	}
 
 	// packing
-	wxBitmap* pNewBitmap = PackingImage(newSize, vPackingInfo);
+	wxBitmap* pNewBitmap = PackImage(newSize, vPackingInfo);
 	if (!pNewBitmap)
 	{
 		FreePackingPiecesInfo(vPackingInfo);
@@ -472,6 +474,7 @@ bool DialogAddPiece::AddPieceIntoNewImage(const wxSize& newSize)
 		ImagePieceDocument::GetInstance().AddPiece(strId, rect, pImageInfo);
 	}
 
+	ImageListTransformer::GetInstance().UpdateListView();
 	PieceListTransformer::GetInstance().UpdateListView();
 	FreePackingPiecesInfo(vPackingInfo);
 	m_pCurrImageInfo = pImageInfo;
@@ -489,28 +492,27 @@ void DialogAddPiece::FreePackingPiecesInfo(TV_PACKING_PIECE_INFO& vPackingInfo)
 	vPackingInfo.clear();
 }
 
-wxBitmap* DialogAddPiece::PackingImage(const wxSize& bmpSize, const TV_PACKING_PIECE_INFO& vPackingInfo)
+wxBitmap* DialogAddPiece::PackImage(const wxSize& bmpSize, const TV_PACKING_PIECE_INFO& vPackingInfo)
 {
 	wxBitmap* pNewBitmap = new wxBitmap(bmpSize);
 	pNewBitmap->UseAlpha();
 
-	wxMemoryDC memDC;
-	memDC.SelectObject(*pNewBitmap);
-	memDC.SetBackground(*wxTRANSPARENT_BRUSH);
-	memDC.Clear();
+	wxMemoryDC memDC(*pNewBitmap);
+	wxGCDC dc(memDC);
 
-	wxMemoryDC memSubDC;
+	dc.SetBackground(*wxTRANSPARENT_BRUSH);
+	dc.Clear();
+
 	for (TV_PACKING_PIECE_INFO::const_iterator it = vPackingInfo.begin(); it != vPackingInfo.end(); ++it)
 	{
 		const PACKING_PIECE_INFO* pPackingInfo = (*it);
 		wxPoint destPos(pPackingInfo->pNode->x, pPackingInfo->pNode->y);
 
-		memSubDC.SelectObject((wxBitmap)pPackingInfo->subBitmap);
-		memDC.Blit(destPos, pPackingInfo->subBitmap.GetSize(), &memSubDC, wxPoint(0, 0));
-		memSubDC.SelectObject(wxNullBitmap);
+		wxBitmap& subBitmap = (wxBitmap)pPackingInfo->subBitmap;
+		wxMemoryDC memSubDC(subBitmap);
+		dc.Blit(destPos, pPackingInfo->subBitmap.GetSize(), &memSubDC, wxPoint(0, 0));
 	}
 
-	memDC.SelectObject(wxNullBitmap);
 	return pNewBitmap;
 }
 

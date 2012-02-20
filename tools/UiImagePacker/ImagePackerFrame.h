@@ -43,6 +43,7 @@ public:
 		IDM_ELEMENT_ADD_CLIP_BITMAP_STYLE,
 
 		IDM_VIEW_GRID,
+		IDM_TOOL_EXTRACT_IMAGE,
 		IDM_TOOL_PREFERENCES,
 		IDM_HELP_SUPPORT,
 		IDM_HELP_ABOUT,
@@ -156,6 +157,7 @@ private:
 	void OnViewZoomIn(wxCommandEvent& event);
 	void OnViewZoomOut(wxCommandEvent& event);
 
+	void OnExtractImage(wxCommandEvent& event);
 	void OnHelpAbout(wxCommandEvent& event);
 
 	void OnImagePieceListSelected(wxTreeEvent& event);

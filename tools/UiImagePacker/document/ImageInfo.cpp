@@ -14,14 +14,14 @@
 
 ImageInfo::ImageInfo()
 {
-	m_pbmpImage = NULL;
+	m_pBitmap = NULL;
 	m_bLoaded = false;
 	m_bIsModified = false;
 }
 
 ImageInfo::~ImageInfo()
 {
-	SAFE_DELETE(m_pbmpImage);
+	SAFE_DELETE(m_pBitmap);
 }
 
 bool ImageInfo::LoadFromXml(TiXmlElement* pElmImage)
@@ -47,10 +47,10 @@ bool ImageInfo::SaveImage()
 {
 	if (!m_bIsModified) return true;
 	m_bIsModified = false;
-	if (!m_pbmpImage) return true;
+	if (!m_pBitmap) return true;
 
 	wxString strFullPath = ProjectDocument::GetInstance().GetRootPath() + "/" + m_strPath;
-	if (!m_pbmpImage->SaveFile(strFullPath, wxBITMAP_TYPE_PNG))
+	if (!m_pBitmap->SaveFile(strFullPath, wxBITMAP_TYPE_PNG))
 	{
 		wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("save image bitmap failed, path=%s", strFullPath));
 		msg.ShowModal();
@@ -81,40 +81,40 @@ const wxString& ImageInfo::GetPath() const
 
 bool ImageInfo::SetBitmap(wxBitmap* pBitmap)
 {
-	if (m_pbmpImage == pBitmap) return false;
+	if (m_pBitmap == pBitmap) return false;
 
-	SAFE_DELETE(m_pbmpImage);
-	m_pbmpImage = pBitmap;
+	SAFE_DELETE(m_pBitmap);
+	m_pBitmap = pBitmap;
 	m_bIsModified = true;
 	return true;
 }
 
 const wxBitmap* ImageInfo::GetBitmap()
 {
-	if (!m_pbmpImage && !m_bLoaded)
+	if (!m_pBitmap && !m_bLoaded)
 	{
 		LoadImageFromFile();
 		m_bLoaded = true;
 	}
 
-	return m_pbmpImage;
+	return m_pBitmap;
 }
 
 bool ImageInfo::LoadImageFromFile()
 {
-	if (m_pbmpImage) return false;
-	SAFE_DELETE(m_pbmpImage);
+	if (m_pBitmap) return false;
+	SAFE_DELETE(m_pBitmap);
 
 	// create new bitmap
-	m_pbmpImage = new wxBitmap();
+	m_pBitmap = new wxBitmap();
 
 	// load bitmap from path
 	wxString strFullPath = ProjectDocument::GetInstance().GetRootPath() + "/" + m_strPath;
-	if (!m_pbmpImage->LoadFile(strFullPath, wxBITMAP_TYPE_ANY))
+	if (!m_pBitmap->LoadFile(strFullPath, wxBITMAP_TYPE_ANY))
 	{
 		wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("can not open file: %s", strFullPath));
 		msg.ShowModal();
-		SAFE_DELETE(m_pbmpImage);
+		SAFE_DELETE(m_pBitmap);
 		return false;
 	}
 
@@ -129,4 +129,19 @@ void ImageInfo::SetTreeItemId(const wxTreeItemId& itemId)
 const wxTreeItemId& ImageInfo::GetTreeItemId() const
 {
 	return m_TreeItemId;
+}
+
+bool ImageInfo::ClearBitmapArea(const wxRect& rect)
+{
+	if (!m_pBitmap) return false;
+	m_bIsModified = true;
+
+	wxMemoryDC memDC;
+	memDC.SelectObject(*m_pBitmap);
+	memDC.SetBrush(*wxBLACK_BRUSH);
+	memDC.SetPen(*wxBLACK_PEN);
+	memDC.DrawRectangle(rect);
+	memDC.SelectObject(wxNullBitmap);
+
+	return true;
 }
