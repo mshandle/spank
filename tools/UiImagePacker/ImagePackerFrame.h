@@ -41,6 +41,7 @@ public:
 		IDM_ELEMENT_ADD_NINE_GRID_STYLE,
 		IDM_ELEMENT_ADD_COLOR_STYLE,
 		IDM_ELEMENT_ADD_CLIP_BITMAP_STYLE,
+		IDM_ELEMENT_REPLACE_PIECE,
 
 		IDM_VIEW_GRID,
 		IDM_TOOL_EXTRACT_IMAGE,
@@ -152,6 +153,7 @@ private:
 	void OnAddNineGridStyle(wxCommandEvent& event);
 	void OnAddColorStyle(wxCommandEvent& event);
 	void OnAddClipBitmapStyle(wxCommandEvent& event);
+	void OnReplacePiece(wxCommandEvent& event);
 
 	void OnViewZoom100(wxCommandEvent& event);
 	void OnViewZoomIn(wxCommandEvent& event);

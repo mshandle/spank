@@ -408,6 +408,14 @@
 				RelativePath=".\dialog\DialogAddPiece.h"
 				>
 			</File>
+			<File
+				RelativePath=".\dialog\DialogReplacePiece.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dialog\DialogReplacePiece.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="utils"
