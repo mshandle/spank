@@ -15,6 +15,7 @@ NineGridStyleTransformer::NineGridStyleTransformer()
 {
 	m_pListView = NULL;
 	m_pPropertyGrid = NULL;
+	m_bSkipUpdateProperty = false;
 }
 
 NineGridStyleTransformer::~NineGridStyleTransformer()
@@ -52,6 +53,8 @@ void NineGridStyleTransformer::UpdateListView()
 
 void NineGridStyleTransformer::UpdateProperty(const NineGridStyle* pNineGrieStyle)
 {
+	if (m_bSkipUpdateProperty) return;
+
 	m_pPropertyGrid->Clear();
 	ImagePackerFrame::GetInstance().SetCurrPropertyType(ImagePackerFrame::PT_UNKNOWN);
 	if (!pNineGrieStyle) return;
@@ -110,8 +113,10 @@ void NineGridStyleTransformer::PropertyChanged(const wxPGProperty* pProperty)
 		wxString strNewId = pProperty->GetValueAsString();
 		if (NineGridStyleDocument::GetInstance().RenameNineGridStyleId(pNineGridStyle, strNewId))
 		{
-			NineGridStyleTransformer::GetInstance().UpdateListView();
-			NineGridStyleTransformer::GetInstance().SetSelectedNineGridStyle(pNineGridStyle);
+			UpdateListView();
+			m_bSkipUpdateProperty = true;
+			SetSelectedNineGridStyle(pNineGridStyle);
+			m_bSkipUpdateProperty = false;
 		}
 	}
 	else if (pProperty->GetName() == "normal_piece_id")

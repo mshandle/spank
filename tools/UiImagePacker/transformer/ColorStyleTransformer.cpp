@@ -14,6 +14,7 @@ ColorStyleTransformer::ColorStyleTransformer()
 {
 	m_pListView = NULL;
 	m_pPropertyGrid = NULL;
+	m_bSkipUpdateProperty = false;
 }
 
 ColorStyleTransformer::~ColorStyleTransformer()
@@ -51,6 +52,8 @@ void ColorStyleTransformer::UpdateListView()
 
 void ColorStyleTransformer::UpdateProperty(const ColorStyle* pColorStyle)
 {
+	if (m_bSkipUpdateProperty) return;
+
 	m_pPropertyGrid->Clear();
 	ImagePackerFrame::GetInstance().SetCurrPropertyType(ImagePackerFrame::PT_UNKNOWN);
 	if (!pColorStyle) return;
@@ -82,8 +85,10 @@ void ColorStyleTransformer::PropertyChanged(const wxPGProperty* pProperty)
 		wxString strNewId = pProperty->GetValueAsString();
 		if (ColorStyleDocument::GetInstance().RenameColorStyleId(pColorStyle, strNewId))
 		{
-			ColorStyleTransformer::GetInstance().UpdateListView();
-			ColorStyleTransformer::GetInstance().SetSelectedColorStyle(pColorStyle);
+			UpdateListView();
+			m_bSkipUpdateProperty = true;
+			SetSelectedColorStyle(pColorStyle);
+			m_bSkipUpdateProperty = false;
 		}
 	}
 	else if (pProperty->GetName() == "normal")

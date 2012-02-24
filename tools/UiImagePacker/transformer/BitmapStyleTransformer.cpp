@@ -15,6 +15,7 @@ BitmapStyleTransformer::BitmapStyleTransformer()
 {
 	m_pListView = NULL;
 	m_pPropertyGrid = NULL;
+	m_bSkipUpdateProperty = false;
 }
 
 BitmapStyleTransformer::~BitmapStyleTransformer()
@@ -52,6 +53,8 @@ void BitmapStyleTransformer::UpdateListView()
 
 void BitmapStyleTransformer::UpdateProperty(const BitmapStyle* pBitmapStyle)
 {
+	if (m_bSkipUpdateProperty) return;
+
 	m_pPropertyGrid->Clear();
 	ImagePackerFrame::GetInstance().SetCurrPropertyType(ImagePackerFrame::PT_UNKNOWN);
 	if (!pBitmapStyle) return;
@@ -85,8 +88,10 @@ void BitmapStyleTransformer::PropertyChanged(wxPGProperty* pProperty)
 		wxString strNewId = pProperty->GetValueAsString();
 		if (BitmapStyleDocument::GetInstance().RenameBitmapStyleId(pBitmapStyle, strNewId))
 		{
-			BitmapStyleTransformer::GetInstance().UpdateListView();
-			BitmapStyleTransformer::GetInstance().SetSelectedBitmapStyle(pBitmapStyle);
+			UpdateListView();
+			m_bSkipUpdateProperty = true;
+			SetSelectedBitmapStyle(pBitmapStyle);
+			m_bSkipUpdateProperty = false;
 		}
 	}
 	else if (pProperty->GetName() == "normal")

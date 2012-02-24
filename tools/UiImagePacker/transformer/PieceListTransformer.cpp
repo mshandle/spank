@@ -13,6 +13,7 @@ PieceListTransformer::PieceListTransformer()
 {
 	m_pListView = NULL;
 	m_pPropertyGrid = NULL;
+	m_bSkipUpdateProperty = false;
 }
 
 PieceListTransformer::~PieceListTransformer()
@@ -50,6 +51,8 @@ void PieceListTransformer::UpdateListView()
 
 void PieceListTransformer::UpdateProperty(const PieceInfo* pPieceInfo)
 {
+	if (m_bSkipUpdateProperty) return;
+
 	m_pPropertyGrid->Clear();
 	ImagePackerFrame::GetInstance().SetCurrPropertyType(ImagePackerFrame::PT_UNKNOWN);
 	if (!pPieceInfo) return;
@@ -78,8 +81,10 @@ void PieceListTransformer::PropertyChanged(const wxPGProperty* pProperty)
 		wxString strNewId = pProperty->GetValueAsString();
 		if (ImagePieceDocument::GetInstance().RenamePieceInfoId(pPieceInfo, strNewId))
 		{
-			PieceListTransformer::GetInstance().UpdateListView();
-			PieceListTransformer::GetInstance().SetSelectedPieceInfo(pPieceInfo);
+			UpdateListView();
+			m_bSkipUpdateProperty = true;
+			SetSelectedPieceInfo(pPieceInfo);
+			m_bSkipUpdateProperty = false;
 		}
 	}
 }

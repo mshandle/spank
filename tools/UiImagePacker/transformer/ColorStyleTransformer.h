@@ -33,6 +33,7 @@ protected:
 private:
 	wxTreeCtrl* m_pListView;
 	wxPropertyGrid* m_pPropertyGrid;
+	bool m_bSkipUpdateProperty;
 
 };
 #endif // __COLORSTYLETRANSFORMER_H__

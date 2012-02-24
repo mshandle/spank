@@ -7,7 +7,7 @@
  */
 #include "Config.h"
 
-wxString Config::m_strAbout =	wxT("UiImagePacker version 1.0.0\n")
+wxString Config::m_strAbout =	wxT("UiImagePacker version 1.1.0\n")
 								wxT("author: zjhlogo\n")
 								wxT("contact: zjhlogo@gmail.com\n")
 								wxT("\n")
