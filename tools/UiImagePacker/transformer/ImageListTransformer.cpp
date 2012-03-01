@@ -57,13 +57,13 @@ void ImageListTransformer::UpdateProperty(const ImageInfo* pImageInfo)
 	ImagePackerFrame::GetInstance().SetCurrPropertyType(ImagePackerFrame::PT_UNKNOWN);
 	if (!pImageInfo) return;
 
-	m_pPropertyGrid->Append(new wxStringProperty("id", "id", pImageInfo->GetId()));
-	m_pPropertyGrid->Append(new wxFileProperty("path", "path", pImageInfo->GetPath()))->Enable(false);
+	m_pPropertyGrid->Append(new wxStringProperty(_("id"), wxT("id"), pImageInfo->GetId()));
+	m_pPropertyGrid->Append(new wxFileProperty(_("path"), wxT("path"), pImageInfo->GetPath()))->Enable(false);
 
 	wxSize bitmapSize = ((ImageInfo*)pImageInfo)->GetBitmap()->GetSize();
-	m_pPropertyGrid->Append(new wxPropertyCategory("size", "size"));
-	m_pPropertyGrid->Append(new wxIntProperty("width", "width", bitmapSize.x))->Enable(false);
-	m_pPropertyGrid->Append(new wxIntProperty("height", "height", bitmapSize.y))->Enable(false);
+	m_pPropertyGrid->Append(new wxPropertyCategory(_("size"), wxT("size")));
+	m_pPropertyGrid->Append(new wxIntProperty(_("width"), wxT("width"), bitmapSize.x))->Enable(false);
+	m_pPropertyGrid->Append(new wxIntProperty(_("height"), wxT("height"), bitmapSize.y))->Enable(false);
 	ImagePackerFrame::GetInstance().SetCurrPropertyType(ImagePackerFrame::PT_IMAGE);
 }
 
@@ -72,7 +72,7 @@ void ImageListTransformer::PropertyChanged(wxPGProperty* pProperty)
 	const ImageInfo* pImageInfo = GetSelectedImageInfo();
 	if (!pImageInfo) return;
 
-	if (pProperty->GetName() == "id")
+	if (pProperty->GetName() == wxT("id"))
 	{
 		wxString strNewId = pProperty->GetValueAsString();
 		if (ImagePieceDocument::GetInstance().RenameImageInfoId(pImageInfo, strNewId))

@@ -18,41 +18,43 @@ PieceInfo::~PieceInfo()
 	// TODO: 
 }
 
-bool PieceInfo::LoadFromXml(TiXmlElement* pElmPiece)
+bool PieceInfo::LoadFromXml(wxXmlNode* pNodePiece)
 {
-	if (!pElmPiece) return false;
+	if (!pNodePiece) return false;
 
-	const char* pszId = pElmPiece->Attribute("id");
-	if (!pszId) return false;
-	m_strId = pszId;
+	m_strId = pNodePiece->GetAttribute(wxT("id"));
+	if (m_strId.length() <= 0) return false;
 
-	const char* pszImageId = pElmPiece->Attribute("image_id");
-	if (!pszImageId) return false;
-
-	m_pImageInfo = ImagePieceDocument::GetInstance().FindImageInfo(pszImageId);
+	wxString strImageId = pNodePiece->GetAttribute(wxT("image_id"));
+	m_pImageInfo = ImagePieceDocument::GetInstance().FindImageInfo(strImageId);
 	if (!m_pImageInfo) return false;
 
-	if (!pElmPiece->Attribute("x", &m_Rect.x)) return false;
-	if (!pElmPiece->Attribute("y", &m_Rect.y)) return false;
-	if (!pElmPiece->Attribute("width", &m_Rect.width)) return false;
-	if (!pElmPiece->Attribute("height", &m_Rect.height)) return false;
+	wxString value;
+	if (!pNodePiece->GetAttribute(wxT("x"), &value)) return false;
+	value.ToLong((long*)&m_Rect.x);
+	if (!pNodePiece->GetAttribute(wxT("y"), &value)) return false;
+	value.ToLong((long*)&m_Rect.y);
+	if (!pNodePiece->GetAttribute(wxT("width"), &value)) return false;
+	value.ToLong((long*)&m_Rect.width);
+	if (!pNodePiece->GetAttribute(wxT("height"), &value)) return false;
+	value.ToLong((long*)&m_Rect.height);
 
 	return true;
 }
 
-bool PieceInfo::SaveToXml(TiXmlElement* pElmPieceList)
+bool PieceInfo::SaveToXml(wxXmlNode* pNodePieceList)
 {
-	TiXmlElement* pElmPiece = new TiXmlElement("Piece");
+	wxXmlNode* pNodePiece = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("Piece"));
 
-	pElmPiece->SetAttribute("id", m_strId);
-	pElmPiece->SetAttribute("image_id", m_pImageInfo->GetId());
+	pNodePiece->AddAttribute(wxT("id"), m_strId);
+	pNodePiece->AddAttribute(wxT("image_id"), m_pImageInfo->GetId());
 
-	pElmPiece->SetAttribute("x", m_Rect.x);
-	pElmPiece->SetAttribute("y", m_Rect.y);
-	pElmPiece->SetAttribute("width", m_Rect.width);
-	pElmPiece->SetAttribute("height", m_Rect.height);
+	pNodePiece->AddAttribute(wxT("x"), wxString::Format(wxT("%d"), m_Rect.x));
+	pNodePiece->AddAttribute(wxT("y"), wxString::Format(wxT("%d"), m_Rect.y));
+	pNodePiece->AddAttribute(wxT("width"), wxString::Format(wxT("%d"), m_Rect.width));
+	pNodePiece->AddAttribute(wxT("height"), wxString::Format(wxT("%d"), m_Rect.height));
 
-	pElmPieceList->LinkEndChild(pElmPiece);
+	pNodePieceList->AddChild(pNodePiece);
 
 	return true;
 }

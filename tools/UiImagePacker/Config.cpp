@@ -7,11 +7,23 @@
  */
 #include "Config.h"
 
-wxString Config::m_strAbout =	wxT("UiImagePacker version 1.1.0\n")
-								wxT("author: zjhlogo\n")
-								wxT("contact: zjhlogo@gmail.com\n")
-								wxT("\n")
-								wxT("special thanks to:\n")
-								wxT("QingzhongZhang (artist, give me some advices and offer some icons)\n")
-								wxT("BaoqingWu (programmer, assist me codeing some models)")
-								;
+Config::Config()
+{
+	m_strAbout = _("UiImagePacker version 1.1.0\nauthor: zjhlogo\ncontact: zjhlogo@gmail.com\n\nspecial thanks to:\nQingzhongZhang (artist, give me some advices and offer some icons)\nBaoqingWu (programmer, assist me codeing some models)");
+}
+
+Config::~Config()
+{
+	// TODO: 
+}
+
+Config& Config::GetInstance()
+{
+	static Config s_Config;
+	return s_Config;
+}
+
+const wxString& Config::GetAbout()
+{
+	return m_strAbout;
+}

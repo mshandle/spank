@@ -58,18 +58,18 @@ void ColorStyleTransformer::UpdateProperty(const ColorStyle* pColorStyle)
 	ImagePackerFrame::GetInstance().SetCurrPropertyType(ImagePackerFrame::PT_UNKNOWN);
 	if (!pColorStyle) return;
 
-	m_pPropertyGrid->Append(new wxStringProperty("id", "id", pColorStyle->GetId()));
+	m_pPropertyGrid->Append(new wxStringProperty(_("id"), wxT("id"), pColorStyle->GetId()));
 
 	wxColour color;
 
 	color.SetRGB(pColorStyle->GetStateColor(IStyle::SS_NORMAL));
-	m_pPropertyGrid->Append(new wxColourProperty("normal", "normal", color));
+	m_pPropertyGrid->Append(new wxColourProperty(_("normal"), wxT("normal"), color));
 	color.SetRGB(pColorStyle->GetStateColor(IStyle::SS_DOWN));
-	m_pPropertyGrid->Append(new wxColourProperty("down", "down", color));
+	m_pPropertyGrid->Append(new wxColourProperty(_("down"), wxT("down"), color));
 	color.SetRGB(pColorStyle->GetStateColor(IStyle::SS_HOVER));
-	m_pPropertyGrid->Append(new wxColourProperty("hover", "hover", color));
+	m_pPropertyGrid->Append(new wxColourProperty(_("hover"), wxT("hover"), color));
 	color.SetRGB(pColorStyle->GetStateColor(IStyle::SS_DISABLED));
-	m_pPropertyGrid->Append(new wxColourProperty("disabled", "disabled", color));
+	m_pPropertyGrid->Append(new wxColourProperty(_("disabled"), wxT("disabled"), color));
 
 	ImagePackerFrame::GetInstance().SetCurrPropertyType(ImagePackerFrame::PT_COLOR_STYLE);
 }
@@ -80,7 +80,7 @@ void ColorStyleTransformer::PropertyChanged(const wxPGProperty* pProperty)
 	if (!pColorStyle) return;
 
 	bool bRedraw = false;
-	if (pProperty->GetName() == "id")
+	if (pProperty->GetName() == wxT("id"))
 	{
 		wxString strNewId = pProperty->GetValueAsString();
 		if (ColorStyleDocument::GetInstance().RenameColorStyleId(pColorStyle, strNewId))
@@ -91,25 +91,25 @@ void ColorStyleTransformer::PropertyChanged(const wxPGProperty* pProperty)
 			m_bSkipUpdateProperty = false;
 		}
 	}
-	else if (pProperty->GetName() == "normal")
+	else if (pProperty->GetName() == wxT("normal"))
 	{
 		wxColour color;
 		color << pProperty->GetValue();
 		bRedraw = ColorStyleDocument::GetInstance().SetStateColor(pColorStyle, color, IStyle::SS_NORMAL);
 	}
-	else if (pProperty->GetName() == "down")
+	else if (pProperty->GetName() == wxT("down"))
 	{
 		wxColour color;
 		color << pProperty->GetValue();
  		bRedraw = ColorStyleDocument::GetInstance().SetStateColor(pColorStyle, color, IStyle::SS_DOWN);
 	}
-	else if (pProperty->GetName() == "hover")
+	else if (pProperty->GetName() == wxT("hover"))
 	{
 		wxColour color;
 		color << pProperty->GetValue();
 		bRedraw = ColorStyleDocument::GetInstance().SetStateColor(pColorStyle, color, IStyle::SS_HOVER);
 	}
-	else if (pProperty->GetName() == "disabled")
+	else if (pProperty->GetName() == wxT("disabled"))
 	{
 		wxColour color;
 		color << pProperty->GetValue();

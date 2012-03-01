@@ -9,6 +9,7 @@
 #define __DOCUMENTBASE_H__
 
 #include <wx/string.h>
+#include <wx/xml/xml.h>
 
 class DocumentBase
 {
@@ -26,6 +27,10 @@ public:
 	void SetModifiedFlag();
 	void ClearModifiedFlag();
 	virtual bool IsModified() const;
+
+protected:
+	wxXmlNode* FindXmlChild(wxXmlNode* pParent, const wxString& name);
+	wxXmlNode* GetNextXml(wxXmlNode* pChild, const wxString& name);
 
 private:
 	bool m_bModifiedFlag;

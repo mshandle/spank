@@ -50,7 +50,7 @@ DialogAddPiece::DialogAddPiece()
 DialogAddPiece::DialogAddPiece(wxWindow* parent, wxWindowID id /* = wxID_ANY */, const wxPoint& pos /* = wxDefaultPosition */, const wxSize& size /* = wxDefaultSize */, long style /* = wxDEFAULT_DIALOG_STYLE */)
 {
 	Init();
-	Create(parent, id, wxT("Add Piece"), pos, size, style);
+	Create(parent, id, _("Add Piece"), pos, size, style);
 }
 
 DialogAddPiece::~DialogAddPiece()
@@ -95,17 +95,17 @@ void DialogAddPiece::CreateControls()
 	wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
 	itemDialog1->SetSizer(itemBoxSizer2);
 
-	wxStaticBox* itemStaticBoxSizer3Static = new wxStaticBox(itemDialog1, wxID_ANY, wxT("Add Piece"));
+	wxStaticBox* itemStaticBoxSizer3Static = new wxStaticBox(itemDialog1, wxID_ANY, _("Add Piece"));
 	wxStaticBoxSizer* itemStaticBoxSizer3 = new wxStaticBoxSizer(itemStaticBoxSizer3Static, wxVERTICAL);
 	itemBoxSizer2->Add(itemStaticBoxSizer3, 0, wxGROW|wxLEFT|wxRIGHT, 5);
 
 	wxBoxSizer* itemBoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
 	itemStaticBoxSizer3->Add(itemBoxSizer4, 0, wxALIGN_RIGHT, 5);
 
-	m_BtnAddPiece = new wxButton(itemStaticBoxSizer3->GetStaticBox(), ID_BUTTON, wxT("+"), wxDefaultPosition, wxSize(24, 24), 0);
+	m_BtnAddPiece = new wxButton(itemStaticBoxSizer3->GetStaticBox(), ID_BUTTON, _("+"), wxDefaultPosition, wxSize(24, 24), 0);
 	itemBoxSizer4->Add(m_BtnAddPiece, 0, wxALIGN_CENTER_VERTICAL, 5);
 
-	m_BtnRemovePiece = new wxButton(itemStaticBoxSizer3->GetStaticBox(), ID_BUTTON1, wxT("-"), wxDefaultPosition, wxSize(24, 24), 0);
+	m_BtnRemovePiece = new wxButton(itemStaticBoxSizer3->GetStaticBox(), ID_BUTTON1, _("-"), wxDefaultPosition, wxSize(24, 24), 0);
 	m_BtnRemovePiece->Enable(false);
 	itemBoxSizer4->Add(m_BtnRemovePiece, 0, wxALIGN_CENTER_VERTICAL, 5);
 
@@ -116,14 +116,14 @@ void DialogAddPiece::CreateControls()
 	wxBoxSizer* itemBoxSizer8 = new wxBoxSizer(wxHORIZONTAL);
 	itemBoxSizer2->Add(itemBoxSizer8, 0, wxALIGN_CENTER_HORIZONTAL, 5);
 
-	wxStaticBox* itemStaticBoxSizer9Static = new wxStaticBox(itemDialog1, wxID_ANY, wxT("Add Image"));
+	wxStaticBox* itemStaticBoxSizer9Static = new wxStaticBox(itemDialog1, wxID_ANY, _("Add Image"));
 	wxStaticBoxSizer* itemStaticBoxSizer9 = new wxStaticBoxSizer(itemStaticBoxSizer9Static, wxVERTICAL);
 	itemBoxSizer8->Add(itemStaticBoxSizer9, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5);
 
 	wxFlexGridSizer* itemFlexGridSizer10 = new wxFlexGridSizer(0, 2, 2, 0);
 	itemStaticBoxSizer9->Add(itemFlexGridSizer10, 0, wxALIGN_CENTER_HORIZONTAL, 5);
 
-	m_RadAddExisting = new wxRadioButton(itemStaticBoxSizer9->GetStaticBox(), ID_RADIOBUTTON, wxT("Add Existing"), wxDefaultPosition, wxDefaultSize, 0);
+	m_RadAddExisting = new wxRadioButton(itemStaticBoxSizer9->GetStaticBox(), ID_RADIOBUTTON, _("Add Existing"), wxDefaultPosition, wxDefaultSize, 0);
 	m_RadAddExisting->SetValue(true);
 	itemFlexGridSizer10->Add(m_RadAddExisting, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 
@@ -131,7 +131,7 @@ void DialogAddPiece::CreateControls()
 	m_ChoImage = new wxChoice(itemStaticBoxSizer9->GetStaticBox(), ID_CHOICE, wxDefaultPosition, wxDefaultSize, m_ChoImageStrings, 0);
 	itemFlexGridSizer10->Add(m_ChoImage, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
 
-	m_RadCreateNew = new wxRadioButton(itemStaticBoxSizer9->GetStaticBox(), ID_RADIOBUTTON1, wxT("Create New"), wxDefaultPosition, wxDefaultSize, 0);
+	m_RadCreateNew = new wxRadioButton(itemStaticBoxSizer9->GetStaticBox(), ID_RADIOBUTTON1, _("Create New"), wxDefaultPosition, wxDefaultSize, 0);
 	m_RadCreateNew->SetValue(false);
 	itemFlexGridSizer10->Add(m_RadCreateNew, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 
@@ -139,20 +139,20 @@ void DialogAddPiece::CreateControls()
 	m_EdtImageName->Enable(false);
 	itemFlexGridSizer10->Add(m_EdtImageName, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
 
-	wxStaticBox* itemStaticBoxSizer15Static = new wxStaticBox(itemDialog1, wxID_ANY, wxT("Image Info"));
+	wxStaticBox* itemStaticBoxSizer15Static = new wxStaticBox(itemDialog1, wxID_ANY, _("Image Info"));
 	wxStaticBoxSizer* itemStaticBoxSizer15 = new wxStaticBoxSizer(itemStaticBoxSizer15Static, wxVERTICAL);
 	itemBoxSizer8->Add(itemStaticBoxSizer15, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5);
 
 	wxFlexGridSizer* itemFlexGridSizer16 = new wxFlexGridSizer(0, 2, 2, 2);
 	itemStaticBoxSizer15->Add(itemFlexGridSizer16, 0, wxALIGN_CENTER_HORIZONTAL, 5);
 
-	wxStaticText* itemStaticText17 = new wxStaticText(itemStaticBoxSizer15->GetStaticBox(), wxID_STATIC, wxT("Width"), wxDefaultPosition, wxDefaultSize, 0);
+	wxStaticText* itemStaticText17 = new wxStaticText(itemStaticBoxSizer15->GetStaticBox(), wxID_STATIC, _("Width"), wxDefaultPosition, wxDefaultSize, 0);
 	itemFlexGridSizer16->Add(itemStaticText17, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 
 	m_EdtImageWidth = new wxTextCtrl(itemStaticBoxSizer15->GetStaticBox(), ID_TEXTCTRL1, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0);
 	itemFlexGridSizer16->Add(m_EdtImageWidth, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 
-	wxStaticText* itemStaticText19 = new wxStaticText(itemStaticBoxSizer15->GetStaticBox(), wxID_STATIC, wxT("Height"), wxDefaultPosition, wxDefaultSize, 0);
+	wxStaticText* itemStaticText19 = new wxStaticText(itemStaticBoxSizer15->GetStaticBox(), wxID_STATIC, _("Height"), wxDefaultPosition, wxDefaultSize, 0);
 	itemFlexGridSizer16->Add(itemStaticText19, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 
 	m_EdtImageHeight = new wxTextCtrl(itemStaticBoxSizer15->GetStaticBox(), ID_TEXTCTRL2, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0);
@@ -161,10 +161,10 @@ void DialogAddPiece::CreateControls()
 	wxStdDialogButtonSizer* itemStdDialogButtonSizer21 = new wxStdDialogButtonSizer;
 
 	itemBoxSizer2->Add(itemStdDialogButtonSizer21, 0, wxALIGN_RIGHT|wxALL, 5);
-	wxButton* itemButton22 = new wxButton(itemDialog1, wxID_OK, wxT("&OK"), wxDefaultPosition, wxDefaultSize, 0);
+	wxButton* itemButton22 = new wxButton(itemDialog1, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0);
 	itemStdDialogButtonSizer21->AddButton(itemButton22);
 
-	wxButton* itemButton23 = new wxButton(itemDialog1, wxID_CANCEL, wxT("&Cancel"), wxDefaultPosition, wxDefaultSize, 0);
+	wxButton* itemButton23 = new wxButton(itemDialog1, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, 0);
 	itemStdDialogButtonSizer21->AddButton(itemButton23);
 
 	itemStdDialogButtonSizer21->Realize();
@@ -183,10 +183,10 @@ void DialogAddPiece::InitializeData()
 void DialogAddPiece::OnBtnAddPieceClicked(wxCommandEvent& event)
 {
 	wxFileDialog dialog(this,
-		wxT("Choose a file"),
+		_("Choose a file"),
 		ProjectDocument::GetInstance().GetRootPath(),
 		wxEmptyString,
-		wxT("Image files (*.png;*.jpg)|*.png;*.jpg"),
+		_("Image files (*.png;*.jpg)|*.png;*.jpg"),
 		wxFD_OPEN|wxFD_MULTIPLE);
 
 	if (dialog .ShowModal() == wxID_OK)
@@ -256,7 +256,7 @@ void DialogAddPiece::OnOkClicked(wxCommandEvent& event)
 	if (!m_EdtImageHeight->GetValue().ToLong(&height)) return;
 	if (width <= 0 || height <= 0)
 	{
-		wxMessageDialog msg(this, wxT("width and height must greater than 0"), wxT("Error"));
+		wxMessageDialog msg(this, _("width and height must greater than 0"), _("Error"));
 		msg.ShowModal();
 		return;
 	}
@@ -270,10 +270,10 @@ void DialogAddPiece::OnOkClicked(wxCommandEvent& event)
 	else
 	{
 		wxFileDialog dialog(this,
-			wxT("Save to file"),
+			_("Save to file"),
 			ProjectDocument::GetInstance().GetRootPath(),
-			wxT("Untitled.png"),
-			wxT("Image files (*.png)|*.png"),
+			_("Untitled.png"),
+			_("Image files (*.png)|*.png"),
 			wxFD_SAVE);
 
 		if (dialog .ShowModal() == wxID_OK)
@@ -325,14 +325,9 @@ void DialogAddPiece::AddListItems(const wxArrayString& arrayString)
 {
 	if (arrayString.size() <= 0) return;
 
-// 	wxString strRootPath = ProjectDocument::GetInstance().GetRootPath() + "/";
-
 	for (int i = 0; i < (int)arrayString.size(); ++i)
 	{
 		wxString strPath = arrayString[i];
-// 		FileUtil::FormatDir(strPath);
-// 
-// 		strPath.Replace(strRootPath, "");
 		m_LstPieces->Append(strPath);
 	}
 }
@@ -462,7 +457,7 @@ bool DialogAddPiece::AddPieceIntoNewImage(const wxSize& newSize)
 	// apply new image and piece info to documents
 	wxString strImageId = FileUtil::GetFileName(strPath);
 	FileUtil::FormatId(strImageId);
-	wxString strRelativePath = FileUtil::RemoveRootDir(strPath, ProjectDocument::GetInstance().GetRootPath() + "/");
+	wxString strRelativePath = FileUtil::RemoveRootDir(strPath, ProjectDocument::GetInstance().GetRootPath() + wxT("/"));
 	const ImageInfo* pImageInfo = ImagePieceDocument::GetInstance().AddImage(strImageId, strRelativePath, pNewBitmap);
 
 	for (TV_PACKING_PIECE_INFO::iterator it = vPackingInfo.begin(); it != vPackingInfo.end(); ++it)

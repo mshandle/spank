@@ -11,9 +11,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MsgGen", "tools\MsgGen\MsgG
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UiImagePacker", "tools\UiImagePacker\UiImagePacker.vcproj", "{93BB0F52-9F03-4906-B764-95E6DDA6120C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{FF5B6302-6F61-455F-B702-D307D601EC2F} = {FF5B6302-6F61-455F-B702-D307D601EC2F}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

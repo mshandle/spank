@@ -6,7 +6,6 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "NineGridStyleDocument.h"
-#include <tinyxml-2.6.2/tinyxml.h>
 #include <wx/msgdlg.h>
 #include "../ImagePackerFrame.h"
 
@@ -30,23 +29,23 @@ NineGridStyleDocument& NineGridStyleDocument::GetInstance()
 
 bool NineGridStyleDocument::OpenFile(const wxString& strFile)
 {
-	TiXmlDocument doc;
-	if (!doc.LoadFile(strFile)) return false;
+	wxXmlDocument doc;
+	if (!doc.Load(strFile)) return false;
 
 	Reset();
 	SetFilePath(strFile);
 
-	TiXmlElement* pElmNineGridStyleList = doc.RootElement();
-	if (!pElmNineGridStyleList || strcmp(pElmNineGridStyleList->Value(), "NineGridStyleList") != 0) return false;
+	wxXmlNode* pNodeNineGridStyleList = doc.GetRoot();
+	if (!pNodeNineGridStyleList || pNodeNineGridStyleList->GetName() != wxT("NineGridStyleList")) return false;
 
 	// parse image list
-	TiXmlElement* pElmNineGridStyle = pElmNineGridStyleList->FirstChildElement("NineGridStyle");
-	while (pElmNineGridStyle)
+	wxXmlNode* pNodeNineGridStyle = this->FindXmlChild(pNodeNineGridStyleList, wxT("NineGridStyle"));
+	while (pNodeNineGridStyle)
 	{
 		NineGridStyle* pNineGridStyle = new NineGridStyle();
-		if (!pNineGridStyle->LoadFromXml(pElmNineGridStyle))
+		if (!pNineGridStyle->LoadFromXml(pNodeNineGridStyle))
 		{
-			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("load 9-grid style failed, id=%s", pNineGridStyle->GetId()));
+			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format(_("load 9-grid style failed, id=%s"), pNineGridStyle->GetId()));
 			msg.ShowModal();
 			SAFE_DELETE(pNineGridStyle);
 			SetModifiedFlag();
@@ -55,7 +54,7 @@ bool NineGridStyleDocument::OpenFile(const wxString& strFile)
 		{
 			m_NineGridStyleMap.insert(std::make_pair(pNineGridStyle->GetId(), pNineGridStyle));
 		}
-		pElmNineGridStyle = pElmNineGridStyle->NextSiblingElement("NineGridStyle");
+		pNodeNineGridStyle = this->GetNextXml(pNodeNineGridStyle, wxT("NineGridStyle"));
 	}
 
 	return true;
@@ -66,24 +65,21 @@ bool NineGridStyleDocument::SaveFile(const wxString& strFile)
 	if (!IsModified()) return true;
 	ClearModifiedFlag();
 
-	TiXmlDocument doc;
-	TiXmlDeclaration* pDecl = new TiXmlDeclaration("1.0", "utf-8", "yes");
-	doc.LinkEndChild(pDecl);
-
-	TiXmlElement* pElmNineGridStyleList = new TiXmlElement("NineGridStyleList");
-	doc.LinkEndChild(pElmNineGridStyleList);
+	wxXmlDocument doc;
+	wxXmlNode* pNodeNineGridStyleList = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("NineGridStyleList"));
+	doc.SetRoot(pNodeNineGridStyleList);
 
 	for (TM_NINE_GRID_STYLE::iterator it = m_NineGridStyleMap.begin(); it != m_NineGridStyleMap.end(); ++it)
 	{
 		NineGridStyle* pNineGridStyle = it->second;
-		if (!pNineGridStyle->SaveToXml(pElmNineGridStyleList))
+		if (!pNineGridStyle->SaveToXml(pNodeNineGridStyleList))
 		{
-			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("save 9-grid style failed, id=%s", pNineGridStyle->GetId()));
+			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format(_("save 9-grid style failed, id=%s"), pNineGridStyle->GetId()));
 			msg.ShowModal();
 		}
 	}
 
-	return doc.SaveFile(strFile);
+	return doc.Save(strFile);
 }
 
 void NineGridStyleDocument::Reset()
@@ -242,7 +238,7 @@ wxString NineGridStyleDocument::GenerateNewNineGridStyleId(const wxString& strId
 
 	while (FindNineGridStyle(strNewId))
 	{
-		strNewId = wxString::Format("%s%d", strId, index++);
+		strNewId = wxString::Format(wxT("%s%d"), strId, index++);
 	}
 
 	return strNewId;

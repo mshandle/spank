@@ -10,6 +10,7 @@
 
 #include <wx/wx.h>
 #include <wx/treectrl.h>
+#include <wx/xml/xml.h>
 
 class IStyle
 {
@@ -32,6 +33,9 @@ public:
 
 	void SetTreeItemId(wxTreeItemId itemId);
 	const wxTreeItemId& GetTreeItemId() const;
+
+protected:
+	wxXmlNode* FindXmlChild(wxXmlNode* pParent, const wxString& name);
 
 private:
 	wxString m_strId;

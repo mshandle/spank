@@ -6,7 +6,6 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "ImagePieceDocument.h"
-#include <tinyxml-2.6.2/tinyxml.h>
 #include <wx/msgdlg.h>
 #include "../ImagePackerFrame.h"
 
@@ -25,26 +24,26 @@ ImagePieceDocument::~ImagePieceDocument()
 
 bool ImagePieceDocument::OpenFile(const wxString& strFile)
 {
-	TiXmlDocument doc;
-	if (!doc.LoadFile(strFile)) return false;
+	wxXmlDocument doc;
+	if (!doc.Load(strFile)) return false;
 
 	Reset();
 	SetFilePath(strFile);
 
-	TiXmlElement* pElmImagePiece = doc.RootElement();
-	if (!pElmImagePiece || strcmp(pElmImagePiece->Value(), "ImagePiece") != 0) return false;
+	wxXmlNode* pNodeImagePiece = doc.GetRoot();
+	if (!pNodeImagePiece || pNodeImagePiece->GetName() != wxT("ImagePiece")) return false;
 
-	TiXmlElement* pElmImageList = pElmImagePiece->FirstChildElement("ImageList");
-	if (!pElmImageList) return false;
+	wxXmlNode* pNodeImageList = this->FindXmlChild(pNodeImagePiece, wxT("ImageList"));
+	if (!pNodeImageList) return false;
 
 	// parse image list
-	TiXmlElement* pElmImage = pElmImageList->FirstChildElement("Image");
-	while (pElmImage)
+	wxXmlNode* pNodeImage = this->FindXmlChild(pNodeImageList, wxT("Image"));
+	while (pNodeImage)
 	{
 		ImageInfo* pImageInfo = new ImageInfo();
-		if (!pImageInfo->LoadFromXml(pElmImage))
+		if (!pImageInfo->LoadFromXml(pNodeImage))
 		{
-			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("load image failed, id=%s", pImageInfo->GetId()));
+			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format(_("load image failed, id=%s"), pImageInfo->GetId()));
 			msg.ShowModal();
 			SAFE_DELETE(pImageInfo);
 			SetModifiedFlag();
@@ -53,19 +52,21 @@ bool ImagePieceDocument::OpenFile(const wxString& strFile)
 		{
 			m_ImageInfoMap.insert(std::make_pair(pImageInfo->GetId(), pImageInfo));
 		}
-		pElmImage = pElmImage->NextSiblingElement("Image");
+		pNodeImage = this->GetNextXml(pNodeImage, wxT("Image"));
 	}
 	m_bNeedUpdateImageIds = true;
 
-	TiXmlElement* pElmPieceList = pElmImagePiece->FirstChildElement("PieceList");
+	wxXmlNode* pNodePieceList = this->FindXmlChild(pNodeImagePiece, wxT("PieceList"));
+	if (!pNodePieceList) return false;
+
 	// parse piece list
-	TiXmlElement* pElmPiece = pElmPieceList->FirstChildElement("Piece");
-	while (pElmPiece)
+	wxXmlNode* pNodePiece = this->FindXmlChild(pNodePieceList, wxT("Piece"));
+	while (pNodePiece)
 	{
 		PieceInfo* pPieceInfo = new PieceInfo();
-		if (!pPieceInfo->LoadFromXml(pElmPiece))
+		if (!pPieceInfo->LoadFromXml(pNodePiece))
 		{
-			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("load piece failed, id=%s", pPieceInfo->GetId()));
+			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format(_("load piece failed, id=%s"), pPieceInfo->GetId()));
 			msg.ShowModal();
 			SAFE_DELETE(pPieceInfo);
 			SetModifiedFlag();
@@ -74,7 +75,7 @@ bool ImagePieceDocument::OpenFile(const wxString& strFile)
 		{
 			m_PieceInfoMap.insert(std::make_pair(pPieceInfo->GetId(), pPieceInfo));
 		}
-		pElmPiece = pElmPiece->NextSiblingElement("Piece");
+		pNodePiece = this->GetNextXml(pNodePiece, wxT("Piece"));
 	}
 	m_bNeedUpdatePieceIds = true;
 
@@ -86,31 +87,28 @@ bool ImagePieceDocument::SaveFile(const wxString& strFile)
 	if (!IsModified()) return true;
 	ClearModifiedFlag();
 
-	TiXmlDocument doc;
-	TiXmlDeclaration* pDecl = new TiXmlDeclaration("1.0", "utf-8", "yes");
-	doc.LinkEndChild(pDecl);
+	wxXmlDocument doc;
+	wxXmlNode* pNodeImagePiece = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("ImagePiece"));
+	doc.SetRoot(pNodeImagePiece);
 
-	TiXmlElement* pElmImagePiece = new TiXmlElement("ImagePiece");
-	doc.LinkEndChild(pElmImagePiece);
-
-	TiXmlElement* pElmImageList = new TiXmlElement("ImageList");
-	pElmImagePiece->LinkEndChild(pElmImageList);
+	wxXmlNode* pNodeImageList = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("ImageList"));
+	pNodeImagePiece->AddChild(pNodeImageList);
 	for (TM_IMAGE_INFO::iterator it = m_ImageInfoMap.begin(); it != m_ImageInfoMap.end(); ++it)
 	{
 		ImageInfo* pImageInfo = it->second;
-		pImageInfo->SaveToXml(pElmImageList);
+		pImageInfo->SaveToXml(pNodeImageList);
 		pImageInfo->SaveImage();
 	}
 
-	TiXmlElement* pElmPieceList = new TiXmlElement("PieceList");
-	pElmImagePiece->LinkEndChild(pElmPieceList);
+	wxXmlNode* pElmPieceList = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("PieceList"));
+	pNodeImagePiece->AddChild(pElmPieceList);
 	for (TM_PIECE_INFO::iterator it = m_PieceInfoMap.begin(); it != m_PieceInfoMap.end(); ++it)
 	{
 		PieceInfo* pPieceInfo = it->second;
 		pPieceInfo->SaveToXml(pElmPieceList);
 	}
 
-	return doc.SaveFile(strFile);
+	return doc.Save(strFile);
 }
 
 void ImagePieceDocument::Reset()
@@ -418,7 +416,7 @@ wxString ImagePieceDocument::GenerateNewImageId(const wxString& strId)
 
 	while (FindImageInfo(strNewId))
 	{
-		strNewId = wxString::Format("%s%d", strId, index++);
+		strNewId = wxString::Format(wxT("%s%d"), strId, index++);
 	}
 
 	return strNewId;
@@ -431,7 +429,7 @@ wxString ImagePieceDocument::GenerateNewPieceId(const wxString& strId)
 
 	while (FindPieceInfo(strNewId))
 	{
-		strNewId = wxString::Format("%s%d", strId, index++);
+		strNewId = wxString::Format(wxT("%s%d"), strId, index++);
 	}
 
 	return strNewId;
@@ -446,7 +444,7 @@ void ImagePieceDocument::UpdateImageArrayString()
 	m_ImageIds.Clear();
 	m_ImageIdsIndex.Clear();
 
-	m_ImageIds.Add("null");
+	m_ImageIds.Add(wxT("null"));
 	m_ImageIdsIndex.Add(nIndex++);
 
 	for (TM_IMAGE_INFO::iterator it = m_ImageInfoMap.begin(); it != m_ImageInfoMap.end(); ++it)
@@ -465,7 +463,7 @@ void ImagePieceDocument::UpdatePieceArrayString()
 	m_PieceIds.Clear();
 	m_PieceIdsIndex.Clear();
 
-	m_PieceIds.Add("null");
+	m_PieceIds.Add(wxT("null"));
 	m_PieceIdsIndex.Add(nIndex++);
 
 	for (TM_PIECE_INFO::iterator it = m_PieceInfoMap.begin(); it != m_PieceInfoMap.end(); ++it)

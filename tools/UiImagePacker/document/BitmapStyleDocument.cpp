@@ -6,7 +6,6 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "BitmapStyleDocument.h"
-#include <tinyxml-2.6.2/tinyxml.h>
 #include <wx/msgdlg.h>
 #include "../ImagePackerFrame.h"
 
@@ -30,23 +29,23 @@ BitmapStyleDocument& BitmapStyleDocument::GetInstance()
 
 bool BitmapStyleDocument::OpenFile(const wxString& strFile)
 {
-	TiXmlDocument doc;
-	if (!doc.LoadFile(strFile)) return false;
+	wxXmlDocument doc;
+	if (!doc.Load(strFile)) return false;
 
 	Reset();
 	SetFilePath(strFile);
 
-	TiXmlElement* pElmBitmapStyleList = doc.RootElement();
-	if (!pElmBitmapStyleList || strcmp(pElmBitmapStyleList->Value(), "BitmapStyleList") != 0) return false;
+	wxXmlNode* pNodeBitmapStyleList = doc.GetRoot();
+	if (!pNodeBitmapStyleList || pNodeBitmapStyleList->GetName() != wxT("BitmapStyleList")) return false;
 
 	// parse image list
-	TiXmlElement* pElmBitmapStyle = pElmBitmapStyleList->FirstChildElement("BitmapStyle");
-	while (pElmBitmapStyle)
+	wxXmlNode* pNodeBitmapStyle = this->FindXmlChild(pNodeBitmapStyleList, wxT("BitmapStyle"));
+	while (pNodeBitmapStyle)
 	{
 		BitmapStyle* pBitmapStyle = new BitmapStyle();
-		if (!pBitmapStyle->LoadFromXml(pElmBitmapStyle))
+		if (!pBitmapStyle->LoadFromXml(pNodeBitmapStyle))
 		{
-			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("load bitmap style failed, id=%s", pBitmapStyle->GetId()));
+			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format(_("load bitmap style failed, id=%s"), pBitmapStyle->GetId()));
 			msg.ShowModal();
 			SAFE_DELETE(pBitmapStyle);
 			SetModifiedFlag();
@@ -56,7 +55,7 @@ bool BitmapStyleDocument::OpenFile(const wxString& strFile)
 			m_BitmapStyleMap.insert(std::make_pair(pBitmapStyle->GetId(), pBitmapStyle));
 		}
 
-		pElmBitmapStyle = pElmBitmapStyle->NextSiblingElement("BitmapStyle");
+		pNodeBitmapStyle = this->GetNextXml(pNodeBitmapStyle, wxT("BitmapStyle"));
 	}
 
 	return true;
@@ -67,24 +66,22 @@ bool BitmapStyleDocument::SaveFile(const wxString& strFile)
 	if (!IsModified()) return true;
 	ClearModifiedFlag();
 
-	TiXmlDocument doc;
-	TiXmlDeclaration* pDecl = new TiXmlDeclaration("1.0", "utf-8", "yes");
-	doc.LinkEndChild(pDecl);
+	wxXmlDocument doc;
 
-	TiXmlElement* pElmBitmapStyleList = new TiXmlElement("BitmapStyleList");
-	doc.LinkEndChild(pElmBitmapStyleList);
+	wxXmlNode* pNodeBitmapStyleList = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("BitmapStyleList"));
+	doc.SetRoot(pNodeBitmapStyleList);
 
 	for (TM_BITMAP_STYLE::iterator it = m_BitmapStyleMap.begin(); it != m_BitmapStyleMap.end(); ++it)
 	{
 		BitmapStyle* pBitmapStyle = it->second;
-		if (!pBitmapStyle->SaveToXml(pElmBitmapStyleList))
+		if (!pBitmapStyle->SaveToXml(pNodeBitmapStyleList))
 		{
-			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("save bitmap style failed, id=%s", pBitmapStyle->GetId()));
+			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format(_("save bitmap style failed, id=%s"), pBitmapStyle->GetId()));
 			msg.ShowModal();
 		}
 	}
 
-	return doc.SaveFile(strFile);
+	return doc.Save(strFile);
 }
 
 void BitmapStyleDocument::Reset()
@@ -199,7 +196,7 @@ wxString BitmapStyleDocument::GenerateNewBitmapStyleId(const wxString& strId)
 
 	while (FindBitmapStyle(strNewId))
 	{
-		strNewId = wxString::Format("%s%d", strId, index++);
+		strNewId = wxString::Format(wxT("%s%d"), strId, index++);
 	}
 
 	return strNewId;

@@ -9,7 +9,6 @@
 #define __COLORSTYLE_H__
 
 #include "IStyle.h"
-#include <tinyxml-2.6.2/tinyxml.h>
 
 class ColorStyle : public IStyle
 {
@@ -17,15 +16,15 @@ public:
 	ColorStyle();
 	~ColorStyle();
 
-	bool LoadFromXml(TiXmlElement* pElmColorStyle);
-	bool SaveToXml(TiXmlElement* pElmColorStyleList);
+	bool LoadFromXml(wxXmlNode* pNodeColorStyle);
+	bool SaveToXml(wxXmlNode* pNodeColorStyleList);
 
 	bool SetStateColor(unsigned int color, STYLE_STATE eState);
 	unsigned int GetStateColor(STYLE_STATE eState) const;
 
 private:
-	unsigned int LoadStateInfo(TiXmlElement* pElmColorStyle, const wxString& strState, unsigned int nDefaultColor);
-	bool SaveStateInfo(TiXmlElement* pElmColorStyle, const wxString& strState, unsigned int nColor);
+	unsigned int LoadStateInfo(wxXmlNode* pNodeColorStyle, const wxString& strState, unsigned int nDefaultColor);
+	bool SaveStateInfo(wxXmlNode* pNodeColorStyle, const wxString& strState, unsigned int nColor);
 
 private:
 	unsigned int m_nColors[SS_NUM];

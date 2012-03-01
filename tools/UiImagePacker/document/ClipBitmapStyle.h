@@ -10,7 +10,6 @@
 
 #include "IStyle.h"
 #include "PieceInfo.h"
-#include <tinyxml-2.6.2/tinyxml.h>
 
 class ClipBitmapStyle : public IStyle
 {
@@ -18,15 +17,15 @@ public:
 	ClipBitmapStyle();
 	~ClipBitmapStyle();
 
-	bool LoadFromXml(TiXmlElement* pElmClipBitmapStyle);
-	bool SaveToXml(TiXmlElement* pElmClipBitmapStyleList);
+	bool LoadFromXml(wxXmlNode* pNodeClipBitmapStyle);
+	bool SaveToXml(wxXmlNode* pNodeClipBitmapStyleList);
 
 	bool SetStatePiece(const PieceInfo* pPieceInfo, STYLE_STATE eState);
 	const PieceInfo* GetStatePiece(STYLE_STATE eState) const;
 
 private:
-	const PieceInfo* LoadStateInfo(TiXmlElement* pElmClipBitmapStyle, const wxString& strState, const PieceInfo* pDefaultPieceInfo);
-	bool SaveStateInfo(TiXmlElement* pElmClipBitmapStyle, const wxString& strState, const PieceInfo* pPieceInfo);
+	const PieceInfo* LoadStateInfo(wxXmlNode* pNodeClipBitmapStyle, const wxString& strState, const PieceInfo* pDefaultPieceInfo);
+	bool SaveStateInfo(wxXmlNode* pNodeClipBitmapStyle, const wxString& strState, const PieceInfo* pPieceInfo);
 
 private:
 	const PieceInfo* m_PieceInfo[SS_NUM];

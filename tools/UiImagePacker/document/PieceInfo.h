@@ -10,7 +10,6 @@
 
 #include <wx/wx.h>
 #include <wx/treectrl.h>
-#include <tinyxml-2.6.2/tinyxml.h>
 #include "ImageInfo.h"
 
 class PieceInfo
@@ -19,8 +18,8 @@ public:
 	PieceInfo();
 	~PieceInfo();
 
-	bool LoadFromXml(TiXmlElement* pElmPiece);
-	bool SaveToXml(TiXmlElement* pElmPieceList);
+	bool LoadFromXml(wxXmlNode* pNodePiece);
+	bool SaveToXml(wxXmlNode* pNodePieceList);
 
 	void SetId(const wxString& strId);
 	const wxString& GetId() const;

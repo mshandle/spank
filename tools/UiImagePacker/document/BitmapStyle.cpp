@@ -22,41 +22,41 @@ BitmapStyle::~BitmapStyle()
 	// TODO: 
 }
 
-bool BitmapStyle::LoadFromXml(TiXmlElement* pElmBitmapStyle)
+bool BitmapStyle::LoadFromXml(wxXmlNode* pNodeBitmapStyle)
 {
-	if (!pElmBitmapStyle) return false;
+	if (!pNodeBitmapStyle) return false;
 
-	wxString strId = pElmBitmapStyle->Attribute("id");
+	wxString strId = pNodeBitmapStyle->GetAttribute(wxT("id"));
 	SetId(strId);
 
-	m_PieceInfo[SS_NORMAL] = LoadStateInfo(pElmBitmapStyle, "normal", NULL);
+	m_PieceInfo[SS_NORMAL] = LoadStateInfo(pNodeBitmapStyle, wxT("normal"), NULL);
 	if (!m_PieceInfo[SS_NORMAL]) return false;
 
-	m_PieceInfo[SS_DOWN] = LoadStateInfo(pElmBitmapStyle, "down", NULL);
-	m_PieceInfo[SS_HOVER] = LoadStateInfo(pElmBitmapStyle, "hover", NULL);
-	m_PieceInfo[SS_DISABLED] = LoadStateInfo(pElmBitmapStyle, "disabled", NULL);
+	m_PieceInfo[SS_DOWN] = LoadStateInfo(pNodeBitmapStyle, wxT("down"), NULL);
+	m_PieceInfo[SS_HOVER] = LoadStateInfo(pNodeBitmapStyle, wxT("hover"), NULL);
+	m_PieceInfo[SS_DISABLED] = LoadStateInfo(pNodeBitmapStyle, wxT("disabled"), NULL);
 
 	return true;
 }
 
-bool BitmapStyle::SaveToXml(TiXmlElement* pElmBitmapStyleList)
+bool BitmapStyle::SaveToXml(wxXmlNode* pNodeBitmapStyleList)
 {
-	if (!pElmBitmapStyleList) return false;
+	if (!pNodeBitmapStyleList) return false;
 
-	TiXmlElement* pElmBitmapStyle = new TiXmlElement("BitmapStyle");
-	pElmBitmapStyle->SetAttribute("id", GetId());
+	wxXmlNode* pNodeBitmapStyle = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("BitmapStyle"));
+	pNodeBitmapStyle->AddAttribute(wxT("id"), GetId());
 
-	if (!SaveStateInfo(pElmBitmapStyle, "normal", m_PieceInfo[SS_NORMAL]))
+	if (!SaveStateInfo(pNodeBitmapStyle, wxT("normal"), m_PieceInfo[SS_NORMAL]))
 	{
-		SAFE_DELETE(pElmBitmapStyle);
+		SAFE_DELETE(pNodeBitmapStyle);
 		return false;
 	}
 
-	if (m_PieceInfo[SS_NORMAL] != m_PieceInfo[SS_DOWN]) SaveStateInfo(pElmBitmapStyle, "down", m_PieceInfo[SS_DOWN]);
-	if (m_PieceInfo[SS_NORMAL] != m_PieceInfo[SS_HOVER]) SaveStateInfo(pElmBitmapStyle, "hover", m_PieceInfo[SS_HOVER]);
-	if (m_PieceInfo[SS_NORMAL] != m_PieceInfo[SS_DISABLED]) SaveStateInfo(pElmBitmapStyle, "disabled", m_PieceInfo[SS_DISABLED]);
+	if (m_PieceInfo[SS_NORMAL] != m_PieceInfo[SS_DOWN]) SaveStateInfo(pNodeBitmapStyle, wxT("down"), m_PieceInfo[SS_DOWN]);
+	if (m_PieceInfo[SS_NORMAL] != m_PieceInfo[SS_HOVER]) SaveStateInfo(pNodeBitmapStyle, wxT("hover"), m_PieceInfo[SS_HOVER]);
+	if (m_PieceInfo[SS_NORMAL] != m_PieceInfo[SS_DISABLED]) SaveStateInfo(pNodeBitmapStyle, wxT("disabled"), m_PieceInfo[SS_DISABLED]);
 
-	pElmBitmapStyleList->LinkEndChild(pElmBitmapStyle);
+	pNodeBitmapStyleList->AddChild(pNodeBitmapStyle);
 	return true;
 }
 
@@ -74,18 +74,18 @@ const PieceInfo* BitmapStyle::GetStatePiece(STYLE_STATE eState) const
 	return m_PieceInfo[eState];
 }
 
-const PieceInfo* BitmapStyle::LoadStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& strState, const PieceInfo* pDefaultPieceInfo)
+const PieceInfo* BitmapStyle::LoadStateInfo(wxXmlNode* pNodeBitmapStyle, const wxString& strState, const PieceInfo* pDefaultPieceInfo)
 {
-	TiXmlElement* pElmState = pElmBitmapStyle->FirstChildElement(strState);
-	if (!pElmState) return pDefaultPieceInfo;
+	wxXmlNode* pNodeState = FindXmlChild(pNodeBitmapStyle, strState);
+	if (!pNodeState) return pDefaultPieceInfo;
 
-	const char* pszPieceId = pElmState->Attribute("piece_id");
-	if (!pszPieceId) return pDefaultPieceInfo;
+	wxString wxPieceId = pNodeState->GetAttribute(wxT("piece_id"));
+	if (wxPieceId.length() <= 0) return pDefaultPieceInfo;
 
-	const PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfo(pszPieceId);
+	const PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfo(wxPieceId);
 	if (!pPieceInfo)
 	{
-		wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("can not found piece id=%s, for bitmap style id=%s", pszPieceId, GetId()));
+		wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format(_("can not found piece id=%s, for bitmap style id=%s"), wxPieceId, GetId()));
 		msg.ShowModal();
 		return pDefaultPieceInfo;
 	}
@@ -93,13 +93,13 @@ const PieceInfo* BitmapStyle::LoadStateInfo(TiXmlElement* pElmBitmapStyle, const
 	return pPieceInfo;
 }
 
-bool BitmapStyle::SaveStateInfo(TiXmlElement* pElmBitmapStyle, const wxString& strState, const PieceInfo* pPieceInfo)
+bool BitmapStyle::SaveStateInfo(wxXmlNode* pNodeBitmapStyle, const wxString& strState, const PieceInfo* pPieceInfo)
 {
 	if (!pPieceInfo) return false;
 
-	TiXmlElement* pElmState = new TiXmlElement(strState);
-	pElmState->SetAttribute("piece_id", pPieceInfo->GetId());
-	pElmBitmapStyle->LinkEndChild(pElmState);
+	wxXmlNode* pNodeState = new wxXmlNode(wxXML_ELEMENT_NODE, strState);
+	pNodeState->AddAttribute(wxT("piece_id"), pPieceInfo->GetId());
+	pNodeBitmapStyle->AddChild(pNodeState);
 
 	return true;
 }

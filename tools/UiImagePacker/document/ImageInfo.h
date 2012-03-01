@@ -10,7 +10,7 @@
 
 #include <wx/wx.h>
 #include <wx/treectrl.h>
-#include <tinyxml-2.6.2/tinyxml.h>
+#include <wx/xml/xml.h>
 
 class ImageInfo
 {
@@ -18,8 +18,8 @@ public:
 	ImageInfo();
 	~ImageInfo();
 
-	bool LoadFromXml(TiXmlElement* pElmImage);
-	bool SaveToXml(TiXmlElement* pElmImageList);
+	bool LoadFromXml(wxXmlNode* pNodeImage);
+	bool SaveToXml(wxXmlNode* pNodeImageList);
 	bool SaveImage();
 
 	void SetId(const wxString& strId);

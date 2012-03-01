@@ -47,7 +47,7 @@ DialogReplacePiece::DialogReplacePiece()
 DialogReplacePiece::DialogReplacePiece(wxWindow* parent, wxWindowID id /* = wxID_ANY */, const wxPoint& pos /* = wxDefaultPosition */, const wxSize& size /* = wxDefaultSize */, long style /* = wxDEFAULT_DIALOG_STYLE */)
 {
 	Init();
-	Create(parent, id, wxT("Replace Piece"), pos, size, style);
+	Create(parent, id, _("Replace Piece"), pos, size, style);
 }
 
 DialogReplacePiece::~DialogReplacePiece()
@@ -150,10 +150,10 @@ void DialogReplacePiece::CreateControls()
 void DialogReplacePiece::OnBtnAddPieceClicked(wxCommandEvent& event)
 {
 	wxFileDialog dialog(this,
-		wxT("Choose a file"),
+		_("Choose a file"),
 		ProjectDocument::GetInstance().GetRootPath(),
 		wxEmptyString,
-		wxT("Image files (*.png;*.jpg)|*.png;*.jpg"),
+		_("Image files (*.png;*.jpg)|*.png;*.jpg"),
 		wxFD_OPEN|wxFD_MULTIPLE);
 
 	if (dialog .ShowModal() == wxID_OK)
@@ -198,7 +198,7 @@ void DialogReplacePiece::OnOkClicked(wxCommandEvent& event)
 
 	if (width <= 0 || height <= 0)
 	{
-		wxMessageDialog msg(this, wxT("width and height must greater than 0"), wxT("Error"));
+		wxMessageDialog msg(this, _("width and height must greater than 0"), _("Error"));
 		msg.ShowModal();
 		return;
 	}
@@ -244,14 +244,9 @@ void DialogReplacePiece::AddListItems(const wxArrayString& arrayString)
 {
 	if (arrayString.size() <= 0) return;
 
-// 	wxString strRootPath = ProjectDocument::GetInstance().GetRootPath() + "/";
-
 	for (int i = 0; i < (int)arrayString.size(); ++i)
 	{
 		wxString strPath = arrayString[i];
-// 		FileUtil::FormatDir(strPath);
-// 
-// 		strPath.Replace(strRootPath, "");
 		m_LstPieces->Append(strPath);
 	}
 }
@@ -384,7 +379,7 @@ bool DialogReplacePiece::GeneratePackingInfo(TV_PACKING_PIECE_INFO& vPackingInfo
 		pPackingInfo->pNode = m_Packer.Insert(pPackingInfo->bmpSize.x, pPackingInfo->bmpSize.y);
 		if (!pPackingInfo->pNode)
 		{
-			m_strError = wxString::Format(wxT("Not enough space to pack sub bitmaps %s"), pPackingInfo->strId);
+			m_strError = wxString::Format(_("Not enough space to pack sub bitmaps %s"), pPackingInfo->strId);
 			return false;
 		}
 	}
@@ -409,14 +404,14 @@ bool DialogReplacePiece::GetPieceFromList(TV_PACKING_PIECE_INFO& vPackingInfo, c
 		pPackingInfo->pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfo(pPackingInfo->strId);
 		if (!pPackingInfo->pPieceInfo || pPackingInfo->pPieceInfo->GetImageInfo() != pImageInfo)
 		{
-			m_strError = wxString::Format(wxT("Can not replace piece (%s),\ncan not find piece (%s) under image (%s)"), strPath, pPackingInfo->strId, pImageInfo->GetId());
+			m_strError = wxString::Format(_("Can not replace piece (%s),\ncan not find piece (%s) under image (%s)"), strPath, pPackingInfo->strId, pImageInfo->GetId());
 			SAFE_DELETE(pPackingInfo);
 			return false;
 		}
 
 		if (!pPackingInfo->subBitmap.LoadFile(strPath, wxBITMAP_TYPE_ANY))
 		{
-			m_strError = wxString::Format(wxT("Load Bimap Failed: %s"), strPath);
+			m_strError = wxString::Format(_("Load Bimap Failed: %s"), strPath);
 			SAFE_DELETE(pPackingInfo);
 			return false;
 		}

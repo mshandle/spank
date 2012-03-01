@@ -12,7 +12,6 @@
 #include "ColorStyleDocument.h"
 #include "ClipBitmapStyleDocument.h"
 #include "../utils/FileUtil.h"
-#include <tinyxml-2.6.2/tinyxml.h>
 
 ProjectDocument::ProjectDocument()
 {
@@ -32,45 +31,37 @@ ProjectDocument& ProjectDocument::GetInstance()
 
 bool ProjectDocument::OpenFile(const wxString& strFile)
 {
-	TiXmlDocument doc;
-	if (!doc.LoadFile(strFile)) return false;
+	wxXmlDocument doc;
+	if (!doc.Load(strFile)) return false;
 
 	Reset();
 	SetFilePath(strFile);
 
-	TiXmlElement* pElmUdProject = doc.RootElement();
-	if (!pElmUdProject || strcmp(pElmUdProject->Value(), "ud_project") != 0) return false;
+	wxXmlNode* pNodeIpProject = doc.GetRoot();
+	if (!pNodeIpProject || pNodeIpProject->GetName() != wxT("ip_project")) return false;
 
-	const char* pszRootPath = pElmUdProject->Attribute("root_dir");
-	if (pszRootPath)
-	{
-		m_strRootDir = pszRootPath;
-		FileUtil::FormatDir(m_strRootDir);
-	}
-	else
-	{
-		m_strRootDir.clear();
-	}
+	m_strRootDir = pNodeIpProject->GetAttribute(wxT("root_dir"));
+	FileUtil::FormatDir(m_strRootDir);
 
-	TiXmlElement* pElmImagePiece = pElmUdProject->FirstChildElement("image_piece");
-	if (!pElmImagePiece) return false;
-	m_strImagePieceFilePath = (m_strProjectDir + "/" + pElmImagePiece->Attribute("path"));
+	wxXmlNode* pNodeImagePiece = this->FindXmlChild(pNodeIpProject, wxT("image_piece"));
+	if (!pNodeImagePiece) return false;
+	m_strImagePieceFilePath = (m_strProjectDir + wxT("/") + pNodeImagePiece->GetAttribute(wxT("path")));
 
-	TiXmlElement* pElmBitmapStyle = pElmUdProject->FirstChildElement("bitmap_style");
-	if (!pElmBitmapStyle) return false;
-	m_strBitmapStyleFilePath = (m_strProjectDir + "/" + pElmBitmapStyle->Attribute("path"));
+	wxXmlNode* pNodeBitmapStyle = this->FindXmlChild(pNodeIpProject, wxT("bitmap_style"));
+	if (!pNodeBitmapStyle) return false;
+	m_strBitmapStyleFilePath = (m_strProjectDir + wxT("/") + pNodeBitmapStyle->GetAttribute(wxT("path")));
 
-	TiXmlElement* pElmNineGridStyle = pElmUdProject->FirstChildElement("nine_grid_style");
-	if (!pElmNineGridStyle) return false;
-	m_strNineGridStyleFilePath = (m_strProjectDir + "/" + pElmNineGridStyle->Attribute("path"));
+	wxXmlNode* pNodeNineGridStyle = this->FindXmlChild(pNodeIpProject, wxT("nine_grid_style"));
+	if (!pNodeNineGridStyle) return false;
+	m_strNineGridStyleFilePath = (m_strProjectDir + wxT("/") + pNodeNineGridStyle->GetAttribute(wxT("path")));
 
-	TiXmlElement* pElmColorStyle = pElmUdProject->FirstChildElement("color_style");
-	if (!pElmColorStyle) return false;
-	m_strColorStyleFilePath = (m_strProjectDir + "/" + pElmColorStyle->Attribute("path"));
+	wxXmlNode* pNodeColorStyle = this->FindXmlChild(pNodeIpProject, wxT("color_style"));
+	if (!pNodeColorStyle) return false;
+	m_strColorStyleFilePath = (m_strProjectDir + wxT("/") + pNodeColorStyle->GetAttribute(wxT("path")));
 
-	TiXmlElement* pElmClipBitmapStyle = pElmUdProject->FirstChildElement("clip_bitmap_style");
-	if (!pElmClipBitmapStyle) return false;
-	m_strClipBitmapStyleFilePath = (m_strProjectDir + "/" + pElmClipBitmapStyle->Attribute("path"));
+	wxXmlNode* pNodeClipBitmapStyle = this->FindXmlChild(pNodeIpProject, wxT("clip_bitmap_style"));
+	if (!pNodeClipBitmapStyle) return false;
+	m_strClipBitmapStyleFilePath = (m_strProjectDir + wxT("/") + pNodeClipBitmapStyle->GetAttribute(wxT("path")));
 
 	return true;
 }
@@ -80,35 +71,32 @@ bool ProjectDocument::SaveFile(const wxString& strFile)
 	if (!IsModified()) return true;
 	ClearModifiedFlag();
 
-	TiXmlDocument doc;
-	TiXmlDeclaration* pDecl = new TiXmlDeclaration("1.0", "utf-8", "yes");
-	doc.LinkEndChild(pDecl);
+	wxXmlDocument doc;
+	wxXmlNode* pNodeIpProject = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("ip_project"));
+	doc.SetRoot(pNodeIpProject);
+	pNodeIpProject->AddAttribute(wxT("root_dir"), m_strRootDir);
 
-	TiXmlElement* pElmUdProject = new TiXmlElement("ud_project");
-	doc.LinkEndChild(pElmUdProject);
-	pElmUdProject->SetAttribute("root_dir", m_strRootDir);
+	wxXmlNode* pNodeImagePiece = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("image_piece"));
+	pNodeIpProject->AddChild(pNodeImagePiece);
+	pNodeImagePiece->AddAttribute(wxT("path"), FileUtil::RemoveRootDir(ImagePieceDocument::GetInstance().GetFilePath(), m_strProjectDir + wxT("/")));
 
-	TiXmlElement* pElmImagePiece = new TiXmlElement("image_piece");
-	pElmUdProject->LinkEndChild(pElmImagePiece);
-	pElmImagePiece->SetAttribute("path", FileUtil::RemoveRootDir(ImagePieceDocument::GetInstance().GetFilePath(), m_strProjectDir + "/"));
+	wxXmlNode* pNodeBitmapStyle = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("bitmap_style"));
+	pNodeIpProject->AddChild(pNodeBitmapStyle);
+	pNodeBitmapStyle->AddAttribute(wxT("path"), FileUtil::RemoveRootDir(BitmapStyleDocument::GetInstance().GetFilePath(), m_strProjectDir + wxT("/")));
 
-	TiXmlElement* pElmBitmapStyle = pElmUdProject->FirstChildElement("bitmap_style");
-	pElmUdProject->LinkEndChild(pElmBitmapStyle);
-	pElmBitmapStyle->SetAttribute("path", FileUtil::RemoveRootDir(BitmapStyleDocument::GetInstance().GetFilePath(), m_strProjectDir + "/"));
+	wxXmlNode* pNodeNineGridStyle = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("nine_grid_style"));
+	pNodeIpProject->AddChild(pNodeNineGridStyle);
+	pNodeNineGridStyle->AddAttribute(wxT("path"), FileUtil::RemoveRootDir(NineGridStyleDocument::GetInstance().GetFilePath(), m_strProjectDir + wxT("/")));
 
-	TiXmlElement* pElmNineGridStyle = pElmUdProject->FirstChildElement("nine_grid_style");
-	pElmUdProject->LinkEndChild(pElmNineGridStyle);
-	pElmNineGridStyle->SetAttribute("path", FileUtil::RemoveRootDir(NineGridStyleDocument::GetInstance().GetFilePath(), m_strProjectDir + "/"));
+	wxXmlNode* pNodeColorStyle = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("color_style"));
+	pNodeIpProject->AddChild(pNodeColorStyle);
+	pNodeColorStyle->AddAttribute(wxT("path"), FileUtil::RemoveRootDir(ColorStyleDocument::GetInstance().GetFilePath(), m_strProjectDir + wxT("/")));
 
-	TiXmlElement* pElmColorStyle = pElmUdProject->FirstChildElement("color_style");
-	pElmUdProject->LinkEndChild(pElmColorStyle);
-	pElmColorStyle->SetAttribute("path", FileUtil::RemoveRootDir(ColorStyleDocument::GetInstance().GetFilePath(), m_strProjectDir + "/"));
+	wxXmlNode* pElmClipBitmapStyle = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("clip_bitmap_style"));
+	pNodeIpProject->AddChild(pElmClipBitmapStyle);
+	pElmClipBitmapStyle->AddAttribute(wxT("path"), FileUtil::RemoveRootDir(ClipBitmapStyleDocument::GetInstance().GetFilePath(), m_strProjectDir + wxT("/")));
 
-	TiXmlElement* pElmClipBitmapStyle = pElmUdProject->FirstChildElement("clip_bitmap_style");
-	pElmUdProject->LinkEndChild(pElmClipBitmapStyle);
-	pElmClipBitmapStyle->SetAttribute("path", FileUtil::RemoveRootDir(ClipBitmapStyleDocument::GetInstance().GetFilePath(), m_strProjectDir + "/"));
-
-	return doc.SaveFile(strFile);
+	return doc.Save(strFile);
 }
 
 void ProjectDocument::Reset()
@@ -123,7 +111,7 @@ const wxString& ProjectDocument::GetRootDir() const
 
 wxString ProjectDocument::GetRootPath() const
 {
-	return m_strProjectDir + "/" + m_strRootDir;
+	return m_strProjectDir + wxT("/") + m_strRootDir;
 }
 
 void ProjectDocument::SetProjectDir(const wxString& strProjectDir)

@@ -19,5 +19,8 @@ public:
 
 	virtual bool OnInit();
 
+private:
+	wxLocale m_Local;
+
 };
 #endif // __IMAGEPACKERAPP_H__

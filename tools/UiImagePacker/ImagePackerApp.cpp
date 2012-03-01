@@ -28,6 +28,10 @@ bool ImagePackerApp::OnInit()
 	wxImage::AddHandler(new wxJPEGHandler());
 	wxImage::AddHandler(new wxCURHandler());
 
+	m_Local.Init();
+	wxLocale::AddCatalogLookupPathPrefix(wxT("."));
+	m_Local.AddCatalog(wxT("zh_cn"));
+
 	ImagePackerFrame* mainWindow = new ImagePackerFrame();
 	mainWindow->Maximize(true);
 	mainWindow->Show(true);

@@ -6,7 +6,6 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "ColorStyleDocument.h"
-#include <tinyxml-2.6.2/tinyxml.h>
 #include <wx/msgdlg.h>
 #include "../ImagePackerFrame.h"
 
@@ -30,23 +29,23 @@ ColorStyleDocument& ColorStyleDocument::GetInstance()
 
 bool ColorStyleDocument::OpenFile(const wxString& strFile)
 {
-	TiXmlDocument doc;
-	if (!doc.LoadFile(strFile)) return false;
+	wxXmlDocument doc;
+	if (!doc.Load(strFile)) return false;
 
 	Reset();
 	SetFilePath(strFile);
 
-	TiXmlElement* pElmColorStyleList = doc.RootElement();
-	if (!pElmColorStyleList || strcmp(pElmColorStyleList->Value(), "ColorStyleList") != 0) return false;
+	wxXmlNode* pNodeColorStyleList = doc.GetRoot();
+	if (!pNodeColorStyleList || pNodeColorStyleList->GetName() != wxT("ColorStyleList")) return false;
 
 	// parse image list
-	TiXmlElement* pElmColorStyle = pElmColorStyleList->FirstChildElement("ColorStyle");
-	while (pElmColorStyle)
+	wxXmlNode* pNodeColorStyle = this->FindXmlChild(pNodeColorStyleList, wxT("ColorStyle"));
+	while (pNodeColorStyle)
 	{
 		ColorStyle* pColorStyle = new ColorStyle();
-		if (!pColorStyle->LoadFromXml(pElmColorStyle))
+		if (!pColorStyle->LoadFromXml(pNodeColorStyle))
 		{
-			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("load color style failed, id=%s", pColorStyle->GetId()));
+			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format(_("load color style failed, id=%s"), pColorStyle->GetId()));
 			msg.ShowModal();
 			SAFE_DELETE(pColorStyle);
 			SetModifiedFlag();
@@ -55,7 +54,7 @@ bool ColorStyleDocument::OpenFile(const wxString& strFile)
 		{
 			m_ColorStyleMap.insert(std::make_pair(pColorStyle->GetId(), pColorStyle));
 		}
-		pElmColorStyle = pElmColorStyle->NextSiblingElement("ColorStyle");
+		pNodeColorStyle = this->GetNextXml(pNodeColorStyle, wxT("ColorStyle"));
 	}
 
 	return true;
@@ -66,24 +65,22 @@ bool ColorStyleDocument::SaveFile(const wxString& strFile)
 	if (!IsModified()) return true;
 	ClearModifiedFlag();
 
-	TiXmlDocument doc;
-	TiXmlDeclaration* pDecl = new TiXmlDeclaration("1.0", "utf-8", "yes");
-	doc.LinkEndChild(pDecl);
+	wxXmlDocument doc;
 
-	TiXmlElement* pElmColorStyleList = new TiXmlElement("ColorStyleList");
-	doc.LinkEndChild(pElmColorStyleList);
+	wxXmlNode* pNodeColorStyleList = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("ColorStyleList"));
+	doc.SetRoot(pNodeColorStyleList);
 
 	for (TM_COLOR_STYLE::iterator it = m_ColorStyleMap.begin(); it != m_ColorStyleMap.end(); ++it)
 	{
 		ColorStyle* pColorStyle = it->second;
-		if (!pColorStyle->SaveToXml(pElmColorStyleList))
+		if (!pColorStyle->SaveToXml(pNodeColorStyleList))
 		{
-			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("save color style failed, id=%s", pColorStyle->GetId()));
+			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format(_("save color style failed, id=%s"), pColorStyle->GetId()));
 			msg.ShowModal();
 		}
 	}
 
-	return doc.SaveFile(strFile);
+	return doc.Save(strFile);
 }
 
 void ColorStyleDocument::Reset()
@@ -180,7 +177,7 @@ wxString ColorStyleDocument::GenerateNewColorStyleId(const wxString& strId)
 
 	while (FindColorStyle(strNewId))
 	{
-		strNewId = wxString::Format("%s%d", strId, index++);
+		strNewId = wxString::Format(wxT("%s%d"), strId, index++);
 	}
 
 	return strNewId;

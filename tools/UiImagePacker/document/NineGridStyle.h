@@ -10,7 +10,6 @@
 
 #include "IStyle.h"
 #include "PieceInfo.h"
-#include <tinyxml-2.6.2/tinyxml.h>
 
 class NineGridStyle : public IStyle
 {
@@ -28,8 +27,8 @@ public:
 	NineGridStyle();
 	~NineGridStyle();
 
-	bool LoadFromXml(TiXmlElement* pElmNineGridStyle);
-	bool SaveToXml(TiXmlElement* pElmNineGridStyleList);
+	bool LoadFromXml(wxXmlNode* pNodeNineGridStyle);
+	bool SaveToXml(wxXmlNode* pNodeNineGridStyleList);
 
 	bool SetStatePiece(const PieceInfo* pPieceInfo, STYLE_STATE eState);
 	bool SetStateMinX(int value, IStyle::STYLE_STATE eState);
@@ -40,8 +39,8 @@ public:
 	const NINE_GRID_INFO* GetStateGridInfo(STYLE_STATE eState) const;
 
 private:
-	bool LoadStateInfo(NINE_GRID_INFO& NineGridInfoOut, TiXmlElement* pElmNineGridStyle, const wxString& strState);
-	bool SaveStateInfo(TiXmlElement* pElmNineGridStyle, const wxString& strState, const NINE_GRID_INFO& NineGridInfo);
+	bool LoadStateInfo(NINE_GRID_INFO& NineGridInfoOut, wxXmlNode* pNodeNineGridStyle, const wxString& strState);
+	bool SaveStateInfo(wxXmlNode* pNodeNineGridStyle, const wxString& strState, const NINE_GRID_INFO& NineGridInfo);
 	bool IsNormalGrid(const NINE_GRID_INFO& NineGridInfo);
 
 private:

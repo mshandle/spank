@@ -24,22 +24,22 @@ ImageInfo::~ImageInfo()
 	SAFE_DELETE(m_pBitmap);
 }
 
-bool ImageInfo::LoadFromXml(TiXmlElement* pElmImage)
+bool ImageInfo::LoadFromXml(wxXmlNode* pNodeImage)
 {
-	if (!pElmImage) return false;
+	if (!pNodeImage) return false;
 
-	m_strId = pElmImage->Attribute("id");
-	m_strPath = pElmImage->Attribute("path");
+	m_strId = pNodeImage->GetAttribute(wxT("id"));
+	m_strPath = pNodeImage->GetAttribute(wxT("path"));
 
 	return true;
 }
 
-bool ImageInfo::SaveToXml(TiXmlElement* pElmImageList)
+bool ImageInfo::SaveToXml(wxXmlNode* pNodeImageList)
 {
-	TiXmlElement* pElmImage = new TiXmlElement("Image");
-	pElmImage->SetAttribute("id", m_strId);
-	pElmImage->SetAttribute("path", m_strPath);
-	pElmImageList->LinkEndChild(pElmImage);
+	wxXmlNode* pNodeImage = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("Image"));
+	pNodeImage->AddAttribute(wxT("id"), m_strId);
+	pNodeImage->AddAttribute(wxT("path"), m_strPath);
+	pNodeImageList->AddChild(pNodeImage);
 	return true;
 }
 
@@ -49,10 +49,10 @@ bool ImageInfo::SaveImage()
 	m_bIsModified = false;
 	if (!m_pBitmap) return true;
 
-	wxString strFullPath = ProjectDocument::GetInstance().GetRootPath() + "/" + m_strPath;
+	wxString strFullPath = ProjectDocument::GetInstance().GetRootPath() + wxT("/") + m_strPath;
 	if (!m_pBitmap->SaveFile(strFullPath, wxBITMAP_TYPE_PNG))
 	{
-		wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("save image bitmap failed, path=%s", strFullPath));
+		wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format(_("save image bitmap failed, path=%s"), strFullPath));
 		msg.ShowModal();
 	}
 
@@ -109,10 +109,10 @@ bool ImageInfo::LoadImageFromFile()
 	m_pBitmap = new wxBitmap();
 
 	// load bitmap from path
-	wxString strFullPath = ProjectDocument::GetInstance().GetRootPath() + "/" + m_strPath;
+	wxString strFullPath = ProjectDocument::GetInstance().GetRootPath() + wxT("/") + m_strPath;
 	if (!m_pBitmap->LoadFile(strFullPath, wxBITMAP_TYPE_ANY))
 	{
-		wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("can not open file: %s", strFullPath));
+		wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format(_("can not open file: %s"), strFullPath));
 		msg.ShowModal();
 		SAFE_DELETE(m_pBitmap);
 		return false;

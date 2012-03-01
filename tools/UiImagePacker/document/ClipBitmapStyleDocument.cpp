@@ -6,7 +6,6 @@
  * \author zjhlogo (zjhlogo@gmail.com)
  */
 #include "ClipBitmapStyleDocument.h"
-#include <tinyxml-2.6.2/tinyxml.h>
 #include <wx/msgdlg.h>
 #include "../ImagePackerFrame.h"
 
@@ -30,23 +29,23 @@ ClipBitmapStyleDocument& ClipBitmapStyleDocument::GetInstance()
 
 bool ClipBitmapStyleDocument::OpenFile(const wxString& strFile)
 {
-	TiXmlDocument doc;
-	if (!doc.LoadFile(strFile)) return false;
+	wxXmlDocument doc;
+	if (!doc.Load(strFile)) return false;
 
 	Reset();
 	SetFilePath(strFile);
 
-	TiXmlElement* pElmClipBitmapStyleList = doc.RootElement();
-	if (!pElmClipBitmapStyleList || strcmp(pElmClipBitmapStyleList->Value(), "ClipBitmapStyleList") != 0) return false;
+	wxXmlNode* pNodeClipBitmapStyleList = doc.GetRoot();
+	if (!pNodeClipBitmapStyleList || pNodeClipBitmapStyleList->GetName() != wxT("ClipBitmapStyleList")) return false;
 
 	// parse image list
-	TiXmlElement* pElmClipBitmapStyle = pElmClipBitmapStyleList->FirstChildElement("ClipBitmapStyle");
-	while (pElmClipBitmapStyle)
+	wxXmlNode* pNodeClipBitmapStyle = this->FindXmlChild(pNodeClipBitmapStyleList, wxT("ClipBitmapStyle"));
+	while (pNodeClipBitmapStyle)
 	{
 		ClipBitmapStyle* pClipBitmapStyle = new ClipBitmapStyle();
-		if (!pClipBitmapStyle->LoadFromXml(pElmClipBitmapStyle))
+		if (!pClipBitmapStyle->LoadFromXml(pNodeClipBitmapStyle))
 		{
-			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("load clip bitmap style failed, id=%s", pClipBitmapStyle->GetId()));
+			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format(_("load clip bitmap style failed, id=%s"), pClipBitmapStyle->GetId()));
 			msg.ShowModal();
 			SAFE_DELETE(pClipBitmapStyle);
 			SetModifiedFlag();
@@ -55,7 +54,7 @@ bool ClipBitmapStyleDocument::OpenFile(const wxString& strFile)
 		{
 			m_ClipBitmapStyleMap.insert(std::make_pair(pClipBitmapStyle->GetId(), pClipBitmapStyle));
 		}
-		pElmClipBitmapStyle = pElmClipBitmapStyle->NextSiblingElement("ClipBitmapStyle");
+		pNodeClipBitmapStyle = this->GetNextXml(pNodeClipBitmapStyle, wxT("ClipBitmapStyle"));
 	}
 
 	return true;
@@ -66,24 +65,22 @@ bool ClipBitmapStyleDocument::SaveFile(const wxString& strFile)
 	if (!IsModified()) return true;
 	ClearModifiedFlag();
 
-	TiXmlDocument doc;
-	TiXmlDeclaration* pDecl = new TiXmlDeclaration("1.0", "utf-8", "yes");
-	doc.LinkEndChild(pDecl);
+	wxXmlDocument doc;
 
-	TiXmlElement* pElmClipBitmapStyleList = new TiXmlElement("ClipBitmapStyleList");
-	doc.LinkEndChild(pElmClipBitmapStyleList);
+	wxXmlNode* pNodeClipBitmapStyleList = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("ClipBitmapStyleList"));
+	doc.SetRoot(pNodeClipBitmapStyleList);
 
 	for (TM_CLIP_BITMAP_STYLE::iterator it = m_ClipBitmapStyleMap.begin(); it != m_ClipBitmapStyleMap.end(); ++it)
 	{
 		ClipBitmapStyle* pClipBitmapStyle = it->second;
-		if (!pClipBitmapStyle->SaveToXml(pElmClipBitmapStyleList))
+		if (!pClipBitmapStyle->SaveToXml(pNodeClipBitmapStyleList))
 		{
-			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("save clip bitmap style failed, id=%s", pClipBitmapStyle->GetId()));
+			wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format(_("save clip bitmap style failed, id=%s"), pClipBitmapStyle->GetId()));
 			msg.ShowModal();
 		}
 	}
 
-	return doc.SaveFile(strFile);
+	return doc.Save(strFile);
 }
 
 void ClipBitmapStyleDocument::Reset()
@@ -199,7 +196,7 @@ wxString ClipBitmapStyleDocument::GenerateNewClipBitmapStyleId(const wxString& s
 
 	while (FindClipBitmapStyle(strNewId))
 	{
-		strNewId = wxString::Format("%s%d", strId, index++);
+		strNewId = wxString::Format(wxT("%s%d"), strId, index++);
 	}
 
 	return strNewId;

@@ -22,39 +22,39 @@ NineGridStyle::~NineGridStyle()
 	// TODO: 
 }
 
-bool NineGridStyle::LoadFromXml(TiXmlElement* pElmNineGridStyle)
+bool NineGridStyle::LoadFromXml(wxXmlNode* pNodeNineGridStyle)
 {
-	if (!pElmNineGridStyle) return false;
+	if (!pNodeNineGridStyle) return false;
 
-	wxString strId = pElmNineGridStyle->Attribute("id");
+	wxString strId = pNodeNineGridStyle->GetAttribute(wxT("id"));
 	SetId(strId);
 
-	if (!LoadStateInfo(m_NineGridInfo[SS_NORMAL], pElmNineGridStyle, "normal")) return false;
-	LoadStateInfo(m_NineGridInfo[SS_DOWN], pElmNineGridStyle, "down");
-	LoadStateInfo(m_NineGridInfo[SS_HOVER], pElmNineGridStyle, "hover");
-	LoadStateInfo(m_NineGridInfo[SS_DISABLED], pElmNineGridStyle, "disabled");
+	if (!LoadStateInfo(m_NineGridInfo[SS_NORMAL], pNodeNineGridStyle, wxT("normal"))) return false;
+	LoadStateInfo(m_NineGridInfo[SS_DOWN], pNodeNineGridStyle, wxT("down"));
+	LoadStateInfo(m_NineGridInfo[SS_HOVER], pNodeNineGridStyle, wxT("hover"));
+	LoadStateInfo(m_NineGridInfo[SS_DISABLED], pNodeNineGridStyle, wxT("disabled"));
 
 	return true;
 }
 
-bool NineGridStyle::SaveToXml(TiXmlElement* pElmBitmapStyleList)
+bool NineGridStyle::SaveToXml(wxXmlNode* pNodeBitmapStyleList)
 {
-	if (!pElmBitmapStyleList) return false;
+	if (!pNodeBitmapStyleList) return false;
 
-	TiXmlElement* pElmBitmapStyle = new TiXmlElement("NineGridStyle");
-	pElmBitmapStyle->SetAttribute("id", GetId());
+	wxXmlNode* pNodeBitmapStyle = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("NineGridStyle"));
+	pNodeBitmapStyle->AddAttribute(wxT("id"), GetId());
 
-	if (!SaveStateInfo(pElmBitmapStyle, "normal", m_NineGridInfo[SS_NORMAL]))
+	if (!SaveStateInfo(pNodeBitmapStyle, wxT("normal"), m_NineGridInfo[SS_NORMAL]))
 	{
-		SAFE_DELETE(pElmBitmapStyle);
+		SAFE_DELETE(pNodeBitmapStyle);
 		return false;
 	}
 
-	if (!IsNormalGrid(m_NineGridInfo[SS_DOWN])) SaveStateInfo(pElmBitmapStyle, "down", m_NineGridInfo[SS_DOWN]);
-	if (!IsNormalGrid(m_NineGridInfo[SS_HOVER])) SaveStateInfo(pElmBitmapStyle, "hover", m_NineGridInfo[SS_HOVER]);
-	if (!IsNormalGrid(m_NineGridInfo[SS_DISABLED])) SaveStateInfo(pElmBitmapStyle, "disabled", m_NineGridInfo[SS_DISABLED]);
+	if (!IsNormalGrid(m_NineGridInfo[SS_DOWN])) SaveStateInfo(pNodeBitmapStyle, wxT("down"), m_NineGridInfo[SS_DOWN]);
+	if (!IsNormalGrid(m_NineGridInfo[SS_HOVER])) SaveStateInfo(pNodeBitmapStyle, wxT("hover"), m_NineGridInfo[SS_HOVER]);
+	if (!IsNormalGrid(m_NineGridInfo[SS_DISABLED])) SaveStateInfo(pNodeBitmapStyle, wxT("disabled"), m_NineGridInfo[SS_DISABLED]);
 
-	pElmBitmapStyleList->LinkEndChild(pElmBitmapStyle);
+	pNodeBitmapStyleList->AddChild(pNodeBitmapStyle);
 	return true;
 }
 
@@ -71,42 +71,46 @@ const NineGridStyle::NINE_GRID_INFO* NineGridStyle::GetStateGridInfo(STYLE_STATE
 	return &m_NineGridInfo[eState];
 }
 
-bool NineGridStyle::LoadStateInfo(NINE_GRID_INFO& NineGridInfoOut, TiXmlElement* pElmNineGridStyle, const wxString& strState)
+bool NineGridStyle::LoadStateInfo(NINE_GRID_INFO& NineGridInfoOut, wxXmlNode* pNodeNineGridStyle, const wxString& strState)
 {
-	TiXmlElement* pElmState = pElmNineGridStyle->FirstChildElement(strState);
-	if (!pElmState) return false;
+	wxXmlNode* pNodeState = this->FindXmlChild(pNodeNineGridStyle, strState);
+	if (!pNodeState) return false;
 
-	const char* pszPieceId = pElmState->Attribute("piece_id");
-	if (!pszPieceId) return false;
+	wxString strPieceId = pNodeState->GetAttribute(wxT("piece_id"));
+	if (strPieceId.length() <= 0) return false;
 
-	const PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfo(pszPieceId);
+	const PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfo(strPieceId);
 	if (!pPieceInfo)
 	{
-		wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format("can not found piece id=%s, for 9-grid style id=", pszPieceId, GetId()));
+		wxMessageDialog msg(&ImagePackerFrame::GetInstance(), wxString::Format(_("can not found piece id=%s, for 9-grid style id=%s"), strPieceId, GetId()));
 		msg.ShowModal();
 		return false;
 	}
 
 	NineGridInfoOut.pPieceInfo = pPieceInfo;
-	pElmState->Attribute("min_x", &NineGridInfoOut.min_x);
-	pElmState->Attribute("min_y", &NineGridInfoOut.min_y);
-	pElmState->Attribute("max_x", &NineGridInfoOut.max_x);
-	pElmState->Attribute("max_y", &NineGridInfoOut.max_y);
+	wxString value = pNodeState->GetAttribute(wxT("min_x"));
+	value.ToLong((long*)&NineGridInfoOut.min_x);
+	value = pNodeState->GetAttribute(wxT("min_y"));
+	value.ToLong((long*)&NineGridInfoOut.min_x);
+	value = pNodeState->GetAttribute(wxT("max_x"));
+	value.ToLong((long*)&NineGridInfoOut.min_x);
+	value = pNodeState->GetAttribute(wxT("max_y"));
+	value.ToLong((long*)&NineGridInfoOut.min_x);
 
 	return true;
 }
 
-bool NineGridStyle::SaveStateInfo(TiXmlElement* pElmNineGridStyle, const wxString& strState, const NINE_GRID_INFO& NineGridInfo)
+bool NineGridStyle::SaveStateInfo(wxXmlNode* pNodeNineGridStyle, const wxString& strState, const NINE_GRID_INFO& NineGridInfo)
 {
 	if (!NineGridInfo.pPieceInfo) return false;
 
-	TiXmlElement* pElmState = new TiXmlElement(strState);
-	pElmState->SetAttribute("piece_id", NineGridInfo.pPieceInfo->GetId());
-	pElmState->SetAttribute("min_x", NineGridInfo.min_x);
-	pElmState->SetAttribute("min_y", NineGridInfo.min_y);
-	pElmState->SetAttribute("max_x", NineGridInfo.max_x);
-	pElmState->SetAttribute("max_y", NineGridInfo.max_y);
-	pElmNineGridStyle->LinkEndChild(pElmState);
+	wxXmlNode* pNodeState = new wxXmlNode(wxXML_ELEMENT_NODE, strState);
+	pNodeState->AddAttribute(wxT("piece_id"), NineGridInfo.pPieceInfo->GetId());
+	pNodeState->AddAttribute(wxT("min_x"), wxString::Format(wxT("%d"), NineGridInfo.min_x));
+	pNodeState->AddAttribute(wxT("min_y"), wxString::Format(wxT("%d"), NineGridInfo.min_y));
+	pNodeState->AddAttribute(wxT("max_x"), wxString::Format(wxT("%d"), NineGridInfo.max_x));
+	pNodeState->AddAttribute(wxT("max_y"), wxString::Format(wxT("%d"), NineGridInfo.max_y));
+	pNodeNineGridStyle->AddChild(pNodeState);
 
 	return true;
 }

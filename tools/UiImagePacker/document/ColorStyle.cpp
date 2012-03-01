@@ -20,46 +20,44 @@ ColorStyle::~ColorStyle()
 	// TODO: 
 }
 
-bool ColorStyle::LoadFromXml(TiXmlElement* pElmColorStyle)
+bool ColorStyle::LoadFromXml(wxXmlNode* pNodeColorStyle)
 {
-	if (!pElmColorStyle) return false;
+	if (!pNodeColorStyle) return false;
 
-	wxString strId = pElmColorStyle->Attribute("id");
+	wxString strId = pNodeColorStyle->GetAttribute(wxT("id"));
 	SetId(strId);
 
-	m_nColors[SS_NORMAL] = LoadStateInfo(pElmColorStyle, "normal", Config::DEFAULT_COLOR);
-	m_nColors[SS_DOWN] = LoadStateInfo(pElmColorStyle, "down", Config::DEFAULT_COLOR);
-	m_nColors[SS_HOVER] = LoadStateInfo(pElmColorStyle, "hover", Config::DEFAULT_COLOR);
-	m_nColors[SS_DISABLED] = LoadStateInfo(pElmColorStyle, "disabled", Config::DEFAULT_COLOR);
+	m_nColors[SS_NORMAL] = LoadStateInfo(pNodeColorStyle, wxT("normal"), Config::DEFAULT_COLOR);
+	m_nColors[SS_DOWN] = LoadStateInfo(pNodeColorStyle, wxT("down"), Config::DEFAULT_COLOR);
+	m_nColors[SS_HOVER] = LoadStateInfo(pNodeColorStyle, wxT("hover"), Config::DEFAULT_COLOR);
+	m_nColors[SS_DISABLED] = LoadStateInfo(pNodeColorStyle, wxT("disabled"), Config::DEFAULT_COLOR);
 
 	return true;
 }
 
-bool ColorStyle::SaveToXml(TiXmlElement* pElmColorStyleList)
+bool ColorStyle::SaveToXml(wxXmlNode* pNodeColorStyleList)
 {
-	if (!pElmColorStyleList) return false;
+	if (!pNodeColorStyleList) return false;
 
-	TiXmlElement* pElmColorStyle = new TiXmlElement("ColorStyle");
-	pElmColorStyle->SetAttribute("id", GetId());
+	wxXmlNode* pNodeColorStyle = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("ColorStyle"));
+	pNodeColorStyle->AddAttribute(wxT("id"), GetId());
 
-	SaveStateInfo(pElmColorStyle, "normal", m_nColors[SS_NORMAL]);
-	if (m_nColors[SS_NORMAL] != m_nColors[SS_DOWN]) SaveStateInfo(pElmColorStyle, "down", m_nColors[SS_DOWN]);
-	if (m_nColors[SS_NORMAL] != m_nColors[SS_HOVER]) SaveStateInfo(pElmColorStyle, "hover", m_nColors[SS_HOVER]);
-	if (m_nColors[SS_NORMAL] != m_nColors[SS_DISABLED]) SaveStateInfo(pElmColorStyle, "disabled", m_nColors[SS_DISABLED]);
+	SaveStateInfo(pNodeColorStyle, wxT("normal"), m_nColors[SS_NORMAL]);
+	if (m_nColors[SS_NORMAL] != m_nColors[SS_DOWN]) SaveStateInfo(pNodeColorStyle, wxT("down"), m_nColors[SS_DOWN]);
+	if (m_nColors[SS_NORMAL] != m_nColors[SS_HOVER]) SaveStateInfo(pNodeColorStyle, wxT("hover"), m_nColors[SS_HOVER]);
+	if (m_nColors[SS_NORMAL] != m_nColors[SS_DISABLED]) SaveStateInfo(pNodeColorStyle, wxT("disabled"), m_nColors[SS_DISABLED]);
 
-	pElmColorStyleList->LinkEndChild(pElmColorStyle);
+	pNodeColorStyleList->AddChild(pNodeColorStyle);
 	return true;
 }
 
-bool ColorStyle::SaveStateInfo(TiXmlElement* pElmColorStyle, const wxString& strState, unsigned int nColor)
+bool ColorStyle::SaveStateInfo(wxXmlNode* pNodeColorStyle, const wxString& strState, unsigned int nColor)
 {
-	TiXmlElement* pElmState = new TiXmlElement(strState);
+	wxXmlNode* pNodeState = new wxXmlNode(wxXML_ELEMENT_NODE, strState);
 
-	char buff[128];
-	sprintf_s(buff, "0x%X", nColor);
-
-	pElmState->SetAttribute("value", buff);
-	pElmColorStyle->LinkEndChild(pElmState);
+	wxString value = wxString::Format(wxT("0x%x"), nColor);
+	pNodeState->AddAttribute(wxT("value"), value);
+	pNodeColorStyle->AddChild(pNodeState);
 
 	return true;
 }
@@ -78,16 +76,16 @@ unsigned int ColorStyle::GetStateColor(STYLE_STATE eState) const
 	return m_nColors[eState];
 }
 
-unsigned int ColorStyle::LoadStateInfo(TiXmlElement* pElmColorStyle, const wxString& strState, unsigned int nDefaultColor)
+unsigned int ColorStyle::LoadStateInfo(wxXmlNode* pNodeColorStyle, const wxString& strState, unsigned int nDefaultColor)
 {
-	TiXmlElement* pElmState = pElmColorStyle->FirstChildElement(strState);
-	if (!pElmState) return nDefaultColor;
+	wxXmlNode* pNodeState = this->FindXmlChild(pNodeColorStyle, strState);
+	if (!pNodeState) return nDefaultColor;
 
-	const char* pszColor = pElmState->Attribute("value");
-	if (!pszColor) return nDefaultColor;
+	wxString strColor = pNodeState->GetAttribute(wxT("value"));
+	if (strColor.length() <= 0) return nDefaultColor;
 
 	unsigned int nColor = 0;
-	sscanf_s(pszColor, "%x", &nColor);
+	_stscanf_s(strColor.c_str(), wxT("%x"), &nColor);
 
 	return nColor;
 }

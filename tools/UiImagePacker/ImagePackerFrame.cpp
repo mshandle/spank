@@ -106,7 +106,7 @@ IMPLEMENT_DYNAMIC_CLASS(ImagePackerFrame, wxFrame)
 ImagePackerFrame* ImagePackerFrame::m_pImagePackerFrame = NULL;
 
 ImagePackerFrame::ImagePackerFrame()
-:wxFrame(NULL, wxID_ANY, wxT("Ui Image Packer"), wxDefaultPosition, wxSize(800, 600))
+:wxFrame(NULL, wxID_ANY, _("Ui Image Packer"), wxDefaultPosition, wxSize(800, 600))
 {
 	Init();
 	CreateControls();
@@ -188,111 +188,111 @@ void ImagePackerFrame::CreateMenu()
 	// file
 	wxMenu* pMenuItemFile = new wxMenu();
 	{
-		wxMenuItem* menuItem = new wxMenuItem(pMenuItemFile, wxID_OPEN, wxT("&Open Project...\tCtrl+O"), wxEmptyString, wxITEM_NORMAL);
+		wxMenuItem* menuItem = new wxMenuItem(pMenuItemFile, wxID_OPEN, _("&Open Project...\tCtrl+O"), wxEmptyString, wxITEM_NORMAL);
 		wxBitmap bitmap(ico_open_16x16_xpm, wxBITMAP_TYPE_XPM);
 		menuItem->SetBitmap(bitmap);
 		pMenuItemFile->Append(menuItem);
 	}
 	{
-		wxMenuItem* menuItem = new wxMenuItem(pMenuItemFile, wxID_SAVE, wxT("&Save Project\tCtrl+S"), wxEmptyString, wxITEM_NORMAL);
+		wxMenuItem* menuItem = new wxMenuItem(pMenuItemFile, wxID_SAVE, _("&Save Project\tCtrl+S"), wxEmptyString, wxITEM_NORMAL);
 		wxBitmap bitmap(ico_save_16x16_xpm, wxBITMAP_TYPE_XPM);
 		menuItem->SetBitmap(bitmap);
 		pMenuItemFile->Append(menuItem);
 	}
 
 	pMenuItemFile->AppendSeparator();
-	pMenuItemFile->Append(wxID_EXIT, wxT("E&xit\tAlt+F4"), wxEmptyString, wxITEM_NORMAL);
-	pMenuBar->Append(pMenuItemFile, wxT("&File"));
+	pMenuItemFile->Append(wxID_EXIT, _("E&xit\tAlt+F4"), wxEmptyString, wxITEM_NORMAL);
+	pMenuBar->Append(pMenuItemFile, _("&File"));
 
 	// edit
 	wxMenu* pMenuItemEdit = new wxMenu();
-	pMenuItemEdit->Append(IDM_EDIT_UNDO, wxT("&Undo\tCtrl+Z"), wxEmptyString, wxITEM_NORMAL)->Enable(false);
-	pMenuItemEdit->Append(IDM_EDIT_REDO, wxT("&Redo\tCtrl+Y"), wxEmptyString, wxITEM_NORMAL)->Enable(false);
+	pMenuItemEdit->Append(IDM_EDIT_UNDO, _("&Undo\tCtrl+Z"), wxEmptyString, wxITEM_NORMAL)->Enable(false);
+	pMenuItemEdit->Append(IDM_EDIT_REDO, _("&Redo\tCtrl+Y"), wxEmptyString, wxITEM_NORMAL)->Enable(false);
 	pMenuItemEdit->AppendSeparator();
-	pMenuItemEdit->Append(IDM_EDIT_COPY, wxT("&Copy\tCtrl+C"), wxEmptyString, wxITEM_NORMAL)->Enable(false);
-	pMenuItemEdit->Append(IDM_EDIT_CUT, wxT("Cu&t\tCtrl+X"), wxEmptyString, wxITEM_NORMAL)->Enable(false);
-	pMenuItemEdit->Append(IDM_EDIT_PAST, wxT("&Past\tCtrl+V"), wxEmptyString, wxITEM_NORMAL)->Enable(false);
-	pMenuItemEdit->Append(IDM_EDIT_DELETE, wxT("&Delete"), wxEmptyString, wxITEM_NORMAL);
-	pMenuBar->Append(pMenuItemEdit, wxT("&Edit"));
+	pMenuItemEdit->Append(IDM_EDIT_COPY, _("&Copy\tCtrl+C"), wxEmptyString, wxITEM_NORMAL)->Enable(false);
+	pMenuItemEdit->Append(IDM_EDIT_CUT, _("Cu&t\tCtrl+X"), wxEmptyString, wxITEM_NORMAL)->Enable(false);
+	pMenuItemEdit->Append(IDM_EDIT_PAST, _("&Past\tCtrl+V"), wxEmptyString, wxITEM_NORMAL)->Enable(false);
+	pMenuItemEdit->Append(IDM_EDIT_DELETE, _("&Delete"), wxEmptyString, wxITEM_NORMAL);
+	pMenuBar->Append(pMenuItemEdit, _("&Edit"));
 
 	// elements
 	wxMenu* pMenuItemElement = new wxMenu();
 	{
-		wxMenuItem* menuItem = new wxMenuItem(pMenuItemElement, IDM_ELEMENT_ADD_PIECE, wxT("Add &Piece..."), wxEmptyString, wxITEM_NORMAL);
+		wxMenuItem* menuItem = new wxMenuItem(pMenuItemElement, IDM_ELEMENT_ADD_PIECE, _("Add &Piece..."), wxEmptyString, wxITEM_NORMAL);
 		wxBitmap bitmap(ico_slice_16x16_xpm, wxBITMAP_TYPE_XPM);
 		menuItem->SetBitmap(bitmap);
 		pMenuItemElement->Append(menuItem);
 	}
 	{
-		wxMenuItem* menuItem = new wxMenuItem(pMenuItemElement, IDM_ELEMENT_ADD_BITMAP_STYLE, wxT("Add New &Bitmap Style"), wxEmptyString, wxITEM_NORMAL);
+		wxMenuItem* menuItem = new wxMenuItem(pMenuItemElement, IDM_ELEMENT_ADD_BITMAP_STYLE, _("Add New &Bitmap Style"), wxEmptyString, wxITEM_NORMAL);
 		wxBitmap bitmap(ico_image_16x16_xpm, wxBITMAP_TYPE_XPM);
 		menuItem->SetBitmap(bitmap);
 		pMenuItemElement->Append(menuItem);
 	}
 	{
-		wxMenuItem* menuItem = new wxMenuItem(pMenuItemElement, IDM_ELEMENT_ADD_NINE_GRID_STYLE, wxT("Add New 9-&Grid Style"), wxEmptyString, wxITEM_NORMAL);
+		wxMenuItem* menuItem = new wxMenuItem(pMenuItemElement, IDM_ELEMENT_ADD_NINE_GRID_STYLE, _("Add New 9-&Grid Style"), wxEmptyString, wxITEM_NORMAL);
 		wxBitmap bitmap(ico_nine_16x16_xpm, wxBITMAP_TYPE_XPM);
 		menuItem->SetBitmap(bitmap);
 		pMenuItemElement->Append(menuItem);
 	}
 	{
-		wxMenuItem* menuItem = new wxMenuItem(pMenuItemElement, IDM_ELEMENT_ADD_COLOR_STYLE, wxT("Add New &Color Style"), wxEmptyString, wxITEM_NORMAL);
+		wxMenuItem* menuItem = new wxMenuItem(pMenuItemElement, IDM_ELEMENT_ADD_COLOR_STYLE, _("Add New &Color Style"), wxEmptyString, wxITEM_NORMAL);
 		wxBitmap bitmap(ico_color_16x16_xpm, wxBITMAP_TYPE_XPM);
 		menuItem->SetBitmap(bitmap);
 		pMenuItemElement->Append(menuItem);
 	}
 	{
-		wxMenuItem* menuItem = new wxMenuItem(pMenuItemElement, IDM_ELEMENT_ADD_CLIP_BITMAP_STYLE, wxT("Add New C&lip Bitmap Style"), wxEmptyString, wxITEM_NORMAL);
+		wxMenuItem* menuItem = new wxMenuItem(pMenuItemElement, IDM_ELEMENT_ADD_CLIP_BITMAP_STYLE, _("Add New C&lip Bitmap Style"), wxEmptyString, wxITEM_NORMAL);
 		wxBitmap bitmap(ico_clip_16x16_xpm, wxBITMAP_TYPE_XPM);
 		menuItem->SetBitmap(bitmap);
 		pMenuItemElement->Append(menuItem);
 	}
 	pMenuItemElement->AppendSeparator();
 	{
-		wxMenuItem* menuItem = new wxMenuItem(pMenuItemElement, IDM_ELEMENT_REPLACE_PIECE, wxT("&Replace Pieces..."), wxEmptyString, wxITEM_NORMAL);
+		wxMenuItem* menuItem = new wxMenuItem(pMenuItemElement, IDM_ELEMENT_REPLACE_PIECE, _("&Replace Pieces..."), wxEmptyString, wxITEM_NORMAL);
 		wxBitmap bitmap(ico_replace_16x16_xpm, wxBITMAP_TYPE_XPM);
 		menuItem->SetBitmap(bitmap);
 		pMenuItemElement->Append(menuItem);
 	}
-	pMenuBar->Append(pMenuItemElement, wxT("E&lement"));
+	pMenuBar->Append(pMenuItemElement, _("E&lement"));
 
 	// view
 	wxMenu* pMenuItemView = new wxMenu();
-	pMenuItemView->Append(IDM_VIEW_GRID, wxT("Show &Grid\tCtrl+G"), wxEmptyString, wxITEM_CHECK)->Enable(false);
+	pMenuItemView->Append(IDM_VIEW_GRID, _("Show &Grid\tCtrl+G"), wxEmptyString, wxITEM_CHECK)->Enable(false);
 	pMenuItemView->Check(IDM_VIEW_GRID, true);
 	pMenuItemView->AppendSeparator();
 	{
-		wxMenuItem* menuItem = new wxMenuItem(pMenuItemView, wxID_ZOOM_100, wxT("Zoom &100%\tCtrl+1"), wxEmptyString, wxITEM_NORMAL);
+		wxMenuItem* menuItem = new wxMenuItem(pMenuItemView, wxID_ZOOM_100, _("Zoom &100%\tCtrl+1"), wxEmptyString, wxITEM_NORMAL);
 		wxBitmap bitmap(ico_zoom_fix_16x16_xpm, wxBITMAP_TYPE_XPM);
 		menuItem->SetBitmap(bitmap);
 		pMenuItemView->Append(menuItem);
 	}
 	{
-		wxMenuItem* menuItem = new wxMenuItem(pMenuItemView, wxID_ZOOM_IN, wxT("Zoom &In\tCtrl++"), wxEmptyString, wxITEM_NORMAL);
+		wxMenuItem* menuItem = new wxMenuItem(pMenuItemView, wxID_ZOOM_IN, _("Zoom &In\tCtrl++"), wxEmptyString, wxITEM_NORMAL);
 		wxBitmap bitmap(ico_zoom_in_16x16_xpm, wxBITMAP_TYPE_XPM);
 		menuItem->SetBitmap(bitmap);
 		pMenuItemView->Append(menuItem);
 	}
 	{
-		wxMenuItem* menuItem = new wxMenuItem(pMenuItemView, wxID_ZOOM_OUT, wxT("Zoom &Out\tCtrl+-"), wxEmptyString, wxITEM_NORMAL);
+		wxMenuItem* menuItem = new wxMenuItem(pMenuItemView, wxID_ZOOM_OUT, _("Zoom &Out\tCtrl+-"), wxEmptyString, wxITEM_NORMAL);
 		wxBitmap bitmap(ico_zoom_out_16x16_xpm, wxBITMAP_TYPE_XPM);
 		menuItem->SetBitmap(bitmap);
 		pMenuItemView->Append(menuItem);
 	}
-	pMenuBar->Append(pMenuItemView, wxT("&View"));
+	pMenuBar->Append(pMenuItemView, _("&View"));
 
 	// tool
 	wxMenu* pMenuItemTool = new wxMenu();
-	pMenuItemTool->Append(IDM_TOOL_EXTRACT_IMAGE, wxT("&Extract Image Pieces..."), wxEmptyString, wxITEM_NORMAL);
-	pMenuItemTool->Append(IDM_TOOL_PREFERENCES, wxT("&Preferences..."), wxEmptyString, wxITEM_NORMAL)->Enable(false);
-	pMenuBar->Append(pMenuItemTool, wxT("&Tools"));
+	pMenuItemTool->Append(IDM_TOOL_EXTRACT_IMAGE, _("&Extract Image Pieces..."), wxEmptyString, wxITEM_NORMAL);
+	pMenuItemTool->Append(IDM_TOOL_PREFERENCES, _("&Preferences..."), wxEmptyString, wxITEM_NORMAL)->Enable(false);
+	pMenuBar->Append(pMenuItemTool, _("&Tools"));
 
 	// help
 	wxMenu* pMenuItemHelp = new wxMenu();
-	pMenuItemHelp->Append(IDM_HELP_SUPPORT, wxT("&Support"), wxEmptyString, wxITEM_NORMAL)->Enable(false);
+	pMenuItemHelp->Append(IDM_HELP_SUPPORT, _("&Support"), wxEmptyString, wxITEM_NORMAL)->Enable(false);
 	pMenuItemHelp->AppendSeparator();
-	pMenuItemHelp->Append(IDM_HELP_ABOUT, wxT("&About\tF1"), wxEmptyString, wxITEM_NORMAL);
-	pMenuBar->Append(pMenuItemHelp, wxT("&Help"));
+	pMenuItemHelp->Append(IDM_HELP_ABOUT, _("&About\tF1"), wxEmptyString, wxITEM_NORMAL);
+	pMenuBar->Append(pMenuItemHelp, _("&Help"));
 
 	SetMenuBar(pMenuBar);
 }
@@ -310,13 +310,13 @@ void ImagePackerFrame::CreateToolbar()
 	{
 		wxBitmap bitmap(ico_open_32x32_xpm, wxBITMAP_TYPE_XPM);
 		wxBitmap bitmapDisabled;
-		pAuiToolBar->AddTool(wxID_OPEN, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxT("open project file ( Ctrl+O )"), wxEmptyString, NULL);
+		pAuiToolBar->AddTool(wxID_OPEN, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, _("open project file ( Ctrl+O )"), wxEmptyString, NULL);
 	}
 
 	{
 		wxBitmap bitmap(ico_save_32x32_xpm, wxBITMAP_TYPE_XPM);
 		wxBitmap bitmapDisabled;
-		pAuiToolBar->AddTool(wxID_SAVE, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxT("save project file ( Ctrl+S )"), wxEmptyString, NULL);
+		pAuiToolBar->AddTool(wxID_SAVE, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, _("save project file ( Ctrl+S )"), wxEmptyString, NULL);
 	}
 
 	pAuiToolBar->AddSeparator();
@@ -324,31 +324,31 @@ void ImagePackerFrame::CreateToolbar()
 	{
 		wxBitmap bitmap(ico_slice_32x32_xpm, wxBITMAP_TYPE_XPM);
 		wxBitmap bitmapDisabled;
-		pAuiToolBar->AddTool(IDM_ELEMENT_ADD_PIECE, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxT("add new piece"), wxEmptyString, NULL);
+		pAuiToolBar->AddTool(IDM_ELEMENT_ADD_PIECE, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, _("add new piece"), wxEmptyString, NULL);
 	}
 
 	{
 		wxBitmap bitmap(ico_image_32x32_xpm, wxBITMAP_TYPE_XPM);
 		wxBitmap bitmapDisabled;
-		pAuiToolBar->AddTool(IDM_ELEMENT_ADD_BITMAP_STYLE, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxT("add new bitmap style"), wxEmptyString, NULL);
+		pAuiToolBar->AddTool(IDM_ELEMENT_ADD_BITMAP_STYLE, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, _("add new bitmap style"), wxEmptyString, NULL);
 	}
 
 	{
 		wxBitmap bitmap(ico_nine_32x32_xpm, wxBITMAP_TYPE_XPM);
 		wxBitmap bitmapDisabled;
-		pAuiToolBar->AddTool(IDM_ELEMENT_ADD_NINE_GRID_STYLE, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxT("add new 9-grid style"), wxEmptyString, NULL);
+		pAuiToolBar->AddTool(IDM_ELEMENT_ADD_NINE_GRID_STYLE, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, _("add new 9-grid style"), wxEmptyString, NULL);
 	}
 
 	{
 		wxBitmap bitmap(ico_color_32x32_xpm, wxBITMAP_TYPE_XPM);
 		wxBitmap bitmapDisabled;
-		pAuiToolBar->AddTool(IDM_ELEMENT_ADD_COLOR_STYLE, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxT("add new color style"), wxEmptyString, NULL);
+		pAuiToolBar->AddTool(IDM_ELEMENT_ADD_COLOR_STYLE, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, _("add new color style"), wxEmptyString, NULL);
 	}
 
 	{
 		wxBitmap bitmap(ico_clip_32x32_xpm, wxBITMAP_TYPE_XPM);
 		wxBitmap bitmapDisabled;
-		pAuiToolBar->AddTool(IDM_ELEMENT_ADD_CLIP_BITMAP_STYLE, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxT("add new clip bitmap style"), wxEmptyString, NULL);
+		pAuiToolBar->AddTool(IDM_ELEMENT_ADD_CLIP_BITMAP_STYLE, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, _("add new clip bitmap style"), wxEmptyString, NULL);
 	}
 
 	pAuiToolBar->AddSeparator();
@@ -356,7 +356,7 @@ void ImagePackerFrame::CreateToolbar()
 	{
 		wxBitmap bitmap(ico_replace_32x32_xpm, wxBITMAP_TYPE_XPM);
 		wxBitmap bitmapDisabled;
-		pAuiToolBar->AddTool(IDM_ELEMENT_REPLACE_PIECE, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxT("replace pieces"), wxEmptyString, NULL);
+		pAuiToolBar->AddTool(IDM_ELEMENT_REPLACE_PIECE, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, _("replace pieces"), wxEmptyString, NULL);
 	}
 
 	pAuiToolBar->AddSeparator();
@@ -364,25 +364,25 @@ void ImagePackerFrame::CreateToolbar()
 	{
 		wxBitmap bitmap(ico_zoom_fix_32x32_xpm, wxBITMAP_TYPE_XPM);
 		wxBitmap bitmapDisabled;
-		pAuiToolBar->AddTool(wxID_ZOOM_100, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxT("zoom 100% ( Ctrl+1 )"), wxEmptyString, NULL);
+		pAuiToolBar->AddTool(wxID_ZOOM_100, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, _("zoom 100% ( Ctrl+1 )"), wxEmptyString, NULL);
 	}
 
 	{
 		wxBitmap bitmap(ico_zoom_in_32x32_xpm, wxBITMAP_TYPE_XPM);
 		wxBitmap bitmapDisabled;
-		pAuiToolBar->AddTool(wxID_ZOOM_IN, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxT("zoom in ( Ctrl++ )"), wxEmptyString, NULL);
+		pAuiToolBar->AddTool(wxID_ZOOM_IN, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, _("zoom in ( Ctrl++ )"), wxEmptyString, NULL);
 	}
 
 	{
 		wxBitmap bitmap(ico_zoom_out_32x32_xpm, wxBITMAP_TYPE_XPM);
 		wxBitmap bitmapDisabled;
-		pAuiToolBar->AddTool(wxID_ZOOM_OUT, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxT("zoom out ( Ctrl+- )"), wxEmptyString, NULL);
+		pAuiToolBar->AddTool(wxID_ZOOM_OUT, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, _("zoom out ( Ctrl+- )"), wxEmptyString, NULL);
 	}
 
 	pAuiToolBar->Realize();
 
 	m_auiManager.AddPane(pAuiToolBar, wxAuiPaneInfo()
-		.Name(wxT("Toolbar"))
+		.Name(_("Toolbar"))
 		.Top()
 		.Layer(1)
 		.Dockable(false)
@@ -399,8 +399,8 @@ void ImagePackerFrame::CreatePropertyView()
 {
 	m_pPropertyGrid = new wxPropertyGrid(this, IDC_PROPERTY, wxDefaultPosition, wxDefaultSize, wxPG_SPLITTER_AUTO_CENTER|wxNO_BORDER);
 	m_auiManager.AddPane(m_pPropertyGrid, wxAuiPaneInfo()
-		.Name(wxT("Property"))
-		.Caption(wxT("Property"))
+		.Name(_("Property"))
+		.Caption(_("Property"))
 		.Right()
 		.BestSize(wxSize(300, 300))
 		.Position(1)
@@ -416,8 +416,8 @@ void ImagePackerFrame::CreateListView()
 {
 	m_pListNotebook = new wxNotebook(this, IDC_NOTEBOOK_EDITOR, wxDefaultPosition, wxDefaultSize, wxNB_MULTILINE|wxNO_BORDER);
 	m_auiManager.AddPane(m_pListNotebook, wxAuiPaneInfo()
-		.Name(wxT("List"))
-		.Caption(wxT("List"))
+		.Name(_("List"))
+		.Caption(_("List"))
 		.Left()
 		.Layer(1)
 		.BestSize(wxSize(400, 500))
@@ -431,32 +431,32 @@ void ImagePackerFrame::CreateListView()
 
 	wxTreeCtrl* pPieceListView = new wxTreeCtrl(m_pListNotebook, IDC_PIECE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pPieceListView->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ImagePackerFrame::OnListKeyDown), NULL, this);
-	m_pListNotebook->AddPage(pPieceListView, "Pieces");
+	m_pListNotebook->AddPage(pPieceListView, _("Pieces"));
 	PieceListTransformer::GetInstance().Initialize(pPieceListView, m_pPropertyGrid);
 
 	wxTreeCtrl* pImageListView = new wxTreeCtrl(m_pListNotebook, IDC_IMAGE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pImageListView->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ImagePackerFrame::OnListKeyDown), NULL, this);
-	m_pListNotebook->AddPage(pImageListView, "Images");
+	m_pListNotebook->AddPage(pImageListView, _("Images"));
 	ImageListTransformer::GetInstance().Initialize(pImageListView, m_pPropertyGrid);
 
 	wxTreeCtrl* pBitmapStyleListView = new wxTreeCtrl(m_pListNotebook, IDC_BITMAP_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pBitmapStyleListView->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ImagePackerFrame::OnListKeyDown), NULL, this);
-	m_pListNotebook->AddPage(pBitmapStyleListView, "Bitmap Styles");
+	m_pListNotebook->AddPage(pBitmapStyleListView, _("Bitmap Styles"));
 	BitmapStyleTransformer::GetInstance().Initialize(pBitmapStyleListView, m_pPropertyGrid);
 
 	wxTreeCtrl* pNineGridStyleListView = new wxTreeCtrl(m_pListNotebook, IDC_NINE_GRID_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pNineGridStyleListView->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ImagePackerFrame::OnListKeyDown), NULL, this);
-	m_pListNotebook->AddPage(pNineGridStyleListView, "9-Grid Styles");
+	m_pListNotebook->AddPage(pNineGridStyleListView, _("9-Grid Styles"));
 	NineGridStyleTransformer::GetInstance().Initialize(pNineGridStyleListView, m_pPropertyGrid);
 
 	wxTreeCtrl* pColorStyleListView = new wxTreeCtrl(m_pListNotebook, IDC_COLOR_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pColorStyleListView->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ImagePackerFrame::OnListKeyDown), NULL, this);
-	m_pListNotebook->AddPage(pColorStyleListView, "Color Styles");
+	m_pListNotebook->AddPage(pColorStyleListView, _("Color Styles"));
 	ColorStyleTransformer::GetInstance().Initialize(pColorStyleListView, m_pPropertyGrid);
 
 	wxTreeCtrl* pClipBitmapStyleListView = new wxTreeCtrl(m_pListNotebook, IDC_CLIP_BITMAP_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pClipBitmapStyleListView->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ImagePackerFrame::OnListKeyDown), NULL, this);
-	m_pListNotebook->AddPage(pClipBitmapStyleListView, "Clip Bitmap Styles");
+	m_pListNotebook->AddPage(pClipBitmapStyleListView, _("Clip Bitmap Styles"));
 	ClipBitmapStyleTransformer::GetInstance().Initialize(pClipBitmapStyleListView, m_pPropertyGrid);
 }
 
@@ -464,8 +464,8 @@ void ImagePackerFrame::CreateEditorView()
 {
 	m_pEditorNotebook = new wxNotebook(this, IDC_NOTEBOOK_EDITOR, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	m_auiManager.AddPane(m_pEditorNotebook, wxAuiPaneInfo()
-		.Name(wxT("Editor"))
-		.Caption(wxT("Editor"))
+		.Name(_("Editor"))
+		.Caption(_("Editor"))
 		.Centre()
 		.CaptionVisible(false)
 		.CloseButton(false)
@@ -476,40 +476,40 @@ void ImagePackerFrame::CreateEditorView()
 
 	ImagePieceEditor* pImagePieceEditor = new ImagePieceEditor(m_pEditorNotebook, IDC_IMAGE_PIECE_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
 	pImagePieceEditor->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ImagePackerFrame::OnEditorKeyDown), NULL, this);
-	m_pEditorNotebook->AddPage(pImagePieceEditor, "Pieces Editor");
+	m_pEditorNotebook->AddPage(pImagePieceEditor, _("Pieces Editor"));
 	m_pEditors[EDITOR_IMAGE_PIECE] = pImagePieceEditor;
 
 	BitmapStyleEditor* pBitmapStyleEditor = new BitmapStyleEditor(m_pEditorNotebook, IDC_BITMAP_STYLE_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
 	pBitmapStyleEditor->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ImagePackerFrame::OnEditorKeyDown), NULL, this);
-	m_pEditorNotebook->AddPage(pBitmapStyleEditor, "Bitmap Style Editor");
+	m_pEditorNotebook->AddPage(pBitmapStyleEditor, _("Bitmap Style Editor"));
 	m_pEditors[EDITOR_BITMAP_STYLE] = pBitmapStyleEditor;
 
 	NineGridStyleEditor* pNineGridStyleEditor = new NineGridStyleEditor(m_pEditorNotebook, IDC_NINE_GRID_STYLE_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
 	pNineGridStyleEditor->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ImagePackerFrame::OnEditorKeyDown), NULL, this);
-	m_pEditorNotebook->AddPage(pNineGridStyleEditor, "Nine Grid Style Editor");
+	m_pEditorNotebook->AddPage(pNineGridStyleEditor, _("Nine Grid Style Editor"));
 	m_pEditors[EDITOR_NINE_GRID_STYLE] = pNineGridStyleEditor;
 
 	ColorStyleEditor* pColorStyleEditor = new ColorStyleEditor(m_pEditorNotebook, IDC_COLOR_STYLE_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
 	pColorStyleEditor->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ImagePackerFrame::OnEditorKeyDown), NULL, this);
-	m_pEditorNotebook->AddPage(pColorStyleEditor, "Color Style Editor");
+	m_pEditorNotebook->AddPage(pColorStyleEditor, _("Color Style Editor"));
 	m_pEditors[EDITOR_COLOR_STYLE] = pColorStyleEditor;
 
 	ClipBitmapStyleEditor* pClipBitmapStyleEditor = new ClipBitmapStyleEditor(m_pEditorNotebook, IDC_CLIP_BITMAP_STYLE_EDITOR_VIEW, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxFRAME_NO_TASKBAR);
 	pClipBitmapStyleEditor->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ImagePackerFrame::OnEditorKeyDown), NULL, this);
-	m_pEditorNotebook->AddPage(pClipBitmapStyleEditor, "Clip Bitmap Style Editor");
+	m_pEditorNotebook->AddPage(pClipBitmapStyleEditor, _("Clip Bitmap Style Editor"));
 	m_pEditors[EDITOR_CLIP_BITMAP_STYLE] = pClipBitmapStyleEditor;
 }
 
 void ImagePackerFrame::CreateOutputView()
 {
 	m_pOutputView = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_MULTILINE|wxNO_BORDER);
-	m_pOutputView->AppendText(wxT("This is output view\n"));
-	m_pOutputView->AppendText(wxT("line 1\n"));
-	m_pOutputView->AppendText(wxT("line 2\n"));
+	m_pOutputView->AppendText(_("This is output view\n"));
+	m_pOutputView->AppendText(_("line 1\n"));
+	m_pOutputView->AppendText(_("line 2\n"));
 
 	m_auiManager.AddPane(m_pOutputView, wxAuiPaneInfo()
-		.Name(wxT("Output"))
-		.Caption(wxT("Output"))
+		.Name(_("Output"))
+		.Caption(_("Output"))
 		.Bottom()
 		.BestSize(wxSize(300, 300))
 		.CloseButton(false)
@@ -524,7 +524,7 @@ void ImagePackerFrame::OnFileOpenProject(wxCommandEvent& event)
 {
 	if (IsModified())
 	{
-		wxMessageDialog dialog(this, wxT("Do you want to save the Project ?"), wxT("Save Project"), wxYES_NO|wxCANCEL);
+		wxMessageDialog dialog(this, _("Do you want to save the Project ?"), _("Save Project"), wxYES_NO|wxCANCEL);
 		switch (dialog .ShowModal())
 		{
 		case wxID_YES:
@@ -545,7 +545,7 @@ void ImagePackerFrame::OnFileOpenProject(wxCommandEvent& event)
 
 void ImagePackerFrame::DoOpenProject()
 {
-	wxFileDialog dialog(this, wxT("Choose a file"), wxEmptyString, wxEmptyString, wxT("Project files (*.ipproj)|*.ipproj"), wxFD_DEFAULT_STYLE);
+	wxFileDialog dialog(this, _("Choose a file"), wxEmptyString, wxEmptyString, _("Project files (*.ipproj)|*.ipproj"), wxFD_DEFAULT_STYLE);
 	if (dialog .ShowModal() == wxID_OK)
 	{
 		SwitchEditor(NUM_EDITOR);
@@ -598,7 +598,7 @@ void ImagePackerFrame::OnClose(wxCloseEvent& event)
 {
 	if (IsModified())
 	{
-		wxMessageDialog dialog(this, wxT("Do you want to save the Project ?"), wxT("Save Project"), wxYES_NO|wxCANCEL);
+		wxMessageDialog dialog(this, _("Do you want to save the Project ?"), _("Save Project"), wxYES_NO|wxCANCEL);
 		switch (dialog .ShowModal())
 		{
 		case wxID_YES:
@@ -639,7 +639,7 @@ void ImagePackerFrame::DoDelete()
 {
 	if (ProjectDocument::GetInstance().GetFilePath().empty())
 	{
-		wxMessageDialog msg(this, wxT("Please open a project first"));
+		wxMessageDialog msg(this, _("Please open a project first"));
 		msg.ShowModal();
 		return;
 	}
@@ -719,10 +719,10 @@ bool ImagePackerFrame::MakeIdsString(wxString& strOut, const TS_WX_STRING& vIds,
 {
 	if (vIds.size() <= 0) return false;
 
-	strOut += wxString::Format("\n\n%s\n", strHeader);
+	strOut += wxString::Format(wxT("\n\n%s\n"), strHeader);
 	for (TS_WX_STRING::const_iterator it = vIds.begin(); it != vIds.end(); ++it)
 	{
-		strOut += wxString::Format("\"%s\" ", (*it));
+		strOut += wxString::Format(wxT("\"%s\" "), (*it));
 	}
 
 	return true;
@@ -740,13 +740,13 @@ void ImagePackerFrame::DoDeletePiece(const PieceInfo* pPieceInfo)
 
 	// make prompt string
 	wxString strDeleteStyles;
-	MakeIdsString(strDeleteStyles, vBitmapStyleIds, wxT("also delete bitmap styles:"));
-	MakeIdsString(strDeleteStyles, vNineGridStyleIds, wxT("also delete 9-grid styles:"));
-	MakeIdsString(strDeleteStyles, vClipBitmapStyleIds, wxT("also delete clip bitmap styles:"));
+	MakeIdsString(strDeleteStyles, vBitmapStyleIds, _("also delete bitmap styles:"));
+	MakeIdsString(strDeleteStyles, vNineGridStyleIds, _("also delete 9-grid styles:"));
+	MakeIdsString(strDeleteStyles, vClipBitmapStyleIds, _("also delete clip bitmap styles:"));
 
 	// prompt
-	wxString wxMsg = wxString::Format(wxT("Do you want to delete the piece: %s ?%s"), pPieceInfo->GetId(), strDeleteStyles);
-	wxMessageDialog msgPrompt(this, wxMsg, wxT("Delete Piece"), wxYES_NO|wxCENTER);
+	wxString wxMsg = wxString::Format(_("Do you want to delete the piece: %s ?%s"), pPieceInfo->GetId(), strDeleteStyles);
+	wxMessageDialog msgPrompt(this, wxMsg, _("Delete Piece"), wxYES_NO|wxCENTER);
 	if (msgPrompt.ShowModal() != wxID_YES) return;
 
 	// delete bitmap styles
@@ -800,14 +800,14 @@ void ImagePackerFrame::DoDeleteImage(const ImageInfo* pImageInfo)
 
 	// make prompt string
 	wxString strDeletePiecesAndStyles;
-	MakeIdsString(strDeletePiecesAndStyles, vPieceInfoIds, wxT("also delete pieces:"));
-	MakeIdsString(strDeletePiecesAndStyles, vBitmapStyleIds, wxT("also delete bitmap styles:"));
-	MakeIdsString(strDeletePiecesAndStyles, vNineGridStyleIds, wxT("also delete 9-grid styles:"));
-	MakeIdsString(strDeletePiecesAndStyles, vClipBitmapStyleIds, wxT("also delete clip bitmap styles:"));
+	MakeIdsString(strDeletePiecesAndStyles, vPieceInfoIds, _("also delete pieces:"));
+	MakeIdsString(strDeletePiecesAndStyles, vBitmapStyleIds, _("also delete bitmap styles:"));
+	MakeIdsString(strDeletePiecesAndStyles, vNineGridStyleIds, _("also delete 9-grid styles:"));
+	MakeIdsString(strDeletePiecesAndStyles, vClipBitmapStyleIds, _("also delete clip bitmap styles:"));
 
 	// prompt
-	wxString wxMsg = wxString::Format(wxT("Do you want to delete the image: %s ?%s"), pImageInfo->GetId(), strDeletePiecesAndStyles);
-	wxMessageDialog msgPrompt(this, wxMsg, wxT("Delete Image"), wxYES_NO|wxCENTER);
+	wxString wxMsg = wxString::Format(_("Do you want to delete the image: %s ?%s"), pImageInfo->GetId(), strDeletePiecesAndStyles);
+	wxMessageDialog msgPrompt(this, wxMsg, _("Delete Image"), wxYES_NO|wxCENTER);
 	if (msgPrompt.ShowModal() != wxID_YES) return;
 
 	// delete bitmap styles
@@ -848,8 +848,8 @@ void ImagePackerFrame::DoDeleteImage(const ImageInfo* pImageInfo)
 void ImagePackerFrame::DoDeleteBitmapStyle(const BitmapStyle* pBitmapStyle)
 {
 	if (!pBitmapStyle) return;
-	wxString wxMsg = wxString::Format(wxT("Do you want to delete the bitmap style: %s"), pBitmapStyle->GetId());
-	wxMessageDialog msgPrompt(this, wxMsg, wxT("Delete Bitmap Style"), wxYES_NO|wxCENTER);
+	wxString wxMsg = wxString::Format(_("Do you want to delete the bitmap style: %s"), pBitmapStyle->GetId());
+	wxMessageDialog msgPrompt(this, wxMsg, _("Delete Bitmap Style"), wxYES_NO|wxCENTER);
 	if (msgPrompt.ShowModal() == wxID_YES)
 	{
 		// delete bitmap style
@@ -863,8 +863,8 @@ void ImagePackerFrame::DoDeleteBitmapStyle(const BitmapStyle* pBitmapStyle)
 void ImagePackerFrame::DoDeleteNineGridStyle(const NineGridStyle* pNineGridStyle)
 {
 	if (!pNineGridStyle) return;
-	wxString wxMsg = wxString::Format(wxT("Do you want to delete the 9-grid style: %s"), pNineGridStyle->GetId());
-	wxMessageDialog msgPrompt(this, wxMsg, wxT("Delete 9-Grid Style"), wxYES_NO|wxCENTER);
+	wxString wxMsg = wxString::Format(_("Do you want to delete the 9-grid style: %s"), pNineGridStyle->GetId());
+	wxMessageDialog msgPrompt(this, wxMsg, _("Delete 9-Grid Style"), wxYES_NO|wxCENTER);
 	if (msgPrompt.ShowModal() == wxID_YES)
 	{
 		// delete nine grid style
@@ -878,8 +878,8 @@ void ImagePackerFrame::DoDeleteNineGridStyle(const NineGridStyle* pNineGridStyle
 void ImagePackerFrame::DoDeleteColorStyle(const ColorStyle* pColorStyle)
 {
 	if (!pColorStyle) return;
-	wxString wxMsg = wxString::Format(wxT("Do you want to delete the color style: %s"), pColorStyle->GetId());
-	wxMessageDialog msgPrompt(this, wxMsg, wxT("Delete Color Style"), wxYES_NO|wxCENTER);
+	wxString wxMsg = wxString::Format(_("Do you want to delete the color style: %s"), pColorStyle->GetId());
+	wxMessageDialog msgPrompt(this, wxMsg, _("Delete Color Style"), wxYES_NO|wxCENTER);
 	if (msgPrompt.ShowModal() == wxID_YES)
 	{
 		// delete color style
@@ -893,8 +893,8 @@ void ImagePackerFrame::DoDeleteColorStyle(const ColorStyle* pColorStyle)
 void ImagePackerFrame::DoDeleteClipBitmapStyle(const ClipBitmapStyle* pClipBitmapStyle)
 {
 	if (!pClipBitmapStyle) return;
-	wxString wxMsg = wxString::Format(wxT("Do you want to delete the clip bitmap style: %s"), pClipBitmapStyle->GetId());
-	wxMessageDialog msgPrompt(this, wxMsg, wxT("Delete Clip Bitmap Style"), wxYES_NO|wxCENTER);
+	wxString wxMsg = wxString::Format(_("Do you want to delete the clip bitmap style: %s"), pClipBitmapStyle->GetId());
+	wxMessageDialog msgPrompt(this, wxMsg, _("Delete Clip Bitmap Style"), wxYES_NO|wxCENTER);
 	if (msgPrompt.ShowModal() == wxID_YES)
 	{
 		// delete clip bitmap style
@@ -909,7 +909,7 @@ void ImagePackerFrame::OnAddPiece(wxCommandEvent& event)
 {
 	if (ProjectDocument::GetInstance().GetFilePath().empty())
 	{
-		wxMessageDialog msg(this, wxT("Please open a project first"));
+		wxMessageDialog msg(this, _("Please open a project first"));
 		msg.ShowModal();
 		return;
 	}
@@ -931,12 +931,12 @@ void ImagePackerFrame::OnAddBitmapStyle(wxCommandEvent& event)
 {
 	if (ProjectDocument::GetInstance().GetFilePath().empty())
 	{
-		wxMessageDialog msg(this, wxT("Please open a project first"));
+		wxMessageDialog msg(this, _("Please open a project first"));
 		msg.ShowModal();
 		return;
 	}
 
-	const BitmapStyle* pNewBitmapStyle = BitmapStyleDocument::GetInstance().AddBitmapStyle("bs_bitmap_style");
+	const BitmapStyle* pNewBitmapStyle = BitmapStyleDocument::GetInstance().AddBitmapStyle(wxT("bs_bitmap_style"));
 	BitmapStyleTransformer::GetInstance().UpdateListView();
 	BitmapStyleTransformer::GetInstance().SetSelectedBitmapStyle(pNewBitmapStyle);
 	m_pListNotebook->SetSelection(LIST_VIEW_BITMAP_STYLE);
@@ -946,12 +946,12 @@ void ImagePackerFrame::OnAddNineGridStyle(wxCommandEvent& event)
 {
 	if (ProjectDocument::GetInstance().GetFilePath().empty())
 	{
-		wxMessageDialog msg(this, wxT("Please open a project first"));
+		wxMessageDialog msg(this, _("Please open a project first"));
 		msg.ShowModal();
 		return;
 	}
 
-	const NineGridStyle* pNewNineGridStyle = NineGridStyleDocument::GetInstance().AddNineGridStyle("ngs_nine_grid_style");
+	const NineGridStyle* pNewNineGridStyle = NineGridStyleDocument::GetInstance().AddNineGridStyle(wxT("ngs_nine_grid_style"));
 	NineGridStyleTransformer::GetInstance().UpdateListView();
 	NineGridStyleTransformer::GetInstance().SetSelectedNineGridStyle(pNewNineGridStyle);
 	m_pListNotebook->SetSelection(LIST_VIEW_NINE_GRID_STYLE);
@@ -961,12 +961,12 @@ void ImagePackerFrame::OnAddColorStyle(wxCommandEvent& event)
 {
 	if (ProjectDocument::GetInstance().GetFilePath().empty())
 	{
-		wxMessageDialog msg(this, wxT("Please open a project first"));
+		wxMessageDialog msg(this, _("Please open a project first"));
 		msg.ShowModal();
 		return;
 	}
 
-	const ColorStyle* pNewColorStyle = ColorStyleDocument::GetInstance().AddColorStyle("cs_color_style");
+	const ColorStyle* pNewColorStyle = ColorStyleDocument::GetInstance().AddColorStyle(wxT("cs_color_style"));
 	ColorStyleTransformer::GetInstance().UpdateListView();
 	ColorStyleTransformer::GetInstance().SetSelectedColorStyle(pNewColorStyle);
 	m_pListNotebook->SetSelection(LIST_VIEW_COLOR_STYLE);
@@ -976,12 +976,12 @@ void ImagePackerFrame::OnAddClipBitmapStyle(wxCommandEvent& event)
 {
 	if (ProjectDocument::GetInstance().GetFilePath().empty())
 	{
-		wxMessageDialog msg(this, wxT("Please open a project first"));
+		wxMessageDialog msg(this, _("Please open a project first"));
 		msg.ShowModal();
 		return;
 	}
 
-	const ClipBitmapStyle* pNewClipBitmapStyle = ClipBitmapStyleDocument::GetInstance().AddClipBitmapStyle("cbs_clip_bitmap_style");
+	const ClipBitmapStyle* pNewClipBitmapStyle = ClipBitmapStyleDocument::GetInstance().AddClipBitmapStyle(wxT("cbs_clip_bitmap_style"));
 	ClipBitmapStyleTransformer::GetInstance().UpdateListView();
 	ClipBitmapStyleTransformer::GetInstance().SetSelectedClipBitmapStyle(pNewClipBitmapStyle);
 	m_pListNotebook->SetSelection(LIST_VIEW_CLIP_BITMAP_STYLE);
@@ -992,7 +992,7 @@ void ImagePackerFrame::OnReplacePiece(wxCommandEvent& event)
 	const ImageInfo* pImageInfo = ImagePieceEditor::GetInstance().GetImageInfo();
 	if (!pImageInfo)
 	{
-		wxMessageDialog msg(this, wxT("Please select a image first"));
+		wxMessageDialog msg(this, _("Please select a image first"));
 		msg.ShowModal();
 		return;
 	}
@@ -1030,7 +1030,7 @@ void ImagePackerFrame::OnExtractImage(wxCommandEvent& event)
 	const ImageInfo* pImageInfo = ImagePieceEditor::GetInstance().GetImageInfo();
 	if (!pImageInfo)
 	{
-		wxMessageDialog msg(this, wxT("Please selected a image first."));
+		wxMessageDialog msg(this, _("Please selected a image first."));
 		msg.ShowModal();
 		return;
 	}
@@ -1041,20 +1041,20 @@ void ImagePackerFrame::OnExtractImage(wxCommandEvent& event)
 	ImagePieceDocument::TV_PIECE_INFO vPieceInfo;
 	if (ImagePieceDocument::GetInstance().EnumImagePieces(vPieceInfo, pImageInfo) <= 0) return;
 
-	wxDirDialog dialog(this, wxT("Choose a directory to extract"), wxEmptyString, wxDD_NEW_DIR_BUTTON);
+	wxDirDialog dialog(this, _("Choose a directory to extract"), wxEmptyString, wxDD_NEW_DIR_BUTTON);
 	if (dialog.ShowModal() != wxID_OK) return;
 
 	for (ImagePieceDocument::TV_PIECE_INFO::iterator it = vPieceInfo.begin(); it != vPieceInfo.end(); ++it)
 	{
 		const PieceInfo* pPieceInfo = (*it);
 		wxBitmap bitmap = pImageBitmap->GetSubBitmap(pPieceInfo->GetRect());
-		bitmap.SaveFile(dialog.GetPath() + "/" + pPieceInfo->GetId() + ".png", wxBITMAP_TYPE_PNG);
+		bitmap.SaveFile(dialog.GetPath() + wxT("/") + pPieceInfo->GetId() + wxT(".png"), wxBITMAP_TYPE_PNG);
 	}
 }
 
 void ImagePackerFrame::OnHelpAbout(wxCommandEvent& event)
 {
-	wxMessageDialog about(this, Config::m_strAbout, wxT("About"), wxOK|wxCENTRE|wxICON_INFORMATION);
+	wxMessageDialog about(this, Config::GetInstance().GetAbout(), _("About"), wxOK|wxCENTRE|wxICON_INFORMATION);
 	about.ShowModal();
 }
 

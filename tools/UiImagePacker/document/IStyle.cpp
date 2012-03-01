@@ -36,3 +36,15 @@ const wxTreeItemId& IStyle::GetTreeItemId() const
 {
 	return m_TreeItemId;
 }
+
+wxXmlNode* IStyle::FindXmlChild(wxXmlNode* pParent, const wxString& name)
+{
+	wxXmlNode* pChild = pParent->GetChildren();
+	while (pChild)
+	{
+		if (pChild->GetName() == name) return pChild;
+		pChild = pChild->GetNext();
+	}
+
+	return NULL;
+}

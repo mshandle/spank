@@ -57,16 +57,16 @@ void PieceListTransformer::UpdateProperty(const PieceInfo* pPieceInfo)
 	ImagePackerFrame::GetInstance().SetCurrPropertyType(ImagePackerFrame::PT_UNKNOWN);
 	if (!pPieceInfo) return;
 
-	m_pPropertyGrid->Append(new wxStringProperty("id", "id", pPieceInfo->GetId()));
-	m_pPropertyGrid->Append(new wxStringProperty("image_id", "image_id", pPieceInfo->GetImageInfo()->GetId()))->Enable(false);
+	m_pPropertyGrid->Append(new wxStringProperty(_("id"), wxT("id"), pPieceInfo->GetId()));
+	m_pPropertyGrid->Append(new wxStringProperty(_("image_id"), wxT("image_id"), pPieceInfo->GetImageInfo()->GetId()))->Enable(false);
 
-	m_pPropertyGrid->Append(new wxPropertyCategory("position", "position"));
-	m_pPropertyGrid->Append(new wxIntProperty("x", "x", pPieceInfo->GetRect().x))->Enable(false);
-	m_pPropertyGrid->Append(new wxIntProperty("y", "y", pPieceInfo->GetRect().y))->Enable(false);
+	m_pPropertyGrid->Append(new wxPropertyCategory(_("position"), wxT("position")));
+	m_pPropertyGrid->Append(new wxIntProperty(_("x"), wxT("x"), pPieceInfo->GetRect().x))->Enable(false);
+	m_pPropertyGrid->Append(new wxIntProperty(_("y"), wxT("y"), pPieceInfo->GetRect().y))->Enable(false);
 
-	m_pPropertyGrid->Append(new wxPropertyCategory("size", "size"));
-	m_pPropertyGrid->Append(new wxIntProperty("width", "width", pPieceInfo->GetRect().width))->Enable(false);
-	m_pPropertyGrid->Append(new wxIntProperty("height", "height", pPieceInfo->GetRect().height))->Enable(false);
+	m_pPropertyGrid->Append(new wxPropertyCategory(_("size"), wxT("size")));
+	m_pPropertyGrid->Append(new wxIntProperty(_("width"), wxT("width"), pPieceInfo->GetRect().width))->Enable(false);
+	m_pPropertyGrid->Append(new wxIntProperty(_("height"), wxT("height"), pPieceInfo->GetRect().height))->Enable(false);
 
 	ImagePackerFrame::GetInstance().SetCurrPropertyType(ImagePackerFrame::PT_PIECE);
 }
@@ -76,7 +76,7 @@ void PieceListTransformer::PropertyChanged(const wxPGProperty* pProperty)
 	const PieceInfo* pPieceInfo = GetSelectedPieceInfo();
 	if (!pPieceInfo) return;
 
-	if (pProperty->GetName() == "id")
+	if (pProperty->GetName() == wxT("id"))
 	{
 		wxString strNewId = pProperty->GetValueAsString();
 		if (ImagePieceDocument::GetInstance().RenamePieceInfoId(pPieceInfo, strNewId))

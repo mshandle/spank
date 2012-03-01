@@ -12,7 +12,7 @@ void FileUtil::FormatDir(wxString& strDirInOut)
 	while (strDirInOut.rbegin() != strDirInOut.rend())
 	{
 		char ch = (*strDirInOut.rbegin());
-		if (ch == '\\' || ch == '/')
+		if (ch == wxT('\\') || ch == wxT('/'))
 		{
 			strDirInOut.erase(strDirInOut.length()-1, 1);
 		}
@@ -22,7 +22,7 @@ void FileUtil::FormatDir(wxString& strDirInOut)
 		}
 	}
 
-	strDirInOut.Replace("\\", "/");
+	strDirInOut.Replace(wxT("\\"), wxT("/"));
 }
 
 wxString FileUtil::GetFileName(const wxString& strPath)
@@ -30,7 +30,7 @@ wxString FileUtil::GetFileName(const wxString& strPath)
 	int nStartPos = 0;
 	for (int i = (int)strPath.length()-1; i >= 0; --i)
 	{
-		if (strPath[i] == '\\' || strPath[i] == '/')
+		if (strPath[i] == wxT('\\') || strPath[i] == wxT('/'))
 		{
 			nStartPos = i;
 			break;
@@ -40,7 +40,7 @@ wxString FileUtil::GetFileName(const wxString& strPath)
 	int nEndPos = nStartPos;
 	for (; nEndPos < (int)strPath.length(); ++nEndPos)
 	{
-		if (strPath[nEndPos] == '.') break;
+		if (strPath[nEndPos] == wxT('.')) break;
 	}
 
 	return strPath.SubString(nStartPos+1, nEndPos-1);
@@ -52,10 +52,10 @@ wxString FileUtil::RemoveRootDir(const wxString& strPath, const wxString& strRoo
 	if (nMinLen > (int)strPath.length()) nMinLen = strPath.length();
 
 	wxString strPathFormated = strPath.Lower();
-	strPathFormated.Replace("\\", "/");
+	strPathFormated.Replace(wxT("\\"), wxT("/"));
 
 	wxString strRootDirFormated = strRootDir.Lower();
-	strRootDirFormated.Replace("\\", "/");
+	strRootDirFormated.Replace(wxT("\\"), wxT("/"));
 
 	int nEndPos = 0;
 	for (; nEndPos < nMinLen; ++nEndPos)
@@ -71,14 +71,14 @@ void FileUtil::FormatId(wxString& strId)
 	strId = strId.Lower();
 	for (int i = 0; i < (int)strId.length(); ++i)
 	{
-		if ((strId[i] >= 'a' && strId[i] <= 'z')
-			|| (strId[i] >= '0' && strId[i] <= '9'))
+		if ((strId[i] >= wxT('a') && strId[i] <= wxT('z'))
+			|| (strId[i] >= wxT('0') && strId[i] <= wxT('9')))
 		{
 			// TODO: 
 		}
 		else
 		{
-			strId[i] = '_';
+			strId[i] = wxT('_');
 		}
 	}
 }

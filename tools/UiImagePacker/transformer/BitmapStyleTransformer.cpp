@@ -59,20 +59,20 @@ void BitmapStyleTransformer::UpdateProperty(const BitmapStyle* pBitmapStyle)
 	ImagePackerFrame::GetInstance().SetCurrPropertyType(ImagePackerFrame::PT_UNKNOWN);
 	if (!pBitmapStyle) return;
 
-	m_pPropertyGrid->Append(new wxStringProperty("id", "id", pBitmapStyle->GetId()));
+	m_pPropertyGrid->Append(new wxStringProperty(_("id"), wxT("id"), pBitmapStyle->GetId()));
 
 	const wxArrayString& pieceIds = ImagePieceDocument::GetInstance().GetPieceIds();
 	const wxArrayInt& pieceIdsIndex = ImagePieceDocument::GetInstance().GetPieceIdsIndex();
 	int value = -1;
 
 	value = ImagePieceDocument::GetInstance().FindPieceIndex(pBitmapStyle->GetStatePiece(IStyle::SS_NORMAL));
-	m_pPropertyGrid->Append(new wxEnumProperty("normal", "normal", pieceIds, pieceIdsIndex, value));
+	m_pPropertyGrid->Append(new wxEnumProperty(_("normal"), wxT("normal"), pieceIds, pieceIdsIndex, value));
 	value = ImagePieceDocument::GetInstance().FindPieceIndex(pBitmapStyle->GetStatePiece(IStyle::SS_DOWN));
-	m_pPropertyGrid->Append(new wxEnumProperty("down", "down", pieceIds, pieceIdsIndex, value));
+	m_pPropertyGrid->Append(new wxEnumProperty(_("down"), wxT("down"), pieceIds, pieceIdsIndex, value));
 	value = ImagePieceDocument::GetInstance().FindPieceIndex(pBitmapStyle->GetStatePiece(IStyle::SS_HOVER));
-	m_pPropertyGrid->Append(new wxEnumProperty("hover", "hover", pieceIds, pieceIdsIndex, value));
+	m_pPropertyGrid->Append(new wxEnumProperty(_("hover"), wxT("hover"), pieceIds, pieceIdsIndex, value));
 	value = ImagePieceDocument::GetInstance().FindPieceIndex(pBitmapStyle->GetStatePiece(IStyle::SS_DISABLED));
-	m_pPropertyGrid->Append(new wxEnumProperty("disabled", "disabled", pieceIds, pieceIdsIndex, value));
+	m_pPropertyGrid->Append(new wxEnumProperty(_("disabled"), wxT("disabled"), pieceIds, pieceIdsIndex, value));
 
 	ImagePackerFrame::GetInstance().SetCurrPropertyType(ImagePackerFrame::PT_BITMAP_STYLE);
 }
@@ -83,7 +83,7 @@ void BitmapStyleTransformer::PropertyChanged(wxPGProperty* pProperty)
 	if (!pBitmapStyle) return;
 
 	bool bRedraw = false;
-	if (pProperty->GetName() == "id")
+	if (pProperty->GetName() == wxT("id"))
 	{
 		wxString strNewId = pProperty->GetValueAsString();
 		if (BitmapStyleDocument::GetInstance().RenameBitmapStyleId(pBitmapStyle, strNewId))
@@ -94,22 +94,22 @@ void BitmapStyleTransformer::PropertyChanged(wxPGProperty* pProperty)
 			m_bSkipUpdateProperty = false;
 		}
 	}
-	else if (pProperty->GetName() == "normal")
+	else if (pProperty->GetName() == wxT("normal"))
 	{
 		wxString strNewPieceId = pProperty->GetValueAsString();
 		bRedraw = BitmapStyleDocument::GetInstance().SetStatePiece(pBitmapStyle, ImagePieceDocument::GetInstance().FindPieceInfo(strNewPieceId), IStyle::SS_NORMAL);
 	}
-	else if (pProperty->GetName() == "down")
+	else if (pProperty->GetName() == wxT("down"))
 	{
 		wxString strNewPieceId = pProperty->GetValueAsString();
 		bRedraw = BitmapStyleDocument::GetInstance().SetStatePiece(pBitmapStyle, ImagePieceDocument::GetInstance().FindPieceInfo(strNewPieceId), IStyle::SS_DOWN);
 	}
-	else if (pProperty->GetName() == "hover")
+	else if (pProperty->GetName() == wxT("hover"))
 	{
 		wxString strNewPieceId = pProperty->GetValueAsString();
 		bRedraw = BitmapStyleDocument::GetInstance().SetStatePiece(pBitmapStyle, ImagePieceDocument::GetInstance().FindPieceInfo(strNewPieceId), IStyle::SS_HOVER);
 	}
-	else if (pProperty->GetName() == "disabled")
+	else if (pProperty->GetName() == wxT("disabled"))
 	{
 		wxString strNewPieceId = pProperty->GetValueAsString();
 		bRedraw = BitmapStyleDocument::GetInstance().SetStatePiece(pBitmapStyle, ImagePieceDocument::GetInstance().FindPieceInfo(strNewPieceId), IStyle::SS_DISABLED);

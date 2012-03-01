@@ -8,7 +8,7 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
-#include <wx/string.h>
+#include <wx/wx.h>
 
 class Config
 {
@@ -22,7 +22,14 @@ public:
 	};
 
 public:
-	static wxString m_strAbout;
+	Config();
+	~Config();
+
+	static Config& GetInstance();
+	const wxString& GetAbout();
+
+public:
+	wxString m_strAbout;
 
 };
 #endif // __CONFIG_H__
