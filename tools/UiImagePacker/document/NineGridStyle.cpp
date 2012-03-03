@@ -91,11 +91,11 @@ bool NineGridStyle::LoadStateInfo(NINE_GRID_INFO& NineGridInfoOut, wxXmlNode* pN
 	wxString value = pNodeState->GetAttribute(wxT("min_x"));
 	value.ToLong((long*)&NineGridInfoOut.min_x);
 	value = pNodeState->GetAttribute(wxT("min_y"));
-	value.ToLong((long*)&NineGridInfoOut.min_x);
+	value.ToLong((long*)&NineGridInfoOut.min_y);
 	value = pNodeState->GetAttribute(wxT("max_x"));
-	value.ToLong((long*)&NineGridInfoOut.min_x);
+	value.ToLong((long*)&NineGridInfoOut.max_x);
 	value = pNodeState->GetAttribute(wxT("max_y"));
-	value.ToLong((long*)&NineGridInfoOut.min_x);
+	value.ToLong((long*)&NineGridInfoOut.max_y);
 
 	return true;
 }
