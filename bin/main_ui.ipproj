@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ud_project root_dir="ui" >
+<ip_project root_dir="ui" >
 	<image_piece path="ui/main_ui/MainImagePieceList.xml" />
 	<bitmap_style path="ui/main_ui/MainBitmapStyleList.xml" />
 	<nine_grid_style path="ui/main_ui/MainNineGridStyleList.xml" />
 	<color_style path="ui/main_ui/MainColorStyleList.xml" />
 	<clip_bitmap_style path="ui/main_ui/MainClipBitmapStyleList.xml" />
-</ud_project>
+</ip_project>
