@@ -9,7 +9,7 @@
 
 IStyle::IStyle()
 {
-	// TODO: 
+	m_AutoGenBitmap = false;
 }
 
 IStyle::~IStyle()
@@ -47,4 +47,14 @@ wxXmlNode* IStyle::FindXmlChild(wxXmlNode* pParent, const wxString& name)
 	}
 
 	return NULL;
+}
+
+void IStyle::SetAutoGenBitmap(bool bAutoGenBitmap)
+{
+	m_AutoGenBitmap = bAutoGenBitmap;
+}
+
+bool IStyle::isAutoGenBitmap() const
+{
+	return m_AutoGenBitmap;
 }

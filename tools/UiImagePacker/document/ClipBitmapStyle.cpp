@@ -29,6 +29,11 @@ bool ClipBitmapStyle::LoadFromXml(wxXmlNode* pNodeClipBitmapStyle)
 	wxString strId = pNodeClipBitmapStyle->GetAttribute(wxT("id"));
 	SetId(strId);
 
+	if (pNodeClipBitmapStyle->GetAttribute(wxT("auto_bitmap")) == wxT("true"))
+	{
+		SetAutoGenBitmap(true);
+	}
+
 	m_PieceInfo[SS_NORMAL] = LoadStateInfo(pNodeClipBitmapStyle, wxT("normal"), NULL);
 	if (!m_PieceInfo[SS_NORMAL]) return false;
 
@@ -45,6 +50,7 @@ bool ClipBitmapStyle::SaveToXml(wxXmlNode* pNodeClipBitmapStyleList)
 
 	wxXmlNode* pNodeClipBitmapStyle = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("ClipBitmapStyle"));
 	pNodeClipBitmapStyle->AddAttribute(wxT("id"), GetId());
+	if (isAutoGenBitmap()) pNodeClipBitmapStyle->AddAttribute(wxT("auto_bitmap"), wxT("true"));
 
 	if (!SaveStateInfo(pNodeClipBitmapStyle, wxT("normal"), m_PieceInfo[SS_NORMAL]))
 	{

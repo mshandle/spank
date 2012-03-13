@@ -145,6 +145,18 @@ bool BitmapStyleDocument::RenameBitmapStyleId(const BitmapStyle* pBitmapStyle, c
 	return true;
 }
 
+bool BitmapStyleDocument::SetAutoGenBitmap(const BitmapStyle* pBitmapStyle, bool bAutoGenBitmap)
+{
+	if (!pBitmapStyle) return false;
+
+	BitmapStyle* pFoundBitmapStyle = InternalFindBitmapStyle(pBitmapStyle->GetId());
+	if (!pFoundBitmapStyle) return false;
+	SetModifiedFlag();
+
+	pFoundBitmapStyle->SetAutoGenBitmap(bAutoGenBitmap);
+	return true;
+}
+
 bool BitmapStyleDocument::SetStatePiece(const BitmapStyle* pBitmapStyle, const PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState)
 {
 	if (!pBitmapStyle) return false;

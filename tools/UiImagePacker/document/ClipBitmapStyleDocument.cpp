@@ -145,6 +145,18 @@ bool ClipBitmapStyleDocument::RenameClipBitmapStyleId(const ClipBitmapStyle* pCl
 	return true;
 }
 
+bool ClipBitmapStyleDocument::SetAutoGenBitmap(const ClipBitmapStyle* pClipBitmapStyle, bool bAutoGenBitmap)
+{
+	if (!pClipBitmapStyle) return false;
+
+	ClipBitmapStyle* pFoundClipBitmapStyle = InternalFindClipBitmapStyle(pClipBitmapStyle->GetId());
+	if (!pFoundClipBitmapStyle) return false;
+	SetModifiedFlag();
+
+	pFoundClipBitmapStyle->SetAutoGenBitmap(bAutoGenBitmap);
+	return true;
+}
+
 bool ClipBitmapStyleDocument::SetStatePiece(const ClipBitmapStyle* pClipBitmapStyle, const PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState)
 {
 	if (!pClipBitmapStyle) return false;

@@ -32,6 +32,7 @@ public:
 	int EnumNineGridStyles(TV_NINE_GRID_STYLE& vNineGridStyleOut, const PieceInfo* pPieceInfo);
 
 	bool RenameNineGridStyleId(const NineGridStyle* pNineGridStyle, const wxString& strNewId);
+	bool SetAutoGenBitmap(const NineGridStyle* pNineGridStyle, bool bAutoGenBitmap);
 	bool SetStatePiece(const NineGridStyle* pNineGridStyle, const PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState);
 	bool SetStateMinX(const NineGridStyle* pNineGridStyle, int value, IStyle::STYLE_STATE eState);
 	bool SetStateMinY(const NineGridStyle* pNineGridStyle, int value, IStyle::STYLE_STATE eState);

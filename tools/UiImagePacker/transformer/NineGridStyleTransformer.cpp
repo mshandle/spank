@@ -60,6 +60,7 @@ void NineGridStyleTransformer::UpdateProperty(const NineGridStyle* pNineGrieStyl
 	if (!pNineGrieStyle) return;
 
 	m_pPropertyGrid->Append(new wxStringProperty(_("id"), wxT("id"), pNineGrieStyle->GetId()));
+	m_pPropertyGrid->Append(new wxBoolProperty(_("auto gen bitmap"), wxT("auto_bitmap"), pNineGrieStyle->isAutoGenBitmap()))->SetAttribute(wxPG_BOOL_USE_CHECKBOX, true);
 
 	const wxArrayString& pieceIds = ImagePieceDocument::GetInstance().GetPieceIds();
 	const wxArrayInt& pieceIdsIndex = ImagePieceDocument::GetInstance().GetPieceIdsIndex();
@@ -118,6 +119,11 @@ void NineGridStyleTransformer::PropertyChanged(const wxPGProperty* pProperty)
 			SetSelectedNineGridStyle(pNineGridStyle);
 			m_bSkipUpdateProperty = false;
 		}
+	}
+	else if (pProperty->GetName() == wxT("auto_bitmap"))
+	{
+		bool bAutoGenBitmap = pProperty->GetValue().GetBool();
+		bRefresh = NineGridStyleDocument::GetInstance().SetAutoGenBitmap(pNineGridStyle, bAutoGenBitmap);
 	}
 	else if (pProperty->GetName() == wxT("normal_piece_id"))
 	{

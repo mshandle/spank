@@ -60,6 +60,7 @@ void BitmapStyleTransformer::UpdateProperty(const BitmapStyle* pBitmapStyle)
 	if (!pBitmapStyle) return;
 
 	m_pPropertyGrid->Append(new wxStringProperty(_("id"), wxT("id"), pBitmapStyle->GetId()));
+	m_pPropertyGrid->Append(new wxBoolProperty(_("auto gen bitmap"), wxT("auto_bitmap"), pBitmapStyle->isAutoGenBitmap()))->SetAttribute(wxPG_BOOL_USE_CHECKBOX, true);
 
 	const wxArrayString& pieceIds = ImagePieceDocument::GetInstance().GetPieceIds();
 	const wxArrayInt& pieceIdsIndex = ImagePieceDocument::GetInstance().GetPieceIdsIndex();
@@ -93,6 +94,11 @@ void BitmapStyleTransformer::PropertyChanged(wxPGProperty* pProperty)
 			SetSelectedBitmapStyle(pBitmapStyle);
 			m_bSkipUpdateProperty = false;
 		}
+	}
+	else if (pProperty->GetName() == wxT("auto_bitmap"))
+	{
+		bool bAutoGenBitmap = pProperty->GetValue().GetBool();
+		bRedraw = BitmapStyleDocument::GetInstance().SetAutoGenBitmap(pBitmapStyle, bAutoGenBitmap);
 	}
 	else if (pProperty->GetName() == wxT("normal"))
 	{

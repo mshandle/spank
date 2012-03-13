@@ -32,6 +32,7 @@ public:
 	int EnumClipBitmapStyles(TV_CLIP_BITMAP_STYLE& vClipBitmapStyleOut, const PieceInfo* pPieceInfo);
 
 	bool RenameClipBitmapStyleId(const ClipBitmapStyle* pClipBitmapStyle, const wxString& strNewId);
+	bool SetAutoGenBitmap(const ClipBitmapStyle* pClipBitmapStyle, bool bAutoGenBitmap);
 	bool SetStatePiece(const ClipBitmapStyle* pClipBitmapStyle, const PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState);
 
 	const ClipBitmapStyle* AddClipBitmapStyle(const wxString& strId);

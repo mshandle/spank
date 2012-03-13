@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UiImagePacker\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-03 13:40+0800\n"
-"PO-Revision-Date: 2012-03-03 13:44+0800\n"
+"POT-Creation-Date: 2012-03-13 16:54+0800\n"
+"PO-Revision-Date: 2012-03-13 16:54+0800\n"
 "Last-Translator: zjhlogo <zjhlogo@gmail.com>\n"
 "Language-Team: zjhlogo <zjhlogo@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -507,7 +507,7 @@ msgstr ""
 msgid "Load Bimap Failed: %s"
 msgstr "加载位图失败: %s"
 
-#: document/BitmapStyle.cpp:88
+#: document/BitmapStyle.cpp:94
 #, c-format
 msgid "can not found piece id=%s, for bitmap style id=%s"
 msgstr "无法找到切片Id=%s, 位图样式Id=%s"
@@ -522,7 +522,7 @@ msgstr "加载位图样式失败, Id=%s"
 msgid "save bitmap style failed, id=%s"
 msgstr "保存位图样式失败, Id=%s"
 
-#: document/ClipBitmapStyle.cpp:89
+#: document/ClipBitmapStyle.cpp:95
 #, c-format
 msgid "can not found piece id=%s, for clip bitmap style id=%s"
 msgstr "无法找到切片Id=%s, 裁剪的位图样式Id=%s"
@@ -567,7 +567,7 @@ msgstr "加载图片失败, Id=%s"
 msgid "load piece failed, id=%s"
 msgstr "加载切片失败, Id=%s"
 
-#: document/NineGridStyle.cpp:85
+#: document/NineGridStyle.cpp:91
 #, c-format
 msgid "can not found piece id=%s, for 9-grid style id=%s"
 msgstr "无法找到切片 Id=%s, 9宫格样式 Id=%s"
@@ -591,31 +591,37 @@ msgstr "保存9宫格样式失败, Id=%s"
 msgid "id"
 msgstr "Id"
 
-#: transformer/BitmapStyleTransformer.cpp:69
-#: transformer/ClipBitmapStyleTransformer.cpp:69
+#: transformer/BitmapStyleTransformer.cpp:63
+#: transformer/ClipBitmapStyleTransformer.cpp:63
+#: transformer/NineGridStyleTransformer.cpp:63
+msgid "auto gen bitmap"
+msgstr "自动生成状态图片"
+
+#: transformer/BitmapStyleTransformer.cpp:70
+#: transformer/ClipBitmapStyleTransformer.cpp:70
 #: transformer/ColorStyleTransformer.cpp:66
-#: transformer/NineGridStyleTransformer.cpp:68
+#: transformer/NineGridStyleTransformer.cpp:69
 msgid "normal"
 msgstr "默认"
 
-#: transformer/BitmapStyleTransformer.cpp:71
-#: transformer/ClipBitmapStyleTransformer.cpp:71
+#: transformer/BitmapStyleTransformer.cpp:72
+#: transformer/ClipBitmapStyleTransformer.cpp:72
 #: transformer/ColorStyleTransformer.cpp:68
-#: transformer/NineGridStyleTransformer.cpp:76
+#: transformer/NineGridStyleTransformer.cpp:77
 msgid "down"
 msgstr "按下"
 
-#: transformer/BitmapStyleTransformer.cpp:73
-#: transformer/ClipBitmapStyleTransformer.cpp:73
+#: transformer/BitmapStyleTransformer.cpp:74
+#: transformer/ClipBitmapStyleTransformer.cpp:74
 #: transformer/ColorStyleTransformer.cpp:70
-#: transformer/NineGridStyleTransformer.cpp:84
+#: transformer/NineGridStyleTransformer.cpp:85
 msgid "hover"
 msgstr "鼠标经过"
 
-#: transformer/BitmapStyleTransformer.cpp:75
-#: transformer/ClipBitmapStyleTransformer.cpp:75
+#: transformer/BitmapStyleTransformer.cpp:76
+#: transformer/ClipBitmapStyleTransformer.cpp:76
 #: transformer/ColorStyleTransformer.cpp:72
-#: transformer/NineGridStyleTransformer.cpp:92
+#: transformer/NineGridStyleTransformer.cpp:93
 msgid "disabled"
 msgstr "禁用"
 
@@ -638,38 +644,38 @@ msgstr "宽度"
 msgid "height"
 msgstr "高度"
 
-#: transformer/NineGridStyleTransformer.cpp:70
-#: transformer/NineGridStyleTransformer.cpp:78
-#: transformer/NineGridStyleTransformer.cpp:86
-#: transformer/NineGridStyleTransformer.cpp:94
-msgid "piece_id"
-msgstr "切片Id"
-
 #: transformer/NineGridStyleTransformer.cpp:71
 #: transformer/NineGridStyleTransformer.cpp:79
 #: transformer/NineGridStyleTransformer.cpp:87
 #: transformer/NineGridStyleTransformer.cpp:95
-msgid "min_x"
-msgstr "左上角X"
+msgid "piece_id"
+msgstr "切片Id"
 
 #: transformer/NineGridStyleTransformer.cpp:72
 #: transformer/NineGridStyleTransformer.cpp:80
 #: transformer/NineGridStyleTransformer.cpp:88
 #: transformer/NineGridStyleTransformer.cpp:96
-msgid "min_y"
-msgstr "左上角Y"
+msgid "min_x"
+msgstr "左上角X"
 
 #: transformer/NineGridStyleTransformer.cpp:73
 #: transformer/NineGridStyleTransformer.cpp:81
 #: transformer/NineGridStyleTransformer.cpp:89
 #: transformer/NineGridStyleTransformer.cpp:97
-msgid "max_x"
-msgstr "右下角X"
+msgid "min_y"
+msgstr "左上角Y"
 
 #: transformer/NineGridStyleTransformer.cpp:74
 #: transformer/NineGridStyleTransformer.cpp:82
 #: transformer/NineGridStyleTransformer.cpp:90
 #: transformer/NineGridStyleTransformer.cpp:98
+msgid "max_x"
+msgstr "右下角X"
+
+#: transformer/NineGridStyleTransformer.cpp:75
+#: transformer/NineGridStyleTransformer.cpp:83
+#: transformer/NineGridStyleTransformer.cpp:91
+#: transformer/NineGridStyleTransformer.cpp:99
 msgid "max_y"
 msgstr "右下角Y"
 

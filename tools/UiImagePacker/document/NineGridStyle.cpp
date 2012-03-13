@@ -29,6 +29,11 @@ bool NineGridStyle::LoadFromXml(wxXmlNode* pNodeNineGridStyle)
 	wxString strId = pNodeNineGridStyle->GetAttribute(wxT("id"));
 	SetId(strId);
 
+	if (pNodeNineGridStyle->GetAttribute(wxT("auto_bitmap")) == wxT("true"))
+	{
+		SetAutoGenBitmap(true);
+	}
+
 	if (!LoadStateInfo(m_NineGridInfo[SS_NORMAL], pNodeNineGridStyle, wxT("normal"))) return false;
 	LoadStateInfo(m_NineGridInfo[SS_DOWN], pNodeNineGridStyle, wxT("down"));
 	LoadStateInfo(m_NineGridInfo[SS_HOVER], pNodeNineGridStyle, wxT("hover"));
@@ -37,24 +42,25 @@ bool NineGridStyle::LoadFromXml(wxXmlNode* pNodeNineGridStyle)
 	return true;
 }
 
-bool NineGridStyle::SaveToXml(wxXmlNode* pNodeBitmapStyleList)
+bool NineGridStyle::SaveToXml(wxXmlNode* pNodeNineGridStyleList)
 {
-	if (!pNodeBitmapStyleList) return false;
+	if (!pNodeNineGridStyleList) return false;
 
-	wxXmlNode* pNodeBitmapStyle = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("NineGridStyle"));
-	pNodeBitmapStyle->AddAttribute(wxT("id"), GetId());
+	wxXmlNode* pNodeNineGridStyle = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("NineGridStyle"));
+	pNodeNineGridStyle->AddAttribute(wxT("id"), GetId());
+	if (isAutoGenBitmap()) pNodeNineGridStyle->AddAttribute(wxT("auto_bitmap"), wxT("true"));
 
-	if (!SaveStateInfo(pNodeBitmapStyle, wxT("normal"), m_NineGridInfo[SS_NORMAL]))
+	if (!SaveStateInfo(pNodeNineGridStyle, wxT("normal"), m_NineGridInfo[SS_NORMAL]))
 	{
-		SAFE_DELETE(pNodeBitmapStyle);
+		SAFE_DELETE(pNodeNineGridStyle);
 		return false;
 	}
 
-	if (!IsNormalGrid(m_NineGridInfo[SS_DOWN])) SaveStateInfo(pNodeBitmapStyle, wxT("down"), m_NineGridInfo[SS_DOWN]);
-	if (!IsNormalGrid(m_NineGridInfo[SS_HOVER])) SaveStateInfo(pNodeBitmapStyle, wxT("hover"), m_NineGridInfo[SS_HOVER]);
-	if (!IsNormalGrid(m_NineGridInfo[SS_DISABLED])) SaveStateInfo(pNodeBitmapStyle, wxT("disabled"), m_NineGridInfo[SS_DISABLED]);
+	if (!IsNormalGrid(m_NineGridInfo[SS_DOWN])) SaveStateInfo(pNodeNineGridStyle, wxT("down"), m_NineGridInfo[SS_DOWN]);
+	if (!IsNormalGrid(m_NineGridInfo[SS_HOVER])) SaveStateInfo(pNodeNineGridStyle, wxT("hover"), m_NineGridInfo[SS_HOVER]);
+	if (!IsNormalGrid(m_NineGridInfo[SS_DISABLED])) SaveStateInfo(pNodeNineGridStyle, wxT("disabled"), m_NineGridInfo[SS_DISABLED]);
 
-	pNodeBitmapStyleList->AddChild(pNodeBitmapStyle);
+	pNodeNineGridStyleList->AddChild(pNodeNineGridStyle);
 	return true;
 }
 
@@ -103,6 +109,8 @@ bool NineGridStyle::LoadStateInfo(NINE_GRID_INFO& NineGridInfoOut, wxXmlNode* pN
 bool NineGridStyle::SaveStateInfo(wxXmlNode* pNodeNineGridStyle, const wxString& strState, const NINE_GRID_INFO& NineGridInfo)
 {
 	if (!NineGridInfo.pPieceInfo) return false;
+	if (NineGridInfo.min_x == NineGridInfo.max_x && NineGridInfo.min_y == NineGridInfo.max_y) return false;
+	if (NineGridInfo.min_x > NineGridInfo.max_x || NineGridInfo.min_y > NineGridInfo.max_y) return false;
 
 	wxXmlNode* pNodeState = new wxXmlNode(wxXML_ELEMENT_NODE, strState);
 	pNodeState->AddAttribute(wxT("piece_id"), NineGridInfo.pPieceInfo->GetId());

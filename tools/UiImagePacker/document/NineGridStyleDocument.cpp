@@ -143,6 +143,18 @@ bool NineGridStyleDocument::RenameNineGridStyleId(const NineGridStyle* pNineGrid
 	return true;
 }
 
+bool NineGridStyleDocument::SetAutoGenBitmap(const NineGridStyle* pNineGridStyle, bool bAutoGenBitmap)
+{
+	if (!pNineGridStyle) return false;
+
+	NineGridStyle* pFoundNineGridStyle = InternalFindNineGridStyle(pNineGridStyle->GetId());
+	if (!pFoundNineGridStyle) return false;
+	SetModifiedFlag();
+
+	pFoundNineGridStyle->SetAutoGenBitmap(bAutoGenBitmap);
+	return true;
+}
+
 bool NineGridStyleDocument::SetStatePiece(const NineGridStyle* pNineGridStyle, const PieceInfo* pPieceInfo, IStyle::STYLE_STATE eState)
 {
 	if (!pNineGridStyle) return false;

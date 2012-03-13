@@ -31,6 +31,9 @@ public:
 	void SetId(const wxString& strId);
 	const wxString& GetId() const;
 
+	void SetAutoGenBitmap(bool bAutoGenBitmap);
+	bool isAutoGenBitmap() const;
+
 	void SetTreeItemId(wxTreeItemId itemId);
 	const wxTreeItemId& GetTreeItemId() const;
 
@@ -40,6 +43,7 @@ protected:
 private:
 	wxString m_strId;
 	wxTreeItemId m_TreeItemId;
+	bool m_AutoGenBitmap;
 
 };
 
