@@ -571,7 +571,7 @@ bool DialogAddPiece::GeneratePackingInfo(TV_PACKING_PIECE_INFO& vPackingInfo, co
 		pPackingInfo->pNode = m_Packer.Insert(pPackingInfo->bmpSize.x, pPackingInfo->bmpSize.y);
 		if (!pPackingInfo->pNode)
 		{
-			m_strError = wxString::Format(wxT("Not enough space to pack sub bitmaps %s"), pPackingInfo->strId);
+			m_strError = wxString::Format(_("Not enough space to pack sub bitmaps %s"), pPackingInfo->strId);
 			return false;
 		}
 	}
@@ -594,7 +594,7 @@ bool DialogAddPiece::GetPieceFromList(TV_PACKING_PIECE_INFO& vPackingInfo)
 		if (!pPackingInfo->subBitmap.LoadFile(strPath, wxBITMAP_TYPE_ANY))
 		{
 			SAFE_DELETE(pPackingInfo);
-			m_strError = wxString::Format(wxT("Load Bimap Failed: %s"), strPath);
+			m_strError = wxString::Format(_("Load Bimap Failed: %s"), strPath);
 			return false;
 		}
 		pPackingInfo->bmpSize = pPackingInfo->subBitmap.GetSize();

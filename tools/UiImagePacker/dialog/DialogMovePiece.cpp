@@ -322,7 +322,7 @@ bool DialogMovePiece::GetPieceFromList(TV_PACKING_PIECE_INFO& vPackingInfo)
 		const PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfo(*it);
 		if (!pPieceInfo || pPieceInfo->GetImageInfo() != m_pFromImageInfo)
 		{
-			m_strError = wxString::Format(wxT("Can not find piece %s from image %s"), (*it), m_pFromImageInfo->GetId());
+			m_strError = wxString::Format(_("Can not find piece %s from image %s"), (*it), m_pFromImageInfo->GetId());
 			return false;
 		}
 
@@ -375,7 +375,7 @@ bool DialogMovePiece::GeneratePackingInfo(TV_PACKING_PIECE_INFO& vPackingInfo, c
 		pPackingInfo->pNode = m_Packer.Insert(pPackingInfo->bmpSize.x, pPackingInfo->bmpSize.y);
 		if (!pPackingInfo->pNode)
 		{
-			m_strError = wxString::Format(wxT("Not enough space to pack sub bitmaps %s"), pPackingInfo->strId);
+			m_strError = wxString::Format(_("Not enough space to pack sub bitmaps %s"), pPackingInfo->strId);
 			return false;
 		}
 	}
