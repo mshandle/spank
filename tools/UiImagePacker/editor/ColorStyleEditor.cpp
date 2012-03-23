@@ -97,9 +97,9 @@ void ColorStyleEditor::DrawSelection(wxDC& dc)
 	DrawRectangle(dc, m_rectState[m_eSelState]);
 }
 
-void ColorStyleEditor::OnLButtonDown(const wxPoint& pos)
+void ColorStyleEditor::OnLButtonDown(wxMouseEvent& event)
 {
-	wxPoint posOrigin = (pos + GetOriginOffset()) / GetZoom();
+	wxPoint posOrigin = (event.GetPosition() + GetOriginOffset()) / GetZoom();
 	for (int i = 0; i < IStyle::SS_NUM; ++i)
 	{
 		if (m_rectState[i].Contains(posOrigin))

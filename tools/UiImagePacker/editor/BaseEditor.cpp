@@ -205,17 +205,17 @@ void BaseEditor::OnMouseWheelEvt(wxMouseEvent& event)
 void BaseEditor::OnLButtonDownEvt(wxMouseEvent& event)
 {
 	SetFocus();
-	OnLButtonDown(event.GetPosition());
+	OnLButtonDown(event);
 }
 
 void BaseEditor::OnLButtonUpEvt(wxMouseEvent& event)
 {
-	OnLButtonUp(event.GetPosition());
+	OnLButtonUp(event);
 }
 
 void BaseEditor::OnMouseMoveEvt(wxMouseEvent& event)
 {
-	OnMouseMove(event.GetPosition());
+	OnMouseMove(event);
 }
 
 void BaseEditor::OnSizeEvt(wxSizeEvent& event)
@@ -344,17 +344,17 @@ wxSize BaseEditor::CalculateMaxSize()
 	return maxSize;
 }
 
-void BaseEditor::OnLButtonDown(const wxPoint& pos)
+void BaseEditor::OnLButtonDown(wxMouseEvent& event)
 {
 	// TODO: 
 }
 
-void BaseEditor::OnLButtonUp(const wxPoint& pos)
+void BaseEditor::OnLButtonUp(wxMouseEvent& event)
 {
 	// TODO: 
 }
 
-void BaseEditor::OnMouseMove(const wxPoint& pos)
+void BaseEditor::OnMouseMove(wxMouseEvent& event)
 {
 	// TODO: 
 }

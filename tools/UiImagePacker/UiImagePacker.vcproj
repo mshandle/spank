@@ -409,6 +409,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\dialog\DialogMovePiece.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dialog\DialogMovePiece.h"
+				>
+			</File>
+			<File
 				RelativePath=".\dialog\DialogReplacePiece.cpp"
 				>
 			</File>

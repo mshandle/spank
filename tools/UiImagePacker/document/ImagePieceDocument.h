@@ -54,7 +54,9 @@ public:
 	bool RenamePieceInfoId(const PieceInfo* pPieceInfo, const wxString& strNewId);
 
 	bool SetImageBitmap(const ImageInfo* pImageInfo, wxBitmap* pNewBitmap);
+	bool ClearImageBitmapArea(const ImageInfo* pImageInfo, const wxRect& rect);
 	bool SetPieceRect(const PieceInfo* pPieceInfo, const wxRect& rect);
+	bool SetPieceImageInfo(const PieceInfo* pPieceInfo, const ImageInfo* pImageInfo);
 
 	const ImageInfo* AddImage(const wxString& strImageId, const wxString& strPath, wxBitmap* pImageBitmap);
 	bool RemoveImage(const wxString& strId);

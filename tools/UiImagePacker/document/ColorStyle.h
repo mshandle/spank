@@ -25,6 +25,7 @@ public:
 private:
 	unsigned int LoadStateInfo(wxXmlNode* pNodeColorStyle, const wxString& strState, unsigned int nDefaultColor);
 	bool SaveStateInfo(wxXmlNode* pNodeColorStyle, const wxString& strState, unsigned int nColor);
+	unsigned int GetReserveColor(unsigned int color);
 
 private:
 	unsigned int m_nColors[SS_NUM];

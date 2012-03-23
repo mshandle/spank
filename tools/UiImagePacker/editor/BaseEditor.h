@@ -59,9 +59,9 @@ public:
 
 	virtual void Draw(wxDC& dc);
 
-	virtual void OnLButtonDown(const wxPoint& pos);
-	virtual void OnLButtonUp(const wxPoint& pos);
-	virtual void OnMouseMove(const wxPoint& pos);
+	virtual void OnLButtonDown(wxMouseEvent& event);
+	virtual void OnLButtonUp(wxMouseEvent& event);
+	virtual void OnMouseMove(wxMouseEvent& event);
 
 	void UpdateVirtualSize();
 	void UpdateScrollPosition(int x, int y);

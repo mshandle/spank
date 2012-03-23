@@ -323,6 +323,20 @@ bool ImagePieceDocument::SetImageBitmap(const ImageInfo* pImageInfo, wxBitmap* p
 	return true;
 }
 
+bool ImagePieceDocument::ClearImageBitmapArea(const ImageInfo* pImageInfo, const wxRect& rect)
+{
+	if (!pImageInfo) return false;
+
+	TM_IMAGE_INFO::iterator itfound = m_ImageInfoMap.find(pImageInfo->GetId());
+	if (itfound == m_ImageInfoMap.end()) return false;
+	SetModifiedFlag();
+
+	ImageInfo* pFoundImageInfo = itfound->second;
+
+	pFoundImageInfo->ClearBitmapArea(rect);
+	return true;
+}
+
 bool ImagePieceDocument::SetPieceRect(const PieceInfo* pPieceInfo, const wxRect& rect)
 {
 	if (!pPieceInfo) return false;
@@ -333,6 +347,19 @@ bool ImagePieceDocument::SetPieceRect(const PieceInfo* pPieceInfo, const wxRect&
 
 	PieceInfo* pFoundPieceInfo = itfound->second;
 	pFoundPieceInfo->SetRect(rect);
+	return true;
+}
+
+bool ImagePieceDocument::SetPieceImageInfo(const PieceInfo* pPieceInfo, const ImageInfo* pImageInfo)
+{
+	if (!pPieceInfo) return false;
+
+	TM_PIECE_INFO::iterator itfound = m_PieceInfoMap.find(pPieceInfo->GetId());
+	if (itfound == m_PieceInfoMap.end()) return false;
+	SetModifiedFlag();
+
+	PieceInfo* pFoundPieceInfo = itfound->second;
+	pFoundPieceInfo->SetImageInfo(pImageInfo);
 	return true;
 }
 

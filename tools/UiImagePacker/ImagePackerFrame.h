@@ -42,6 +42,7 @@ public:
 		IDM_ELEMENT_ADD_COLOR_STYLE,
 		IDM_ELEMENT_ADD_CLIP_BITMAP_STYLE,
 		IDM_ELEMENT_REPLACE_PIECE,
+		IDM_ELEMENT_MOVE_PIECE,
 
 		IDM_VIEW_GRID,
 		IDM_TOOL_EXTRACT_IMAGE,
@@ -52,8 +53,8 @@ public:
  		IDC_TOOLBAR,
 		IDC_NOTEBOOK_LIST,
 		IDC_NOTEBOOK_EDITOR,
-		IDC_PIECE_LIST,
 		IDC_IMAGE_LIST,
+		IDC_PIECE_LIST,
 		IDC_BITMAP_STYLE_LIST,
 		IDC_NINE_GRID_STYLE_LIST,
 		IDC_COLOR_STYLE_LIST,
@@ -154,6 +155,7 @@ private:
 	void OnAddColorStyle(wxCommandEvent& event);
 	void OnAddClipBitmapStyle(wxCommandEvent& event);
 	void OnReplacePiece(wxCommandEvent& event);
+	void OnMovePiece(wxCommandEvent& event);
 
 	void OnViewZoom100(wxCommandEvent& event);
 	void OnViewZoomIn(wxCommandEvent& event);

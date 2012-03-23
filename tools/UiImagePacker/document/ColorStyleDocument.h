@@ -29,7 +29,7 @@ public:
 	const TM_COLOR_STYLE& GetColorStyleMap();
 
 	bool RenameColorStyleId(const ColorStyle* pColorStyle, const wxString& strNewId);
-	bool SetStateColor(const ColorStyle* pColorStyle, const wxColour& color, IStyle::STYLE_STATE eState);
+	bool SetStateColor(const ColorStyle* pColorStyle, unsigned int color, IStyle::STYLE_STATE eState);
 
 	const ColorStyle* AddColorStyle(const wxString& strId);
 	bool RemoveColorStyle(const wxString& strId);

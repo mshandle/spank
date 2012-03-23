@@ -55,7 +55,7 @@ bool ColorStyle::SaveStateInfo(wxXmlNode* pNodeColorStyle, const wxString& strSt
 {
 	wxXmlNode* pNodeState = new wxXmlNode(wxXML_ELEMENT_NODE, strState);
 
-	wxString value = wxString::Format(wxT("0x%x"), nColor);
+	wxString value = wxString::Format(wxT("0x%x"), GetReserveColor(nColor));
 	pNodeState->AddAttribute(wxT("value"), value);
 	pNodeColorStyle->AddChild(pNodeState);
 
@@ -87,5 +87,14 @@ unsigned int ColorStyle::LoadStateInfo(wxXmlNode* pNodeColorStyle, const wxStrin
 	unsigned int nColor = 0;
 	_stscanf_s(strColor.c_str(), wxT("%x"), &nColor);
 
-	return nColor;
+	return GetReserveColor(nColor);
+}
+
+unsigned int ColorStyle::GetReserveColor(unsigned int color)
+{
+	unsigned int r = (color & 0xFF0000) >> 16;
+	unsigned int g = (color & 0xFF00) >> 8;
+	unsigned int b = (color & 0xFF);
+
+	return (b << 16) | (g << 8) | (r);
 }

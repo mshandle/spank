@@ -34,7 +34,6 @@ ImagePieceEditor::~ImagePieceEditor()
 void ImagePieceEditor::Init()
 {
 	m_pImagePieceEditor = this;
-	m_pPieceInfo = NULL;
 	m_pImageInfo = NULL;
 	Reset();
 }
@@ -52,25 +51,33 @@ ImagePieceEditor& ImagePieceEditor::GetInstance()
 
 void ImagePieceEditor::Reset()
 {
-	SetPieceInfo(NULL);
+	SetSelPieceInfo(NULL);
 	SetImageInfo(NULL);
 }
 
-void ImagePieceEditor::SetPieceInfo(const PieceInfo* pPieceInfo)
+bool ImagePieceEditor::SetSelPieceInfo(const PieceInfo* pPieceInfo)
 {
-	m_pPieceInfo = pPieceInfo;
-	Refresh(false);
+	ClearSelections();
+	AddSelPieceInfo(pPieceInfo);
+	return true;
 }
 
-const PieceInfo* ImagePieceEditor::GetPieceInfo() const
+const PieceInfo* ImagePieceEditor::GetSelPieceInfo() const
 {
-	return m_pPieceInfo;
+	if (m_vSelPieceInfo.size() == 1) return m_vSelPieceInfo[0];
+	return NULL;
+}
+
+const ImagePieceEditor::TV_PIECE_INFO& ImagePieceEditor::GetSelections()
+{
+	return m_vSelPieceInfo;
 }
 
 bool ImagePieceEditor::SetImageInfo(const ImageInfo* pImageInfo)
 {
 	if (m_pImageInfo == pImageInfo) return false;
 	m_pImageInfo = pImageInfo;
+	ClearSelections();
 
 	UpdateVirtualSize();
 	UpdateScrollPosition(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
@@ -105,28 +112,83 @@ void ImagePieceEditor::Draw(wxDC& dc)
 
 	DrawImage(dc, wxPoint(0, 0), pImageInfo);
 
-	DrawSelection(dc);
+	DrawSelections(dc);
 }
 
-void ImagePieceEditor::DrawSelection(wxDC& dc)
+void ImagePieceEditor::DrawSelections(wxDC& dc)
 {
-	if (!m_pPieceInfo) return;
+	dc.SetPen(*wxRED_PEN);
+	dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
- 	dc.SetPen(*wxRED_PEN);
- 	dc.SetBrush(*wxTRANSPARENT_BRUSH);
-	DrawRectangle(dc, m_pPieceInfo->GetRect());
-}
-
-void ImagePieceEditor::OnLButtonDown(const wxPoint& pos)
-{
-	wxPoint posMouse = (pos + GetOriginOffset()) / GetZoom();
-	const PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfoUnderPoint(posMouse, m_pImageInfo);
-	SetPieceInfo(pPieceInfo);
-
-	PieceListTransformer::GetInstance().SetSelectedPieceInfo(pPieceInfo);
-	PieceListTransformer::GetInstance().UpdateProperty(pPieceInfo);
-	if (!pPieceInfo && m_pImageInfo)
+	for (TV_PIECE_INFO::const_iterator it = m_vSelPieceInfo.begin(); it != m_vSelPieceInfo.end(); ++it)
 	{
-		ImageListTransformer::GetInstance().UpdateProperty(m_pImageInfo);
+		const PieceInfo* pPieceInfo = (*it);
+		DrawRectangle(dc, pPieceInfo->GetRect());
+	}
+}
+
+bool ImagePieceEditor::AddSelPieceInfo(const PieceInfo* pPieceInfo)
+{
+	if (!pPieceInfo) return false;
+	if (IsPieceInfoSelected(pPieceInfo)) return false;
+	m_vSelPieceInfo.push_back(pPieceInfo);
+	Refresh(false);
+	return true;
+}
+
+bool ImagePieceEditor::RemoveSelPieceInfo(const PieceInfo* pPieceInfo)
+{
+	for (TV_PIECE_INFO::iterator it = m_vSelPieceInfo.begin(); it != m_vSelPieceInfo.end(); ++it)
+	{
+		if (pPieceInfo == (*it))
+		{
+			m_vSelPieceInfo.erase(it);
+			Refresh(false);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool ImagePieceEditor::IsPieceInfoSelected(const PieceInfo* pPieceInfo)
+{
+	for (TV_PIECE_INFO::const_iterator it = m_vSelPieceInfo.begin(); it != m_vSelPieceInfo.end(); ++it)
+	{
+		if (pPieceInfo == (*it)) return true;
+	}
+
+	return false;
+}
+
+void ImagePieceEditor::ClearSelections()
+{
+	m_vSelPieceInfo.clear();
+	Refresh(false);
+}
+
+void ImagePieceEditor::OnLButtonDown(wxMouseEvent& event)
+{
+	wxPoint posMouse = (event.GetPosition() + GetOriginOffset()) / GetZoom();
+	const PieceInfo* pPieceInfo = ImagePieceDocument::GetInstance().FindPieceInfoUnderPoint(posMouse, m_pImageInfo);
+
+	bool bUpdate = false;
+	if (event.ControlDown())
+	{
+		bUpdate = AddSelPieceInfo(pPieceInfo);
+	}
+	else
+	{
+		bUpdate = SetSelPieceInfo(pPieceInfo);
+	}
+
+	if (bUpdate)
+	{
+		PieceListTransformer::GetInstance().SetSelectedPieceInfo(GetSelPieceInfo());
+		PieceListTransformer::GetInstance().UpdateProperty(GetSelPieceInfo());
+		if (!GetSelPieceInfo() && m_pImageInfo)
+		{
+			ImageListTransformer::GetInstance().UpdateProperty(m_pImageInfo);
+		}
 	}
 }

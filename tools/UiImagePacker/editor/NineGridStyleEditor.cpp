@@ -125,9 +125,9 @@ void NineGridStyleEditor::DrawSelection(wxDC& dc)
 	DrawLine(dc, wxPoint(rect.x+pGridInfo->max_x, 0), wxPoint(rect.x+pGridInfo->max_x, maxSize.y));
 }
 
-void NineGridStyleEditor::OnLButtonDown(const wxPoint& pos)
+void NineGridStyleEditor::OnLButtonDown(wxMouseEvent& event)
 {
-	wxPoint posOrigin = (pos + GetOriginOffset()) / GetZoom();
+	wxPoint posOrigin = (event.GetPosition() + GetOriginOffset()) / GetZoom();
 	DoSelState(posOrigin);
 }
 

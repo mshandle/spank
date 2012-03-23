@@ -126,7 +126,7 @@ bool ColorStyleDocument::RenameColorStyleId(const ColorStyle* pColorStyle, const
 	return true;
 }
 
-bool ColorStyleDocument::SetStateColor(const ColorStyle* pColorStyle, const wxColour& color, IStyle::STYLE_STATE eState)
+bool ColorStyleDocument::SetStateColor(const ColorStyle* pColorStyle, unsigned int color, IStyle::STYLE_STATE eState)
 {
 	if (!pColorStyle) return false;
 
@@ -134,7 +134,7 @@ bool ColorStyleDocument::SetStateColor(const ColorStyle* pColorStyle, const wxCo
 	if (!pFoundColorStyle) return false;
 	SetModifiedFlag();
 
-	return pFoundColorStyle->SetStateColor(color.GetRGB(), eState);
+	return pFoundColorStyle->SetStateColor(color, eState);
 }
 
 const ColorStyle* ColorStyleDocument::AddColorStyle(const wxString& strId)

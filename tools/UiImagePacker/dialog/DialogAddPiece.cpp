@@ -246,6 +246,54 @@ void DialogAddPiece::OnChoImageSelected(wxCommandEvent& event)
 	event.Skip();
 }
 
+bool DialogAddPiece::RepackImagePiece(const ImageInfo* pImageInfo)
+{
+	if (!pImageInfo) return false;
+
+	const wxBitmap* pBitmap = ((ImageInfo*)pImageInfo)->GetBitmap();
+	wxSize newSize(pBitmap->GetWidth(), pBitmap->GetHeight());
+
+	TV_PACKING_PIECE_INFO vPackingInfo;
+
+	// get packing info from images
+	if (!GetPieceFromImage(vPackingInfo, pImageInfo))
+	{
+		FreePackingPiecesInfo(vPackingInfo);
+		return false;
+	}
+
+	// sort the pieces
+	std::sort(vPackingInfo.begin(), vPackingInfo.end(), ComparePackingInfo);
+
+	// generate packing info, try packing
+	if (!GeneratePackingInfo(vPackingInfo, newSize))
+	{
+		FreePackingPiecesInfo(vPackingInfo);
+		return false;
+	}
+
+	// packing
+	wxBitmap* pNewBitmap = PackImage(newSize, vPackingInfo);
+	if (!pNewBitmap)
+	{
+		FreePackingPiecesInfo(vPackingInfo);
+		return false;
+	}
+
+	// apply new image and piece info to documents
+	ImagePieceDocument::GetInstance().SetImageBitmap(pImageInfo, pNewBitmap);
+	for (TV_PACKING_PIECE_INFO::iterator it = vPackingInfo.begin(); it != vPackingInfo.end(); ++it)
+	{
+		PACKING_PIECE_INFO* pPackingInfo = (*it);
+		wxRect rect(pPackingInfo->pNode->x, pPackingInfo->pNode->y, pPackingInfo->pNode->width, pPackingInfo->pNode->height);
+		ImagePieceDocument::GetInstance().SetPieceRect(pPackingInfo->pPieceInfo, rect);
+	}
+
+	FreePackingPiecesInfo(vPackingInfo);
+
+	return true;
+}
+
 void DialogAddPiece::OnOkClicked(wxCommandEvent& event)
 {
 	bool bOk = false;
@@ -265,7 +313,7 @@ void DialogAddPiece::OnOkClicked(wxCommandEvent& event)
 
 	if (m_RadAddExisting->GetValue())
 	{
-		bOk = AddPieceFromExistingImage(newSize);
+		bOk = AddPieceToExistingImage(newSize);
 	}
 	else
 	{
@@ -357,7 +405,7 @@ void DialogAddPiece::RemoveListSelectedItems()
 	}
 }
 
-bool DialogAddPiece::AddPieceFromExistingImage(const wxSize& newSize)
+bool DialogAddPiece::AddPieceToExistingImage(const wxSize& newSize)
 {
 	wxString strImageId = m_ChoImage->GetStringSelection();
 	const ImageInfo* pImageInfo = ImagePieceDocument::GetInstance().FindImageInfo(strImageId);

@@ -11,9 +11,13 @@
 #include "BaseEditor.h"
 #include "../document/PieceInfo.h"
 #include "../document/ImageInfo.h"
+#include <vector>
 
 class ImagePieceEditor : public BaseEditor
 {
+public:
+	typedef std::vector<const PieceInfo*> TV_PIECE_INFO;
+
 public:
 	ImagePieceEditor();
 	ImagePieceEditor(wxWindow *parent,
@@ -29,26 +33,31 @@ public:
 
 	virtual void Reset();
 
-	void SetPieceInfo(const PieceInfo* pPieceInfo);
-	const PieceInfo* GetPieceInfo() const;
+	bool SetSelPieceInfo(const PieceInfo* pPieceInfo);
+	const PieceInfo* GetSelPieceInfo() const;
+	const TV_PIECE_INFO& GetSelections();
 
 	bool SetImageInfo(const ImageInfo* pImageInfo);
 	const ImageInfo* GetImageInfo() const;
 
 	virtual wxSize CalculateVirtualSize();
 	virtual void Draw(wxDC& dc);
-	virtual void OnLButtonDown(const wxPoint& pos);
+	virtual void OnLButtonDown(wxMouseEvent& event);
 
 private:
 	void Init();
 	void Release();
 
-	void DrawSelection(wxDC& dc);
+	void DrawSelections(wxDC& dc);
+	bool AddSelPieceInfo(const PieceInfo* pPieceInfo);
+	bool RemoveSelPieceInfo(const PieceInfo* pPieceInfo);
+	bool IsPieceInfoSelected(const PieceInfo* pPieceInfo);
+	void ClearSelections();
 
 private:
 	static ImagePieceEditor* m_pImagePieceEditor;
 	wxMemoryDC m_memDC;
-	const PieceInfo* m_pPieceInfo;
+	TV_PIECE_INFO m_vSelPieceInfo;
 	const ImageInfo* m_pImageInfo;
 
 };

@@ -33,7 +33,7 @@ public:
 
 	virtual wxSize CalculateVirtualSize();
 	virtual void Draw(wxDC& dc);
-	virtual void OnLButtonDown(const wxPoint& pos);
+	virtual void OnLButtonDown(wxMouseEvent& event);
 
 	void SetSelState(IStyle::STYLE_STATE eState);
 	IStyle::STYLE_STATE GetSelState() const;

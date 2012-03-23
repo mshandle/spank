@@ -37,6 +37,7 @@
 
 #include "dialog/DialogAddPiece.h"
 #include "dialog/DialogReplacePiece.h"
+#include "dialog/DialogMovePiece.h"
 #include "utils/FileUtil.h"
 
 #include "images/icon.xpm"
@@ -82,6 +83,7 @@ BEGIN_EVENT_TABLE(ImagePackerFrame, wxFrame)
 	EVT_MENU(IDM_ELEMENT_ADD_COLOR_STYLE, ImagePackerFrame::OnAddColorStyle)
 	EVT_MENU(IDM_ELEMENT_ADD_CLIP_BITMAP_STYLE, ImagePackerFrame::OnAddClipBitmapStyle)
 	EVT_MENU(IDM_ELEMENT_REPLACE_PIECE, ImagePackerFrame::OnReplacePiece)
+	EVT_MENU(IDM_ELEMENT_MOVE_PIECE, ImagePackerFrame::OnMovePiece)
 
 	EVT_MENU(wxID_ZOOM_100, ImagePackerFrame::OnViewZoom100)
 	EVT_MENU(wxID_ZOOM_IN, ImagePackerFrame::OnViewZoomIn)
@@ -254,6 +256,10 @@ void ImagePackerFrame::CreateMenu()
 		menuItem->SetBitmap(bitmap);
 		pMenuItemElement->Append(menuItem);
 	}
+	{
+		wxMenuItem* menuItem = new wxMenuItem(pMenuItemElement, IDM_ELEMENT_MOVE_PIECE, _("&Move Pieces..."), wxEmptyString, wxITEM_NORMAL);
+		pMenuItemElement->Append(menuItem);
+	}
 	pMenuBar->Append(pMenuItemElement, _("E&lement"));
 
 	// view
@@ -300,12 +306,6 @@ void ImagePackerFrame::CreateMenu()
 void ImagePackerFrame::CreateToolbar()
 {
 	wxAuiToolBar* pAuiToolBar = new wxAuiToolBar(this, IDC_TOOLBAR, wxDefaultPosition, wxDefaultSize, 0);
-
-// 	{
-// 		wxBitmap bitmap(document_plus_xpm, wxBITMAP_TYPE_XPM);
-// 		wxBitmap bitmapDisabled;
-// 		pAuiToolBar->AddTool(wxID_NEW, wxEmptyString, bitmap, bitmapDisabled, wxITEM_NORMAL, wxEmptyString, wxEmptyString, NULL);
-// 	}
 
 	{
 		wxBitmap bitmap(ico_open_32x32_xpm, wxBITMAP_TYPE_XPM);
@@ -429,15 +429,15 @@ void ImagePackerFrame::CreateListView()
 		.FloatingSize(wxSize(400, 500))
 		.Movable(false));
 
-	wxTreeCtrl* pPieceListView = new wxTreeCtrl(m_pListNotebook, IDC_PIECE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
-	pPieceListView->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ImagePackerFrame::OnListKeyDown), NULL, this);
-	m_pListNotebook->AddPage(pPieceListView, _("Pieces"));
-	PieceListTransformer::GetInstance().Initialize(pPieceListView, m_pPropertyGrid);
-
 	wxTreeCtrl* pImageListView = new wxTreeCtrl(m_pListNotebook, IDC_IMAGE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pImageListView->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ImagePackerFrame::OnListKeyDown), NULL, this);
 	m_pListNotebook->AddPage(pImageListView, _("Images"));
 	ImageListTransformer::GetInstance().Initialize(pImageListView, m_pPropertyGrid);
+
+	wxTreeCtrl* pPieceListView = new wxTreeCtrl(m_pListNotebook, IDC_PIECE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
+	pPieceListView->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ImagePackerFrame::OnListKeyDown), NULL, this);
+	m_pListNotebook->AddPage(pPieceListView, _("Pieces"));
+	PieceListTransformer::GetInstance().Initialize(pPieceListView, m_pPropertyGrid);
 
 	wxTreeCtrl* pBitmapStyleListView = new wxTreeCtrl(m_pListNotebook, IDC_BITMAP_STYLE_LIST, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
 	pBitmapStyleListView->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ImagePackerFrame::OnListKeyDown), NULL, this);
@@ -648,7 +648,7 @@ void ImagePackerFrame::DoDelete()
 	{
 	case EDITOR_IMAGE_PIECE:
 		{
-			const PieceInfo* pPieceInfo = ImagePieceEditor::GetInstance().GetPieceInfo();
+			const PieceInfo* pPieceInfo = ImagePieceEditor::GetInstance().GetSelPieceInfo();
 			const ImageInfo* pImageInfo = ImagePieceEditor::GetInstance().GetImageInfo();
 			if (pPieceInfo) DoDeletePiece(pPieceInfo);
 			else if (pImageInfo) DoDeleteImage(pImageInfo);
@@ -771,7 +771,7 @@ void ImagePackerFrame::DoDeletePiece(const PieceInfo* pPieceInfo)
 	if (vClipBitmapStyleIds.size() > 0) ClipBitmapStyleTransformer::GetInstance().UpdateListView();
 
 	// delete the piece
-	ImagePieceEditor::GetInstance().SetPieceInfo(NULL);
+	ImagePieceEditor::GetInstance().SetSelPieceInfo(NULL);
 	ImagePieceDocument::GetInstance().RemovePiece(pPieceInfo->GetId());
 	PieceListTransformer::GetInstance().UpdateListView();
 	PieceListTransformer::GetInstance().UpdateProperty(NULL);
@@ -1010,6 +1010,40 @@ void ImagePackerFrame::OnReplacePiece(wxCommandEvent& event)
 	}
 }
 
+void ImagePackerFrame::OnMovePiece(wxCommandEvent& event)
+{
+	const ImageInfo* pImageInfo = ImagePieceEditor::GetInstance().GetImageInfo();
+	if (!pImageInfo)
+	{
+		wxMessageDialog msg(this, _("Please select a image first"));
+		msg.ShowModal();
+		return;
+	}
+
+	const ImagePieceEditor::TV_PIECE_INFO& vPieces = ImagePieceEditor::GetInstance().GetSelections();
+	if (vPieces.size() <= 0)
+	{
+		wxMessageDialog msg(this, _("Please select pieces to move to"));
+		msg.ShowModal();
+		return;
+	}
+
+	DialogMovePiece dialog(this);
+	if (!dialog.InitializeData(pImageInfo, vPieces)) return;
+	dialog.ShowModal();
+
+	const ImageInfo* pToImageInfo = dialog.GetToImageInfo();
+	if (pToImageInfo)
+	{
+		DialogAddPiece dialogRepack(this);
+		dialogRepack.RepackImagePiece(dialog.GetFromImageInfo());
+
+		m_pListNotebook->SetSelection(LIST_VIEW_IMAGE);
+		SwitchEditor(EDITOR_IMAGE_PIECE);
+		ImagePieceEditor::GetInstance().SetImageInfo(pToImageInfo);
+	}
+}
+
 void ImagePackerFrame::OnViewZoom100(wxCommandEvent& event)
 {
 	m_pEditors[m_pEditorNotebook->GetSelection()]->Zoom(BaseEditor::ZOOM_MIN);
@@ -1068,7 +1102,7 @@ void ImagePackerFrame::OnImagePieceListSelected(wxTreeEvent& event)
 		ImagePieceEditor::GetInstance().SetImageInfo(pImageInfo);
 		ImageListTransformer::GetInstance().SetSelectedImageInfo(pImageInfo);
 	}
-	ImagePieceEditor::GetInstance().SetPieceInfo(pPieceInfo);
+	ImagePieceEditor::GetInstance().SetSelPieceInfo(pPieceInfo);
 	PieceListTransformer::GetInstance().UpdateProperty(pPieceInfo);
 }
 
@@ -1077,7 +1111,7 @@ void ImagePackerFrame::OnImageListSelected(wxTreeEvent& event)
 	SwitchEditor(EDITOR_IMAGE_PIECE);
 	const ImageInfo* pImageInfo = ImageListTransformer::GetInstance().GetSelectedImageInfo();
 	ImagePieceEditor::GetInstance().SetImageInfo(pImageInfo);
-	ImagePieceEditor::GetInstance().SetPieceInfo(NULL);
+	ImagePieceEditor::GetInstance().SetSelPieceInfo(NULL);
 	ImageListTransformer::GetInstance().UpdateProperty(pImageInfo);
 }
 

@@ -54,6 +54,8 @@ public:
 	void SetDefaultImageInfo(const ImageInfo* pImageInfo);
 	const ImageInfo* GetCurrImageInfo();
 
+	bool RepackImagePiece(const ImageInfo* pImageInfo);
+
 private:
 	void Init();
 	void CreateControls();
@@ -71,7 +73,7 @@ private:
 	void AddListItems(const wxArrayString& arrayString);
 	void RemoveListSelectedItems();
 
-	bool AddPieceFromExistingImage(const wxSize& newSize);
+	bool AddPieceToExistingImage(const wxSize& newSize);
 	bool AddPieceIntoNewImage(const wxSize& newSize);
 	void FreePackingPiecesInfo(TV_PACKING_PIECE_INFO& vPackingInfo);
 
