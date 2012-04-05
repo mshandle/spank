@@ -8,6 +8,7 @@
 #include "ImageInfo.h"
 #include "ProjectDocument.h"
 #include <wx/msgdlg.h>
+#include "../utils/FileUtil.h"
 #include "../ImagePackerFrame.h"
 
 #define SAFE_DELETE(x) if (x) {delete (x); (x) = NULL;}
@@ -30,6 +31,7 @@ bool ImageInfo::LoadFromXml(wxXmlNode* pNodeImage)
 
 	m_strId = pNodeImage->GetAttribute(wxT("id"));
 	m_strPath = pNodeImage->GetAttribute(wxT("path"));
+	FileUtil::FormatDir(m_strPath);
 
 	return true;
 }
@@ -72,6 +74,7 @@ const wxString& ImageInfo::GetId() const
 void ImageInfo::SetPath(const wxString& strPath)
 {
 	m_strPath = strPath;
+	FileUtil::FormatDir(m_strPath);
 }
 
 const wxString& ImageInfo::GetPath() const

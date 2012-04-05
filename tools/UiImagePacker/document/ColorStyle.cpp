@@ -28,9 +28,9 @@ bool ColorStyle::LoadFromXml(wxXmlNode* pNodeColorStyle)
 	SetId(strId);
 
 	m_nColors[SS_NORMAL] = LoadStateInfo(pNodeColorStyle, wxT("normal"), Config::DEFAULT_COLOR);
-	m_nColors[SS_DOWN] = LoadStateInfo(pNodeColorStyle, wxT("down"), Config::DEFAULT_COLOR);
-	m_nColors[SS_HOVER] = LoadStateInfo(pNodeColorStyle, wxT("hover"), Config::DEFAULT_COLOR);
-	m_nColors[SS_DISABLED] = LoadStateInfo(pNodeColorStyle, wxT("disabled"), Config::DEFAULT_COLOR);
+	m_nColors[SS_DOWN] = LoadStateInfo(pNodeColorStyle, wxT("down"), m_nColors[SS_NORMAL]);
+	m_nColors[SS_HOVER] = LoadStateInfo(pNodeColorStyle, wxT("hover"), m_nColors[SS_NORMAL]);
+	m_nColors[SS_DISABLED] = LoadStateInfo(pNodeColorStyle, wxT("disabled"), m_nColors[SS_NORMAL]);
 
 	return true;
 }
