@@ -22,6 +22,7 @@
 #include "document/ClipBitmapStyle.h"
 
 #include "editor/BaseEditor.h"
+#include "editor/ImagePieceEditor.h"
 
 class ImagePackerFrame : public wxFrame
 {
@@ -177,6 +178,7 @@ private:
 	void OnEditorKeyDown(wxKeyEvent& event);
 
 	void SwitchEditor(EDITOR eEditor);
+	bool ExtractPieces(const ImagePieceEditor::TV_PIECE_INFO& vPieceInfo);
 
 private:
 	static ImagePackerFrame* m_pImagePackerFrame;

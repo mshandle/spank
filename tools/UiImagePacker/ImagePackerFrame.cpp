@@ -1061,29 +1061,26 @@ void ImagePackerFrame::OnViewZoomOut(wxCommandEvent& event)
 
 void ImagePackerFrame::OnExtractImage(wxCommandEvent& event)
 {
-	const ImageInfo* pImageInfo = ImagePieceEditor::GetInstance().GetImageInfo();
-	if (!pImageInfo)
+	// extrace the selection pieces
+	const ImagePieceEditor::TV_PIECE_INFO& vSelPieceInfo = ImagePieceEditor::GetInstance().GetSelections();
+	if (vSelPieceInfo.size() > 0)
 	{
-		wxMessageDialog msg(this, _("Please selected a image first."));
-		msg.ShowModal();
+		ExtractPieces(vSelPieceInfo);
 		return;
 	}
 
-	const wxBitmap* pImageBitmap = ((ImageInfo*)pImageInfo)->GetBitmap();
-	if (!pImageBitmap) return;
-
-	ImagePieceDocument::TV_PIECE_INFO vPieceInfo;
-	if (ImagePieceDocument::GetInstance().EnumImagePieces(vPieceInfo, pImageInfo) <= 0) return;
-
-	wxDirDialog dialog(this, _("Choose a directory to extract"), wxEmptyString, wxDD_NEW_DIR_BUTTON);
-	if (dialog.ShowModal() != wxID_OK) return;
-
-	for (ImagePieceDocument::TV_PIECE_INFO::iterator it = vPieceInfo.begin(); it != vPieceInfo.end(); ++it)
+	// extrace the pieces in the image
+	ImagePieceDocument::TV_PIECE_INFO vPiecesInTheImage;
+	const ImageInfo* pImageInfo = ImagePieceEditor::GetInstance().GetImageInfo();
+	if (ImagePieceDocument::GetInstance().EnumImagePieces(vPiecesInTheImage, pImageInfo) > 0)
 	{
-		const PieceInfo* pPieceInfo = (*it);
-		wxBitmap bitmap = pImageBitmap->GetSubBitmap(pPieceInfo->GetRect());
-		bitmap.SaveFile(dialog.GetPath() + wxT("/") + pPieceInfo->GetId() + wxT(".png"), wxBITMAP_TYPE_PNG);
+		ExtractPieces(vPiecesInTheImage);
+		return;
 	}
+
+	// show error message
+	wxMessageDialog msg(this, _("Please selected a image or pieces"));
+	msg.ShowModal();
 }
 
 void ImagePackerFrame::OnHelpAbout(wxCommandEvent& event)
@@ -1208,4 +1205,26 @@ void ImagePackerFrame::SwitchEditor(EDITOR eEditor)
 			m_pEditors[i]->Reset();
 		}
 	}
+}
+
+bool ImagePackerFrame::ExtractPieces(const ImagePieceEditor::TV_PIECE_INFO& vPieceInfo)
+{
+	wxDirDialog dialog(this, _("Choose a directory to extract"), wxEmptyString, wxDD_NEW_DIR_BUTTON);
+	if (dialog.ShowModal() != wxID_OK) return false;
+
+	for (ImagePieceDocument::TV_PIECE_INFO::const_iterator it = vPieceInfo.begin(); it != vPieceInfo.end(); ++it)
+	{
+		const PieceInfo* pPieceInfo = (*it);
+
+		const ImageInfo* pImageInfo = pPieceInfo->GetImageInfo();
+		if (!pImageInfo) continue;
+
+		const wxBitmap* pImageBitmap = ((ImageInfo*)pImageInfo)->GetBitmap();
+		if (!pImageBitmap) continue;
+
+		wxBitmap bitmap = pImageBitmap->GetSubBitmap(pPieceInfo->GetRect());
+		bitmap.SaveFile(dialog.GetPath() + wxT("/") + pPieceInfo->GetId() + wxT(".png"), wxBITMAP_TYPE_PNG);
+	}
+
+	return true;
 }
