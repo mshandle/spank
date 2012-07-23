@@ -42,6 +42,7 @@ private:
 	bool LoadStateInfo(NINE_GRID_INFO& NineGridInfoOut, wxXmlNode* pNodeNineGridStyle, const wxString& strState);
 	bool SaveStateInfo(wxXmlNode* pNodeNineGridStyle, const wxString& strState, const NINE_GRID_INFO& NineGridInfo);
 	bool IsNormalGrid(const NINE_GRID_INFO& NineGridInfo);
+	void BoundingRect(NINE_GRID_INFO& gridInfo);
 
 private:
 	NINE_GRID_INFO m_NineGridInfo[SS_NUM];

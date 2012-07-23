@@ -21,7 +21,7 @@ public:
 	bool Initialize(wxTreeCtrl* pTreeCtrl, wxPropertyGrid* pPropertyGrid);
 	void UpdateListView();
 	void UpdateProperty(const NineGridStyle* pNineGrieStyle);
-	void PropertyChanged(const wxPGProperty* pProperty);
+	void PropertyChanged(wxPGProperty* pProperty);
 
 	void SetSelectedNineGridStyle(const NineGridStyle* pNineGrieStyle);
 	const NineGridStyle* GetSelectedNineGridStyle();

@@ -56,7 +56,6 @@ private:
 
 private:
 	static ImagePieceEditor* m_pImagePieceEditor;
-	wxMemoryDC m_memDC;
 	TV_PIECE_INFO m_vSelPieceInfo;
 	const ImageInfo* m_pImageInfo;
 

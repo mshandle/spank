@@ -68,7 +68,54 @@ bool NineGridStyle::SetStatePiece(const PieceInfo* pPieceInfo, STYLE_STATE eStat
 {
 	if (eState < 0 || eState >= SS_NUM) return false;
 	if (m_NineGridInfo[eState].pPieceInfo == pPieceInfo) return false;
+
 	m_NineGridInfo[eState].pPieceInfo = pPieceInfo;
+	BoundingRect(m_NineGridInfo[eState]);
+
+	return true;
+}
+
+bool NineGridStyle::SetStateMinX(int value, IStyle::STYLE_STATE eState)
+{
+	if (eState < 0 || eState >= SS_NUM) return false;
+	if (m_NineGridInfo[eState].min_x == value) return false;
+
+	m_NineGridInfo[eState].min_x = value;
+	BoundingRect(m_NineGridInfo[eState]);
+
+	return true;
+}
+
+bool NineGridStyle::SetStateMinY(int value, IStyle::STYLE_STATE eState)
+{
+	if (eState < 0 || eState >= SS_NUM) return false;
+	if (m_NineGridInfo[eState].min_y == value) return false;
+
+	m_NineGridInfo[eState].min_y = value;
+	BoundingRect(m_NineGridInfo[eState]);
+
+	return true;
+}
+
+bool NineGridStyle::SetStateMaxX(int value, IStyle::STYLE_STATE eState)
+{
+	if (eState < 0 || eState >= SS_NUM) return false;
+	if (m_NineGridInfo[eState].max_x == value) return false;
+
+	m_NineGridInfo[eState].max_x = value;
+	BoundingRect(m_NineGridInfo[eState]);
+
+	return true;
+}
+
+bool NineGridStyle::SetStateMaxY(int value, IStyle::STYLE_STATE eState)
+{
+	if (eState < 0 || eState >= SS_NUM) return false;
+	if (m_NineGridInfo[eState].max_y == value) return false;
+
+	m_NineGridInfo[eState].max_y = value;
+	BoundingRect(m_NineGridInfo[eState]);
+
 	return true;
 }
 
@@ -133,55 +180,23 @@ bool NineGridStyle::IsNormalGrid(const NINE_GRID_INFO& NineGridInfo)
 	return true;
 }
 
-bool NineGridStyle::SetStateMinX(int value, IStyle::STYLE_STATE eState)
+void NineGridStyle::BoundingRect(NINE_GRID_INFO& gridInfo)
 {
-	if (eState < 0 || eState >= SS_NUM) return false;
-	if (m_NineGridInfo[eState].min_x == value) return false;
+	if (gridInfo.min_x < 0) gridInfo.min_x = 0;
+	if (gridInfo.min_y < 0) gridInfo.min_y = 0;
 
-	m_NineGridInfo[eState].min_x = value;
-	if (m_NineGridInfo[eState].min_x == m_NineGridInfo[eState].max_x)
-	{
-		m_NineGridInfo[eState].min_x = 0;
-		m_NineGridInfo[eState].max_x = 0;
-	}
-	return true;
-}
+	int maxWidth = 0;
+	if (gridInfo.pPieceInfo) maxWidth = gridInfo.pPieceInfo->GetRect().width;
 
-bool NineGridStyle::SetStateMinY(int value, IStyle::STYLE_STATE eState)
-{
-	if (eState < 0 || eState >= SS_NUM) return false;
-	if (m_NineGridInfo[eState].min_y == value) return false;
-	m_NineGridInfo[eState].min_y = value;
-	if (m_NineGridInfo[eState].min_y == m_NineGridInfo[eState].max_y)
-	{
-		m_NineGridInfo[eState].min_y = 0;
-		m_NineGridInfo[eState].max_y = 0;
-	}
-	return true;
-}
+	int maxHeight = 0;
+	if (gridInfo.pPieceInfo) maxHeight = gridInfo.pPieceInfo->GetRect().height;
 
-bool NineGridStyle::SetStateMaxX(int value, IStyle::STYLE_STATE eState)
-{
-	if (eState < 0 || eState >= SS_NUM) return false;
-	if (m_NineGridInfo[eState].max_x == value) return false;
-	m_NineGridInfo[eState].max_x = value;
-	if (m_NineGridInfo[eState].min_x == m_NineGridInfo[eState].max_x)
-	{
-		m_NineGridInfo[eState].min_x = 0;
-		m_NineGridInfo[eState].max_x = 0;
-	}
-	return true;
-}
+	if (gridInfo.max_x > maxWidth) gridInfo.max_x = maxWidth;
+	if (gridInfo.max_y > maxHeight) gridInfo.max_y = maxHeight;
 
-bool NineGridStyle::SetStateMaxY(int value, IStyle::STYLE_STATE eState)
-{
-	if (eState < 0 || eState >= SS_NUM) return false;
-	if (m_NineGridInfo[eState].max_y == value) return false;
-	m_NineGridInfo[eState].max_y = value;
-	if (m_NineGridInfo[eState].min_y == m_NineGridInfo[eState].max_y)
-	{
-		m_NineGridInfo[eState].min_y = 0;
-		m_NineGridInfo[eState].max_y = 0;
-	}
-	return true;
+	if (gridInfo.min_x > gridInfo.max_x) gridInfo.min_x = gridInfo.max_x;
+	if (gridInfo.min_y > gridInfo.max_y) gridInfo.min_y = gridInfo.max_y;
+
+	if (gridInfo.max_x < gridInfo.min_x) gridInfo.max_x = gridInfo.min_x;
+	if (gridInfo.max_y < gridInfo.min_y) gridInfo.max_y = gridInfo.min_y;
 }

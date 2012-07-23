@@ -101,7 +101,7 @@ void NineGridStyleTransformer::UpdateProperty(const NineGridStyle* pNineGrieStyl
 	ImagePackerFrame::GetInstance().SetCurrPropertyType(ImagePackerFrame::PT_NINE_GRID_STYLE);
 }
 
-void NineGridStyleTransformer::PropertyChanged(const wxPGProperty* pProperty)
+void NineGridStyleTransformer::PropertyChanged(wxPGProperty* pProperty)
 {
 	const NineGridStyle* pNineGridStyle = GetSelectedNineGridStyle();
 	if (!pNineGridStyle) return;
@@ -134,21 +134,25 @@ void NineGridStyleTransformer::PropertyChanged(const wxPGProperty* pProperty)
 	{
 		int value = pProperty->GetValue().GetInteger();
 		bRefresh = NineGridStyleDocument::GetInstance().SetStateMinX(pNineGridStyle, value, IStyle::SS_NORMAL);
+		pProperty->SetValueFromInt(pNineGridStyle->GetStateGridInfo(IStyle::SS_NORMAL)->min_x);
 	}
 	else if (pProperty->GetName() == wxT("normal_min_y"))
 	{
 		int value = pProperty->GetValue().GetInteger();
 		bRefresh = NineGridStyleDocument::GetInstance().SetStateMinY(pNineGridStyle, value, IStyle::SS_NORMAL);
+		pProperty->SetValueFromInt(pNineGridStyle->GetStateGridInfo(IStyle::SS_NORMAL)->min_y);
 	}
 	else if (pProperty->GetName() == wxT("normal_max_x"))
 	{
 		int value = pProperty->GetValue().GetInteger();
 		bRefresh = NineGridStyleDocument::GetInstance().SetStateMaxX(pNineGridStyle, value, IStyle::SS_NORMAL);
+		pProperty->SetValueFromInt(pNineGridStyle->GetStateGridInfo(IStyle::SS_NORMAL)->max_x);
 	}
 	else if (pProperty->GetName() == wxT("normal_max_y"))
 	{
 		int value = pProperty->GetValue().GetInteger();
 		bRefresh = NineGridStyleDocument::GetInstance().SetStateMaxY(pNineGridStyle, value, IStyle::SS_NORMAL);
+		pProperty->SetValueFromInt(pNineGridStyle->GetStateGridInfo(IStyle::SS_NORMAL)->max_y);
 	}
 	else if (pProperty->GetName() == wxT("down_piece_id"))
 	{
@@ -159,21 +163,25 @@ void NineGridStyleTransformer::PropertyChanged(const wxPGProperty* pProperty)
 	{
 		int value = pProperty->GetValue().GetInteger();
 		bRefresh = NineGridStyleDocument::GetInstance().SetStateMinX(pNineGridStyle, value, IStyle::SS_DOWN);
+		pProperty->SetValueFromInt(pNineGridStyle->GetStateGridInfo(IStyle::SS_DOWN)->min_x);
 	}
 	else if (pProperty->GetName() == wxT("down_min_y"))
 	{
 		int value = pProperty->GetValue().GetInteger();
 		bRefresh = NineGridStyleDocument::GetInstance().SetStateMinY(pNineGridStyle, value, IStyle::SS_DOWN);
+		pProperty->SetValueFromInt(pNineGridStyle->GetStateGridInfo(IStyle::SS_DOWN)->min_y);
 	}
 	else if (pProperty->GetName() == wxT("down_max_x"))
 	{
 		int value = pProperty->GetValue().GetInteger();
 		bRefresh = NineGridStyleDocument::GetInstance().SetStateMaxX(pNineGridStyle, value, IStyle::SS_DOWN);
+		pProperty->SetValueFromInt(pNineGridStyle->GetStateGridInfo(IStyle::SS_DOWN)->max_x);
 	}
 	else if (pProperty->GetName() == wxT("down_max_y"))
 	{
 		int value = pProperty->GetValue().GetInteger();
 		bRefresh = NineGridStyleDocument::GetInstance().SetStateMaxY(pNineGridStyle, value, IStyle::SS_DOWN);
+		pProperty->SetValueFromInt(pNineGridStyle->GetStateGridInfo(IStyle::SS_DOWN)->max_y);
 	}
 	else if (pProperty->GetName() == wxT("hover_piece_id"))
 	{
@@ -184,21 +192,25 @@ void NineGridStyleTransformer::PropertyChanged(const wxPGProperty* pProperty)
 	{
 		int value = pProperty->GetValue().GetInteger();
 		bRefresh = NineGridStyleDocument::GetInstance().SetStateMinX(pNineGridStyle, value, IStyle::SS_HOVER);
+		pProperty->SetValueFromInt(pNineGridStyle->GetStateGridInfo(IStyle::SS_HOVER)->min_x);
 	}
 	else if (pProperty->GetName() == wxT("hover_min_y"))
 	{
 		int value = pProperty->GetValue().GetInteger();
 		bRefresh = NineGridStyleDocument::GetInstance().SetStateMinY(pNineGridStyle, value, IStyle::SS_HOVER);
+		pProperty->SetValueFromInt(pNineGridStyle->GetStateGridInfo(IStyle::SS_HOVER)->min_y);
 	}
 	else if (pProperty->GetName() == wxT("hover_max_x"))
 	{
 		int value = pProperty->GetValue().GetInteger();
 		bRefresh = NineGridStyleDocument::GetInstance().SetStateMaxX(pNineGridStyle, value, IStyle::SS_HOVER);
+		pProperty->SetValueFromInt(pNineGridStyle->GetStateGridInfo(IStyle::SS_HOVER)->max_x);
 	}
 	else if (pProperty->GetName() == wxT("hover_max_y"))
 	{
 		int value = pProperty->GetValue().GetInteger();
 		bRefresh = NineGridStyleDocument::GetInstance().SetStateMaxY(pNineGridStyle, value, IStyle::SS_HOVER);
+		pProperty->SetValueFromInt(pNineGridStyle->GetStateGridInfo(IStyle::SS_HOVER)->max_y);
 	}
 	else if (pProperty->GetName() == wxT("disabled_piece_id"))
 	{
@@ -209,21 +221,25 @@ void NineGridStyleTransformer::PropertyChanged(const wxPGProperty* pProperty)
 	{
 		int value = pProperty->GetValue().GetInteger();
 		bRefresh = NineGridStyleDocument::GetInstance().SetStateMinX(pNineGridStyle, value, IStyle::SS_DISABLED);
+		pProperty->SetValueFromInt(pNineGridStyle->GetStateGridInfo(IStyle::SS_DISABLED)->min_x);
 	}
 	else if (pProperty->GetName() == wxT("disabled_min_y"))
 	{
 		int value = pProperty->GetValue().GetInteger();
 		bRefresh = NineGridStyleDocument::GetInstance().SetStateMinY(pNineGridStyle, value, IStyle::SS_DISABLED);
+		pProperty->SetValueFromInt(pNineGridStyle->GetStateGridInfo(IStyle::SS_DISABLED)->min_y);
 	}
 	else if (pProperty->GetName() == wxT("disabled_max_x"))
 	{
 		int value = pProperty->GetValue().GetInteger();
 		bRefresh = NineGridStyleDocument::GetInstance().SetStateMaxX(pNineGridStyle, value, IStyle::SS_DISABLED);
+		pProperty->SetValueFromInt(pNineGridStyle->GetStateGridInfo(IStyle::SS_DISABLED)->max_x);
 	}
 	else if (pProperty->GetName() == wxT("disabled_max_y"))
 	{
 		int value = pProperty->GetValue().GetInteger();
 		bRefresh = NineGridStyleDocument::GetInstance().SetStateMaxY(pNineGridStyle, value, IStyle::SS_DISABLED);
+		pProperty->SetValueFromInt(pNineGridStyle->GetStateGridInfo(IStyle::SS_DISABLED)->max_y);
 	}
 
 	if (bResetStyle)
