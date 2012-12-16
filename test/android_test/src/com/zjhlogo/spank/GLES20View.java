@@ -92,7 +92,7 @@ public class GLES20View extends BaseView implements SurfaceHolder.Callback, OnTo
 			break;
 		case MotionEvent.ACTION_MOVE:
 			{
-				SpankLibrary.touchMove(0, event.getX(), event.getY());
+//				SpankLibrary.touchMove(0, event.getX(), event.getY());
 			}
 			break;
 		case MotionEvent.ACTION_UP:

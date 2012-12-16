@@ -1,3 +1,3 @@
 mkdir assets
 cp ../resources/*.* assets/
-$ANDROID_NDK_ROOT/ndk-build
+$NDK_ROOT/ndk-build

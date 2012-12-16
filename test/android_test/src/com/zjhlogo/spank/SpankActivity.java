@@ -22,6 +22,7 @@ public class SpankActivity extends Activity
 	@Override
 	public void onBackPressed()
 	{
-		SpankLibrary.onKeyReturn();
+		android.os.Process.killProcess(android.os.Process.myPid());
+//		SpankLibrary.onKeyReturn();
 	}
 }

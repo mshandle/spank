@@ -830,6 +830,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\source\ExitTestCase.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\source\ExitTestCase.h"
+			>
+		</File>
+		<File
 			RelativePath="..\source\GameApp.cpp"
 			>
 		</File>

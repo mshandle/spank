@@ -13,8 +13,8 @@ class WindowConfig
 public:
 	enum CONST_DEFINE
 	{
-		SURFACE_WIDTH = 800,
-		SURFACE_HEIGHT = 480,
+		SURFACE_WIDTH = 1280,
+		SURFACE_HEIGHT = 720,
 		WM_SOCKET = 0x0400 + 1,		// WM_USER + 1
 	};
 };

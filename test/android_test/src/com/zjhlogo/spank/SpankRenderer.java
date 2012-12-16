@@ -16,8 +16,8 @@ public class SpankRenderer {
 	private static final int GREEN_BITS = 8;
 	private static final int RED_BITS = 8;
 	private static final int ALPHA_BITS = 8;
-	private static final int DEPTH_BITS = 24;
-	private static final int STENCIL_BITS = 8;
+	private static final int DEPTH_BITS = 16;
+	private static final int STENCIL_BITS = 0;
 	
 	private static final int[] s_configAttribs2 =
 	{

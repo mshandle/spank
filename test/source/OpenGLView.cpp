@@ -34,6 +34,7 @@
 #include "TweenTestCase.h"
 #include "PorkerTestCase.h"
 #include "NetworkTestCase.h"
+#include "ExitTestCase.h"
 
 OpenGLView::OpenGLView()
 {
@@ -78,7 +79,7 @@ bool OpenGLView::Initialize()
 	AddTestCase(new TweenTestCase(), m_pMainScreen);
 	AddTestCase(new PorkerTestCase(), m_pMainScreen);
 	AddTestCase(new NetworkTestCase(), m_pMainScreen);
-
+	AddTestCase(new ExitTestCase(), m_pMainScreen);
 	m_pListView->ArrangeItems();
 	return true;
 }
